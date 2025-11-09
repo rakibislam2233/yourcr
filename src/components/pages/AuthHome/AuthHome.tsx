@@ -3,6 +3,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { User, GraduationCap } from "lucide-react";
+import Link from "next/link";
 
 const AuthHome = () => {
   return (
@@ -44,7 +45,7 @@ const AuthHome = () => {
             </h2>
 
             <div className="space-y-6">
-              <a href="/auth/cr-login" className="w-full block">
+              <Link href="/auth/cr-login" className="w-full block">
                 <Button
                   variant="outline"
                   className="w-full h-16 text-lg justify-start pl-4"
@@ -52,9 +53,9 @@ const AuthHome = () => {
                   <GraduationCap className="w-6 h-6 mr-4 text-blue-600" />
                   Login as Class Representative (CR)
                 </Button>
-              </a>
+              </Link>
 
-              <a href="/auth/student-login" className="w-full block">
+              <Link href="/auth/student-login" className="w-full block">
                 <Button
                   variant="outline"
                   className="w-full h-16 text-lg justify-start pl-4"
@@ -62,18 +63,18 @@ const AuthHome = () => {
                   <User className="w-6 h-6 mr-4 text-green-600" />
                   Login as Student
                 </Button>
-              </a>
+              </Link>
 
               <div className="mt-8 pt-6 border-t border-gray-200">
                 <p className="text-center text-gray-600">
                   Only CRs can register. If you&apos;re a CR, please register
                   first.
                 </p>
-                <a href="/auth/cr-register" className="block mt-4">
+                <Link href="/auth/cr-register" className="block mt-4">
                   <Button className="w-full h-12">
                     Register as Class Representative (CR)
                   </Button>
-                </a>
+                </Link>
               </div>
             </div>
           </motion.div>

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { User, Mail, Lock, GraduationCap } from "lucide-react";
+import Link from "next/link";
 
 const CrRegister = () => {
   return (
@@ -51,7 +52,7 @@ const CrRegister = () => {
                 <GraduationCap className="w-8 h-8 text-blue-600" />
               </div>
             </div>
-            
+
             <h2 className="text-3xl font-bold text-center text-gray-900 mb-2">
               Register as CR
             </h2>
@@ -62,11 +63,13 @@ const CrRegister = () => {
             <form className="space-y-6  ">
               <div className="space-y-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="name" className="text-gray-700">Full Name</Label>
+                  <Label htmlFor="name" className="text-gray-700">
+                    Full Name
+                  </Label>
                   <div className="relative mt-2">
-                    <Input 
-                      id="name" 
-                      type="text" 
+                    <Input
+                      id="name"
+                      type="text"
                       placeholder="Enter your full name"
                       className="pl-12 py-4"
                     />
@@ -75,11 +78,13 @@ const CrRegister = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="email" className="text-gray-700">CR Email</Label>
+                  <Label htmlFor="email" className="text-gray-700">
+                    CR Email
+                  </Label>
                   <div className="relative mt-2">
-                    <Input 
-                      id="email" 
-                      type="email" 
+                    <Input
+                      id="email"
+                      type="email"
                       placeholder="Enter your CR email"
                       className="pl-12 py-4"
                     />
@@ -88,11 +93,13 @@ const CrRegister = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="college" className="text-gray-700">College</Label>
+                  <Label htmlFor="college" className="text-gray-700">
+                    College
+                  </Label>
                   <div className="relative mt-2">
-                    <Input 
-                      id="college" 
-                      type="text" 
+                    <Input
+                      id="college"
+                      type="text"
                       placeholder="Enter your college name"
                       className="pl-12 py-4"
                     />
@@ -101,11 +108,13 @@ const CrRegister = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="course" className="text-gray-700">Course/Class</Label>
+                  <Label htmlFor="course" className="text-gray-700">
+                    Course/Class
+                  </Label>
                   <div className="relative mt-2">
-                    <Input 
-                      id="course" 
-                      type="text" 
+                    <Input
+                      id="course"
+                      type="text"
                       placeholder="Enter your course/class"
                       className="pl-12 py-4"
                     />
@@ -114,11 +123,13 @@ const CrRegister = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="password" className="text-gray-700">Password</Label>
+                  <Label htmlFor="password" className="text-gray-700">
+                    Password
+                  </Label>
                   <div className="relative mt-2">
-                    <Input 
-                      id="password" 
-                      type="password" 
+                    <Input
+                      id="password"
+                      type="password"
                       placeholder="Create a password"
                       className="pl-12 py-4"
                     />
@@ -127,11 +138,13 @@ const CrRegister = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="confirmPassword" className="text-gray-700">Confirm Password</Label>
+                  <Label htmlFor="confirmPassword" className="text-gray-700">
+                    Confirm Password
+                  </Label>
                   <div className="relative mt-2">
-                    <Input 
-                      id="confirmPassword" 
-                      type="password" 
+                    <Input
+                      id="confirmPassword"
+                      type="password"
                       placeholder="Confirm your password"
                       className="pl-12 py-4"
                     />
@@ -141,13 +154,26 @@ const CrRegister = () => {
               </div>
 
               <div className="flex items-center">
-                <input 
-                  type="checkbox" 
-                  id="terms" 
+                <input
+                  type="checkbox"
+                  id="terms"
                   className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                 />
                 <Label htmlFor="terms" className="ml-2 text-sm text-gray-600">
-                  I agree to the <a href="/terms-and-conditions" className="text-blue-600 hover:underline">Terms and Conditions</a> and <a href="/privacy-policy" className="text-blue-600 hover:underline">Privacy Policy</a>
+                  I agree to the{" "}
+                  <Link
+                    href="/terms-and-conditions"
+                    className="text-blue-600 hover:underline"
+                  >
+                    Terms and Conditions
+                  </Link>{" "}
+                  and{" "}
+                  <a
+                    href="/privacy-policy"
+                    className="text-blue-600 hover:underline"
+                  >
+                    Privacy Policy
+                  </a>
                 </Label>
               </div>
 
@@ -159,7 +185,10 @@ const CrRegister = () => {
             <div className="mt-8 text-center">
               <p className="text-gray-600">
                 Already have a CR account?{" "}
-                <a href="/auth/cr-login" className="text-blue-600 font-medium hover:underline">
+                <a
+                  href="/auth/cr-login"
+                  className="text-blue-600 font-medium hover:underline"
+                >
                   Sign in
                 </a>
               </p>

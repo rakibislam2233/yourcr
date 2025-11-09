@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const Sidebar = () => {
   return (
     <div className="w-64 bg-white shadow-md">
@@ -7,13 +9,13 @@ const Sidebar = () => {
       <nav className="p-4">
         <ul className="space-y-2">
           <li>
-            <a href="#" className="block p-2 rounded hover:bg-gray-100 text-primary">Home</a>
+            <Link href="#" className="block p-2 rounded hover:bg-gray-100 text-primary">Home</Link>
           </li>
           <li>
-            <a href="#" className="block p-2 rounded hover:bg-gray-100 text-primary">Profile</a>
+            <Link href="#" className="block p-2 rounded hover:bg-gray-100 text-primary">Profile</Link>
           </li>
           <li>
-            <a href="#" className="block p-2 rounded hover:bg-gray-100 text-primary">Settings</a>
+            <Link href="#" className="block p-2 rounded hover:bg-gray-100 text-primary">Settings</Link>
           </li>
         </ul>
       </nav>

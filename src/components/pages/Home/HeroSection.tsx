@@ -3,6 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const HeroSection: React.FC = () => {
   return (
@@ -52,13 +53,15 @@ const HeroSection: React.FC = () => {
                   ease: "easeInOut",
                 }}
               >
-                <Button
-                  variant="default"
-                  size="lg"
-                  className="h-13 px-8 border border-primary cursor-pointer"
-                >
-                  Login as CR
-                </Button>
+                <Link href="/auth/cr-login">
+                  <Button
+                    variant="default"
+                    size="lg"
+                    className="h-13 px-8 border border-primary cursor-pointer"
+                  >
+                    Login as CR
+                  </Button>
+                </Link>
               </motion.div>
 
               <motion.div
@@ -75,7 +78,7 @@ const HeroSection: React.FC = () => {
                   size="lg"
                   className="h-13 px-8 border border-primary text-primary cursor-pointer"
                 >
-                  Join as Student
+                  <Link href="/auth/student-login">Login as Student</Link>
                 </Button>
               </motion.div>
             </motion.div>

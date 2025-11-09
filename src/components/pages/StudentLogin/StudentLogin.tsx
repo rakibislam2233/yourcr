@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Mail, Lock, User } from "lucide-react";
+import Link from "next/link";
 
 const StudentLogin = () => {
   return (
@@ -99,9 +100,9 @@ const StudentLogin = () => {
                     Remember me
                   </Label>
                 </div>
-                <a href="/auth/forgot-password" className="text-sm text-blue-600 hover:underline">
+                <Link href="/auth/forgot-password" className="text-sm text-blue-600 hover:underline">
                   Forgot password?
-                </a>
+                </Link>
               </div>
 
               <Button type="submit" className="w-full h-14 text-lg">

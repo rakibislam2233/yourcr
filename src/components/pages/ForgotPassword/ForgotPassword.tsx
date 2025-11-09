@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Mail, ArrowLeft, CheckCircle } from "lucide-react";
+import Link from "next/link";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -26,13 +27,13 @@ const ForgotPassword = () => {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-left max-w-3xl mx-auto text-center"
+            className="max-w-3xl mx-auto text-center"
           >
             <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 mb-4 leading-tight">
               Forgot Password?
             </h1>
             <p className="text-lg md:text-xl text-gray-700 font-medium">
-              No worries, we'll send you reset instructions
+              No worries, we&apos;ll send you reset instructions
             </p>
           </motion.div>
         </div>
@@ -71,13 +72,13 @@ const ForgotPassword = () => {
                   Check Your Email
                 </h2>
                 <p className="text-gray-600 mb-8">
-                  We've sent a password reset link to {email}. Please check your inbox and follow the instructions.
+                  We&apos;ve sent a password reset link to {email}. Please check your inbox and follow the instructions.
                 </p>
-                <a href="/auth">
+                <Link href="/auth">
                   <Button className="w-full h-14 text-lg">
                     Back to Login
                   </Button>
-                </a>
+                </Link>
               </div>
             ) : (
               <>
@@ -85,7 +86,7 @@ const ForgotPassword = () => {
                   Forgot Password
                 </h2>
                 <p className="text-center text-gray-600 mb-8">
-                  Enter your email and we'll send you a link to reset your password
+                  Enter your email and we&apos;ll send you a link to reset your password
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -113,10 +114,10 @@ const ForgotPassword = () => {
                 </form>
 
                 <div className="mt-8 text-center">
-                  <a href="/auth" className="flex items-center justify-center text-blue-600 hover:underline">
+                  <Link href="/auth" className="flex items-center justify-center text-blue-600 hover:underline">
                     <ArrowLeft className="w-4 h-4 mr-2" />
                     Back to Login
-                  </a>
+                  </Link>
                 </div>
               </>
             )}

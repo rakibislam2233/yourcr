@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 const TermsAndConditions = () => {
   return (
@@ -45,8 +46,8 @@ const TermsAndConditions = () => {
             <div className="mb-12">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">Introduction</h2>
               <p className="text-gray-600 leading-relaxed">
-                Welcome to YourCR ("the Platform", "we", "us", or "our"). These Terms and Conditions ("Terms", "Terms and Conditions") 
-                govern your use of the online classroom management platform accessible at https://yourcr.in (the "Service") and any 
+                Welcome to YourCR (&quot;the Platform&quot;, &quot;we&quot;, &quot;us&quot;, or &quot;our&quot;). These Terms and Conditions (&quot;Terms&quot;, &quot;Terms and Conditions&quot;) 
+                govern your use of the online classroom management platform accessible at https://yourcr.in (the &quot;Service&quot;) and any 
                 related services provided by YourCR.
               </p>
               <p className="text-gray-600 leading-relaxed mt-2">
@@ -160,7 +161,7 @@ const TermsAndConditions = () => {
               <h2 className="text-3xl font-bold text-gray-900 mb-4">Changes to Terms</h2>
               <p className="text-gray-600 leading-relaxed">
                 We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is 
-                material, we will try to provide at least 30 days' notice prior to any new terms taking effect. What constitutes 
+                material, we will try to provide at least 30 days&apos; notice prior to any new terms taking effect. What constitutes 
                 a material change will be determined at our sole discretion. By continuing to access or use our Service after 
                 those revisions become effective, you agree to be bound by the revised terms.
               </p>
@@ -173,7 +174,7 @@ const TermsAndConditions = () => {
               </p>
               <ul className="text-gray-600 list-disc pl-6 mt-4 space-y-2">
                 <li>By email: legal@ourcr.in</li>
-                <li>Through our <a href="/contact-us" className="text-blue-600 hover:underline">Contact Us</a> page</li>
+                <li>Through our <Link href="/contact-us" className="text-blue-600 hover:underline">Contact Us</Link> page</li>
               </ul>
             </div>
           </motion.div>

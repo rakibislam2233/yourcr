@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Lock, CheckCircle } from "lucide-react";
+import Link from "next/link";
 
 const ResetPassword = () => {
   const [password, setPassword] = useState("");
@@ -31,7 +32,7 @@ const ResetPassword = () => {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-left max-w-3xl mx-auto text-center"
+            className="max-w-3xl mx-auto text-center"
           >
             <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 mb-4 leading-tight">
               Reset Password
@@ -78,11 +79,11 @@ const ResetPassword = () => {
                 <p className="text-gray-600 mb-8">
                   Your password has been successfully changed. You can now log in with your new password.
                 </p>
-                <a href="/auth">
+                <Link href="/auth">
                   <Button className="w-full h-14 text-lg">
                     Back to Login
                   </Button>
-                </a>
+                </Link>
               </div>
             ) : (
               <>
@@ -135,7 +136,7 @@ const ResetPassword = () => {
 
                 <div className="mt-8 text-center">
                   <p className="text-gray-600">
-                    Remember your password? <a href="/auth" className="text-blue-600 font-medium hover:underline">Back to Login</a>
+                    Remember your password? <Link href="/auth" className="text-blue-600 font-medium hover:underline">Back to Login</Link>
                   </p>
                 </div>
               </>
