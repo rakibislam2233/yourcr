@@ -114,7 +114,7 @@ const Navbar: React.FC = () => {
           {/* Right side items */}
           <div className="hidden md:flex items-center space-x-4">
             <div className="flex items-center space-x-5">
-              <Link href="/login">
+              <Link href="/auth/cr-login">
                 <Button
                   variant="outline"
                   size="lg"
@@ -123,7 +123,7 @@ const Navbar: React.FC = () => {
                   Login
                 </Button>
               </Link>
-              <Link href="/register">
+              <Link href="/auth/cr-register">
                 <Button
                   variant="default"
                   size="lg"
@@ -181,7 +181,7 @@ const Navbar: React.FC = () => {
 
               <div className="border-t border-border pt-3">
                 <div className="space-y-3">
-                  <Link href="/login" onClick={() => setIsMenuOpen(false)}>
+                  <Link href="/auth/cr-login" onClick={() => setIsMenuOpen(false)}>
                     <Button
                       variant="ghost"
                       size="lg"
@@ -190,7 +190,7 @@ const Navbar: React.FC = () => {
                       Login
                     </Button>
                   </Link>
-                  <Link href="/register" onClick={() => setIsMenuOpen(false)}>
+                  <Link href="/auth/cr-register" onClick={() => setIsMenuOpen(false)}>
                     <Button variant="default" size="lg" className="w-full h-12">
                       Register Now
                     </Button>
