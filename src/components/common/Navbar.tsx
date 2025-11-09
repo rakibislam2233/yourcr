@@ -15,7 +15,6 @@ const Navbar: React.FC = () => {
 
   const pathName = usePathname();
 
-
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -27,11 +26,10 @@ const Navbar: React.FC = () => {
 
   const navLinks = [
     { href: "/", label: "Home" },
-    { href: "/about", label: "About" },
+    { href: "/about-us", label: "About Us" },
     {
-      href: "/dashboard/create-quiz",
-      label: "Create Quiz",
-      authRequired: true,
+      href: "/contact-us",
+      label: "Contact Us",
     },
   ];
 

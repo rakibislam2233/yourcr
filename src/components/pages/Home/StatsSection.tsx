@@ -107,7 +107,7 @@ const StatsSection = () => {
           </motion.div>
 
           {/* Right Stats Cards */}
-          <div className="grid grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
             {stats.map((stat, index) => (
               <motion.div
                 key={index}
