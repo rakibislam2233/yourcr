@@ -1,22 +1,20 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, BookOpen } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import logo from "@/assets/logo/logo.png";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 const Navbar: React.FC = () => {
-  const user = {
-    profile: {
-      fullName: "John Doe",
-    },
-    email: "l0bZ2@example.com",
-  };
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+
+  const pathName = usePathname();
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -39,9 +37,9 @@ const Navbar: React.FC = () => {
 
   const isActiveLink = (href: string) => {
     if (href === "/") {
-      return location.pathname === "/";
+      return pathName === "/";
     }
-    return location.pathname.startsWith(href);
+    return pathName.startsWith(href);
   };
 
   return (
@@ -122,7 +120,7 @@ const Navbar: React.FC = () => {
                 <Button
                   variant="outline"
                   size="lg"
-                  className="cursor-pointer h-12 px-10"
+                  className="cursor-pointer h-12 px-10 border-2 border-primary text-primary bg-transparent hover:bg-transparent"
                 >
                   Login
                 </Button>
