@@ -120,7 +120,7 @@ const Navbar: React.FC = () => {
                 <Button
                   variant="outline"
                   size="lg"
-                  className="cursor-pointer h-12 px-10 border-2 border-primary text-primary bg-transparent hover:bg-transparent"
+                  className="cursor-pointer h-12 px-10 border border-primary text-primary bg-transparent hover:bg-transparent"
                 >
                   Login
                 </Button>

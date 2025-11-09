@@ -55,7 +55,7 @@ const HeroSection: React.FC = () => {
                 <Button
                   variant="default"
                   size="lg"
-                  className="h-13 px-8 border-2 border-primary cursor-pointer"
+                  className="h-13 px-8 border border-primary cursor-pointer"
                 >
                   Login as CR
                 </Button>
@@ -73,7 +73,7 @@ const HeroSection: React.FC = () => {
                 <Button
                   variant="outline"
                   size="lg"
-                  className="h-13 px-8 border-2 border-primary text-primary cursor-pointer"
+                  className="h-13 px-8 border border-primary text-primary cursor-pointer"
                 >
                   Join as Student
                 </Button>

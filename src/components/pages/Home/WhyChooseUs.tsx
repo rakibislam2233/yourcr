@@ -60,7 +60,7 @@ const features = [
 
 const WhyChooseUs = () => {
   return (
-    <section className="relative w-full py-16 md:py-24 lg:py-32 bg-gradient-to-b from-white to-[#F8FAFC] overflow-hidden">
+    <section className="relative w-full py-16 md:py-24 lg:py-32  overflow-hidden">
       {/* Subtle Background Blurs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-80 h-80 bg-blue-100 rounded-full blur-3xl opacity-30"></div>
