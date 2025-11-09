@@ -16,7 +16,7 @@ const CrRegister = () => {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-left max-w-3xl mx-auto text-center"
+            className="max-w-3xl mx-auto text-center"
           >
             <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 mb-4 leading-tight">
               CR Registration
@@ -39,12 +39,12 @@ const CrRegister = () => {
       </section>
 
       <section className="py-16 px-6 bg-white min-h-[60vh]">
-        <div className="max-w-md mx-auto">
+        <div className="max-w-2xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100"
+            className="bg-white rounded-xl p-8 border border-gray-100"
           >
             <div className="flex justify-center mb-2">
               <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center">
@@ -59,8 +59,8 @@ const CrRegister = () => {
               Create your Class Representative account
             </p>
 
-            <form className="space-y-6">
-              <div className="space-y-4">
+            <form className="space-y-6  ">
+              <div className="space-y-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="name" className="text-gray-700">Full Name</Label>
                   <div className="relative mt-2">

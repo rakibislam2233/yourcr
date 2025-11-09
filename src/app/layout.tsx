@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Syne } from "next/font/google";
 import "./globals.css";
+import Navbar from "@/components/common/Navbar";
 
 const geistSans = Syne({
   variable: "--font-geist-sans",

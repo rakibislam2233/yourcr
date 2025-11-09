@@ -13,8 +13,8 @@ const AuthHome = () => {
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-left max-w-3xl mx-auto text-center"
+            transition={{ duration: 0.3 }}
+            className="text-left max-w-3xl mx-auto"
           >
             <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 mb-4 leading-tight">
               Welcome to YourCR
@@ -38,26 +38,27 @@ const AuthHome = () => {
 
       <section className="py-16 px-6 bg-white min-h-[60vh] flex items-center">
         <div className="max-w-md mx-auto w-full">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100"
-          >
+          <motion.div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
             <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">
               Select Your Role
             </h2>
 
             <div className="space-y-6">
               <a href="/auth/cr-login" className="w-full block">
-                <Button variant="outline" className="w-full h-16 text-lg justify-start pl-4">
+                <Button
+                  variant="outline"
+                  className="w-full h-16 text-lg justify-start pl-4"
+                >
                   <GraduationCap className="w-6 h-6 mr-4 text-blue-600" />
                   Login as Class Representative (CR)
                 </Button>
               </a>
 
               <a href="/auth/student-login" className="w-full block">
-                <Button variant="outline" className="w-full h-16 text-lg justify-start pl-4">
+                <Button
+                  variant="outline"
+                  className="w-full h-16 text-lg justify-start pl-4"
+                >
                   <User className="w-6 h-6 mr-4 text-green-600" />
                   Login as Student
                 </Button>
@@ -65,7 +66,8 @@ const AuthHome = () => {
 
               <div className="mt-8 pt-6 border-t border-gray-200">
                 <p className="text-center text-gray-600">
-                  Only CRs can register. If you're a CR, please register first.
+                  Only CRs can register. If you&apos;re a CR, please register
+                  first.
                 </p>
                 <a href="/auth/cr-register" className="block mt-4">
                   <Button className="w-full h-12">
