@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
-import { Syne } from "next/font/google";
-import "./globals.css";
-import Navbar from "@/components/common/Navbar";
+import { Inconsolata } from "next/font/google";
+import "./globals.css"
 
-const geistSans = Syne({
+// const geistSans = Syne({
+//   variable: "--font-geist-sans",
+//   subsets: ["latin"],
+//   weight: ["400", "500", "600", "700"],
+// });
+const geistSans = Inconsolata({
   variable: "--font-geist-sans",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
