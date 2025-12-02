@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import {
   Bell,
   Search,
@@ -81,60 +80,53 @@ const CrHeader: React.FC = () => {
               )}
             </button>
 
-            <AnimatePresence>
-              {showNotifications && (
-                <>
-                  <div
-                    className="fixed inset-0 z-10"
-                    onClick={() => setShowNotifications(false)}
-                  />
-                  <motion.div
-                    initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                    className="absolute right-0 top-full mt-2 w-80 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden z-20"
-                  >
-                    <div className="p-4 border-b border-gray-100">
-                      <h3 className="font-semibold text-gray-900">
-                        Notifications
-                      </h3>
-                    </div>
-                    <div className="max-h-80 overflow-y-auto">
-                      {mockNotifications.map((notification) => (
-                        <div
-                          key={notification.id}
-                          className={`p-4 border-b border-gray-50 hover:bg-gray-50 cursor-pointer transition-colors ${
-                            notification.unread ? "bg-blue-50/50" : ""
-                          }`}
-                        >
-                          <div className="flex items-start gap-3">
-                            {notification.unread && (
-                              <div className="w-2 h-2 mt-2 rounded-full bg-primary flex-shrink-0" />
-                            )}
-                            <div className={notification.unread ? "" : "ml-5"}>
-                              <p className="text-sm font-medium text-gray-900">
-                                {notification.title}
-                              </p>
-                              <p className="text-xs text-gray-500 mt-1">
-                                {notification.message}
-                              </p>
-                              <p className="text-xs text-gray-400 mt-1">
-                                {notification.time}
-                              </p>
-                            </div>
+            {showNotifications && (
+              <>
+                <div
+                  className="fixed inset-0 z-10"
+                  onClick={() => setShowNotifications(false)}
+                />
+                <div className="absolute right-0 top-full mt-2 w-80 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden z-20">
+                  <div className="p-4 border-b border-gray-100">
+                    <h3 className="font-semibold text-gray-900">
+                      Notifications
+                    </h3>
+                  </div>
+                  <div className="max-h-80 overflow-y-auto">
+                    {mockNotifications.map((notification) => (
+                      <div
+                        key={notification.id}
+                        className={`p-4 border-b border-gray-50 hover:bg-gray-50 cursor-pointer transition-colors ${
+                          notification.unread ? "bg-blue-50/50" : ""
+                        }`}
+                      >
+                        <div className="flex items-start gap-3">
+                          {notification.unread && (
+                            <div className="w-2 h-2 mt-2 rounded-full bg-primary flex-shrink-0" />
+                          )}
+                          <div className={notification.unread ? "" : "ml-5"}>
+                            <p className="text-sm font-medium text-gray-900">
+                              {notification.title}
+                            </p>
+                            <p className="text-xs text-gray-500 mt-1">
+                              {notification.message}
+                            </p>
+                            <p className="text-xs text-gray-400 mt-1">
+                              {notification.time}
+                            </p>
                           </div>
                         </div>
-                      ))}
-                    </div>
-                    <div className="p-3 border-t border-gray-100">
-                      <button className="w-full py-2 text-sm font-medium text-primary hover:bg-primary/5 rounded-lg transition-colors">
-                        View all notifications
-                      </button>
-                    </div>
-                  </motion.div>
-                </>
-              )}
-            </AnimatePresence>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="p-3 border-t border-gray-100">
+                    <button className="w-full py-2 text-sm font-medium text-primary hover:bg-primary/5 rounded-lg transition-colors">
+                      View all notifications
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
 
           {/* Profile Dropdown */}
@@ -162,45 +154,38 @@ const CrHeader: React.FC = () => {
               />
             </button>
 
-            <AnimatePresence>
-              {showProfile && (
-                <>
-                  <div
-                    className="fixed inset-0 z-10"
-                    onClick={() => setShowProfile(false)}
-                  />
-                  <motion.div
-                    initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                    className="absolute right-0 top-full mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden z-20"
-                  >
-                    <div className="p-4 border-b border-gray-100">
-                      <p className="font-semibold text-gray-900">Rakib Ahmed</p>
-                      <p className="text-sm text-gray-500">
-                        rakib@example.com
-                      </p>
-                    </div>
-                    <div className="p-2">
-                      <button className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
-                        <User className="w-4 h-4" />
-                        My Profile
-                      </button>
-                      <button className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
-                        <Settings className="w-4 h-4" />
-                        Settings
-                      </button>
-                    </div>
-                    <div className="p-2 border-t border-gray-100">
-                      <button className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors">
-                        <LogOut className="w-4 h-4" />
-                        Logout
-                      </button>
-                    </div>
-                  </motion.div>
-                </>
-              )}
-            </AnimatePresence>
+            {showProfile && (
+              <>
+                <div
+                  className="fixed inset-0 z-10"
+                  onClick={() => setShowProfile(false)}
+                />
+                <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden z-20">
+                  <div className="p-4 border-b border-gray-100">
+                    <p className="font-semibold text-gray-900">Rakib Ahmed</p>
+                    <p className="text-sm text-gray-500">
+                      rakib@example.com
+                    </p>
+                  </div>
+                  <div className="p-2">
+                    <button className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                      <User className="w-4 h-4" />
+                      My Profile
+                    </button>
+                    <button className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                      <Settings className="w-4 h-4" />
+                      Settings
+                    </button>
+                  </div>
+                  <div className="p-2 border-t border-gray-100">
+                    <button className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                      <LogOut className="w-4 h-4" />
+                      Logout
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>

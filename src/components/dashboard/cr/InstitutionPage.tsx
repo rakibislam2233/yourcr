@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
 import {
   Building2,
   MapPin,
@@ -16,35 +15,39 @@ import {
 } from "lucide-react";
 import PageHeader from "../shared/PageHeader";
 import { Button } from "@/components/ui/button";
-
-const institutionData = {
-  name: "Dhaka Polytechnic Institute",
-  shortName: "DPI",
-  type: "Polytechnic Institute",
-  establishedYear: 1955,
-  address: "Tejgaon Industrial Area, Dhaka-1208, Bangladesh",
-  phone: "+880-2-8870553",
-  email: "info@dpi.gov.bd",
-  website: "www.dpi.gov.bd",
-  totalStudents: 5000,
-  totalDepartments: 12,
-  currentDepartment: "Computer Technology",
-  currentSemester: "8th Semester",
-  session: "2020-2024",
-  shift: "1st Shift",
-  group: "A",
-};
-
-const departmentInfo = {
-  name: "Computer Technology",
-  code: "CT",
-  head: "Engr. Md. Abdul Karim",
-  totalStudents: 450,
-  totalTeachers: 25,
-  labs: 8,
-};
+import Link from "next/link";
 
 const InstitutionPage: React.FC = () => {
+  const institutionData = {
+    name: "Dhaka Polytechnic Institute",
+    shortName: "DPI",
+    type: "Polytechnic Institute",
+    establishedYear: 1955,
+    address: "Tejgaon Industrial Area, Dhaka-1208, Bangladesh",
+    phone: "+880-2-8870553",
+    email: "info@dpi.gov.bd",
+    website: "www.dpi.gov.bd",
+    totalStudents: 5000,
+    totalDepartments: 12,
+  };
+
+  const classInfo = {
+    department: "Computer Technology",
+    semester: "8th Semester",
+    session: "2020-2024",
+    shift: "1st Shift",
+    group: "A",
+  };
+
+  const departmentInfo = {
+    name: "Computer Technology",
+    code: "CT",
+    head: "Engr. Md. Abdul Karim",
+    totalStudents: 450,
+    totalTeachers: 25,
+    labs: 8,
+  };
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -56,19 +59,17 @@ const InstitutionPage: React.FC = () => {
           { label: "My Institution" },
         ]}
         action={
-          <Button className="gap-2">
-            <Edit className="w-4 h-4" />
-            Edit Details
-          </Button>
+          <Link href="/dashboard/cr/institution/edit">
+            <Button className="gap-2">
+              <Edit className="w-4 h-4" />
+              Edit Details
+            </Button>
+          </Link>
         }
       />
 
       {/* Institution Overview Card */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="bg-gradient-to-r from-primary to-primary/80 rounded-2xl p-8 text-white"
-      >
+      <div className="bg-gradient-to-r from-primary to-primary/80 rounded-2xl p-8 text-white">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-center gap-6">
             <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center">
@@ -95,16 +96,11 @@ const InstitutionPage: React.FC = () => {
             </Button>
           </div>
         </div>
-      </motion.div>
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Contact Information */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="bg-white rounded-2xl p-6 border border-gray-100"
-        >
+        <div className="bg-white rounded-2xl p-6 border border-gray-100">
           <h3 className="text-lg font-semibold text-gray-900 mb-6">
             Contact Information
           </h3>
@@ -154,60 +150,57 @@ const InstitutionPage: React.FC = () => {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Your Class Info */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="bg-white rounded-2xl p-6 border border-gray-100"
-        >
-          <h3 className="text-lg font-semibold text-gray-900 mb-6">
-            Your Class Information
-          </h3>
+        <div className="bg-white rounded-2xl p-6 border border-gray-100">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-lg font-semibold text-gray-900">
+              Your Class Information
+            </h3>
+            <Link href="/dashboard/cr/institution/edit">
+              <Button variant="ghost" size="sm">
+                <Edit className="w-4 h-4" />
+              </Button>
+            </Link>
+          </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="p-4 bg-gray-50 rounded-xl">
               <p className="text-sm text-gray-500">Department</p>
               <p className="font-semibold text-gray-900 mt-1">
-                {institutionData.currentDepartment}
+                {classInfo.department}
               </p>
             </div>
             <div className="p-4 bg-gray-50 rounded-xl">
               <p className="text-sm text-gray-500">Semester</p>
               <p className="font-semibold text-gray-900 mt-1">
-                {institutionData.currentSemester}
+                {classInfo.semester}
               </p>
             </div>
             <div className="p-4 bg-gray-50 rounded-xl">
               <p className="text-sm text-gray-500">Session</p>
               <p className="font-semibold text-gray-900 mt-1">
-                {institutionData.session}
+                {classInfo.session}
               </p>
             </div>
             <div className="p-4 bg-gray-50 rounded-xl">
               <p className="text-sm text-gray-500">Shift</p>
               <p className="font-semibold text-gray-900 mt-1">
-                {institutionData.shift}
+                {classInfo.shift}
               </p>
             </div>
             <div className="p-4 bg-gray-50 rounded-xl col-span-2">
               <p className="text-sm text-gray-500">Group</p>
               <p className="font-semibold text-gray-900 mt-1">
-                Group {institutionData.group}
+                Group {classInfo.group}
               </p>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
 
       {/* Department Details */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="bg-white rounded-2xl p-6 border border-gray-100"
-      >
+      <div className="bg-white rounded-2xl p-6 border border-gray-100">
         <h3 className="text-lg font-semibold text-gray-900 mb-6">
           Department Overview
         </h3>
@@ -280,7 +273,7 @@ const InstitutionPage: React.FC = () => {
             </div>
           </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };

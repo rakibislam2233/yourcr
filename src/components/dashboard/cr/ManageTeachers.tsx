@@ -1,7 +1,6 @@
 "use client";
 
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useState } from "react";
 import {
   Users,
   Plus,
@@ -9,12 +8,27 @@ import {
   Phone,
   BookOpen,
   Search,
-  Filter,
+  Edit,
+  Trash2,
 } from "lucide-react";
 import PageHeader from "../shared/PageHeader";
 import { Button } from "@/components/ui/button";
+import { ConfirmModal } from "@/components/ui/modal";
+import Link from "next/link";
 
-const teachers = [
+interface Teacher {
+  id: number;
+  name: string;
+  designation: string;
+  department: string;
+  email: string;
+  phone: string;
+  subjects: string[];
+  image: string;
+  color: string;
+}
+
+const initialTeachers: Teacher[] = [
   {
     id: 1,
     name: "Dr. Kamal Ahmed",
@@ -84,6 +98,30 @@ const teachers = [
 ];
 
 const ManageTeachers: React.FC = () => {
+  const [teachers, setTeachers] = useState<Teacher[]>(initialTeachers);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
+
+  const filteredTeachers = teachers.filter(
+    (teacher) =>
+      teacher.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      teacher.designation.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      teacher.subjects.some((s) => s.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
+
+  const handleDelete = (teacher: Teacher) => {
+    setSelectedTeacher(teacher);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (selectedTeacher) {
+      setTeachers(teachers.filter((t) => t.id !== selectedTeacher.id));
+      setSelectedTeacher(null);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -95,42 +133,33 @@ const ManageTeachers: React.FC = () => {
           { label: "Manage Teachers" },
         ]}
         action={
-          <Button className="gap-2">
-            <Plus className="w-4 h-4" />
-            Add Teacher
-          </Button>
+          <Link href="/dashboard/cr/teachers/add">
+            <Button className="gap-2">
+              <Plus className="w-4 h-4" />
+              Add Teacher
+            </Button>
+          </Link>
         }
       />
 
-      {/* Search and Filter */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col sm:flex-row gap-4"
-      >
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search teachers..."
-            className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
-          />
-        </div>
-        <Button variant="outline" className="gap-2">
-          <Filter className="w-4 h-4" />
-          Filter
-        </Button>
-      </motion.div>
+      {/* Search */}
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+        <input
+          type="text"
+          placeholder="Search teachers..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
+        />
+      </div>
 
       {/* Teachers Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {teachers.map((teacher, index) => (
-          <motion.div
+        {filteredTeachers.map((teacher) => (
+          <div
             key={teacher.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 + index * 0.05 }}
-            className="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-xl transition-all duration-300 group"
+            className="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-md transition-shadow group"
           >
             <div className="flex items-start gap-4">
               <div
@@ -167,9 +196,7 @@ const ManageTeachers: React.FC = () => {
             <div className="mt-5 pt-5 border-t border-gray-100">
               <div className="flex items-center gap-2 mb-2">
                 <BookOpen className="w-4 h-4 text-gray-400" />
-                <span className="text-sm font-medium text-gray-700">
-                  Subjects
-                </span>
+                <span className="text-sm font-medium text-gray-700">Subjects</span>
               </div>
               <div className="flex flex-wrap gap-2">
                 {teacher.subjects.map((subject) => (
@@ -184,16 +211,37 @@ const ManageTeachers: React.FC = () => {
             </div>
 
             <div className="mt-5 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-              <Button variant="outline" size="sm" className="flex-1">
-                View Profile
-              </Button>
-              <Button size="sm" className="flex-1">
-                Contact
+              <Link href={`/dashboard/cr/teachers/${teacher.id}/edit`} className="flex-1">
+                <Button variant="outline" size="sm" className="w-full gap-1">
+                  <Edit className="w-3 h-3" />
+                  Edit
+                </Button>
+              </Link>
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex-1 gap-1 text-red-600 hover:text-red-700 hover:bg-red-50"
+                onClick={() => handleDelete(teacher)}
+              >
+                <Trash2 className="w-3 h-3" />
+                Delete
               </Button>
             </div>
-          </motion.div>
+          </div>
         ))}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Teacher"
+        description={`Are you sure you want to remove "${selectedTeacher?.name}" from your class? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="danger"
+      />
     </div>
   );
 };

@@ -90,7 +90,7 @@ const StudentSidebar: React.FC = () => {
       {/* Logo Section */}
       <div className="p-6 border-b border-gray-100">
         <Link href="/" className="flex items-center gap-3">
-          <div className="relative w-10 h-10">
+          <div className="relative w-48 h-10 mx-auto">
             <Image
               src="/logo.png"
               alt="YourCR Logo"
@@ -98,46 +98,24 @@ const StudentSidebar: React.FC = () => {
               className="object-contain"
             />
           </div>
-          <div>
-            <h1 className="text-xl font-bold text-primary">YourCR</h1>
-            <p className="text-xs text-gray-500">Student Portal</p>
-          </div>
         </Link>
-      </div>
-
-      {/* Student Badge */}
-      <div className="px-4 py-3">
-        <div className="flex items-center gap-3 px-3 py-2.5 bg-emerald-50 rounded-xl">
-          <div className="p-2 bg-emerald-100 rounded-lg">
-            <User className="w-5 h-5 text-emerald-600" />
-          </div>
-          <div>
-            <p className="text-sm font-semibold text-gray-900">Student</p>
-            <p className="text-xs text-gray-500">View Access</p>
-          </div>
-        </div>
       </div>
 
       {/* Navigation */}
       <nav className="flex-1 px-3 py-4 overflow-y-auto">
-        <ul className="space-y-1">
-          {menuItems.map((item, index) => {
+        <ul className="space-y-3">
+          {menuItems.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.href);
 
             return (
-              <motion.li
-                key={item.href}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.05 }}
-              >
+              <motion.li key={item.href}>
                 <Link
                   href={item.href}
                   onClick={() => setIsMobileOpen(false)}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group ${
+                  className={`flex items-center gap-3 px-4 py-4 rounded transition-all duration-200 group ${
                     active
-                      ? "bg-primary text-white shadow-lg shadow-primary/25"
+                      ? "bg-primary text-white "
                       : "text-gray-600 hover:bg-gray-100"
                   }`}
                 >

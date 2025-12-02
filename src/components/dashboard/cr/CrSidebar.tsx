@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard,
   Building2,
@@ -19,7 +18,6 @@ import {
   Menu,
   X,
   LogOut,
-  GraduationCap,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -97,7 +95,7 @@ const CrSidebar: React.FC = () => {
       {/* Logo Section */}
       <div className="p-6 border-b border-gray-100">
         <Link href="/" className="flex items-center gap-3">
-          <div className="relative w-10 h-10">
+          <div className="relative w-44 h-10 mx-auto">
             <Image
               src="/logo.png"
               alt="YourCR Logo"
@@ -105,63 +103,38 @@ const CrSidebar: React.FC = () => {
               className="object-contain"
             />
           </div>
-          <div>
-            <h1 className="text-xl font-bold text-primary">YourCR</h1>
-            <p className="text-xs text-gray-500">CR Dashboard</p>
-          </div>
         </Link>
-      </div>
-
-      {/* CR Badge */}
-      <div className="px-4 py-3">
-        <div className="flex items-center gap-3 px-3 py-2.5 bg-primary/5 rounded-xl">
-          <div className="p-2 bg-primary/10 rounded-lg">
-            <GraduationCap className="w-5 h-5 text-primary" />
-          </div>
-          <div>
-            <p className="text-sm font-semibold text-gray-900">Class Rep</p>
-            <p className="text-xs text-gray-500">Full Access</p>
-          </div>
-        </div>
       </div>
 
       {/* Navigation */}
       <nav className="flex-1 px-3 py-4 overflow-y-auto">
-        <ul className="space-y-1">
-          {menuItems.map((item, index) => {
+        <ul className="space-y-2">
+          {menuItems.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.href);
 
             return (
-              <motion.li
-                key={item.href}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.05 }}
-              >
+              <li key={item.href}>
                 <Link
                   href={item.href}
                   onClick={() => setIsMobileOpen(false)}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group ${
+                  className={`flex items-center gap-3 px-4 py-4 rounded transition-colors ${
                     active
-                      ? "bg-primary text-white shadow-lg shadow-primary/25"
+                      ? "bg-primary text-white"
                       : "text-gray-600 hover:bg-gray-100"
                   }`}
                 >
                   <Icon
-                    className={`w-5 h-5 transition-transform group-hover:scale-110 ${
+                    className={`w-5 h-5 ${
                       active ? "text-white" : "text-gray-500"
                     }`}
                   />
-                  <span className="font-medium text-sm">{item.label}</span>
+                  <span className="font-medium">{item.label}</span>
                   {active && (
-                    <motion.div
-                      layoutId="activeIndicator"
-                      className="ml-auto w-1.5 h-1.5 rounded-full bg-white"
-                    />
+                    <div className="ml-auto w-1.5 h-1.5 rounded-full bg-white" />
                   )}
                 </Link>
-              </motion.li>
+              </li>
             );
           })}
         </ul>
@@ -193,34 +166,23 @@ const CrSidebar: React.FC = () => {
       </aside>
 
       {/* Mobile Sidebar */}
-      <AnimatePresence>
-        {isMobileOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+      {isMobileOpen && (
+        <>
+          <div
+            onClick={() => setIsMobileOpen(false)}
+            className="lg:hidden fixed inset-0 bg-black/50 z-40 transition-opacity"
+          />
+          <aside className="lg:hidden fixed left-0 top-0 bottom-0 w-72 bg-white z-50 flex flex-col shadow-2xl">
+            <button
               onClick={() => setIsMobileOpen(false)}
-              className="lg:hidden fixed inset-0 bg-black/50 z-40"
-            />
-            <motion.aside
-              initial={{ x: "-100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "-100%" }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="lg:hidden fixed left-0 top-0 bottom-0 w-72 bg-white z-50 flex flex-col shadow-2xl"
+              className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-lg"
             >
-              <button
-                onClick={() => setIsMobileOpen(false)}
-                className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-lg"
-              >
-                <X className="w-5 h-5 text-gray-500" />
-              </button>
-              <SidebarContent />
-            </motion.aside>
-          </>
-        )}
-      </AnimatePresence>
+              <X className="w-5 h-5 text-gray-500" />
+            </button>
+            <SidebarContent />
+          </aside>
+        </>
+      )}
     </>
   );
 };

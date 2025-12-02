@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
 import {
   Users,
   BookOpen,
@@ -55,13 +54,13 @@ const recentActivities = [
 const quickActions = [
   {
     label: "Add Student",
-    href: "/dashboard/cr/students",
+    href: "/dashboard/cr/students/add",
     icon: Users,
     color: "bg-blue-500",
   },
   {
     label: "Create Notice",
-    href: "/dashboard/cr/notices",
+    href: "/dashboard/cr/notices/add",
     icon: Bell,
     color: "bg-green-500",
   },
@@ -116,14 +115,12 @@ const DashboardOverview: React.FC = () => {
           icon={Users}
           color="blue"
           trend={{ value: 5, isPositive: true }}
-          delay={0}
         />
         <StatsCard
           title="Active Subjects"
           value={8}
           icon={BookOpen}
           color="green"
-          delay={0.1}
         />
         <StatsCard
           title="Pending Issues"
@@ -131,26 +128,19 @@ const DashboardOverview: React.FC = () => {
           icon={MessageSquare}
           color="orange"
           trend={{ value: 2, isPositive: false }}
-          delay={0.2}
         />
         <StatsCard
           title="Assessments"
           value={12}
           icon={ClipboardList}
           color="purple"
-          delay={0.3}
         />
       </div>
 
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Recent Activity */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="lg:col-span-2 bg-white rounded-2xl p-6 border border-gray-100"
-        >
+        <div className="lg:col-span-2 bg-white rounded-2xl p-6 border border-gray-100">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold text-gray-900">
               Recent Activity
@@ -163,12 +153,9 @@ const DashboardOverview: React.FC = () => {
             </Link>
           </div>
           <div className="space-y-4">
-            {recentActivities.map((activity, index) => (
-              <motion.div
+            {recentActivities.map((activity) => (
+              <div
                 key={activity.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.5 + index * 0.1 }}
                 className="flex items-start gap-4 p-4 rounded-xl hover:bg-gray-50 transition-colors"
               >
                 <div className={`p-2.5 rounded-xl ${activity.color}`}>
@@ -182,56 +169,41 @@ const DashboardOverview: React.FC = () => {
                   <Clock className="w-3 h-3" />
                   {activity.time}
                 </span>
-              </motion.div>
+              </div>
             ))}
           </div>
-        </motion.div>
+        </div>
 
         {/* Quick Actions */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="bg-white rounded-2xl p-6 border border-gray-100"
-        >
+        <div className="bg-white rounded-2xl p-6 border border-gray-100">
           <h2 className="text-lg font-semibold text-gray-900 mb-6">
             Quick Actions
           </h2>
           <div className="grid grid-cols-2 gap-3">
-            {quickActions.map((action, index) => (
+            {quickActions.map((action) => (
               <Link
                 key={action.label}
                 href={action.href}
                 className="group"
               >
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.6 + index * 0.1 }}
-                  className="flex flex-col items-center gap-3 p-4 rounded-xl bg-gray-50 hover:bg-gray-100 transition-all group-hover:shadow-md"
-                >
+                <div className="flex flex-col items-center gap-3 p-4 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors">
                   <div
-                    className={`p-3 rounded-xl ${action.color} text-white group-hover:scale-110 transition-transform`}
+                    className={`p-3 rounded-xl ${action.color} text-white`}
                   >
                     <action.icon className="w-5 h-5" />
                   </div>
                   <span className="text-sm font-medium text-gray-700">
                     {action.label}
                   </span>
-                </motion.div>
+                </div>
               </Link>
             ))}
           </div>
-        </motion.div>
+        </div>
       </div>
 
       {/* Today's Classes */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.7 }}
-        className="bg-white rounded-2xl p-6 border border-gray-100"
-      >
+      <div className="bg-white rounded-2xl p-6 border border-gray-100">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-lg font-semibold text-gray-900">
             Today&apos;s Classes
@@ -244,12 +216,9 @@ const DashboardOverview: React.FC = () => {
           </Link>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {upcomingClasses.map((cls, index) => (
-            <motion.div
+          {upcomingClasses.map((cls) => (
+            <div
               key={cls.subject}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 + index * 0.1 }}
               className="p-4 rounded-xl bg-gradient-to-br from-primary/5 to-primary/10 border border-primary/10"
             >
               <h3 className="font-semibold text-gray-900">{cls.subject}</h3>
@@ -261,18 +230,13 @@ const DashboardOverview: React.FC = () => {
                 </span>
                 <span>{cls.room}</span>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
-      </motion.div>
+      </div>
 
       {/* Performance Overview */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.9 }}
-        className="bg-gradient-to-r from-primary to-primary/80 rounded-2xl p-6 text-white"
-      >
+      <div className="bg-gradient-to-r from-primary to-primary/80 rounded-2xl p-6 text-white">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-lg font-semibold">Class Performance</h2>
@@ -299,7 +263,7 @@ const DashboardOverview: React.FC = () => {
             <p className="text-2xl font-bold mt-1">15/18</p>
           </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };

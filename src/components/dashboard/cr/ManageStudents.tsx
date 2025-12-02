@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion } from "framer-motion";
 import {
   UserPlus,
   Plus,
@@ -9,7 +8,6 @@ import {
   Filter,
   Mail,
   Phone,
-  MoreVertical,
   Download,
   Upload,
   Trash2,
@@ -17,8 +15,21 @@ import {
 } from "lucide-react";
 import PageHeader from "../shared/PageHeader";
 import { Button } from "@/components/ui/button";
+import { ConfirmModal } from "@/components/ui/modal";
+import Link from "next/link";
 
-const students = [
+interface Student {
+  id: number;
+  roll: string;
+  name: string;
+  email: string;
+  phone: string;
+  status: string;
+  avatar: string;
+  color: string;
+}
+
+const initialStudents: Student[] = [
   { id: 1, roll: "CT-8001", name: "Sakib Hasan", email: "sakib@example.com", phone: "+880 1711-111111", status: "active", avatar: "SH", color: "bg-blue-500" },
   { id: 2, roll: "CT-8002", name: "Fahim Rahman", email: "fahim@example.com", phone: "+880 1711-222222", status: "active", avatar: "FR", color: "bg-green-500" },
   { id: 3, roll: "CT-8003", name: "Nadia Islam", email: "nadia@example.com", phone: "+880 1711-333333", status: "active", avatar: "NI", color: "bg-purple-500" },
@@ -30,8 +41,11 @@ const students = [
 ];
 
 const ManageStudents: React.FC = () => {
+  const [students, setStudents] = useState<Student[]>(initialStudents);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStudents, setSelectedStudents] = useState<number[]>([]);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
 
   const filteredStudents = students.filter(
     (student) =>
@@ -54,6 +68,18 @@ const ManageStudents: React.FC = () => {
     }
   };
 
+  const handleDelete = (student: Student) => {
+    setSelectedStudent(student);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (selectedStudent) {
+      setStudents(students.filter((s) => s.id !== selectedStudent.id));
+      setSelectedStudent(null);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -70,60 +96,42 @@ const ManageStudents: React.FC = () => {
               <Upload className="w-4 h-4" />
               Import
             </Button>
-            <Button className="gap-2">
-              <Plus className="w-4 h-4" />
-              Add Student
-            </Button>
+            <Link href="/dashboard/cr/students/add">
+              <Button className="gap-2">
+                <Plus className="w-4 h-4" />
+                Add Student
+              </Button>
+            </Link>
           </div>
         }
       />
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-xl p-5 border border-gray-100"
-        >
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Total Students</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">45</p>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="bg-white rounded-xl p-5 border border-gray-100"
-        >
+          <p className="text-2xl font-bold text-gray-900 mt-1">{students.length}</p>
+        </div>
+        <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Active</p>
-          <p className="text-2xl font-bold text-green-600 mt-1">42</p>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="bg-white rounded-xl p-5 border border-gray-100"
-        >
+          <p className="text-2xl font-bold text-green-600 mt-1">
+            {students.filter((s) => s.status === "active").length}
+          </p>
+        </div>
+        <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Inactive</p>
-          <p className="text-2xl font-bold text-red-600 mt-1">3</p>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="bg-white rounded-xl p-5 border border-gray-100"
-        >
+          <p className="text-2xl font-bold text-red-600 mt-1">
+            {students.filter((s) => s.status === "inactive").length}
+          </p>
+        </div>
+        <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Avg. Attendance</p>
           <p className="text-2xl font-bold text-gray-900 mt-1">89%</p>
-        </motion.div>
+        </div>
       </div>
 
       {/* Search and Actions */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-        className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between"
-      >
+      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <div className="flex flex-1 gap-4 w-full sm:w-auto">
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -132,7 +140,7 @@ const ManageStudents: React.FC = () => {
               placeholder="Search by name, roll, email..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+              className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
             />
           </div>
           <Button variant="outline" className="gap-2">
@@ -152,15 +160,10 @@ const ManageStudents: React.FC = () => {
             </Button>
           </div>
         )}
-      </motion.div>
+      </div>
 
       {/* Students Table */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-        className="bg-white rounded-2xl border border-gray-100 overflow-hidden"
-      >
+      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
@@ -191,14 +194,8 @@ const ManageStudents: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {filteredStudents.map((student, index) => (
-                <motion.tr
-                  key={student.id}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.6 + index * 0.03 }}
-                  className="hover:bg-gray-50/50 transition-colors"
-                >
+              {filteredStudents.map((student) => (
+                <tr key={student.id} className="hover:bg-gray-50/50 transition-colors">
                   <td className="px-6 py-4">
                     <input
                       type="checkbox"
@@ -245,15 +242,20 @@ const ManageStudents: React.FC = () => {
                       <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
                         <Mail className="w-4 h-4 text-gray-500" />
                       </button>
-                      <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                        <Edit className="w-4 h-4 text-gray-500" />
-                      </button>
-                      <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                        <MoreVertical className="w-4 h-4 text-gray-500" />
+                      <Link href={`/dashboard/cr/students/${student.id}/edit`}>
+                        <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                          <Edit className="w-4 h-4 text-gray-500" />
+                        </button>
+                      </Link>
+                      <button
+                        onClick={() => handleDelete(student)}
+                        className="p-2 hover:bg-red-50 rounded-lg transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4 text-red-500" />
                       </button>
                     </div>
                   </td>
-                </motion.tr>
+                </tr>
               ))}
             </tbody>
           </table>
@@ -272,14 +274,23 @@ const ManageStudents: React.FC = () => {
               1
             </Button>
             <Button variant="outline" size="sm">
-              2
-            </Button>
-            <Button variant="outline" size="sm">
               Next
             </Button>
           </div>
         </div>
-      </motion.div>
+      </div>
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Student"
+        description={`Are you sure you want to remove "${selectedStudent?.name}" from your class? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="danger"
+      />
     </div>
   );
 };

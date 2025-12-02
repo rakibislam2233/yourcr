@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
 import { LucideIcon } from "lucide-react";
 
 interface StatsCardProps {
@@ -13,7 +12,6 @@ interface StatsCardProps {
     isPositive: boolean;
   };
   color?: "blue" | "green" | "purple" | "orange" | "red";
-  delay?: number;
 }
 
 const colorClasses = {
@@ -50,17 +48,11 @@ const StatsCard: React.FC<StatsCardProps> = ({
   icon: Icon,
   trend,
   color = "blue",
-  delay = 0,
 }) => {
   const colors = colorClasses[color];
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay }}
-      className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300"
-    >
+    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
       <div className="flex items-center justify-between">
         <div className="space-y-2">
           <p className="text-sm font-medium text-gray-500">{title}</p>
@@ -83,7 +75,7 @@ const StatsCard: React.FC<StatsCardProps> = ({
           <Icon className="w-7 h-7" />
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

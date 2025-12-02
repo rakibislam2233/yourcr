@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion } from "framer-motion";
 import {
   Settings,
   User,
@@ -45,11 +44,7 @@ const ProfileSettings: React.FC = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Profile Card */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="lg:col-span-1"
-        >
+        <div className="lg:col-span-1">
           <div className="bg-white rounded-2xl border border-gray-100 p-6">
             <div className="flex flex-col items-center">
               <div className="relative">
@@ -102,15 +97,10 @@ const ProfileSettings: React.FC = () => {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Settings Forms */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="lg:col-span-2 space-y-6"
-        >
+        <div className="lg:col-span-2 space-y-6">
           {/* Personal Information */}
           <div className="bg-white rounded-2xl border border-gray-100 p-6">
             <div className="flex items-center gap-3 mb-6">
@@ -309,7 +299,7 @@ const ProfileSettings: React.FC = () => {
               Delete Account
             </Button>
           </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   );

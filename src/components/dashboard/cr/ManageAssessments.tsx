@@ -1,7 +1,6 @@
 "use client";
 
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useState } from "react";
 import {
   ClipboardList,
   Plus,
@@ -17,8 +16,25 @@ import {
 } from "lucide-react";
 import PageHeader from "../shared/PageHeader";
 import { Button } from "@/components/ui/button";
+import { ConfirmModal } from "@/components/ui/modal";
+import Link from "next/link";
 
-const assessments = [
+interface Assessment {
+  id: number;
+  title: string;
+  subject: string;
+  type: string;
+  date: string;
+  time: string;
+  totalMarks: number;
+  status: string;
+  venue?: string;
+  submissions?: number;
+  totalStudents?: number;
+  avgScore?: number;
+}
+
+const initialAssessments: Assessment[] = [
   {
     id: 1,
     title: "Mid-Term Examination",
@@ -133,6 +149,26 @@ const getTypeColor = (type: string) => {
 };
 
 const ManageAssessments: React.FC = () => {
+  const [assessments, setAssessments] = useState<Assessment[]>(initialAssessments);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [selectedAssessment, setSelectedAssessment] = useState<Assessment | null>(null);
+
+  const handleDelete = (assessment: Assessment) => {
+    setSelectedAssessment(assessment);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (selectedAssessment) {
+      setAssessments(assessments.filter((a) => a.id !== selectedAssessment.id));
+      setSelectedAssessment(null);
+    }
+  };
+
+  const upcomingCount = assessments.filter((a) => a.status === "upcoming").length;
+  const ongoingCount = assessments.filter((a) => a.status === "ongoing").length;
+  const completedCount = assessments.filter((a) => a.status === "completed").length;
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -144,65 +180,44 @@ const ManageAssessments: React.FC = () => {
           { label: "Manage Assessments" },
         ]}
         action={
-          <Button className="gap-2">
-            <Plus className="w-4 h-4" />
-            Create Assessment
-          </Button>
+          <Link href="/dashboard/cr/assessments/add">
+            <Button className="gap-2">
+              <Plus className="w-4 h-4" />
+              Create Assessment
+            </Button>
+          </Link>
         }
       />
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-xl p-5 border border-gray-100"
-        >
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Total Assessments</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">12</p>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="bg-white rounded-xl p-5 border border-gray-100"
-        >
+          <p className="text-2xl font-bold text-gray-900 mt-1">{assessments.length}</p>
+        </div>
+        <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Upcoming</p>
-          <p className="text-2xl font-bold text-blue-600 mt-1">3</p>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="bg-white rounded-xl p-5 border border-gray-100"
-        >
+          <p className="text-2xl font-bold text-blue-600 mt-1">{upcomingCount}</p>
+        </div>
+        <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Ongoing</p>
-          <p className="text-2xl font-bold text-orange-600 mt-1">2</p>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="bg-white rounded-xl p-5 border border-gray-100"
-        >
+          <p className="text-2xl font-bold text-orange-600 mt-1">{ongoingCount}</p>
+        </div>
+        <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Completed</p>
-          <p className="text-2xl font-bold text-green-600 mt-1">7</p>
-        </motion.div>
+          <p className="text-2xl font-bold text-green-600 mt-1">{completedCount}</p>
+        </div>
       </div>
 
       {/* Assessments List */}
       <div className="space-y-4">
-        {assessments.map((assessment, index) => {
+        {assessments.map((assessment) => {
           const statusConfig = getStatusConfig(assessment.status);
-          const StatusIcon = statusConfig.icon;
 
           return (
-            <motion.div
+            <div
               key={assessment.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 + index * 0.1 }}
-              className="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-lg transition-shadow"
+              className="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-md transition-shadow"
             >
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                 <div className="flex items-start gap-4">
@@ -270,23 +285,38 @@ const ManageAssessments: React.FC = () => {
                         Results
                       </Button>
                     )}
-                    <Button variant="ghost" size="sm">
-                      <Edit className="w-4 h-4" />
-                    </Button>
+                    <Link href={`/dashboard/cr/assessments/${assessment.id}/edit`}>
+                      <Button variant="ghost" size="sm">
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                    </Link>
                     <Button
                       variant="ghost"
                       size="sm"
                       className="text-red-600 hover:bg-red-50"
+                      onClick={() => handleDelete(assessment)}
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
           );
         })}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Assessment"
+        description={`Are you sure you want to delete the assessment "${selectedAssessment?.title}"? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="danger"
+      />
     </div>
   );
 };

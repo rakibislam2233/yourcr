@@ -1,7 +1,6 @@
 "use client";
 
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useState } from "react";
 import {
   Bell,
   Plus,
@@ -17,8 +16,21 @@ import {
 } from "lucide-react";
 import PageHeader from "../shared/PageHeader";
 import { Button } from "@/components/ui/button";
+import { ConfirmModal } from "@/components/ui/modal";
+import Link from "next/link";
 
-const notices = [
+interface Notice {
+  id: number;
+  title: string;
+  content: string;
+  type: string;
+  author: string;
+  date: string;
+  pinned: boolean;
+  views: number;
+}
+
+const initialNotices: Notice[] = [
   {
     id: 1,
     title: "Mid-Term Examination Schedule",
@@ -109,6 +121,31 @@ const getTypeConfig = (type: string) => {
 };
 
 const ManageNotices: React.FC = () => {
+  const [notices, setNotices] = useState<Notice[]>(initialNotices);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [selectedNotice, setSelectedNotice] = useState<Notice | null>(null);
+
+  const handleDelete = (notice: Notice) => {
+    setSelectedNotice(notice);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (selectedNotice) {
+      setNotices(notices.filter((n) => n.id !== selectedNotice.id));
+      setSelectedNotice(null);
+    }
+  };
+
+  const togglePin = (id: number) => {
+    setNotices(notices.map((n) =>
+      n.id === id ? { ...n, pinned: !n.pinned } : n
+    ));
+  };
+
+  const pinnedCount = notices.filter((n) => n.pinned).length;
+  const totalViews = notices.reduce((sum, n) => sum + n.views, 0);
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -120,65 +157,45 @@ const ManageNotices: React.FC = () => {
           { label: "Manage Notices" },
         ]}
         action={
-          <Button className="gap-2">
-            <Plus className="w-4 h-4" />
-            Create Notice
-          </Button>
+          <Link href="/dashboard/cr/notices/add">
+            <Button className="gap-2">
+              <Plus className="w-4 h-4" />
+              Create Notice
+            </Button>
+          </Link>
         }
       />
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-xl p-5 border border-gray-100"
-        >
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Total Notices</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">24</p>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="bg-white rounded-xl p-5 border border-gray-100"
-        >
+          <p className="text-2xl font-bold text-gray-900 mt-1">{notices.length}</p>
+        </div>
+        <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Pinned</p>
-          <p className="text-2xl font-bold text-orange-600 mt-1">2</p>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="bg-white rounded-xl p-5 border border-gray-100"
-        >
+          <p className="text-2xl font-bold text-orange-600 mt-1">{pinnedCount}</p>
+        </div>
+        <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">This Week</p>
           <p className="text-2xl font-bold text-gray-900 mt-1">5</p>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="bg-white rounded-xl p-5 border border-gray-100"
-        >
+        </div>
+        <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Total Views</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">1.2K</p>
-        </motion.div>
+          <p className="text-2xl font-bold text-gray-900 mt-1">{totalViews}</p>
+        </div>
       </div>
 
       {/* Notices List */}
       <div className="space-y-4">
-        {notices.map((notice, index) => {
+        {notices.map((notice) => {
           const typeConfig = getTypeConfig(notice.type);
           const TypeIcon = typeConfig.icon;
 
           return (
-            <motion.div
+            <div
               key={notice.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 + index * 0.1 }}
-              className={`bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow ${
+              className={`bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-md transition-shadow ${
                 notice.pinned ? "ring-2 ring-primary/20" : ""
               }`}
             >
@@ -225,26 +242,46 @@ const ManageNotices: React.FC = () => {
                     </div>
                   </div>
                   <div className="flex items-center gap-1">
-                    <Button variant="ghost" size="sm" className="gap-1">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className={`gap-1 ${notice.pinned ? "text-yellow-600" : ""}`}
+                      onClick={() => togglePin(notice.id)}
+                    >
                       <Pin className="w-4 h-4" />
                     </Button>
-                    <Button variant="ghost" size="sm" className="gap-1">
-                      <Edit className="w-4 h-4" />
-                    </Button>
+                    <Link href={`/dashboard/cr/notices/${notice.id}/edit`}>
+                      <Button variant="ghost" size="sm" className="gap-1">
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                    </Link>
                     <Button
                       variant="ghost"
                       size="sm"
                       className="gap-1 text-red-600 hover:bg-red-50"
+                      onClick={() => handleDelete(notice)}
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
           );
         })}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Notice"
+        description={`Are you sure you want to delete the notice "${selectedNotice?.title}"? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="danger"
+      />
     </div>
   );
 };

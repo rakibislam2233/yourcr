@@ -1,7 +1,6 @@
 "use client";
 
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useState } from "react";
 import {
   BookOpen,
   Plus,
@@ -9,12 +8,25 @@ import {
   Trash2,
   Clock,
   User,
-  MoreVertical,
+  Search,
 } from "lucide-react";
 import PageHeader from "../shared/PageHeader";
 import { Button } from "@/components/ui/button";
+import { ConfirmModal } from "@/components/ui/modal";
+import Link from "next/link";
 
-const subjects = [
+interface Subject {
+  id: number;
+  code: string;
+  name: string;
+  teacher: string;
+  credits: number;
+  type: string;
+  schedule: string;
+  color: string;
+}
+
+const initialSubjects: Subject[] = [
   {
     id: 1,
     code: "CSE-401",
@@ -75,29 +87,33 @@ const subjects = [
     schedule: "Mon, Fri - 3:00 PM",
     color: "bg-cyan-500",
   },
-  {
-    id: 7,
-    code: "HUM-401",
-    name: "Professional Ethics",
-    teacher: "Dr. Shamsul Alam",
-    credits: 2,
-    type: "Theory",
-    schedule: "Tue - 4:00 PM",
-    color: "bg-amber-500",
-  },
-  {
-    id: 8,
-    code: "CSE-407",
-    name: "Project Work",
-    teacher: "All Faculty",
-    credits: 6,
-    type: "Project",
-    schedule: "As Scheduled",
-    color: "bg-red-500",
-  },
 ];
 
 const ManageSubjects: React.FC = () => {
+  const [subjects, setSubjects] = useState<Subject[]>(initialSubjects);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null);
+
+  const filteredSubjects = subjects.filter(
+    (subject) =>
+      subject.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      subject.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      subject.teacher.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const handleDelete = (subject: Subject) => {
+    setSelectedSubject(subject);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (selectedSubject) {
+      setSubjects(subjects.filter((s) => s.id !== selectedSubject.id));
+      setSelectedSubject(null);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -109,75 +125,75 @@ const ManageSubjects: React.FC = () => {
           { label: "Manage Subjects" },
         ]}
         action={
-          <Button className="gap-2">
-            <Plus className="w-4 h-4" />
-            Add Subject
-          </Button>
+          <Link href="/dashboard/cr/subjects/add">
+            <Button className="gap-2">
+              <Plus className="w-4 h-4" />
+              Add Subject
+            </Button>
+          </Link>
         }
       />
 
+      {/* Search */}
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+        <input
+          type="text"
+          placeholder="Search subjects..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
+        />
+      </div>
+
       {/* Stats Summary */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-xl p-5 border border-gray-100"
-        >
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Total Subjects</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">8</p>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="bg-white rounded-xl p-5 border border-gray-100"
-        >
+          <p className="text-2xl font-bold text-gray-900 mt-1">{subjects.length}</p>
+        </div>
+        <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Total Credits</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">29</p>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="bg-white rounded-xl p-5 border border-gray-100"
-        >
+          <p className="text-2xl font-bold text-gray-900 mt-1">
+            {subjects.reduce((sum, s) => sum + s.credits, 0)}
+          </p>
+        </div>
+        <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Theory Subjects</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">3</p>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="bg-white rounded-xl p-5 border border-gray-100"
-        >
+          <p className="text-2xl font-bold text-gray-900 mt-1">
+            {subjects.filter((s) => s.type === "Theory").length}
+          </p>
+        </div>
+        <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Lab Subjects</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">4</p>
-        </motion.div>
+          <p className="text-2xl font-bold text-gray-900 mt-1">
+            {subjects.filter((s) => s.type.includes("Lab")).length}
+          </p>
+        </div>
       </div>
 
       {/* Subjects Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {subjects.map((subject, index) => (
-          <motion.div
+        {filteredSubjects.map((subject) => (
+          <div
             key={subject.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 + index * 0.05 }}
-            className="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-lg transition-shadow group"
+            className="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-md transition-shadow group"
           >
             <div className="flex items-start justify-between mb-4">
               <div className={`w-12 h-12 ${subject.color} rounded-xl flex items-center justify-center text-white`}>
                 <BookOpen className="w-6 h-6" />
               </div>
               <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                  <Edit className="w-4 h-4 text-gray-500" />
-                </button>
-                <button className="p-2 hover:bg-red-50 rounded-lg transition-colors">
+                <Link href={`/dashboard/cr/subjects/${subject.id}/edit`}>
+                  <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                    <Edit className="w-4 h-4 text-gray-500" />
+                  </button>
+                </Link>
+                <button
+                  onClick={() => handleDelete(subject)}
+                  className="p-2 hover:bg-red-50 rounded-lg transition-colors"
+                >
                   <Trash2 className="w-4 h-4 text-red-500" />
-                </button>
-                <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                  <MoreVertical className="w-4 h-4 text-gray-500" />
                 </button>
               </div>
             </div>
@@ -205,9 +221,21 @@ const ManageSubjects: React.FC = () => {
                 {subject.schedule}
               </div>
             </div>
-          </motion.div>
+          </div>
         ))}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Subject"
+        description={`Are you sure you want to delete "${selectedSubject?.name}"? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="danger"
+      />
     </div>
   );
 };
