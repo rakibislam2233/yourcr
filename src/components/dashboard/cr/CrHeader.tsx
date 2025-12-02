@@ -9,7 +9,7 @@ import {
   Settings,
   LogOut,
 } from "lucide-react";
-import SemesterSwitcher from "../shared/SemesterSwitcher";
+import Link from "next/link";
 
 const mockNotifications = [
   {
@@ -54,11 +54,6 @@ const CrHeader: React.FC = () => {
               className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
             />
           </div>
-        </div>
-
-        {/* Center - Semester Switcher */}
-        <div className="flex-shrink-0 ml-4 lg:ml-0">
-          <SemesterSwitcher />
         </div>
 
         {/* Right Side - Notifications & Profile */}
@@ -120,9 +115,13 @@ const CrHeader: React.FC = () => {
                     ))}
                   </div>
                   <div className="p-3 border-t border-gray-100">
-                    <button className="w-full py-2 text-sm font-medium text-primary hover:bg-primary/5 rounded-lg transition-colors">
+                    <Link
+                      href="/dashboard/cr/notifications"
+                      onClick={() => setShowNotifications(false)}
+                      className="block w-full py-2 text-sm font-medium text-primary hover:bg-primary/5 rounded-lg transition-colors text-center"
+                    >
                       View all notifications
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </>
@@ -163,9 +162,7 @@ const CrHeader: React.FC = () => {
                 <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden z-20">
                   <div className="p-4 border-b border-gray-100">
                     <p className="font-semibold text-gray-900">Rakib Ahmed</p>
-                    <p className="text-sm text-gray-500">
-                      rakib@example.com
-                    </p>
+                    <p className="text-sm text-gray-500">rakib@example.com</p>
                   </div>
                   <div className="p-2">
                     <button className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">

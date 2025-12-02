@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
-import { Inconsolata } from "next/font/google";
-import "./globals.css"
+import { Syne } from "next/font/google";
+import "./globals.css";
 
-// const geistSans = Syne({
-//   variable: "--font-geist-sans",
-//   subsets: ["latin"],
-//   weight: ["400", "500", "600", "700"],
-// });
-const geistSans = Inconsolata({
+const geistSans = Syne({
   variable: "--font-geist-sans",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
+// const inconsolata = Inconsolata({
+//   variable: "--font-geist-sans",
+//   subsets: ["latin"],
+//   weight: ["400", "500", "600", "700"],
+// });
 
 export const metadata: Metadata = {
   title: "Your CR",

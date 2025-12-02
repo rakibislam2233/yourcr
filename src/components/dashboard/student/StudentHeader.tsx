@@ -56,14 +56,6 @@ const StudentHeader: React.FC = () => {
           </div>
         </div>
 
-        {/* Center - Semester Info (Read-only for students) */}
-        <div className="flex items-center gap-3 px-4 py-2.5 bg-gray-50 rounded-xl">
-          <div className="text-left">
-            <p className="text-xs text-gray-500">Current Semester</p>
-            <p className="text-sm font-semibold text-gray-900">8th Semester</p>
-          </div>
-        </div>
-
         {/* Right Side - Notifications & Profile */}
         <div className="flex items-center gap-3 ml-4">
           {/* Notifications */}
@@ -179,9 +171,7 @@ const StudentHeader: React.FC = () => {
                   >
                     <div className="p-4 border-b border-gray-100">
                       <p className="font-semibold text-gray-900">Sakib Hasan</p>
-                      <p className="text-sm text-gray-500">
-                        sakib@example.com
-                      </p>
+                      <p className="text-sm text-gray-500">sakib@example.com</p>
                     </div>
                     <div className="p-2">
                       <button className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">

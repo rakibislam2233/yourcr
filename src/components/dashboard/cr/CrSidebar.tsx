@@ -73,6 +73,11 @@ const menuItems = [
     href: "/dashboard/cr/issues",
   },
   {
+    icon: Bell,
+    label: "Notifications",
+    href: "/dashboard/cr/notifications",
+  },
+  {
     icon: Settings,
     label: "Profile Settings",
     href: "/dashboard/cr/profile",
