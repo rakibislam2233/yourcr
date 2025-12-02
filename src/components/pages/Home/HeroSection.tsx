@@ -1,89 +1,78 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { ArrowRight, Users, Bell, Calendar } from "lucide-react";
 
 const HeroSection: React.FC = () => {
   return (
-    <section className="w-full h-full md:h-screen relative sm:px-6 lg:px-8 pt-24 flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#DEECFE] to-white">
-      {/* Background Blur Circles */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+    <section className="w-full min-h-screen relative px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 md:pt-32 pb-16 flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#DEECFE] to-white">
+      {/* Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-48 sm:w-64 h-48 sm:h-64 bg-primary/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-64 sm:w-96 h-64 sm:h-96 bg-secondary/10 rounded-full blur-3xl"></div>
       </div>
+
       {/* Main Content */}
-      <div className="relative z-10 max-w-7xl flex justify-center items-center mx-auto px-4 sm:px-6 lg:px-8  text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="space-y-9"
-        >
-          <div className="space-y-6">
-            <motion.h1
-              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-tight text-foreground font-bold leading-tight"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-            >
-              <span className="block mb-2">Manage Your education</span>
-              <span className="block text-foreground">
-                Smarter with <span className="text-primary">Your CR</span>
-              </span>
-            </motion.h1>
-
-            <motion.p
-              className="text-base sm:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed font-light"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-            >
-              “A simple platform for Class Representatives to organize classes,
-              announcements, and student issues — all in one place.”
-            </motion.p>
-
-            <motion.div className="w-full flex justify-center items-center gap-8 mt-8 sm:mt-10 md:mt-12">
-              <motion.div
-                initial={{ scale: 1 }}
-                animate={{ scale: [1, 1.1, 1] }}
-                transition={{
-                  duration: 2,
-                  ease: "easeInOut",
-                }}
-              >
-                <Link href="/auth/cr-login">
-                  <Button
-                    variant="default"
-                    size="lg"
-                    className="h-13 px-8 border border-primary cursor-pointer"
-                  >
-                    Login as CR
-                  </Button>
-                </Link>
-              </motion.div>
-
-              <motion.div
-                initial={{ scale: 1 }}
-                animate={{ scale: [1, 1.1, 1] }}
-                transition={{
-                  duration: 2,
-                  ease: "easeInOut",
-                  delay: 0.3,
-                }}
-              >
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="h-13 px-8 border border-primary text-primary cursor-pointer"
-                >
-                  <Link href="/auth/student-login">Login as Student</Link>
-                </Button>
-              </motion.div>
-            </motion.div>
+      <div className="relative z-10 max-w-5xl mx-auto text-center">
+        <div className="space-y-6 sm:space-y-8">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full border border-gray-200 shadow-sm">
+            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+            <span className="text-sm text-gray-600 font-medium">Trusted by 120+ Class Representatives</span>
           </div>
-        </motion.div>
+
+          {/* Heading */}
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-tight text-gray-900 font-bold leading-tight">
+            <span className="block mb-2">Manage Your Education</span>
+            <span className="block">
+              Smarter with <span className="text-primary">YourCR</span>
+            </span>
+          </h1>
+
+          {/* Description */}
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            A simple platform for Class Representatives to organize classes,
+            announcements, and student issues — all in one place.
+          </p>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4 pt-4">
+            <Link href="/auth/cr-login">
+              <Button size="lg" className="w-full sm:w-auto h-12 sm:h-14 px-6 sm:px-8 text-base sm:text-lg gap-2">
+                Login as CR
+                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+              </Button>
+            </Link>
+            <Link href="/auth/student-login">
+              <Button
+                variant="outline"
+                size="lg"
+                className="w-full sm:w-auto h-12 sm:h-14 px-6 sm:px-8 text-base sm:text-lg border-primary text-primary hover:bg-primary/5"
+              >
+                Login as Student
+              </Button>
+            </Link>
+          </div>
+
+          {/* Feature Pills */}
+          <div className="flex flex-wrap justify-center gap-3 pt-6 sm:pt-8">
+            {[
+              { icon: Users, label: "Student Management" },
+              { icon: Bell, label: "Instant Notices" },
+              { icon: Calendar, label: "Class Scheduling" },
+            ].map((feature, idx) => (
+              <div
+                key={idx}
+                className="flex items-center gap-2 px-4 py-2 bg-white rounded-full border border-gray-100 shadow-sm"
+              >
+                <feature.icon className="w-4 h-4 text-primary" />
+                <span className="text-sm text-gray-700">{feature.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );

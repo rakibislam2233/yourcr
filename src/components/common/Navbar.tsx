@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -24,13 +23,15 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Close menu when route changes
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [pathName]);
+
   const navLinks = [
     { href: "/", label: "Home" },
     { href: "/about-us", label: "About Us" },
-    {
-      href: "/contact-us",
-      label: "Contact Us",
-    },
+    { href: "/contact-us", label: "Contact Us" },
   ];
 
   const isActiveLink = (href: string) => {
@@ -41,173 +42,116 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <motion.nav
+    <nav
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b",
         {
-          "bg-background/80 backdrop-blur-lg border-border ": isScrolled,
+          "bg-background/80 backdrop-blur-lg border-border shadow-sm": isScrolled,
           "bg-transparent border-transparent": !isScrolled,
         }
       )}
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-5 py-5">
-        <div className="flex justify-between items-center ">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-5">
+        <div className="flex justify-between items-center">
           {/* Logo */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-          >
-            <Link
-              href="/"
-              className="flex items-center space-x-2 text-xl font-bold"
-            >
-              <Image src={logo} alt="logo" width={160} height={100} />
-            </Link>
-          </motion.div>
+          <Link href="/" className="flex items-center">
+            <Image src={logo} alt="YourCR Logo" width={140} height={80} className="w-32 sm:w-40" />
+          </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-5">
-            {navLinks.map((link, index) => {
-              return (
-                <motion.div
-                  key={link.href}
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.1 + index * 0.1 }}
-                >
-                  <Link
-                    href={link.href}
-                    className={cn(
-                      "relative block px-5 py-2 rounded-md text-sm font-medium transition-all duration-200",
-                      {
-                        "bg-primary text-white": isActiveLink(link.href),
-                        "text-primary hover:bg-accent": !isActiveLink(
-                          link.href
-                        ),
-                      }
-                    )}
-                  >
-                    {isActiveLink(link.href) && (
-                      <motion.div
-                        className="absolute inset-0 bg-primary/10 rounded-md"
-                        layoutId="activeNavLink"
-                        transition={{
-                          type: "spring",
-                          stiffness: 500,
-                          damping: 30,
-                        }}
-                      />
-                    )}
-                    <span className="relative z-10 text-base">
-                      {link.label}
-                    </span>
-                  </Link>
-                </motion.div>
-              );
-            })}
+          <div className="hidden md:flex items-center gap-1">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={cn(
+                  "relative px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+                  {
+                    "bg-primary text-white": isActiveLink(link.href),
+                    "text-gray-700 hover:bg-gray-100": !isActiveLink(link.href),
+                  }
+                )}
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
 
-          {/* Right side items */}
-          <div className="hidden md:flex items-center space-x-4">
-            <div className="flex items-center space-x-5">
-              <Link href="/auth">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="cursor-pointer h-12 px-10 border border-primary text-primary bg-transparent hover:bg-transparent"
-                >
-                  Login
-                </Button>
-              </Link>
-              <Link href="/auth/cr-register">
-                <Button
-                  variant="default"
-                  size="lg"
-                  className="cursor-pointer h-12 px-6"
-                >
-                  Register as CR
-                </Button>
-              </Link>
-            </div>
+          {/* Desktop Auth Buttons */}
+          <div className="hidden md:flex items-center gap-3">
+            <Link href="/auth">
+              <Button
+                variant="outline"
+                size="default"
+                className="h-10 sm:h-11 px-5 sm:px-6 border-primary text-primary hover:bg-primary/5"
+              >
+                Login
+              </Button>
+            </Link>
+            <Link href="/auth/cr-register">
+              <Button size="default" className="h-10 sm:h-11 px-5 sm:px-6">
+                Register as CR
+              </Button>
+            </Link>
           </div>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden">
-            <motion.button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2 rounded-lg text-foreground hover:text-primary hover:bg-accent"
-              whileTap={{ scale: 0.95 }}
-            >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </motion.button>
-          </div>
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors"
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
       </div>
 
       {/* Mobile Menu */}
-      <AnimatePresence>
-        {isMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.2 }}
-            className="md:hidden bg-background border-t border-border"
-          >
-            <div className="px-4 py-4 space-y-3">
-              {navLinks.map((link) => {
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setIsMenuOpen(false)}
-                    className={cn(
-                      "block px-3 py-2 rounded-lg text-sm font-medium transition-colors",
-                      {
-                        "text-primary bg-primary/10": isActiveLink(link.href),
-                        "text-foreground hover:text-primary hover:bg-accent":
-                          !isActiveLink(link.href),
-                      }
-                    )}
-                  >
-                    {link.label}
-                  </Link>
-                );
-              })}
+      {isMenuOpen && (
+        <>
+          {/* Backdrop */}
+          <div
+            className="md:hidden fixed inset-0 top-[65px] bg-black/20 z-40"
+            onClick={() => setIsMenuOpen(false)}
+          />
 
-              <div className="border-t border-border pt-3">
-                <div className="space-y-3">
-                  <Link
-                    href="/auth/cr-login"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    <Button
-                      variant="ghost"
-                      size="lg"
-                      className="w-full cursor-pointer h-12"
-                    >
-                      Login
-                    </Button>
-                  </Link>
-                  <Link
-                    href="/auth/cr-register"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    <Button variant="default" size="lg" className="w-full h-12">
-                      Register Now
-                    </Button>
-                  </Link>
-                </div>
+          {/* Menu Content */}
+          <div className="md:hidden absolute top-full left-0 right-0 bg-white border-b border-gray-200 shadow-lg z-50">
+            <div className="px-4 py-4 space-y-2">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setIsMenuOpen(false)}
+                  className={cn(
+                    "block px-4 py-3 rounded-lg text-sm font-medium transition-colors",
+                    {
+                      "text-primary bg-primary/10": isActiveLink(link.href),
+                      "text-gray-700 hover:bg-gray-100": !isActiveLink(link.href),
+                    }
+                  )}
+                >
+                  {link.label}
+                </Link>
+              ))}
+
+              <div className="border-t border-gray-100 pt-4 mt-4 space-y-3">
+                <Link href="/auth" onClick={() => setIsMenuOpen(false)}>
+                  <Button variant="outline" className="w-full h-11 border-primary text-primary">
+                    Login
+                  </Button>
+                </Link>
+                <Link href="/auth/cr-register" onClick={() => setIsMenuOpen(false)}>
+                  <Button className="w-full h-11">
+                    Register as CR
+                  </Button>
+                </Link>
               </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.nav>
+          </div>
+        </>
+      )}
+    </nav>
   );
 };
 
