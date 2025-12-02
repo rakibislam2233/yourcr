@@ -5,9 +5,19 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Mail, Lock, User } from "lucide-react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 const StudentLogin = () => {
+  const router = useRouter();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // In production, this will authenticate and then redirect
+    // For now, just redirect to Student dashboard
+    router.push("/dashboard/student");
+  };
+
   return (
     <>
       {/* Hero Banner */}
@@ -52,7 +62,7 @@ const StudentLogin = () => {
                 <User className="w-8 h-8 text-green-600" />
               </div>
             </div>
-            
+
             <h2 className="text-3xl font-bold text-center text-gray-900 mb-2">
               Student Sign In
             </h2>
@@ -60,14 +70,16 @@ const StudentLogin = () => {
               Access your classroom resources
             </p>
 
-            <form className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="email" className="text-gray-700">Student Email</Label>
+                  <Label htmlFor="email" className="text-gray-700">
+                    Student Email
+                  </Label>
                   <div className="relative mt-2">
-                    <Input 
-                      id="email" 
-                      type="email" 
+                    <Input
+                      id="email"
+                      type="email"
                       placeholder="Enter your student email"
                       className="pl-12 py-4"
                     />
@@ -76,11 +88,13 @@ const StudentLogin = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="password" className="text-gray-700">Password</Label>
+                  <Label htmlFor="password" className="text-gray-700">
+                    Password
+                  </Label>
                   <div className="relative mt-2">
-                    <Input 
-                      id="password" 
-                      type="password" 
+                    <Input
+                      id="password"
+                      type="password"
                       placeholder="Enter your password"
                       className="pl-12 py-4"
                     />
@@ -91,16 +105,22 @@ const StudentLogin = () => {
 
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
-                  <input 
-                    type="checkbox" 
-                    id="remember" 
+                  <input
+                    type="checkbox"
+                    id="remember"
                     className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                   />
-                  <Label htmlFor="remember" className="ml-2 text-sm text-gray-600">
+                  <Label
+                    htmlFor="remember"
+                    className="ml-2 text-sm text-gray-600"
+                  >
                     Remember me
                   </Label>
                 </div>
-                <Link href="/auth/forgot-password" className="text-sm text-blue-600 hover:underline">
+                <Link
+                  href="/auth/forgot-password"
+                  className="text-sm text-blue-600 hover:underline"
+                >
                   Forgot password?
                 </Link>
               </div>
@@ -112,7 +132,8 @@ const StudentLogin = () => {
 
             <div className="mt-8 text-center">
               <p className="text-gray-600">
-                Only CRs can register. Contact your Class Representative for access.
+                Only CRs can register. Contact your Class Representative for
+                access.
               </p>
             </div>
           </motion.div>

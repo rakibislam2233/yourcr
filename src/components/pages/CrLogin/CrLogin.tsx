@@ -5,8 +5,19 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Mail, Lock, GraduationCap } from "lucide-react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const CrLogin = () => {
+  const router = useRouter();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // In production, this will authenticate and then redirect
+    // For now, just redirect to CR dashboard
+    router.push("/dashboard/cr");
+  };
+
   return (
     <>
       {/* Hero Banner */}
@@ -59,7 +70,7 @@ const CrLogin = () => {
               Access your classroom management tools
             </p>
 
-            <form className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="email" className="text-gray-700">
@@ -106,12 +117,12 @@ const CrLogin = () => {
                     Remember me
                   </Label>
                 </div>
-                <a
+                <Link
                   href="/auth/forgot-password"
                   className="text-sm text-blue-600 hover:underline"
                 >
                   Forgot password?
-                </a>
+                </Link>
               </div>
 
               <Button type="submit" className="w-full h-14 text-lg">
@@ -122,12 +133,12 @@ const CrLogin = () => {
             <div className="mt-8 text-center">
               <p className="text-gray-600">
                 Don&apos;t have a CR account?{" "}
-                <a
+                <Link
                   href="/auth/cr-register"
                   className="text-blue-600 font-medium hover:underline"
                 >
                   Register as CR
-                </a>
+                </Link>
               </p>
             </div>
           </motion.div>
