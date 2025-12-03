@@ -7,7 +7,6 @@ import {
   Check,
   CheckCheck,
   Trash2,
-  Filter,
   Calendar,
   MessageSquare,
   AlertCircle,

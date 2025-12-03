@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { BookOpen, Clock, User, FileText } from "lucide-react";
+import { BookOpen, Clock, User } from "lucide-react";
 import PageHeader from "../shared/PageHeader";
 
 const subjects = [

@@ -4,7 +4,6 @@ import React from "react";
 import { motion } from "framer-motion";
 import {
   Bell,
-  Calendar,
   ClipboardList,
   Video,
   Clock,

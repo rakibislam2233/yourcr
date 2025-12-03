@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { Calendar, ArrowLeft } from "lucide-react";
 import PageHeader from "@/components/dashboard/shared/PageHeader";
 import { Button } from "@/components/ui/button";
@@ -31,7 +31,7 @@ const mockRoutineData: Record<string, Record<string, { subject: string; teacher:
   },
 };
 
-export default function EditRoutinePage() {
+function EditRoutineContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const day = searchParams.get("day") || "Saturday";
@@ -186,5 +186,13 @@ export default function EditRoutinePage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function EditRoutinePage() {
+  return (
+    <Suspense fallback={<div className="p-6">Loading...</div>}>
+      <EditRoutineContent />
+    </Suspense>
   );
 }

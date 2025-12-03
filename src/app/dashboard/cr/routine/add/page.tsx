@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { Calendar, ArrowLeft } from "lucide-react";
 import PageHeader from "@/components/dashboard/shared/PageHeader";
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,7 @@ const colorOptions = [
   { value: "bg-red-500", label: "Red" },
 ];
 
-export default function AddRoutinePage() {
+function AddRoutineContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const defaultDay = searchParams.get("day") || "Saturday";
@@ -166,5 +166,13 @@ export default function AddRoutinePage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function AddRoutinePage() {
+  return (
+    <Suspense fallback={<div className="p-6">Loading...</div>}>
+      <AddRoutineContent />
+    </Suspense>
   );
 }
