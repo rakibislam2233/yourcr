@@ -1,11 +1,12 @@
 "use client";
-import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Mail, Lock, User, Eye, EyeOff, Shield, Info } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Eye, EyeOff, Info, Lock, Mail, Shield, User } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { motion } from "framer-motion";
 
 const StudentLogin = () => {
   const router = useRouter();
@@ -17,27 +18,45 @@ const StudentLogin = () => {
   };
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50 pt-20 pb-16 px-4 sm:px-6 flex items-center justify-center">
-      <div className="w-full max-w-md">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 text-white mb-4 sm:mb-6 shadow-lg">
-            <User className="w-8 h-8 sm:w-10 sm:h-10" />
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-            Student Sign In
-          </h1>
-          <p className="text-sm sm:text-base text-gray-600">
-            Access your student portal and class resources
-          </p>
+    <>
+      {/* Hero Banner */}
+      <section className="relative h-[40vh] md:h-[50vh] bg-gradient-to-t from-primary/10 via-secondary/5 to-primary/20 overflow-hidden">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 h-full flex items-center">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="text-left max-w-3xl mx-auto"
+          >
+            <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 mb-4 leading-tight">
+              Login to YourCR
+            </h1>
+            <p className="text-lg md:text-xl text-gray-700 font-medium">
+              Access your student portal and class resources
+            </p>
+          </motion.div>
         </div>
 
+        {/* Wave Bottom */}
+        <div className="absolute bottom-0 left-0 right-0">
+          <svg viewBox="0 0 1440 200" className="w-full">
+            <path
+              fill="#ffffff"
+              d="M0,100 C320,200 1120,0 1440,100 L1440,200 L0,200 Z"
+            ></path>
+          </svg>
+        </div>
+      </section>
+      <div className="w-full max-w-xl mx-auto py-16 px-6">
         {/* Form Card */}
-        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl border border-gray-100 p-6 sm:p-8">
+        <div className="bg-white rounded-2xl sm:rounded-3xl border border-gray-200 p-6 sm:p-8">
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Email */}
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-gray-700 text-sm sm:text-base">
+              <Label
+                htmlFor="email"
+                className="text-gray-700 text-sm sm:text-base"
+              >
                 Student Email
               </Label>
               <div className="relative">
@@ -46,14 +65,17 @@ const StudentLogin = () => {
                   id="email"
                   type="email"
                   placeholder="Enter your student email"
-                  className="pl-10 sm:pl-12 h-11 sm:h-12 text-sm sm:text-base"
+                  className="pl-10 sm:pl-12  text-sm sm:text-base"
                 />
               </div>
             </div>
 
             {/* Password */}
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-gray-700 text-sm sm:text-base">
+              <Label
+                htmlFor="password"
+                className="text-gray-700 text-sm sm:text-base"
+              >
                 Password
               </Label>
               <div className="relative">
@@ -62,14 +84,18 @@ const StudentLogin = () => {
                   id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
-                  className="pl-10 sm:pl-12 pr-10 sm:pr-12 h-11 sm:h-12 text-sm sm:text-base"
+                  className="pl-10 sm:pl-12 pr-10 sm:pr-12  text-sm sm:text-base"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                 >
-                  {showPassword ? <EyeOff className="w-4 h-4 sm:w-5 sm:h-5" /> : <Eye className="w-4 h-4 sm:w-5 sm:h-5" />}
+                  {showPassword ? (
+                    <EyeOff className="w-4 h-4 sm:w-5 sm:h-5" />
+                  ) : (
+                    <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
+                  )}
                 </button>
               </div>
             </div>
@@ -82,7 +108,10 @@ const StudentLogin = () => {
                   id="remember"
                   className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded cursor-pointer"
                 />
-                <Label htmlFor="remember" className="text-xs sm:text-sm text-gray-600 cursor-pointer">
+                <Label
+                  htmlFor="remember"
+                  className="text-xs sm:text-sm text-gray-600 cursor-pointer"
+                >
                   Remember me
                 </Label>
               </div>
@@ -97,7 +126,7 @@ const StudentLogin = () => {
             {/* Submit Button */}
             <Button
               type="submit"
-              className="w-full h-12 sm:h-14 text-base sm:text-lg font-medium bg-green-600 hover:bg-green-700"
+              className="w-full h-12 sm:h-14 text-base"
             >
               Sign In as Student
             </Button>
@@ -116,7 +145,8 @@ const StudentLogin = () => {
               <div className="text-xs sm:text-sm text-amber-800">
                 <p className="font-medium mb-1">Need an account?</p>
                 <p className="text-amber-700">
-                  Students are added by their Class Representative. Contact your CR to get access.
+                  Students are added by their Class Representative. Contact your
+                  CR to get access.
                 </p>
               </div>
             </div>
@@ -127,13 +157,16 @@ const StudentLogin = () => {
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-600">
             Are you a CR?{" "}
-            <Link href="/auth/cr-login" className="text-primary font-semibold hover:underline">
+            <Link
+              href="/auth/cr-login"
+              className="text-primary font-semibold hover:underline"
+            >
               CR Login
             </Link>
           </p>
         </div>
       </div>
-    </section>
+    </>
   );
 };
 

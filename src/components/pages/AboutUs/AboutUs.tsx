@@ -1,7 +1,13 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { Target, Users, HeartHandshake, CheckCircle2, ArrowRight } from "lucide-react";
+import {
+  Target,
+  Users,
+  HeartHandshake,
+  CheckCircle2,
+  ArrowRight,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -31,8 +37,9 @@ const AboutUs = () => {
               <span className="text-primary">Management</span>
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-gray-600 leading-relaxed max-w-2xl">
-              At YourCR, we believe classroom management shouldn&apos;t be stressful.
-              We&apos;re building tools that empower Class Representatives to focus on what matters most.
+              At YourCR, we believe classroom management shouldn&apos;t be
+              stressful. We&apos;re building tools that empower Class
+              Representatives to focus on what matters most.
             </p>
           </div>
         </div>
@@ -61,8 +68,12 @@ const AboutUs = () => {
                     <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
                   </div>
                   <div>
-                    <p className="text-xl sm:text-2xl font-bold text-gray-900">120+</p>
-                    <p className="text-xs sm:text-sm text-gray-500">Active CRs</p>
+                    <p className="text-xl sm:text-2xl font-bold text-gray-900">
+                      120+
+                    </p>
+                    <p className="text-xs sm:text-sm text-gray-500">
+                      Active CRs
+                    </p>
                   </div>
                 </div>
               </div>
@@ -75,16 +86,16 @@ const AboutUs = () => {
               </h2>
               <p className="text-sm sm:text-base md:text-lg text-gray-600 leading-relaxed">
                 Welcome to YourCR, your go-to platform for streamlined classroom
-                management. As a Class Representative, you&apos;re often juggling
-                multiple tasks and responsibilities, but we&apos;ve made it easy for
-                you to stay connected with your students and manage your class
-                efficiently.
+                management. As a Class Representative, you&apos;re often
+                juggling multiple tasks and responsibilities, but we&apos;ve
+                made it easy for you to stay connected with your students and
+                manage your class efficiently.
               </p>
               <p className="text-sm sm:text-base md:text-lg text-gray-600 leading-relaxed">
-                YourCR is a smart, web-based platform designed with one clear goal:
-                to make communication between CRs and students fast, transparent,
-                and organized. No more chasing updates, lost messages, or scattered
-                notes.
+                YourCR is a smart, web-based platform designed with one clear
+                goal: to make communication between CRs and students fast,
+                transparent, and organized. No more chasing updates, lost
+                messages, or scattered notes.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2">
                 <Link href="/auth/cr-register">
@@ -93,7 +104,11 @@ const AboutUs = () => {
                   </Button>
                 </Link>
                 <Link href="/contact-us">
-                  <Button variant="outline" size="lg" className="w-full sm:w-auto">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="w-full sm:w-auto"
+                  >
                     Contact Us
                   </Button>
                 </Link>
@@ -109,8 +124,8 @@ const AboutUs = () => {
               </h2>
               <div className="w-16 sm:w-20 md:w-24 h-1 bg-gradient-to-r from-primary to-secondary mx-auto mb-4 sm:mb-6 rounded-full" />
               <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto">
-                We believe in teamwork — connecting CRs, students, and teachers in
-                a shared digital space.
+                We believe in teamwork — connecting CRs, students, and teachers
+                in a shared digital space.
               </p>
             </div>
 
@@ -148,7 +163,9 @@ const AboutUs = () => {
                   <div
                     className={`w-14 h-14 sm:w-16 sm:h-16 ${item.lightColor} rounded-xl flex items-center justify-center mb-5 sm:mb-6 group-hover:scale-105 transition-transform duration-300`}
                   >
-                    <item.icon className={`w-7 h-7 sm:w-8 sm:h-8 ${item.iconColor}`} />
+                    <item.icon
+                      className={`w-7 h-7 sm:w-8 sm:h-8 ${item.iconColor}`}
+                    />
                   </div>
                   <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">
                     {item.title}
@@ -175,7 +192,11 @@ const AboutUs = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
             <Link href="/auth/cr-register">
-              <Button size="lg" variant="secondary" className="w-full sm:w-auto gap-2">
+              <Button
+                size="lg"
+                variant="secondary"
+                className="w-full bg-white hover:bg-transparent border border-white hover:text-white cursor-pointer sm:w-auto gap-2"
+              >
                 Register as CR <ArrowRight className="w-4 h-4" />
               </Button>
             </Link>
@@ -183,7 +204,7 @@ const AboutUs = () => {
               <Button
                 size="lg"
                 variant="outline"
-                className="w-full sm:w-auto bg-transparent text-white border-white hover:bg-white/10"
+                className="w-full sm:w-auto bg-transparent text-white border-white cursor-pointer"
               >
                 Learn More
               </Button>

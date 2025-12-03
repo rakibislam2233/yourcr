@@ -1,13 +1,13 @@
 "use client";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   User,
   Mail,
   Lock,
-  GraduationCap,
   Building2,
   BookOpen,
   Eye,
@@ -201,8 +201,7 @@ const CrRegister = () => {
                 htmlFor="shift"
                 className="text-gray-700 text-sm sm:text-base"
               >
-                Shift{" "}
-                <span className="text-gray-400 text-xs">(optional)</span>
+                Shift <span className="text-gray-400 text-xs">(optional)</span>
               </Label>
               <select
                 id="shift"
@@ -414,8 +413,7 @@ const CrRegister = () => {
                 htmlFor="shift"
                 className="text-gray-700 text-sm sm:text-base"
               >
-                Shift{" "}
-                <span className="text-gray-400 text-xs">(optional)</span>
+                Shift <span className="text-gray-400 text-xs">(optional)</span>
               </Label>
               <select
                 id="shift"
@@ -483,10 +481,10 @@ const CrRegister = () => {
                       {i === 0
                         ? "st"
                         : i === 1
-                          ? "nd"
-                          : i === 2
-                            ? "rd"
-                            : "th"}{" "}
+                        ? "nd"
+                        : i === 2
+                        ? "rd"
+                        : "th"}{" "}
                       Semester
                     </option>
                   ))}
@@ -594,10 +592,10 @@ const CrRegister = () => {
                       {i === 0
                         ? "st"
                         : i === 1
-                          ? "nd"
-                          : i === 2
-                            ? "rd"
-                            : "th"}{" "}
+                        ? "nd"
+                        : i === 2
+                        ? "rd"
+                        : "th"}{" "}
                       Semester
                     </option>
                   ))}
@@ -663,64 +661,37 @@ const CrRegister = () => {
   };
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 pt-20 pb-16 px-4 sm:px-6">
-      <div className="max-w-2xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-6 sm:mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-primary to-primary/80 text-white mb-4 sm:mb-6 shadow-lg">
-            <GraduationCap className="w-8 h-8 sm:w-10 sm:h-10" />
-          </div>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-            Register as Class Representative
-          </h1>
-          <p className="text-sm sm:text-base text-gray-600">
-            Create your CR account in just 2 simple steps
-          </p>
+    <section className="w-full min-h-screen ">
+      <section className="relative bg-gradient-to-t from-primary/10  to-primary/20 overflow-hidden py-16 md:py-20 ">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 py-10 h-full flex items-center">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="text-left max-w-3xl mx-auto py-10"
+          >
+            <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 mb-4 leading-tight">
+              Register as a CR
+            </h1>
+            <p className="text-lg md:text-xl text-gray-700 font-medium">
+              Two simple steps to get started
+            </p>
+          </motion.div>
         </div>
 
-        {/* Step Indicator */}
-        <div className="flex items-center justify-center mb-8">
-          <div className="flex items-center gap-3">
-            <div
-              className={`flex items-center justify-center w-10 h-10 rounded-full font-semibold text-sm transition-all ${
-                step >= 1 ? "bg-primary text-white" : "bg-gray-200 text-gray-500"
-              }`}
-            >
-              {step > 1 ? <CheckCircle2 className="w-5 h-5" /> : "1"}
-            </div>
-            <div
-              className={`w-16 sm:w-24 h-1 rounded-full transition-all ${step > 1 ? "bg-primary" : "bg-gray-200"}`}
-            />
-            <div
-              className={`flex items-center justify-center w-10 h-10 rounded-full font-semibold text-sm transition-all ${
-                step >= 2 ? "bg-primary text-white" : "bg-gray-200 text-gray-500"
-              }`}
-            >
-              2
-            </div>
-          </div>
+        {/* Wave Bottom */}
+        <div className="absolute bottom-0 left-0 right-0">
+          <svg viewBox="0 0 1440 200" className="w-full">
+            <path
+              fill="#ffffff"
+              d="M0,100 C320,200 1120,0 1440,100 L1440,200 L0,200 Z"
+            ></path>
+          </svg>
         </div>
-
-        {/* Step Labels */}
-        <div className="flex justify-center mb-8">
-          <div className="flex items-center gap-8 sm:gap-16">
-            <div
-              className={`text-center ${step === 1 ? "text-primary" : "text-gray-500"}`}
-            >
-              <p className="text-xs sm:text-sm font-medium">Step 1</p>
-              <p className="text-xs text-gray-500">Personal Info</p>
-            </div>
-            <div
-              className={`text-center ${step === 2 ? "text-primary" : "text-gray-500"}`}
-            >
-              <p className="text-xs sm:text-sm font-medium">Step 2</p>
-              <p className="text-xs text-gray-500">Institution Info</p>
-            </div>
-          </div>
-        </div>
-
+      </section>
+      <div className="max-w-2xl mx-auto pb-14">
         {/* Form Card */}
-        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl border border-gray-100 p-6 sm:p-8">
+        <div className="bg-white rounded-2xl sm:rounded-3xl  border border-gray-100 p-6 sm:p-8">
           <form onSubmit={handleSubmit}>
             {/* Step 1: Personal Information */}
             {step === 1 && (
@@ -872,7 +843,7 @@ const CrRegister = () => {
                 <Button
                   type="button"
                   onClick={handleNext}
-                  className="w-full h-12 sm:h-14 text-base sm:text-lg font-medium gap-2 mt-4"
+                  className="w-full h-12 sm:h-14 text-base cursor-pointer gap-2 mt-4"
                 >
                   Continue to Institution Info
                   <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -979,7 +950,7 @@ const CrRegister = () => {
                   </Button>
                   <Button
                     type="submit"
-                    className="w-full flex-1 h-12 sm:h-14 text-base sm:text-lg font-medium gap-2"
+                    className="w-full flex-1 h-12 sm:h-14 text-base cursor-pointer gap-2"
                   >
                     <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5" />
                     Create CR Account

@@ -46,7 +46,7 @@ const Navbar: React.FC = () => {
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b",
         {
-          "bg-background/80 backdrop-blur-lg border-border shadow-sm": isScrolled,
+          "bg-background/80 backdrop-blur-lg ": isScrolled,
           "bg-transparent border-transparent": !isScrolled,
         }
       )}
@@ -59,13 +59,13 @@ const Navbar: React.FC = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden md:flex items-center gap-3">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "relative px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+                  "relative px-4 py-2 rounded-md text-sm font-medium transition-all duration-200",
                   {
                     "bg-primary text-white": isActiveLink(link.href),
                     "text-gray-700 hover:bg-gray-100": !isActiveLink(link.href),
@@ -78,18 +78,18 @@ const Navbar: React.FC = () => {
           </div>
 
           {/* Desktop Auth Buttons */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-5">
             <Link href="/auth">
               <Button
                 variant="outline"
                 size="default"
-                className="h-10 sm:h-11 px-5 sm:px-6 border-primary text-primary hover:bg-primary/5"
+                className="h-10 sm:h-11 px-5 sm:px-6 border-primary text-primary hover:bg-primary/5 cursor-pointer"
               >
                 Login
               </Button>
             </Link>
             <Link href="/auth/cr-register">
-              <Button size="default" className="h-10 sm:h-11 px-5 sm:px-6">
+              <Button size="default" className="h-10 sm:h-11 px-5 sm:px-6 cursor-pointer">
                 Register as CR
               </Button>
             </Link>

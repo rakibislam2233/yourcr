@@ -38,8 +38,8 @@ const AuthHome = () => {
       </section>
 
       <section className="py-16 px-6 bg-white min-h-[60vh] flex items-center">
-        <div className="max-w-md mx-auto w-full">
-          <motion.div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
+        <div className="max-w-xl mx-auto w-full">
+          <motion.div className="bg-white rounded-3xl p-8 border border-gray-200">
             <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">
               Select Your Role
             </h2>
@@ -71,7 +71,7 @@ const AuthHome = () => {
                   first.
                 </p>
                 <Link href="/auth/cr-register" className="block mt-4">
-                  <Button className="w-full h-12">
+                  <Button className="w-full h-12 cursor-pointer">
                     Register as Class Representative (CR)
                   </Button>
                 </Link>

@@ -18,7 +18,7 @@ const HeroSection: React.FC = () => {
       <div className="relative z-10 max-w-5xl mx-auto text-center">
         <div className="space-y-6 sm:space-y-8">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full border border-gray-200 shadow-sm">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full border border-gray-200">
             <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
             <span className="text-sm text-gray-600 font-medium">Trusted by 120+ Class Representatives</span>
           </div>
@@ -54,23 +54,6 @@ const HeroSection: React.FC = () => {
                 Login as Student
               </Button>
             </Link>
-          </div>
-
-          {/* Feature Pills */}
-          <div className="flex flex-wrap justify-center gap-3 pt-6 sm:pt-8">
-            {[
-              { icon: Users, label: "Student Management" },
-              { icon: Bell, label: "Instant Notices" },
-              { icon: Calendar, label: "Class Scheduling" },
-            ].map((feature, idx) => (
-              <div
-                key={idx}
-                className="flex items-center gap-2 px-4 py-2 bg-white rounded-full border border-gray-100 shadow-sm"
-              >
-                <feature.icon className="w-4 h-4 text-primary" />
-                <span className="text-sm text-gray-700">{feature.label}</span>
-              </div>
-            ))}
           </div>
         </div>
       </div>
