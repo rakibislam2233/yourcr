@@ -663,25 +663,23 @@ const CrRegister = () => {
 
   return (
     <section className="w-full min-h-screen flex justify-center items-center ">
-      <div className="max-w-2xl mx-auto pb-14">
-        {/* Form Card */}
-        <div className="bg-white rounded-2xl sm:rounded-3xl  border border-gray-100 p-6 sm:p-8">
-          <Image src={logo} alt="logo" className="w-40 h-auto mb-8 mx-auto" />
-          <h2 className="text-3xl font-bold text-center text-gray-900 mb-2">
-            Forgot Password
-          </h2>
-          <p className="text-center text-gray-600 mb-8">
-            Enter your email and we&apos;ll send you a link to reset your
-            password
-          </p>
-          <form onSubmit={handleSubmit}>
-            {/* Step 1: Personal Information */}
-            {step === 1 && (
-              <div className="space-y-5">
-                <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">
-                  Personal Information
-                </h2>
+      <div className="w-full max-w-3xl bg-white rounded-2xl sm:rounded-2xl  border border-gray-100 p-6 sm:p-8">
+        <Image src={logo} alt="logo" className="w-40 h-auto mb-8 mx-auto" />
+        <h2 className="text-3xl font-bold text-center text-gray-900 mb-2">
+          Create Your Account
+        </h2>
+        <p className="text-center text-gray-600 mb-8">
+          Enter your email and we&apos;ll send you a link to reset your password
+        </p>
+        <form onSubmit={handleSubmit}>
+          {/* Step 1: Personal Information */}
+          {step === 1 && (
+            <div className="space-y-5">
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">
+                Personal Information
+              </h2>
 
+              <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Full Name */}
                 <div className="space-y-2">
                   <Label
@@ -820,26 +818,27 @@ const CrRegister = () => {
                     </button>
                   </div>
                 </div>
-
-                {/* Next Button */}
-                <Button
-                  type="button"
-                  onClick={handleNext}
-                  className="w-full h-12 sm:h-14 text-base cursor-pointer gap-2 mt-4"
-                >
-                  Continue to Institution Info
-                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
-                </Button>
               </div>
-            )}
 
-            {/* Step 2: Institution Information */}
-            {step === 2 && (
-              <div className="space-y-5">
-                <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">
-                  Institution Information
-                </h2>
+              {/* Next Button */}
+              <Button
+                type="button"
+                onClick={handleNext}
+                className="w-full h-12 sm:h-14 text-base cursor-pointer gap-2 mt-4"
+              >
+                Continue to Institution Info
+                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+              </Button>
+            </div>
+          )}
 
+          {/* Step 2: Institution Information */}
+          {step === 2 && (
+            <div className="space-y-5">
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">
+                Institution Information
+              </h2>
+              <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Institution Name */}
                 <div className="space-y-2">
                   <Label
@@ -886,74 +885,74 @@ const CrRegister = () => {
                     <option value="polytechnic">Polytechnic Institute</option>
                   </select>
                 </div>
-
-                {/* Dynamic Institution-specific Fields */}
-                {renderInstitutionFields()}
-
-                {/* Terms Checkbox */}
-                <div className="flex items-start gap-3 pt-2">
-                  <input
-                    type="checkbox"
-                    id="terms"
-                    className="mt-1 h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded cursor-pointer"
-                    required
-                  />
-                  <Label
-                    htmlFor="terms"
-                    className="text-xs sm:text-sm text-gray-600 leading-relaxed cursor-pointer"
-                  >
-                    I agree to the{" "}
-                    <Link
-                      href="/terms-and-conditions"
-                      className="text-primary hover:underline font-medium"
-                    >
-                      Terms and Conditions
-                    </Link>{" "}
-                    and{" "}
-                    <Link
-                      href="/privacy-policy"
-                      className="text-primary hover:underline font-medium"
-                    >
-                      Privacy Policy
-                    </Link>
-                  </Label>
-                </div>
-
-                {/* Buttons */}
-                <div className="flex flex-col sm:flex-row gap-3 mt-4">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={handleBack}
-                    className="w-full sm:w-auto h-12 sm:h-14 px-6 text-base font-medium gap-2"
-                  >
-                    <ArrowLeft className="w-4 h-4" />
-                    Back
-                  </Button>
-                  <Button
-                    type="submit"
-                    className="w-full flex-1 h-12 sm:h-14 text-base cursor-pointer gap-2"
-                  >
-                    <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5" />
-                    Create CR Account
-                  </Button>
-                </div>
               </div>
-            )}
-          </form>
 
-          {/* Sign In Link */}
-          <div className="mt-6 sm:mt-8 text-center pt-6 border-t border-gray-100">
-            <p className="text-sm sm:text-base text-gray-600">
-              Already have a CR account?{" "}
-              <Link
-                href="/auth/cr-login"
-                className="text-primary font-semibold hover:underline"
-              >
-                Sign in
-              </Link>
-            </p>
-          </div>
+              {/* Dynamic Institution-specific Fields */}
+              {renderInstitutionFields()}
+
+              {/* Terms Checkbox */}
+              <div className="flex items-start gap-3 pt-2">
+                <input
+                  type="checkbox"
+                  id="terms"
+                  className="mt-1 h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded cursor-pointer"
+                  required
+                />
+                <Label
+                  htmlFor="terms"
+                  className="text-xs sm:text-sm text-gray-600 leading-relaxed cursor-pointer"
+                >
+                  I agree to the{" "}
+                  <Link
+                    href="/terms-and-conditions"
+                    className="text-primary hover:underline font-medium"
+                  >
+                    Terms and Conditions
+                  </Link>{" "}
+                  and{" "}
+                  <Link
+                    href="/privacy-policy"
+                    className="text-primary hover:underline font-medium"
+                  >
+                    Privacy Policy
+                  </Link>
+                </Label>
+              </div>
+
+              {/* Buttons */}
+              <div className="flex flex-col sm:flex-row gap-3 mt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleBack}
+                  className="w-full sm:w-auto h-12 sm:h-14 px-6 text-base font-medium gap-2"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  Back
+                </Button>
+                <Button
+                  type="submit"
+                  className="w-full flex-1 h-12 sm:h-14 text-base cursor-pointer gap-2"
+                >
+                  <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5" />
+                  Create CR Account
+                </Button>
+              </div>
+            </div>
+          )}
+        </form>
+
+        {/* Sign In Link */}
+        <div className="mt-6 sm:mt-8 text-center pt-6 border-t border-gray-100">
+          <p className="text-sm sm:text-base text-gray-600">
+            Already have a CR account?{" "}
+            <Link
+              href="/auth/cr-login"
+              className="text-primary font-semibold hover:underline"
+            >
+              Sign in
+            </Link>
+          </p>
         </div>
       </div>
     </section>
