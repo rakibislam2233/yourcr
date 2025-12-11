@@ -21,6 +21,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import logo from "@/assets/logo/logo.png";
 
 const CrRegister = () => {
   const router = useRouter();
@@ -664,6 +666,14 @@ const CrRegister = () => {
       <div className="max-w-2xl mx-auto pb-14">
         {/* Form Card */}
         <div className="bg-white rounded-2xl sm:rounded-3xl  border border-gray-100 p-6 sm:p-8">
+          <Image src={logo} alt="logo" className="w-40 h-auto mb-8 mx-auto" />
+          <h2 className="text-3xl font-bold text-center text-gray-900 mb-2">
+            Forgot Password
+          </h2>
+          <p className="text-center text-gray-600 mb-8">
+            Enter your email and we&apos;ll send you a link to reset your
+            password
+          </p>
           <form onSubmit={handleSubmit}>
             {/* Step 1: Personal Information */}
             {step === 1 && (
