@@ -3,7 +3,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowRight, Users, Bell, Calendar } from "lucide-react";
+import { ArrowRight} from "lucide-react";
 
 const HeroSection: React.FC = () => {
   return (
