@@ -1,92 +1,129 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
+import {
+  motion,
+  useInView,
+  useMotionValue,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 
 const stats = [
   {
-    number: "120+",
+    number: 120,
+    suffix: "+",
     label: "Active CRs",
-    desc: "Class Representatives using YourCR to manage their classes.",
+    desc: "Class Representatives using OUR CR to manage their classes.",
     color: "text-green-600",
-    bg: "bg-green-50",
-    border: "border-green-100",
+    gradient: "from-green-500 to-emerald-500",
   },
   {
-    number: "3500+",
+    number: 3500,
+    suffix: "+",
     label: "Connected Students",
     desc: "Students receiving notices, updates, and class info instantly.",
     color: "text-red-600",
-    bg: "bg-red-50",
-    border: "border-red-100",
+    gradient: "from-red-500 to-pink-500",
   },
   {
-    number: "1000+",
-    label: "Announcements",
+    number: 1000,
+    suffix: "+",
+    label: "Announcements Shared",
     desc: "Notices and announcements made clearer and better organized.",
     color: "text-blue-600",
-    bg: "bg-blue-50",
-    border: "border-blue-100",
+    gradient: "from-blue-500 to-cyan-500",
   },
   {
-    number: "800+",
-    label: "Issues Solved",
-    desc: "Problems resolved through digital CR-Student communication.",
+    number: 800,
+    suffix: "+",
+    label: "Student Issues Solved",
+    desc: "Problems resolved efficiently through digital CR-Student communication.",
     color: "text-purple-600",
-    bg: "bg-purple-50",
-    border: "border-purple-100",
+    gradient: "from-purple-500 to-indigo-500",
   },
 ];
 
+const AnimatedCounter = ({
+  value,
+  suffix = "",
+}: {
+  value: number;
+  suffix?: string;
+}) => {
+  const ref = useRef<HTMLSpanElement>(null);
+  const motionValue = useMotionValue(0);
+  const springValue = useSpring(motionValue, { duration: 3000 });
+  const isInView = useInView(ref, { once: true });
+
+  React.useEffect(() => {
+    if (isInView) {
+      motionValue.set(value);
+    }
+  }, [motionValue, value, isInView]);
+
+  const displayValue = useTransform(
+    springValue,
+    (current) => Math.round(current) + suffix
+  );
+
+  return (
+    <motion.span ref={ref} className="font-bold text-5xl md:text-6xl">
+      {displayValue}
+    </motion.span>
+  );
+};
+
 const StatsSection = () => {
   return (
-    <section className="relative w-full py-16 md:py-24 lg:py-32 bg-gradient-to-b from-gray-50 to-white overflow-hidden">
-      {/* Background */}
+    <section className="relative w-full py-24 md:py-32 lg:py-40 bg-gradient-to-b from-[#F8FAFC] to-white overflow-hidden">
+      {/* Background Blurs */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 sm:w-96 h-72 sm:h-96 bg-blue-100 rounded-full blur-3xl opacity-30"></div>
-        <div className="absolute bottom-20 right-10 w-60 sm:w-80 h-60 sm:h-80 bg-purple-100 rounded-full blur-3xl opacity-30"></div>
+        <div className="absolute top-20 left-10 w-96 h-96 bg-blue-100 rounded-full blur-3xl opacity-30"></div>
+        <div className="absolute bottom-20 right-10 w-80 h-80 bg-purple-100 rounded-full blur-3xl opacity-30"></div>
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-12 lg:gap-16 items-center">
-          {/* Left Content */}
-          <div className="space-y-5 sm:space-y-6 text-center lg:text-left">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900">
-              YourCR In <span className="text-primary">Numbers</span>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <motion.div className="space-y-8 text-center lg:text-left">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground">
+              Our CR In <span className="text-primary">Numbers</span>
             </h2>
-            <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-lg mx-auto lg:mx-0">
+            <p className="text-lg text-muted-foreground max-w-2xl">
               A simple idea that&apos;s making class management smarter. These
-              numbers show how YourCR is helping Class Representatives and
+              numbers show how YOUR CR is helping Class Representatives and
               students stay more connected every day.
             </p>
-            <Link href="/about-us">
-              <Button size="lg" className="h-12 sm:h-14 px-6 sm:px-8 gap-2">
-                Learn More <ArrowRight className="w-4 h-4" />
-              </Button>
-            </Link>
-          </div>
+            <Button size="lg" className="h-14 px-10 cursor-pointer ">
+              Learn More
+            </Button>
+          </motion.div>
 
           {/* Right Stats Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
             {stats.map((stat, index) => (
-              <div
+              <motion.div
                 key={index}
-                className={`${stat.bg} ${stat.border} border rounded-xl sm:rounded-2xl p-5 sm:p-6 hover:shadow-lg transition-shadow duration-300`}
+                className="group relative bg-white/80 backdrop-blur-sm rounded-xl p-8 border border-gray-200 cursor-pointer hover:shadow-lg transition-shadow duration-300"
               >
-                <div className="space-y-2 sm:space-y-3">
-                  <p className={`text-3xl sm:text-4xl md:text-5xl font-bold ${stat.color}`}>
-                    {stat.number}
-                  </p>
-                  <h3 className="text-base sm:text-lg font-bold text-gray-900">
+                {/* Gradient Hover Glow */}
+                <div
+                  className={`absolute inset-0 rounded-xl bg-gradient-to-br ${stat.gradient} opacity-0 group-hover:opacity-20 transition-opacity duration-300 -z-10`}
+                ></div>
+
+                <div className="space-y-4">
+                  <div className={stat.color}>
+                    <AnimatedCounter value={stat.number} suffix={stat.suffix} />
+                  </div>
+                  <h3 className="text-xl font-bold text-foreground">
                     {stat.label}
                   </h3>
-                  <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                  <p className="text-sm text-muted-foreground leading-relaxed">
                     {stat.desc}
                   </p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>

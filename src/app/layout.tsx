@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
-import { Syne } from "next/font/google";
+import { Inconsolata, Syne } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Syne({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-// const inconsolata = Inconsolata({
+// const geistSans = Syne({
 //   variable: "--font-geist-sans",
 //   subsets: ["latin"],
 //   weight: ["400", "500", "600", "700"],
 // });
+const inconsolata = Inconsolata({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
 
 export const metadata: Metadata = {
   title: "Your CR",
@@ -25,7 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.className} antialiased`}>{children}</body>
+      <body className={`${inconsolata.className} antialiased`}>{children}</body>
     </html>
   );
 }

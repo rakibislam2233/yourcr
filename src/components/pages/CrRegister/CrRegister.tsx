@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -661,34 +660,7 @@ const CrRegister = () => {
   };
 
   return (
-    <section className="w-full min-h-screen ">
-      <section className="relative bg-gradient-to-t from-primary/10  to-primary/20 overflow-hidden py-16 md:py-20 ">
-        <div className="relative z-10 max-w-7xl mx-auto px-6 py-10 h-full flex items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="text-left max-w-3xl mx-auto py-10"
-          >
-            <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 mb-4 leading-tight">
-              Register as a CR
-            </h1>
-            <p className="text-lg md:text-xl text-gray-700 font-medium">
-              Two simple steps to get started
-            </p>
-          </motion.div>
-        </div>
-
-        {/* Wave Bottom */}
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 200" className="w-full">
-            <path
-              fill="#ffffff"
-              d="M0,100 C320,200 1120,0 1440,100 L1440,200 L0,200 Z"
-            ></path>
-          </svg>
-        </div>
-      </section>
+    <section className="w-full min-h-screen flex justify-center items-center ">
       <div className="max-w-2xl mx-auto pb-14">
         {/* Form Card */}
         <div className="bg-white rounded-2xl sm:rounded-3xl  border border-gray-100 p-6 sm:p-8">

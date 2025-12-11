@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeOff, Info, Lock, Mail, Shield, User } from "lucide-react";
+import { Eye, EyeOff, Info, Lock, Mail, Shield } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -18,35 +18,7 @@ const StudentLogin = () => {
   };
 
   return (
-    <>
-      {/* Hero Banner */}
-      <section className="relative h-[40vh] md:h-[50vh] bg-gradient-to-t from-primary/10 via-secondary/5 to-primary/20 overflow-hidden">
-        <div className="relative z-10 max-w-7xl mx-auto px-6 h-full flex items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="text-left max-w-3xl mx-auto"
-          >
-            <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 mb-4 leading-tight">
-              Login to YourCR
-            </h1>
-            <p className="text-lg md:text-xl text-gray-700 font-medium">
-              Access your student portal and class resources
-            </p>
-          </motion.div>
-        </div>
-
-        {/* Wave Bottom */}
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 200" className="w-full">
-            <path
-              fill="#ffffff"
-              d="M0,100 C320,200 1120,0 1440,100 L1440,200 L0,200 Z"
-            ></path>
-          </svg>
-        </div>
-      </section>
+   <section className="w-full min-h-screen flex justify-center items-center ">
       <div className="w-full max-w-xl mx-auto py-16 px-6">
         {/* Form Card */}
         <div className="bg-white rounded-2xl sm:rounded-3xl border border-gray-200 p-6 sm:p-8">
@@ -166,7 +138,7 @@ const StudentLogin = () => {
           </p>
         </div>
       </div>
-    </>
+    </section>
   );
 };
 
