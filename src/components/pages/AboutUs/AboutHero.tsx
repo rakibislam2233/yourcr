@@ -2,7 +2,7 @@ import React from "react";
 
 const AboutHero = () => {
   return (
-    <section className="relative px-4 sm:px-10 lg:px-40 py-12 lg:py-20 flex justify-center">
+    <section className="relative px-5 py-12 md:py-24  flex justify-center">
       <div className="w-full max-w-7xl mx-auto">
         <div className="flex flex-col-reverse lg:flex-row gap-10 lg:gap-16 items-center">
           {/* Text Content */}

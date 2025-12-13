@@ -2,8 +2,8 @@ import React from "react";
 
 const AboutStats = () => {
   return (
-    <section className="px-4 sm:px-10 lg:px-40 py-10 bg-white dark:bg-[#2a291a]">
-      <div className="max-w-7xl mx-auto">
+    <section className="px-5 py-10 bg-white dark:bg-[#2a291a]">
+      <div className="w-full max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center divide-y md:divide-y-0 md:divide-x divide-[#e9e8ce] dark:divide-[#4a493a]">
           <div className="flex flex-col gap-2 p-4">
             <p className="text-4xl lg:text-5xl font-black tracking-tight text-[#1c1c0d] dark:text-white">

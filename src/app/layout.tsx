@@ -1,18 +1,12 @@
 import type { Metadata } from "next";
-import { Amaranth, Arimo, Inconsolata, Lato, Oswald, Rubik } from "next/font/google";
+import {Mukta} from "next/font/google";
 import "./globals.css";
 
-const inconsolata = Rubik({
+const mukta = Mukta({
   variable: "--font-geist-sans",
   subsets: ["latin"],
   weight: ["400"],
 });
-
-// const inconsolata = Inconsolata({
-//   variable: "--font-geist-sans",
-//   subsets: ["latin"],
-//   weight: ["400", "500", "600", "700"],
-// });
 
 export const metadata: Metadata = {
   title: "Your CR",
@@ -30,7 +24,7 @@ export default function RootLayout({
       <head>
         <meta name="google-adsense-account" content="ca-pub-1132020137464868" />
       </head>
-      <body className={`${inconsolata.className} antialiased`}>{children}</body>
+      <body className={`${mukta.className} antialiased`}>{children}</body>
     </html>
   );
 }

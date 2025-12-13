@@ -62,7 +62,7 @@ const HeroSection: React.FC = () => {
       <div className="container mx-auto max-w-7xl w-full grid lg:grid-cols-2 gap-12 items-center">
         {/* Left Content */}
         <div className="flex flex-col gap-8 text-center lg:text-left z-10">
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.1] tracking-tight">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.1] tracking-tight">
             Simplify Class <br />
             <span className="relative inline-block">Management</span>
             with Your CR
