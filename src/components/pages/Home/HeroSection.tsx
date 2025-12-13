@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import React from "react";
+import { MdCampaign } from "react-icons/md";
 
 const HeroSection: React.FC = () => {
   return (
@@ -61,38 +62,15 @@ const HeroSection: React.FC = () => {
       <div className="container mx-auto max-w-7xl w-full grid lg:grid-cols-2 gap-12 items-center">
         {/* Left Content */}
         <div className="flex flex-col gap-8 text-center lg:text-left z-10">
-          <div className="inline-flex items-center gap-2 self-center lg:self-start px-3 py-1 rounded-full bg-white dark:bg-white/10 border border-border-light dark:border-border-dark shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-            <span className="text-xs font-semibold uppercase tracking-wide opacity-80">
-              v2.0 Now Live
-            </span>
-          </div>
-
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.1] tracking-tight">
             Simplify Class <br />
-            <span className="relative inline-block">
-              Management
-              <svg
-                className="absolute w-full h-3 -bottom-1 left-0 text-primary z-[-1]"
-                preserveAspectRatio="none"
-                viewBox="0 0 100 10"
-              >
-                <path
-                  d="M0 5 Q 50 10 100 5"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="8"
-                />
-              </svg>
-            </span>
+            <span className="relative inline-block">Management</span>
             with Your CR
           </h1>
-
           <p className="text-lg sm:text-xl text-text-muted dark:text-gray-300 max-w-xl mx-auto lg:mx-0 leading-relaxed">
             The all-in-one platform bridging the gap between students, reps, and
             faculty. Announcements, polls, and resources in one place.
           </p>
-
           <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
             <button className="h-14 px-8 rounded-xl bg-primary hover:bg-primary-hover text-text-main  cursor-pointer flex items-center justify-center gap-2 text-white">
               <span>Get Started as CR</span>
@@ -101,7 +79,6 @@ const HeroSection: React.FC = () => {
               Student Login
             </button>
           </div>
-
           <div className="flex items-center justify-center lg:justify-start gap-4 pt-4 opacity-80">
             <div className="flex -space-x-3">
               <Image
@@ -134,7 +111,7 @@ const HeroSection: React.FC = () => {
 
         {/* Right Image */}
         <div className="relative w-full aspect-square lg:aspect-auto lg:h-[600px] rounded-3xl overflow-hidden shadow-2xl bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark group">
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent z-10 pointer-events-none" />
+          <div className="absolute inset-0 bg-linear-to-br from-primary/5 to-transparent z-10 pointer-events-none" />
           <div
             className="w-full h-full bg-center bg-cover transition-transform duration-700 group-hover:scale-105"
             style={{
@@ -147,7 +124,7 @@ const HeroSection: React.FC = () => {
           <div className="absolute bottom-8 left-8 right-8 bg-white/90 dark:bg-black/80 backdrop-blur-md p-6 rounded-2xl border border-white/20 shadow-xl z-20 transform translate-y-0 opacity-100 transition-all duration-500 hover:-translate-y-2">
             <div className="flex items-center gap-4 mb-3">
               <div className="bg-primary/20 p-2 rounded-full text-primary-hover">
-                <span className="material-symbols-outlined">campaign</span>
+                <MdCampaign className="w-5 h-5" />
               </div>
               <div>
                 <h4 className="font-bold text-sm">New Announcement</h4>

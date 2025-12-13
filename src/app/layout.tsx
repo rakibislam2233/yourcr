@@ -1,12 +1,18 @@
 import type { Metadata } from "next";
-import { Inconsolata } from "next/font/google";
+import { Amaranth, Arimo, Inconsolata, Lato, Oswald, Rubik } from "next/font/google";
 import "./globals.css";
 
-const inconsolata = Inconsolata({
+const inconsolata = Rubik({
   variable: "--font-geist-sans",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400"],
 });
+
+// const inconsolata = Inconsolata({
+//   variable: "--font-geist-sans",
+//   subsets: ["latin"],
+//   weight: ["400", "500", "600", "700"],
+// });
 
 export const metadata: Metadata = {
   title: "Your CR",
