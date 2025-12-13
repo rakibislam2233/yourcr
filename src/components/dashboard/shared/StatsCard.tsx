@@ -49,8 +49,7 @@ const StatsCard: React.FC<StatsCardProps> = ({
   value,
   icon: Icon,
   trend,
-  color = "blue",
-  delay = 0,
+  color = "blue"
 }) => {
   const colors = colorClasses[color];
 

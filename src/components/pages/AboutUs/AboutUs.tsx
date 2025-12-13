@@ -15,7 +15,7 @@ const AboutUs = () => {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative pt-24 sm:pt-28 md:pt-32 pb-16 sm:pb-20 md:pb-24 bg-gradient-to-b from-primary/5 via-white to-white overflow-hidden">
+      <section className="relative pt-24 sm:pt-28 md:pt-32 pb-16 sm:pb-20 md:pb-24 bg-linear-to-b from-primary/5 via-white to-white overflow-hidden">
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-[0.03]">
           <div
@@ -122,7 +122,7 @@ const AboutUs = () => {
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
                 Mission, Vision & Values
               </h2>
-              <div className="w-16 sm:w-20 md:w-24 h-1 bg-gradient-to-r from-primary to-secondary mx-auto mb-4 sm:mb-6 rounded-full" />
+              <div className="w-16 sm:w-20 md:w-24 h-1 bg-linear-to-r from-primary to-secondary mx-auto mb-4 sm:mb-6 rounded-full" />
               <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto">
                 We believe in teamwork — connecting CRs, students, and teachers
                 in a shared digital space.
@@ -181,7 +181,7 @@ const AboutUs = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-gradient-to-r from-primary to-primary/90">
+      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-linear-to-r from-primary to-primary/90">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 sm:mb-6">
             Ready to Transform Your Classroom?
