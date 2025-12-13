@@ -23,13 +23,10 @@ const ForgotPassword = () => {
   return (
     <section className="w-full min-h-screen flex justify-center items-center ">
       <div className="w-full max-w-xl mx-auto py-16 px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="bg-white rounded-2xl sm:rounded-3xl border border-gray-200 p-6 sm:p-8"
-        >
-          <Image src={logo} alt="logo" className="w-40 h-auto mb-8 mx-auto" />
+        <motion.div className="bg-white rounded-2xl sm:rounded-3xl border border-gray-200 p-6 sm:p-8">
+          <Link href="/">
+            <Image src={logo} alt="logo" className="w-40 h-auto mb-5 mx-auto" />
+          </Link>
 
           {submitted ? (
             <div className="text-center py-8">

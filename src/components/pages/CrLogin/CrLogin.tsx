@@ -3,9 +3,11 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Mail, Lock, Eye, EyeOff, Shield } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
+import logo from "@/assets/logo/logo.png";
 
 const CrLogin = () => {
   const router = useRouter();
@@ -21,6 +23,15 @@ const CrLogin = () => {
       <div className="w-full max-w-xl mx-auto py-16 px-6">
         {/* Form Card */}
         <div className="bg-white rounded-2xl sm:rounded-3xl border border-gray-200 p-6 sm:p-8">
+          <Link href="/">
+            <Image src={logo} alt="logo" className="w-40 h-auto mb-5 mx-auto" />
+          </Link>
+          <h2 className="text-3xl font-bold text-center text-gray-900 mb-2">
+            CR Login
+          </h2>
+          <p className="text-center text-gray-600 mb-8">
+            Enter your CR email and password
+          </p>
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Email */}
             <div className="space-y-2">
@@ -102,34 +113,6 @@ const CrLogin = () => {
               Sign In as CR
             </Button>
           </form>
-
-          {/* Security Note */}
-          <div className="mt-6 flex items-center justify-center gap-2 text-xs sm:text-sm text-gray-500">
-            <Shield className="w-4 h-4" />
-            <span>Secure login with 256-bit encryption</span>
-          </div>
-
-          {/* Divider */}
-          <div className="relative my-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-200"></div>
-            </div>
-            <div className="relative flex justify-center text-xs sm:text-sm">
-              <span className="px-4 bg-white text-gray-500">
-                New to YourCR?
-              </span>
-            </div>
-          </div>
-
-          {/* Register Link */}
-          <Link href="/auth/cr-register" className="block">
-            <Button
-              variant="outline"
-              className="w-full h-11 sm:h-12 text-sm sm:text-base"
-            >
-              Register as CR
-            </Button>
-          </Link>
         </div>
 
         {/* Student Login Link */}
