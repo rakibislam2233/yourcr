@@ -26,12 +26,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   action,
 }) => {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-      className="mb-8"
-    >
+    <motion.div className="mb-8">
       {breadcrumbs && breadcrumbs.length > 0 && (
         <nav className="flex items-center gap-2 text-sm text-gray-500 mb-3">
           {breadcrumbs.map((item, index) => (
@@ -63,9 +58,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
           )}
           <div>
             <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
-            {description && (
-              <p className="text-gray-500 mt-1">{description}</p>
-            )}
+            {description && <p className="text-gray-500 mt-1">{description}</p>}
           </div>
         </div>
         {action && <div>{action}</div>}

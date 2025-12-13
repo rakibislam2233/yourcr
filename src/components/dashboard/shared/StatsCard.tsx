@@ -55,12 +55,7 @@ const StatsCard: React.FC<StatsCardProps> = ({
   const colors = colorClasses[color];
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay }}
-      className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
-    >
+    <motion.div className="bg-white rounded-2xl p-6  border border-gray-100 ">
       <div className="flex items-center justify-between">
         <div className="space-y-2">
           <p className="text-sm font-medium text-gray-500">{title}</p>
