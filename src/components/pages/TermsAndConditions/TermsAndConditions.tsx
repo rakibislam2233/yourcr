@@ -80,8 +80,8 @@ Your access to and use of the Service is conditioned on your acceptance of and c
   return (
     <>
       {/* Hero Section */}
-      <section className="relative pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-16 bg-gradient-to-b from-primary/5 via-white to-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+      <section className="relative pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-16 bg-linear-to-b from-primary/5 via-white to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-2 text-sm text-gray-500 mb-4 sm:mb-6">
             <Link href="/" className="hover:text-primary transition-colors">Home</Link>
             <ChevronRight className="w-4 h-4" />
@@ -106,7 +106,7 @@ Your access to and use of the Service is conditioned on your acceptance of and c
 
       {/* Content Section */}
       <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-white">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           {/* Table of Contents */}
           <div className="bg-gray-50 rounded-xl p-5 sm:p-6 mb-8 sm:mb-12">
             <h3 className="font-semibold text-gray-900 mb-4 text-sm sm:text-base">Table of Contents</h3>
@@ -144,7 +144,7 @@ Your access to and use of the Service is conditioned on your acceptance of and c
                     <ul className="mt-4 space-y-2">
                       {section.list.map((item, i) => (
                         <li key={i} className="text-sm sm:text-base text-gray-600 flex items-start gap-2">
-                          <span className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0" />
+                          <span className="w-1.5 h-1.5 bg-primary rounded-full mt-2 shrink-0" />
                           {item}
                         </li>
                       ))}

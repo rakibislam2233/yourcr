@@ -16,7 +16,7 @@ const Footer = () => {
     "Contact Us",
     "FAQ",
     "Privacy Policy",
-    "Terms of Condition",
+    "Terms And Conditions",
   ];
 
   const socialLinks = [
@@ -42,8 +42,8 @@ const Footer = () => {
     <footer className="relative w-full bg-[#1E293B] text-white overflow-hidden">
       {/* Gradient Circles Background */}
       <div className="hidden md:block absolute inset-0 pointer-events-none">
-        <div className="absolute -left-10 top-1/2  size-56 bg-gradient-to-t from-[#3A4050] to-[#1E293B] rounded-full "></div>
-        <div className="absolute right-16 top-20 size-16 bg-gradient-to-r from-[#6D788B] to-[#1E293B] rounded-full "></div>
+        <div className="absolute -left-10 top-1/2  size-56 bg-linear-to-t from-[#3A4050] to-[#1E293B] rounded-full "></div>
+        <div className="absolute right-16 top-20 size-16 bg-linear-to-r from-[#6D788B] to-[#1E293B] rounded-full "></div>
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-16 md:py-20">
