@@ -27,9 +27,6 @@ const CrLogin = () => {
           {/* Brand Header */}
           <div className="mb-10 flex items-center justify-center gap-3">
             <Image src={logo} alt="Your CR Logo" className="h-10 w-auto" />
-            <h2 className="text-2xl font-bold tracking-tight text-gray-900">
-              Your CR
-            </h2>
           </div>
 
           {/* Text Content */}
@@ -172,8 +169,8 @@ const CrLogin = () => {
               Academic Year 2024-2025
             </div>
             <blockquote className="text-3xl font-bold leading-tight tracking-tight">
-              "Empower your class with seamless coordination, updates, and
-              communication tools."
+              Empower your class with seamless coordination, updates, and
+              communication tools.
             </blockquote>
           </div>
         </div>

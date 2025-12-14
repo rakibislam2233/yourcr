@@ -1,4 +1,4 @@
-import CrLogin from "@/components/pages/CrLogin/CrLogin";
+import CrLogin from "@/components/pages/Auth/CrLogin/CrLogin";
 import React from "react";
 
 const page = () => {

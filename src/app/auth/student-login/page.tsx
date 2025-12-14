@@ -1,4 +1,4 @@
-import StudentLogin from "@/components/pages/StudentLogin/StudentLogin";
+import StudentLogin from "@/components/pages/Auth/StudentLogin/StudentLogin";
 import React from "react";
 
 const page = () => {

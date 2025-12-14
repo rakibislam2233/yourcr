@@ -1,4 +1,4 @@
-import CrRegister from "@/components/pages/CrRegister/CrRegister";
+import CrRegister from "@/components/pages/Auth/CrRegister/CrRegister";
 import React from "react";
 
 const page = () => {
