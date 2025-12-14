@@ -1,6 +1,4 @@
-"use client";
 
-import React from "react";
 import {
   Users,
   Calendar,
@@ -93,12 +91,14 @@ const WhyChooseUs = () => {
             return (
               <div
                 key={index}
-                className="group relative bg-white border border-gray-100 rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-8 text-left hover:shadow-xl hover:border-gray-200 transition-all duration-300"
+                className="group relative bg-white border border-gray-100 rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-8 text-left hover:bg-primary/5 transition-colors duration-300 hover:border-primary "
               >
                 <div
                   className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 ${feature.bg} rounded-lg sm:rounded-xl flex items-center justify-center mb-4 sm:mb-5 group-hover:scale-105 transition-transform duration-300`}
                 >
-                  <Icon className={`w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 ${feature.color}`} />
+                  <Icon
+                    className={`w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 ${feature.color}`}
+                  />
                 </div>
                 <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 mb-2 sm:mb-3">
                   {feature.title}

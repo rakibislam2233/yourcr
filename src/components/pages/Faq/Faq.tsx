@@ -1,147 +1,366 @@
 "use client";
-import React from "react";
-import { motion } from "framer-motion";
-import { ChevronDown } from "lucide-react";
+import React, { useState } from "react";
+import {
+  ChevronDown,
+  Badge,
+  Grid3X3,
+  UserCog,
+  CalendarClock,
+  Bell,
+  MessageSquare,
+  CalendarIcon,
+  ShieldAlert,
+} from "lucide-react";
 
-const Faq = () => {
-  const faqs = [
-    {
-      question: "What is YourCR?",
-      answer:
-        "YourCR is a comprehensive classroom management platform designed to help Class Representatives manage classroom activities, student interactions, and academic tasks more efficiently.",
-    },
-    {
-      question: "How does the system work?",
-      answer:
-        "OurCR provides a centralized platform where CRs can manage attendance, announcements, assignments, and communication with classmates and faculty members.",
-    },
-    {
-      question: "Is there a mobile app?",
-      answer:
-        "Currently, we offer a responsive web application that works seamlessly across all devices. A dedicated mobile app is planned for future development.",
-    },
-    {
-      question: "How secure is my data?",
-      answer:
-        "We take data security seriously. All user data is encrypted and stored securely with industry-standard security measures to protect your privacy.",
-    },
-    {
-      question: "How do I contact support?",
-      answer:
-        "You can reach our support team through the Contact Us page or by emailing support@ourcr.in during business hours (10 AM - 6 PM IST).",
-    },
-    {
-      question: "Can I customize my dashboard?",
-      answer:
-        "Yes, our dashboard is highly customizable. You can organize widgets, set up notifications, and configure settings according to your preferences.",
-    },
-    {
-      question: "Is training provided for new users?",
-      answer:
-        "Yes, we offer comprehensive onboarding materials and video tutorials to help new users get started quickly with our platform.",
-    },
-    {
-      question: "How often do you update the platform?",
-      answer:
-        "We release updates monthly with new features, improvements, and bug fixes based on user feedback.",
-    },
-  ];
+interface Category {
+  id: string;
+  name: string;
+  icon: React.ReactNode;
+}
 
-  const [openIndex, setOpenIndex] = React.useState<number | null>(null);
+interface Topic {
+  id: string;
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+}
 
-  const toggleFaq = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index);
+interface FAQItem {
+  id: string;
+  categoryId: string;
+  question: string;
+  answer: React.ReactNode;
+}
+
+// Updated CATEGORIES with Lucide icons
+const CATEGORIES: Category[] = [
+  {
+    id: "general",
+    name: "General",
+    icon: <Grid3X3 className="size-5 text-gray-600" />,
+  },
+  {
+    id: "account",
+    name: "Account Management",
+    icon: <UserCog className="size-5 text-gray-600" />,
+  },
+  {
+    id: "schedules",
+    name: "Class Schedules",
+    icon: <CalendarClock className="size-5 text-gray-600" />,
+  },
+  {
+    id: "exams",
+    name: "Exam Updates",
+    icon: <Bell className="size-5 text-gray-600" />,
+  },
+  {
+    id: "faculty",
+    name: "Faculty Communication",
+    icon: <MessageSquare className="size-5 text-gray-600" />,
+  },
+];
+
+// Updated TOPICS with proper Lucide icon names
+const TOPICS: Topic[] = [
+  {
+    id: "schedule",
+    title: "Update schedule",
+    description: "Learn how to request changes to class timings.",
+    icon: <CalendarIcon className="size-6" />,
+  },
+  {
+    id: "cr-position",
+    title: "Apply for CR position",
+    description: "Requirements and application process details.",
+    icon: <Badge className="size-6" />,
+  },
+  {
+    id: "conflict",
+    title: "Report conflict",
+    description: "Resolve exam or lecture overlaps quickly.",
+    icon: <ShieldAlert className="size-6" />,
+  },
+];
+const FAQ_ITEMS: FAQItem[] = [
+  // General
+  {
+    id: "apply-cr",
+    categoryId: "general",
+    question: "How do I apply to become a Class Representative?",
+    answer: (
+      <>
+        <p className="mb-3">
+          To apply for a Class Representative position, navigate to your{" "}
+          <span className="text-primary font-medium cursor-pointer">
+            Dashboard
+          </span>{" "}
+          and look for the CR Applications widget during the open enrollment
+          period.
+        </p>
+        <p>
+          You will need to submit a brief statement of purpose and may need
+          endorsements from at least 3 faculty members.
+        </p>
+      </>
+    ),
+  },
+  {
+    id: "missed-meeting",
+    categoryId: "general",
+    question: "What happens if I miss a mandatory CR meeting?",
+    answer:
+      'Missing a mandatory meeting may result in a warning. If you have a valid reason, please submit an excuse form through the "Messages" tab at least 24 hours in advance.',
+  },
+  // Account
+  {
+    id: "reset-password",
+    categoryId: "account",
+    question: "How do I reset my portal password?",
+    answer:
+      'Go to the login page and click "Forgot Password". A reset link will be sent to your university email address immediately.',
+  },
+  {
+    id: "update-profile",
+    categoryId: "account",
+    question: "Can I change my display name?",
+    answer:
+      "Yes, go to Settings > Profile > Personal Information. Note that your official name must match university records.",
+  },
+  // Schedules
+  {
+    id: "timetable",
+    categoryId: "schedules",
+    question: "Where can I find the updated semester timetable?",
+    answer:
+      'You can find the updated timetable in the "Classes" section of your dashboard. It is updated in real-time by the administration.',
+  },
+  {
+    id: "conflict-report",
+    categoryId: "schedules",
+    question: "How do I report a scheduling conflict?",
+    answer:
+      'Navigate to the "Report Conflict" section in your sidebar, select the conflicting courses, and submit a ticket. The administration usually resolves these within 24 hours.',
+  },
+  // Exams
+  {
+    id: "exam-dates",
+    categoryId: "exams",
+    question: "When will the final exam dates be released?",
+    answer:
+      'Final exam schedules are typically released 4 weeks before the end of the semester. Check the "Exams" tab for the PDF download.',
+  },
+  {
+    id: "grading",
+    categoryId: "exams",
+    question: "What is the policy for re-checking grades?",
+    answer:
+      "You must submit a formal request to the Controller of Examinations within 7 days of result publication along with the required fee.",
+  },
+  // Faculty
+  {
+    id: "announcements",
+    categoryId: "faculty",
+    question: "Can faculty members edit posted announcements?",
+    answer:
+      "Yes, faculty members can edit announcements. You will receive a notification if a major change is made to an existing announcement.",
+  },
+  {
+    id: "contact-faculty",
+    categoryId: "faculty",
+    question: "Best way to contact a professor?",
+    answer:
+      'Use the official "Messages" system in the portal. It ensures a record of communication is kept for administrative purposes.',
+  },
+];
+const Hero: React.FC = () => {
+  return (
+    <div className="bg-surface pb-12 pt-16">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col items-center text-center">
+          <h1 className="text-4xl font-black tracking-tight text-text-primary sm:text-5xl">
+            How can we help you today?
+          </h1>
+          <p className="mt-4 text-lg text-text-secondary">
+            Find answers to common questions.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const TopicCard: React.FC<{ topic: Topic }> = ({ topic }) => {
+  return (
+    <div className="flex flex-col items-start gap-3 rounded-xl border border-border bg-white p-5 cursor-pointer ">
+      <div className="flex size-12 items-center justify-center rounded-lg bg-blue-50 text-primary">
+        {topic.icon}
+      </div>
+      <div>
+        <h3 className="font-bold text-text-primary">{topic.title}</h3>
+        <p className="text-sm text-text-secondary mt-1 leading-relaxed">
+          {topic.description}
+        </p>
+      </div>
+    </div>
+  );
+};
+
+interface SidebarProps {
+  activeCategory: string;
+  onSelectCategory: (id: string) => void;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({
+  activeCategory,
+  onSelectCategory,
+}) => {
+  return (
+    <aside className="w-full lg:w-64 shrink-0">
+      <div className="sticky top-24 rounded-xl border border-border bg-white p-4">
+        <div className="mb-4 px-2">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-text-secondary">
+            Categories
+          </h2>
+        </div>
+        <nav className="space-y-2">
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => onSelectCategory(cat.id)}
+              className={`w-full flex items-center gap-3 cursor-pointer rounded-md px-3 py-3 text-sm font-medium transition-colors text-left ${
+                activeCategory === cat.id
+                  ? "bg-blue-50 text-primary"
+                  : "text-text-secondary hover:bg-gray-50"
+              }`}
+            >
+              {cat.icon}
+              <span>{cat.name}</span>
+            </button>
+          ))}
+        </nav>
+      </div>
+    </aside>
+  );
+};
+
+const AccordionItem: React.FC<{
+  item: FAQItem;
+  isOpen: boolean;
+  onToggle: () => void;
+}> = ({ item, isOpen, onToggle }) => {
+  return (
+    <div
+      className={`w-full rounded-xl border bg-white cursor-pointer  overflow-hidden transition-colors ${
+        isOpen ? "border-primary shadow-sm" : "border-border"
+      }`}
+    >
+      <button
+        onClick={onToggle}
+        className="flex w-full items-center justify-between px-6 py-4 text-left hover:bg-gray-50 transition-colors"
+      >
+        <span
+          className={`text-base font-medium cursor-pointer ${
+            isOpen ? "text-primary font-semibold" : "text-text-primary"
+          }`}
+        >
+          {item.question}
+        </span>
+        <ChevronDown
+          className={`size-5 text-text-secondary cursor-pointer transition-transform ${
+            isOpen ? "rotate-180 text-primary" : ""
+          }`}
+        />
+      </button>
+      <div
+        className={`overflow-hidden transition-all duration-300 ease-in-out ${
+          isOpen ? "max-h-96" : "max-h-0"
+        }`}
+      >
+        <div className="border-t border-border bg-surface px-6 py-4">
+          <div className="text-sm leading-relaxed text-text-secondary">
+            {item.answer}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Faq: React.FC = () => {
+  const [activeCategory, setActiveCategory] = useState<string>("general");
+  const [openAccordionId, setOpenAccordionId] = useState<string | null>(null);
+
+  const toggleAccordion = (id: string) => {
+    setOpenAccordionId(openAccordionId === id ? null : id);
   };
 
+  const handleCategorySelect = (id: string) => {
+    setActiveCategory(id);
+    setOpenAccordionId(null); // Close all when switching category
+  };
+
+  const filteredItems = FAQ_ITEMS.filter(
+    (item) => item.categoryId === activeCategory
+  );
+  const currentCategoryName =
+    CATEGORIES.find((c) => c.id === activeCategory)?.name || "General";
+
   return (
-    <>
-      {/* Hero Banner */}
-      <section className="relative h-[60vh] md:h-[70vh] bg-gradient-to-t from-primary/10 via-secondary/5 to-primary/20 overflow-hidden">
-        <div className="relative z-10 max-w-7xl mx-auto px-6 h-full flex items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-left max-w-3xl"
-          >
-            <h1 className="text-5xl md:text-7xl font-extrabold text-gray-900 mb-6 leading-tight">
-              FAQ
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-700 font-medium">
-              Find answers to commonly asked questions about YourCR.
-            </p>
-          </motion.div>
-        </div>
+    <main className="relative flex min-h-screen flex-col font-display bg-background-light pt-16 md:pt-20">
+      <Hero />
 
-        {/* Wave Bottom */}
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 200" className="w-full">
-            <path
-              fill="#ffffff"
-              d="M0,100 C320,200 1120,0 1440,100 L1440,200 L0,200 Z"
-            ></path>
-          </svg>
+      {/* Popular Topics Grid */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-12">
+        <h2 className="text-2xl font-bold text-text-primary mb-6">
+          Popular Topics
+        </h2>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {TOPICS.map((topic) => (
+            <TopicCard key={topic.id} topic={topic} />
+          ))}
         </div>
       </section>
 
-      <section className="py-20 px-6 bg-white">
-        <div className="max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="space-y-6"
-          >
-            {faqs.map((faq, index) => (
-              <div
-                key={index}
-                className="border border-gray-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow"
-              >
-                <button
-                  className="w-full flex justify-between items-center p-6 text-left"
-                  onClick={() => toggleFaq(index)}
-                >
-                  <h3 className="text-xl font-semibold text-gray-900">
-                    {faq.question}
-                  </h3>
-                  <ChevronDown
-                    className={`w-6 h-6 text-gray-600 transition-transform ${
-                      openIndex === index ? "rotate-180" : ""
-                    }`}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 w-full">
+        <div className="flex flex-col lg:flex-row gap-8">
+          <Sidebar
+            activeCategory={activeCategory}
+            onSelectCategory={handleCategorySelect}
+          />
+
+          {/* FAQ Accordion Content */}
+          <div className="flex-1">
+            <div className="mb-6 flex items-baseline justify-between">
+              <h2 className="text-2xl font-bold text-text-primary">
+                {currentCategoryName} Questions
+              </h2>
+              <span className="text-sm text-text-secondary">
+                {filteredItems.length} result
+                {filteredItems.length !== 1 ? "s" : ""}
+              </span>
+            </div>
+
+            <div className="space-y-4">
+              {filteredItems?.length > 0 ? (
+                filteredItems.map((item) => (
+                  <AccordionItem
+                    key={item.id}
+                    item={item}
+                    isOpen={openAccordionId === item.id}
+                    onToggle={() => toggleAccordion(item.id)}
                   />
-                </button>
-                {openIndex === index && (
-                  <div className="px-6 pb-6 pt-0">
-                    <p className="text-gray-600">{faq.answer}</p>
-                  </div>
-                )}
-              </div>
-            ))}
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="mt-16 text-center"
-          >
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">
-              Still have questions?
-            </h2>
-            <p className="text-xl text-gray-600 mb-8">
-              Can&apos;t find the answer you&apos;re looking for? Reach out to our support
-              team.
-            </p>
-            <a
-              href="/contact-us"
-              className="inline-block bg-blue-600 text-white px-8 py-4 rounded-full font-medium hover:bg-blue-700 transition-colors"
-            >
-              Contact Support
-            </a>
-          </motion.div>
+                ))
+              ) : (
+                <div className="rounded-xl border border-border bg-white p-8 text-center text-text-secondary">
+                  No questions found for this category.
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </section>
-    </>
+    </main>
   );
 };
 

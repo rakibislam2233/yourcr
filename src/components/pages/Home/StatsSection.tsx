@@ -77,7 +77,7 @@ const AnimatedCounter = ({
 
 const StatsSection = () => {
   return (
-    <section className="relative w-full py-24 md:py-32 lg:py-40 bg-gradient-to-b from-[#F8FAFC] to-white overflow-hidden">
+    <section className="relative w-full py-24 md:py-32 lg:py-40 bg-linear-to-b from-[#F8FAFC] to-white overflow-hidden">
       {/* Background Blurs */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-20 left-10 w-96 h-96 bg-blue-100 rounded-full blur-3xl opacity-30"></div>
@@ -109,7 +109,7 @@ const StatsSection = () => {
               >
                 {/* Gradient Hover Glow */}
                 <div
-                  className={`absolute inset-0 rounded-xl bg-gradient-to-br ${stat.gradient} opacity-0 group-hover:opacity-20 transition-opacity duration-300 -z-10`}
+                  className={`absolute inset-0 rounded-xl bg-linear-to-br ${stat.gradient} opacity-0 group-hover:opacity-20 transition-opacity duration-300 -z-10`}
                 ></div>
 
                 <div className="space-y-4">
