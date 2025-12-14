@@ -126,15 +126,10 @@ const VerifyOtp = () => {
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1605792657660-73dd5671e119?q=80&w=2024&auto=format&fit=crop')",
+              "url('https://images.unsplash.com/photo-1523240795612-9a054b0db644')",
           }}
         />
-        <div className="relative z-20 flex h-full w-full flex-col justify-end p-12 text-white">
-          <blockquote className="text-3xl font-bold leading-tight tracking-tight max-w-lg">
-            One more step to secure your account and continue managing your
-            class smoothly.
-          </blockquote>
-        </div>
+        <div className="absolute inset-0 bg-gray-900 opacity-40 mix-blend-multiply z-10"></div>
       </div>
     </section>
   );

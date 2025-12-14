@@ -158,19 +158,7 @@ const StudentLogin = () => {
           }}
         />
 
-        {/* Overlay Text */}
-        <div className="relative z-20 flex h-full flex-col justify-end p-12 text-white">
-          <div className="max-w-lg">
-            <div className="mb-4 inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-sm font-medium backdrop-blur-md">
-              <span className="mr-2 h-2 w-2 rounded-full bg-green-400"></span>
-              Academic Year 2024-2025
-            </div>
-            <blockquote className="text-3xl font-bold leading-tight tracking-tight">
-              Stay connected with your class updates, schedules, and important
-              announcements in one place.
-            </blockquote>
-          </div>
-        </div>
+        <div className="absolute inset-0 bg-gray-900 opacity-40 mix-blend-multiply z-10"></div>
       </div>
     </section>
   );

@@ -110,17 +110,10 @@ const ForgotPassword = () => {
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1497633765632-6b3bc9c2c7e4?q=80&w=2070&auto=format&fit=crop')",
+              "url('https://images.unsplash.com/photo-1571260899304-425eee4c7efc')",
           }}
         />
-        <div className="relative z-20 flex h-full w-full flex-col justify-end p-12 text-white">
-          <div className="max-w-lg">
-            <blockquote className="text-3xl font-bold leading-tight tracking-tight">
-              Security is our priority. Reset your password easily and get back
-              to coordinating your class.
-            </blockquote>
-          </div>
-        </div>
+        <div className="absolute inset-0 bg-gray-900 opacity-40 mix-blend-multiply z-10"></div>
       </div>
     </section>
   );

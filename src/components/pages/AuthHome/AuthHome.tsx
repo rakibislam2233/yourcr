@@ -9,12 +9,7 @@ const AuthHome = () => {
     <section className="w-full flex flex-col items-center justify-center bg-background-light px-6 py-12 lg:py-20">
       <div className="max-w-7xl mx-auto w-full flex flex-col gap-12 lg:gap-16">
         {/* Hero Text Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="flex flex-col items-center text-center gap-6"
-        >
+        <motion.div className="flex flex-col items-center text-center gap-6">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-primary text-xs font-semibold  tracking-wider">
             <span className="w-2 h-2 rounded-full bg-primary"></span>
             Centralized Hub
@@ -31,12 +26,7 @@ const AuthHome = () => {
         {/* Role Selection Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 w-full">
           {/* Student Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="group relative flex flex-col gap-6 rounded-2xl border border-border-subtle bg-surface p-8 "
-          >
+          <motion.div className="group relative flex flex-col gap-6 rounded-2xl border border-border-subtle bg-surface p-8 ">
             <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
               <School className="size-14" />
             </div>
@@ -62,12 +52,7 @@ const AuthHome = () => {
           </motion.div>
 
           {/* CR Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="group relative flex flex-col gap-6 rounded-2xl border border-border-subtle bg-surface p-8 "
-          >
+          <motion.div className="group relative flex flex-col gap-6 rounded-2xl border border-border-subtle bg-surface p-8 ">
             <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
               <University className="size-14" />
             </div>

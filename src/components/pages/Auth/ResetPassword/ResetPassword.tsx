@@ -157,15 +157,10 @@ const ResetPassword = () => {
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop')",
+              "url('https://images.unsplash.com/photo-1663162550974-aaf76bcdeedf')",
           }}
         />
-        <div className="relative z-20 flex h-full w-full flex-col justify-end p-12 text-white">
-          <blockquote className="text-3xl font-bold leading-tight tracking-tight max-w-lg">
-            A strong password is the first step to keeping your class data safe
-            and secure.
-          </blockquote>
-        </div>
+        <div className="absolute inset-0 bg-gray-900 opacity-40 mix-blend-multiply z-10"></div>
       </div>
     </section>
   );

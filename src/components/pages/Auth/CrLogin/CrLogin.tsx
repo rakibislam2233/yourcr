@@ -160,20 +160,7 @@ const CrLogin = () => {
               "url('https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
           }}
         />
-
-        {/* Overlay Text */}
-        <div className="relative z-20 flex h-full w-full flex-col justify-end p-12 text-white">
-          <div className="max-w-lg">
-            <div className="mb-4 inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-sm font-medium backdrop-blur-md">
-              <span className="mr-2 h-2 w-2 rounded-full bg-green-400"></span>
-              Academic Year 2024-2025
-            </div>
-            <blockquote className="text-3xl font-bold leading-tight tracking-tight">
-              Empower your class with seamless coordination, updates, and
-              communication tools.
-            </blockquote>
-          </div>
-        </div>
+        <div className="absolute inset-0 bg-gray-900 opacity-40 mix-blend-multiply z-10"></div>
       </div>
     </section>
   );
