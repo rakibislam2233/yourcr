@@ -16,16 +16,14 @@ const stats = [
     suffix: "+",
     label: "Active CRs",
     desc: "Class Representatives using OUR CR to manage their classes.",
-    color: "text-green-600",
-    gradient: "from-green-500 to-emerald-500",
+    color: "text-green-600"
   },
   {
     number: 3500,
     suffix: "+",
     label: "Connected Students",
     desc: "Students receiving notices, updates, and class info instantly.",
-    color: "text-red-600",
-    gradient: "from-red-500 to-pink-500",
+    color: "text-red-600"
   },
   {
     number: 1000,
@@ -33,15 +31,13 @@ const stats = [
     label: "Announcements Shared",
     desc: "Notices and announcements made clearer and better organized.",
     color: "text-blue-600",
-    gradient: "from-blue-500 to-cyan-500",
   },
   {
     number: 800,
     suffix: "+",
     label: "Student Issues Solved",
     desc: "Problems resolved efficiently through digital CR-Student communication.",
-    color: "text-purple-600",
-    gradient: "from-purple-500 to-indigo-500",
+    color: "text-purple-600"
   },
 ];
 
@@ -105,11 +101,11 @@ const StatsSection = () => {
             {stats.map((stat, index) => (
               <motion.div
                 key={index}
-                className="group relative bg-white/80 backdrop-blur-sm rounded-xl p-8 border border-gray-200 cursor-pointer hover:shadow-lg transition-shadow duration-300"
+                className="group relative bg-white/80 backdrop-blur-sm rounded-xl p-8 border border-gray-200 cursor-pointer"
               >
                 {/* Gradient Hover Glow */}
                 <div
-                  className={`absolute inset-0 rounded-xl bg-linear-to-br ${stat.gradient} opacity-0 group-hover:opacity-20 transition-opacity duration-300 -z-10`}
+                  className={`absolute inset-0 rounded-xl bg-linear-to-br opacity-0 group-hover:opacity-20 transition-opacity duration-300 -z-10`}
                 ></div>
 
                 <div className="space-y-4">
