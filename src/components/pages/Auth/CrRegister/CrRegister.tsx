@@ -16,8 +16,7 @@ import {
   ArrowLeft,
   CheckCircle2,
   User2,
-  School,
-  Badge,
+  School
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";

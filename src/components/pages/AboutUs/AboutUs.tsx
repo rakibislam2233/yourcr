@@ -1,218 +1,296 @@
 "use client";
-import React from "react";
-import Image from "next/image";
+
+import { Badge, School } from "lucide-react";
 import {
-  Target,
-  Users,
-  HeartHandshake,
-  CheckCircle2,
-  ArrowRight,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+  MdCastForEducation,
+  MdForum,
+  MdGroups,
+  MdTrackChanges,
+  MdVisibility,
+} from "react-icons/md";
 
 const AboutUs = () => {
   return (
-    <>
+    <section className="w-full pt-16 md:pt-20 space-y-5">
       {/* Hero Section */}
-      <section className="relative pt-24 sm:pt-28 md:pt-32 pb-16 sm:pb-20 md:pb-24 bg-linear-to-b from-primary/5 via-white to-white overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-[0.03]">
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: `radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0)`,
-              backgroundSize: "40px 40px",
-            }}
-          />
-        </div>
-
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="max-w-3xl">
-            <span className="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4 sm:mb-6">
-              About YourCR
-            </span>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight">
-              Simplifying Classroom{" "}
-              <span className="text-primary">Management</span>
-            </h1>
-            <p className="text-base sm:text-lg md:text-xl text-gray-600 leading-relaxed max-w-2xl">
-              At YourCR, we believe classroom management shouldn&apos;t be
-              stressful. We&apos;re building tools that empower Class
-              Representatives to focus on what matters most.
-            </p>
+      <div className="flex flex-1 justify-center bg-white px-5 py-5">
+        <div className="flex w-full max-w-7xl flex-1 flex-col">
+          <div className="flex flex-col gap-6 px-4 py-10 md:gap-8 md:flex-row">
+            <div className="flex flex-1 flex-col gap-6 md:min-w-[400px] md:gap-8 md:justify-center">
+              <div className="flex flex-col gap-2 text-left">
+                <h1 className="text-4xl font-black leading-tight tracking-[-0.033em] text-[#121317]  md:text-5xl">
+                  Bridging the Gap Between Students and Faculty
+                </h1>
+                <h2 className="mt-2 text-sm font-normal leading-normal text-[#64748B]  md:text-lg">
+                  Empowering academic leadership with centralized tools for
+                  Class Representatives, students, and faculty members.
+                </h2>
+              </div>
+              <button className="flex w-fit cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-primary px-6 py-2.5 text-sm font-bold leading-normal tracking-[0.015em] text-white hover:bg-primary/90 md:py-3 md:text-base">
+                <span className="truncate">Join Our Mission</span>
+              </button>
+            </div>
+            <div
+              className="aspect-video w-full flex-1 rounded-xl bg-cover bg-center bg-no-repeat shadow-lg md:h-auto"
+              style={{
+                backgroundImage: `url(https://lh3.googleusercontent.com/aida-public/AB6AXuDuDhA3kpfxcpSNThyAjHxWdHb4BcORVENsohDQAHAIDnNn1Ar-WK43PBQ7kbJBHtorq8k7unON5GYmdxfqICC4ymGUXNBhhDOngOn8iqiffzmsVCVBhmnUcam1m7B7fUMpYuM_RdJdS8WZX-gc14AyeMvSWqWeYFdYrtOhJtAdeN3nQ2Ixzajlb1LskEfpCAvD13WDwGLBMN28l89L_9QKSWlXcq-yPiF4SSJ1Mcno97XDjsMzqMfNGE-BWNMH__R3RIStn46gRtU)`,
+              }}
+              aria-label="Students and faculty collaborating in a modern university setting"
+            />
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Main Content Section */}
-      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-white">
-        <div className="max-w-7xl mx-auto">
-          {/* Story Section */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center mb-16 sm:mb-20 md:mb-24">
-            {/* Image */}
-            <div className="relative order-2 lg:order-1">
-              <div className="relative rounded-2xl overflow-hidden shadow-xl">
-                <Image
-                  src="https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?w=600&h=500&fit=crop"
-                  alt="Students working together"
-                  width={600}
-                  height={500}
-                  className="w-full h-auto object-cover"
-                />
+      {/* Stats Section */}
+      <div className="flex flex-1 justify-center bg-gray-50  px-5 py-10 md:py-12">
+        <div className="flex w-full max-w-7xl flex-1 flex-col">
+          <div className="flex flex-wrap gap-4 px-4">
+            <div className="flex min-w-[158px] flex-1 flex-col gap-2 rounded-lg border border-[#e2e8f0] bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+              <div className="flex items-center gap-2">
+                <School className="text-primary" />
+                <p className="text-base font-medium leading-normal text-[#64748B] ">
+                  Universities
+                </p>
               </div>
-              {/* Floating Card */}
-              <div className="absolute -bottom-4 -right-4 sm:-bottom-6 sm:-right-6 bg-white rounded-xl shadow-lg p-4 sm:p-5 border border-gray-100">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-full flex items-center justify-center">
-                    <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
-                  </div>
-                  <div>
-                    <p className="text-xl sm:text-2xl font-bold text-gray-900">
-                      120+
-                    </p>
-                    <p className="text-xs sm:text-sm text-gray-500">
-                      Active CRs
-                    </p>
-                  </div>
+              <p className="text-3xl font-bold leading-tight tracking-tight text-[#121317] ">
+                50+
+              </p>
+            </div>
+            <div className="flex min-w-[158px] flex-1 flex-col gap-2 rounded-lg border border-[#e2e8f0] bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+              <div className="flex items-center gap-2">
+                <MdGroups className="text-primary" />
+                <p className="text-base font-medium leading-normal text-[#64748B] ">
+                  Active Students
+                </p>
+              </div>
+              <p className="text-3xl font-bold leading-tight tracking-tight text-[#121317] ">
+                10k+
+              </p>
+            </div>
+            <div className="flex min-w-[158px] flex-1 flex-col gap-2 rounded-lg border border-[#e2e8f0] bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+              <div className="flex items-center gap-2">
+                <MdForum className="text-primary" />
+                <p className="text-base font-medium leading-normal text-[#64748B] ">
+                  Messages
+                </p>
+              </div>
+              <p className="text-3xl font-bold leading-tight tracking-tight text-[#121317] ">
+                500k+
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Mission & Vision */}
+      <div className="flex flex-1 justify-center bg-white px-5 py-5">
+        <div className="flex w-full max-w-7xl flex-1 flex-col">
+          <div className="flex flex-col gap-10 px-4 py-16">
+            <div className="flex flex-col items-center gap-4 text-center">
+              <h1 className="max-w-[720px] text-4xl font-bold leading-tight text-[#121317]  md:text-[32px]">
+                Our Purpose
+              </h1>
+              <p className="max-w-[720px] text-base font-normal leading-relaxed text-[#64748B] ">
+                We are driven by a commitment to improve educational
+                coordination, ensuring that administrative hurdles never get in
+                the way of learning.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 gap-6 p-0 md:grid-cols-2">
+              <div className="flex flex-1 flex-col items-start gap-4 rounded-xl border border-[#e2e8f0] bg-gray-50 p-8 transition-shadow">
+                <div className="rounded-lg bg-white p-3 shadow-sm ">
+                  <MdTrackChanges className="text-3xl text-primary" />
                 </div>
-              </div>
-            </div>
-
-            {/* Text Content */}
-            <div className="space-y-4 sm:space-y-6 order-1 lg:order-2">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 leading-tight">
-                Built for Every Class Representative
-              </h2>
-              <p className="text-sm sm:text-base md:text-lg text-gray-600 leading-relaxed">
-                Welcome to YourCR, your go-to platform for streamlined classroom
-                management. As a Class Representative, you&apos;re often
-                juggling multiple tasks and responsibilities, but we&apos;ve
-                made it easy for you to stay connected with your students and
-                manage your class efficiently.
-              </p>
-              <p className="text-sm sm:text-base md:text-lg text-gray-600 leading-relaxed">
-                YourCR is a smart, web-based platform designed with one clear
-                goal: to make communication between CRs and students fast,
-                transparent, and organized. No more chasing updates, lost
-                messages, or scattered notes.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2">
-                <Link href="/auth/cr-register">
-                  <Button size="lg" className="w-full sm:w-auto gap-2">
-                    Get Started <ArrowRight className="w-4 h-4" />
-                  </Button>
-                </Link>
-                <Link href="/contact-us">
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="w-full sm:w-auto"
-                  >
-                    Contact Us
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* Mission, Vision, Values */}
-          <div className="pt-8 sm:pt-12">
-            <div className="text-center mb-10 sm:mb-12 md:mb-16">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
-                Mission, Vision & Values
-              </h2>
-              <div className="w-16 sm:w-20 md:w-24 h-1 bg-linear-to-r from-primary to-secondary mx-auto mb-4 sm:mb-6 rounded-full" />
-              <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto">
-                We believe in teamwork — connecting CRs, students, and teachers
-                in a shared digital space.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-              {[
-                {
-                  icon: Target,
-                  title: "Our Mission",
-                  desc: "To empower Class Representatives with modern tools that simplify daily tasks, reduce stress, and strengthen community — making every classroom run smoothly.",
-                  color: "bg-blue-500",
-                  lightColor: "bg-blue-50",
-                  iconColor: "text-blue-600",
-                },
-                {
-                  icon: Users,
-                  title: "Our Vision",
-                  desc: "To become the go-to digital companion for every CR in every college — creating connected, transparent, and thriving academic communities worldwide.",
-                  color: "bg-green-500",
-                  lightColor: "bg-green-50",
-                  iconColor: "text-green-600",
-                },
-                {
-                  icon: HeartHandshake,
-                  title: "Our Values",
-                  desc: "At YourCR, we stand for simplicity, transparency, and reliability — building trust with every update, every feature, and every connection we help create.",
-                  color: "bg-purple-500",
-                  lightColor: "bg-purple-50",
-                  iconColor: "text-purple-600",
-                },
-              ].map((item, idx) => (
-                <div
-                  key={idx}
-                  className="bg-white rounded-2xl p-6 sm:p-8 border border-gray-100 hover:shadow-lg transition-shadow duration-300 group"
-                >
-                  <div
-                    className={`w-14 h-14 sm:w-16 sm:h-16 ${item.lightColor} rounded-xl flex items-center justify-center mb-5 sm:mb-6 group-hover:scale-105 transition-transform duration-300`}
-                  >
-                    <item.icon
-                      className={`w-7 h-7 sm:w-8 sm:h-8 ${item.iconColor}`}
-                    />
-                  </div>
-                  <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">
-                    {item.title}
-                  </h3>
-                  <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
-                    {item.desc}
+                <div className="flex flex-col gap-2">
+                  <h2 className="text-xl font-bold leading-tight text-[#121317] ">
+                    Our Mission
+                  </h2>
+                  <p className="text-base font-normal leading-relaxed text-[#64748B] ">
+                    To simplify academic coordination by providing Class
+                    Representatives with powerful digital tools that streamline
+                    communication and task management.
                   </p>
                 </div>
-              ))}
+              </div>
+              <div className="flex flex-1 flex-col items-start gap-4 rounded-xl border border-[#e2e8f0] bg-gray-50 p-8 transition-shadow">
+                <div className="rounded-lg bg-white p-3 shadow-sm ">
+                  <MdVisibility className="text-3xl text-primary" />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <h2 className="text-xl font-bold leading-tight text-[#121317] ">
+                    Our Vision
+                  </h2>
+                  <p className="text-base font-normal leading-relaxed text-[#64748B] ">
+                    A future where every academic voice is heard, administrative
+                    chaos is eliminated, and students can focus entirely on
+                    their growth and learning.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* CTA Section */}
-      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-linear-to-r from-primary to-primary/90">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 sm:mb-6">
-            Ready to Transform Your Classroom?
-          </h2>
-          <p className="text-base sm:text-lg text-white/90 mb-6 sm:mb-8 max-w-2xl mx-auto">
-            Join hundreds of Class Representatives who are already making their
-            academic life easier with YourCR.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-            <Link href="/auth/cr-register">
-              <Button
-                size="lg"
-                variant="secondary"
-                className="w-full bg-white hover:bg-transparent border border-white hover:text-white cursor-pointer sm:w-auto gap-2"
-              >
-                Register as CR <ArrowRight className="w-4 h-4" />
-              </Button>
-            </Link>
-            <Link href="/contact-us">
-              <Button
-                size="lg"
-                variant="outline"
-                className="w-full sm:w-auto bg-transparent text-white border-white cursor-pointer"
-              >
-                Learn More
-              </Button>
-            </Link>
+      {/* Why Your CR? */}
+      <div className="flex flex-1 justify-center bg-gray-50 px-5 py-5">
+        <div className="flex w-full max-w-7xl flex-1 flex-col">
+          <div className="flex flex-col gap-10 px-4 py-16">
+            <div className="flex flex-col gap-4">
+              <h1 className="max-w-[720px] text-4xl font-bold leading-tight text-[#121317]  md:text-[32px]">
+                Why Your CR?
+              </h1>
+              <p className="max-w-[720px] text-base font-normal leading-normal text-[#64748B] ">
+                A platform designed to serve the entire academic ecosystem with
+                tailored solutions.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+              <div className="flex flex-1 flex-col gap-4 rounded-xl bg-white p-6 shadow-sm transition-transform duration-300 hover:-translate-y-1 dark:bg-gray-800">
+                <Badge className="text-4xl text-primary" />
+                <div className="flex flex-col gap-2">
+                  <h2 className="text-lg font-bold leading-tight text-[#121317] ">
+                    For Class Reps
+                  </h2>
+                  <p className="text-sm font-normal leading-relaxed text-[#64748B] ">
+                    Manage tasks effortlessly, organize polls, and distribute
+                    materials with a single click.
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-1 flex-col gap-4 rounded-xl bg-white p-6 shadow-sm transition-transform duration-300 hover:-translate-y-1 dark:bg-gray-800">
+                <School className="text-4xl text-primary" />
+                <div className="flex flex-col gap-2">
+                  <h2 className="text-lg font-bold leading-tight text-[#121317] ">
+                    For Students
+                  </h2>
+                  <p className="text-sm font-normal leading-relaxed text-[#64748B] ">
+                    Never miss a deadline or announcement with centralized
+                    notifications and calendars.
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-1 flex-col gap-4 rounded-xl bg-white p-6 shadow-sm transition-transform duration-300 hover:-translate-y-1 dark:bg-gray-800">
+                <MdCastForEducation className="text-4xl text-primary" />
+                <div className="flex flex-col gap-2">
+                  <h2 className="text-lg font-bold leading-tight text-[#121317] ">
+                    For Faculty
+                  </h2>
+                  <p className="text-sm font-normal leading-relaxed text-[#64748B] ">
+                    Streamline announcements and ensure important updates reach
+                    every student instantly.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </section>
-    </>
+      </div>
+
+      {/* Team Section */}
+      <div className="flex flex-1 justify-center bg-white px-5 py-5">
+        <div className="flex w-full max-w-7xl flex-1 flex-col">
+          <div className="flex flex-col gap-10 px-4 py-16">
+            <div className="flex flex-col items-center gap-4 text-center">
+              <h1 className="text-4xl font-bold leading-tight text-[#121317]  md:text-[32px]">
+                The Team Behind the Tool
+              </h1>
+              <p className="max-w-[600px] text-base font-normal text-[#64748B] ">
+                We are a group of educators, developers, and former class
+                representatives passionate about making academic life easier.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
+              {/* Sarah Jenkins */}
+              <div className="flex flex-col items-center gap-3">
+                <div className="aspect-square w-full overflow-hidden rounded-xl">
+                  <img
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSHNFS2L8Ul9KujrBUGxC2wgf-0YZqL8jw9a4Uf42A9plFTizMUseL_OHp6tXYVgQDyxGw5e-rb03SlIkTO7VOv7w5w-QA0SCTetk1E6RmbcHMh-t3UV3sb-6as1TUKRFl0Bs1H0exwMLXZBHvulTB24xvuJzhcvc5IHClSF4USQpbRAl1t8eNk3JR8P6xpdAlnhgLRX94GvVG2P3V3FDRrc03x_toK9oO5NZ_Y9umIWSuHvuxPbvNuHyFii-WQT7DP78t5eCMI-I"
+                    alt="Portrait of Sarah Jenkins, Founder & CEO"
+                    className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+                  />
+                </div>
+                <div className="text-center">
+                  <h3 className="text-lg font-bold text-[#121317] ">
+                    Sarah Jenkins
+                  </h3>
+                  <p className="text-sm text-[#64748B] ">Founder & CEO</p>
+                </div>
+              </div>
+              {/* David Chen */}
+              <div className="flex flex-col items-center gap-3">
+                <div className="aspect-square w-full overflow-hidden rounded-xl">
+                  <img
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXzzML_vCj1smBGdycSY2LxVnfhxOMBucIeCMvE8A9AgVK9Tifq-OnChZ_uqoyFL0A7gEtCuNrva_czcU7CNU5IcjTLLbpThX0Y0BlMsDtRvedmFDjJ4Qu3hQ0yCbYC-lA3Nf4UBSqdgxEiHH0TZwHyOshnnlpilFcGppTo_5Q7OwHYz98cTBL0sBNzdlDDVEaO7KR0CCfBeQ-xSnlmPmRuBRaXTRvTQ-CHz8mAz4BRlk-KB-QSINl0BO2DmTJd0lpZ2Nemm4aJ-0"
+                    alt="Portrait of David Chen, Head of Product"
+                    className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+                  />
+                </div>
+                <div className="text-center">
+                  <h3 className="text-lg font-bold text-[#121317] ">
+                    David Chen
+                  </h3>
+                  <p className="text-sm text-[#64748B] ">Head of Product</p>
+                </div>
+              </div>
+              {/* Maya Patel */}
+              <div className="flex flex-col items-center gap-3">
+                <div className="aspect-square w-full overflow-hidden rounded-xl">
+                  <img
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQxnRVBo0SRbNLQ4Cf3P9HI1Lou23ijw6jgbCshEHY-S5641v_9Ko2hkuJfjAtuP8Z0Ij1yg7CUzk-5TCuig6W2v7AV6IC8m7N7QNsDtD9fBAid1JNBTDyXvXasP5PVJ8w1RTZkoIUsMknspbxr3IBVGsbggAne8cKPkYEmEs1bfQ-wAUEeigOn3ZaTaO6EN4a7vSoRI3wamVb085NVkbRZt0Psbnk3HHttrydjMf5clpwL1hWysvZz9jr76LIdlcpU79lvQGRzvs"
+                    alt="Portrait of Maya Patel, Community Lead"
+                    className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+                  />
+                </div>
+                <div className="text-center">
+                  <h3 className="text-lg font-bold text-[#121317] ">
+                    Maya Patel
+                  </h3>
+                  <p className="text-sm text-[#64748B] ">Community Lead</p>
+                </div>
+              </div>
+              {/* James Wilson */}
+              <div className="flex flex-col items-center gap-3">
+                <div className="aspect-square w-full overflow-hidden rounded-xl">
+                  <img
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfOanewN3OejadAgqgH3p_s_4hJUExVUJA_a1ix4VsPfCT2PYEcTQ1XwDIUy8PVuAW7gP_LgaA2nyVahQaI0NwUbC2J8YbzdIyG1Jxc5equ-00L2REcoEhJT2EKRMq5eT54aOKx3e2cMiA1QcQKrAT1kditJ7wIcUZ3hldjpW9itoBQNC8XgtHr2PSCli39DOLDSH-lWysvaOR4xUKLemSU00t0LIeROR_yVtSY7Jo4M2is0C9CTNtNSFhz-ou9Vl02uhIZ9CRH_8"
+                    alt="Portrait of James Wilson, Lead Developer"
+                    className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+                  />
+                </div>
+                <div className="text-center">
+                  <h3 className="text-lg font-bold text-[#121317] ">
+                    James Wilson
+                  </h3>
+                  <p className="text-sm text-[#64748B] ">Lead Developer</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* CTA Banner */}
+      <div className="flex w-full justify-center bg-primary px-5 py-16 md:py-20">
+        <div className="flex w-full max-w-7xl flex-1 flex-col items-center gap-6 text-center">
+          <h2 className="max-w-[600px] text-3xl font-black tracking-tight text-white md:text-4xl">
+            Ready to transform your academic experience?
+          </h2>
+          <p className="max-w-[600px] text-lg text-white/80">
+            Join thousands of students and faculty members who are already using
+            Your CR.
+          </p>
+          <div className="flex gap-4 pt-2">
+            <button className="rounded-lg bg-white px-8 py-3 font-bold text-primary shadow-lg transition-colors hover:bg-gray-100">
+              Get Started Now
+            </button>
+            <button className="rounded-lg border border-white bg-transparent px-8 py-3 font-bold text-white transition-colors hover:bg-white/10">
+              Contact Sales
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 };
 

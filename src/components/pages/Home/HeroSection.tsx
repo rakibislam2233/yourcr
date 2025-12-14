@@ -128,7 +128,7 @@ const HeroSection: React.FC = () => {
               </div>
               <div>
                 <h4 className="font-bold text-sm">New Announcement</h4>
-                <p className="text-xs text-text-muted dark:text-gray-400">
+                <p className="text-xs text-text-muted ">
                   Class schedule updated for CS-101
                 </p>
               </div>

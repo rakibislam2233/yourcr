@@ -11,6 +11,22 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "lh3.googleusercontent.com",
       },
+      {
+        protocol: "https",
+        hostname: "thumbs.dreamstime.com",
+      },
+      {
+        protocol: "https",
+        hostname: "s39613.pcdn.co",
+      },
+      {
+        protocol: "https",
+        hostname: "youthtoday.org",
+      },
+      {
+        protocol: "https",
+        hostname: "news.wisc.edu",
+      }
     ],
   },
 };
