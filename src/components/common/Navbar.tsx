@@ -80,7 +80,7 @@ const Navbar: React.FC = () => {
 
           {/* Desktop Auth Buttons */}
           <div className="hidden md:flex items-center gap-5">
-            <Link href="/auth">
+            <Link href="/auth/login">
               <Button
                 variant="outline"
                 size="default"
@@ -137,7 +137,7 @@ const Navbar: React.FC = () => {
               ))}
 
               <div className="border-t border-gray-100 pt-4 mt-4 space-y-3">
-                <Link href="/auth" onClick={() => setIsMenuOpen(false)}>
+                <Link href="/auth/login" onClick={() => setIsMenuOpen(false)}>
                   <Button variant="outline" className="w-full h-11 border-primary text-primary">
                     Login
                   </Button>

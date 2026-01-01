@@ -8,25 +8,41 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import logo from "@/assets/logo/logo.png";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+const resetPasswordSchema = z.object({
+  password: z.string().min(8, "Password must be at least 8 characters"),
+  confirmPassword: z.string().min(8, "Please confirm your password"),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords do not match",
+  path: ["confirmPassword"],
+});
+
+type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
 
 const ResetPassword = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (password !== confirmPassword) {
-      alert("Passwords do not match!");
-      return;
-    }
-    if (password.length < 8) {
-      alert("Password must be at least 8 characters.");
-      return;
-    }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm<ResetPasswordFormData>({
+    resolver: zodResolver(resetPasswordSchema),
+    defaultValues: {
+      password: "",
+      confirmPassword: "",
+    },
+  });
+
+  const onSubmit = (data: ResetPasswordFormData) => {
+    console.log("New password set:", data.password);
     setSubmitted(true);
   };
 
@@ -66,7 +82,7 @@ const ResetPassword = () => {
               </Link>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div className="space-y-2">
                 <Label
                   htmlFor="password"
@@ -79,10 +95,10 @@ const ResetPassword = () => {
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter new password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="pr-12 h-12 text-base border-gray-300 focus:border-primary focus:ring-primary"
-                    required
+                    className={`pr-12 h-12 text-base border-gray-300 focus:border-primary focus:ring-primary ${
+                      errors.password ? "border-red-500" : ""
+                    }`}
+                    {...register("password")}
                   />
                   <button
                     type="button"
@@ -96,6 +112,9 @@ const ResetPassword = () => {
                     )}
                   </button>
                 </div>
+                {errors.password && (
+                  <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -110,10 +129,10 @@ const ResetPassword = () => {
                     id="confirm"
                     type={showConfirm ? "text" : "password"}
                     placeholder="Re-enter password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="pr-12 h-12 text-base border-gray-300 focus:border-primary focus:ring-primary"
-                    required
+                    className={`pr-12 h-12 text-base border-gray-300 focus:border-primary focus:ring-primary ${
+                      errors.confirmPassword ? "border-red-500" : ""
+                    }`}
+                    {...register("confirmPassword")}
                   />
                   <button
                     type="button"
@@ -127,6 +146,9 @@ const ResetPassword = () => {
                     )}
                   </button>
                 </div>
+                {errors.confirmPassword && (
+                  <p className="text-red-500 text-sm mt-1">{errors.confirmPassword.message}</p>
+                )}
               </div>
 
               <Button

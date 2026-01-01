@@ -9,14 +9,44 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+const loginSchema = z.object({
+  email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(1, "Password is required"),
+  remember: z.boolean().default(false),
+});
+
+type LoginFormData = z.infer<typeof loginSchema>;
 
 const Login = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    watch,
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+      remember: false,
+    },
+  });
+
+  const onSubmit = (data: LoginFormData) => {
+    console.log("Login data:", data);
     router.push("/dashboard/student");
+  };
+
+  const handleCheckboxChange = (checked: boolean) => {
+    setValue("remember", checked);
   };
 
   return (
@@ -43,7 +73,7 @@ const Login = () => {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+          <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
             {/* Email */}
             <div className="flex flex-col gap-1.5">
               <Label
@@ -58,9 +88,15 @@ const Login = () => {
                   id="email"
                   type="text"
                   placeholder="e.g. student@university.edu"
-                  className="pl-12 h-12 text-base border-gray-300 focus:border-primary focus:ring-primary"
+                  className={`pl-12 h-12 text-base border-gray-300 focus:border-primary focus:ring-primary ${
+                    errors.email ? "border-red-500" : ""
+                  }`}
+                  {...register("email")}
                 />
               </div>
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+              )}
             </div>
 
             {/* Password */}
@@ -77,7 +113,10 @@ const Login = () => {
                   id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
-                  className="pl-12 pr-12 h-12 text-base border-gray-300 focus:border-primary focus:ring-primary"
+                  className={`pl-12 pr-12 h-12 text-base border-gray-300 focus:border-primary focus:ring-primary ${
+                    errors.password ? "border-red-500" : ""
+                  }`}
+                  {...register("password")}
                 />
                 <button
                   type="button"
@@ -91,12 +130,19 @@ const Login = () => {
                   )}
                 </button>
               </div>
+              {errors.password && (
+                <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+              )}
             </div>
 
             {/* Remember & Forgot */}
             <div className="flex items-center justify-between py-2">
               <div className="flex items-center space-x-2">
-                <Checkbox id="remember" />
+                <Checkbox
+                  id="remember"
+                  checked={watch("remember")}
+                  onCheckedChange={handleCheckboxChange}
+                />
                 <Label
                   htmlFor="remember"
                   className="text-sm font-medium text-gray-700 cursor-pointer"

@@ -6,8 +6,29 @@ import PageHeader from "@/components/dashboard/shared/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import Link from "next/link";
 import { useRouter, useParams } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+const teacherSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  designation: z.string().min(1, "Designation is required"),
+  department: z.string().min(2, "Department is required"),
+  email: z.string().email("Please enter a valid email address"),
+  phone: z.string().min(10, "Phone number must be at least 10 digits"),
+  color: z.string().min(1, "Color is required"),
+});
+
+type TeacherFormData = z.infer<typeof teacherSchema>;
 
 const designationOptions = ["Professor", "Associate Professor", "Assistant Professor", "Lecturer", "Instructor"];
 
@@ -31,52 +52,58 @@ export default function EditTeacherPage() {
   const params = useParams();
   const teacherId = parseInt(params.id as string);
   const [subjectInput, setSubjectInput] = useState("");
+  const [subjects, setSubjects] = useState<string[]>([]);
 
-  const [formData, setFormData] = useState({
-    name: "",
-    designation: "Lecturer",
-    department: "Computer Technology",
-    email: "",
-    phone: "",
-    subjects: [] as string[],
-    color: "bg-blue-500",
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+    setValue,
+  } = useForm<TeacherFormData>({
+    resolver: zodResolver(teacherSchema),
+    defaultValues: {
+      name: "",
+      designation: "Lecturer",
+      department: "Computer Technology",
+      email: "",
+      phone: "",
+      color: "bg-blue-500",
+    },
   });
 
   useEffect(() => {
     const teacher = mockTeachers.find((t) => t.id === teacherId);
     if (teacher) {
-      setFormData({
-        name: teacher.name,
-        designation: teacher.designation,
-        department: teacher.department,
-        email: teacher.email,
-        phone: teacher.phone,
-        subjects: teacher.subjects,
-        color: teacher.color,
-      });
+      setValue("name", teacher.name);
+      setValue("designation", teacher.designation);
+      setValue("department", teacher.department);
+      setValue("email", teacher.email);
+      setValue("phone", teacher.phone);
+      setValue("color", teacher.color);
+      setSubjects(teacher.subjects);
     }
-  }, [teacherId]);
+  }, [teacherId, setValue]);
 
   const handleAddSubject = () => {
-    if (subjectInput.trim() && !formData.subjects.includes(subjectInput.trim())) {
-      setFormData({
-        ...formData,
-        subjects: [...formData.subjects, subjectInput.trim()],
-      });
+    if (subjectInput.trim() && !subjects.includes(subjectInput.trim())) {
+      setSubjects([...subjects, subjectInput.trim()]);
       setSubjectInput("");
     }
   };
 
   const handleRemoveSubject = (subject: string) => {
-    setFormData({
-      ...formData,
-      subjects: formData.subjects.filter((s) => s !== subject),
-    });
+    setSubjects(subjects.filter((s) => s !== subject));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Updating teacher:", { id: teacherId, ...formData });
+  const onSubmit = (data: TeacherFormData) => {
+    // Add subjects to the form data
+    const teacherData = {
+      ...data,
+      subjects: subjects,
+      id: teacherId,
+    };
+    console.log("Updating teacher:", teacherData);
     router.push("/dashboard/cr/teachers");
   };
 
@@ -102,70 +129,90 @@ export default function EditTeacherPage() {
       />
 
       <div className="bg-white rounded-2xl border border-gray-100 p-6">
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label htmlFor="name">Full Name</Label>
               <Input
                 id="name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                required
+                className={errors.name ? "border-red-500" : ""}
+                {...register("name")}
               />
+              {errors.name && (
+                <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="designation">Designation</Label>
-              <select
-                id="designation"
-                value={formData.designation}
-                onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              <Select
+                value={watch("designation")}
+                onValueChange={(value) => setValue("designation", value)}
               >
-                {designationOptions.map((d) => (
-                  <option key={d} value={d}>{d}</option>
-                ))}
-              </select>
+                <SelectTrigger className={errors.designation ? "border-red-500" : ""}>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {designationOptions.map((d) => (
+                    <SelectItem key={d} value={d}>{d}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {errors.designation && (
+                <p className="text-red-500 text-sm mt-1">{errors.designation.message}</p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="department">Department</Label>
               <Input
                 id="department"
-                value={formData.department}
-                onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-                required
+                className={errors.department ? "border-red-500" : ""}
+                {...register("department")}
               />
+              {errors.department && (
+                <p className="text-red-500 text-sm mt-1">{errors.department.message}</p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="color">Avatar Color</Label>
-              <select
-                id="color"
-                value={formData.color}
-                onChange={(e) => setFormData({ ...formData, color: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              <Select
+                value={watch("color")}
+                onValueChange={(value) => setValue("color", value)}
               >
-                {colorOptions.map((c) => (
-                  <option key={c.value} value={c.value}>{c.label}</option>
-                ))}
-              </select>
+                <SelectTrigger className={errors.color ? "border-red-500" : ""}>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {colorOptions.map((c) => (
+                    <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {errors.color && (
+                <p className="text-red-500 text-sm mt-1">{errors.color.message}</p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 type="email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                required
+                className={errors.email ? "border-red-500" : ""}
+                {...register("email")}
               />
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="phone">Phone</Label>
               <Input
                 id="phone"
-                value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                required
+                className={errors.phone ? "border-red-500" : ""}
+                {...register("phone")}
               />
+              {errors.phone && (
+                <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+              )}
             </div>
             <div className="space-y-2 md:col-span-2">
               <Label>Subjects</Label>
@@ -181,9 +228,9 @@ export default function EditTeacherPage() {
                   Add
                 </Button>
               </div>
-              {formData.subjects.length > 0 && (
+              {subjects.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-3">
-                  {formData.subjects.map((subject) => (
+                  {subjects.map((subject) => (
                     <span
                       key={subject}
                       className="px-3 py-1.5 bg-primary/10 text-primary text-sm rounded-full flex items-center gap-2"

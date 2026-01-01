@@ -14,6 +14,17 @@ import PageHeader from "../shared/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 const previousIssues = [
   {
@@ -49,17 +60,40 @@ const issueCategories = [
   "Other",
 ];
 
+const submitIssueSchema = z.object({
+  title: z.string().min(5, "Title must be at least 5 characters"),
+  category: z.string().min(1, "Please select a category"),
+  description: z.string().min(10, "Description must be at least 10 characters"),
+  priority: z.enum(["low", "medium", "high"], {
+    required_error: "Please select a priority level",
+  }),
+});
+
+type SubmitIssueFormData = z.infer<typeof submitIssueSchema>;
+
 const SubmitIssue: React.FC = () => {
-  const [formData, setFormData] = useState({
-    title: "",
-    category: "",
-    description: "",
-    priority: "medium",
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    watch,
+  } = useForm<SubmitIssueFormData>({
+    resolver: zodResolver(submitIssueSchema),
+    defaultValues: {
+      title: "",
+      category: "",
+      description: "",
+      priority: "medium",
+    },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Submitting issue:", formData);
+  const onSubmit = (data: SubmitIssueFormData) => {
+    console.log("Submitting issue:", data);
+  };
+
+  const handlePriorityChange = (priority: "low" | "medium" | "high") => {
+    setValue("priority", priority);
   };
 
   return (
@@ -81,46 +115,51 @@ const SubmitIssue: React.FC = () => {
             <h3 className="text-lg font-semibold text-gray-900 mb-6">
               New Issue
             </h3>
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div className="space-y-2">
                 <Label>Issue Title</Label>
                 <Input
                   placeholder="Brief title for your issue"
-                  value={formData.title}
-                  onChange={(e) =>
-                    setFormData({ ...formData, title: e.target.value })
-                  }
+                  className={errors.title ? "border-red-500" : ""}
+                  {...register("title")}
                 />
+                {errors.title && (
+                  <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
+                )}
               </div>
 
               <div className="space-y-2">
                 <Label>Category</Label>
-                <select
-                  value={formData.category}
-                  onChange={(e) =>
-                    setFormData({ ...formData, category: e.target.value })
-                  }
-                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                <Select
+                  value={watch("category")}
+                  onValueChange={(value) => setValue("category", value)}
                 >
-                  <option value="">Select a category</option>
-                  {issueCategories.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
-                    </option>
-                  ))}
-                </select>
+                  <SelectTrigger className={errors.category ? "border-red-500" : ""}>
+                    <SelectValue placeholder="Select a category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {issueCategories.map((cat) => (
+                      <SelectItem key={cat} value={cat}>
+                        {cat}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {errors.category && (
+                  <p className="text-red-500 text-sm mt-1">{errors.category.message}</p>
+                )}
               </div>
 
               <div className="space-y-2">
                 <Label>Priority</Label>
                 <div className="flex gap-3">
-                  {["low", "medium", "high"].map((priority) => (
+                  {(["low", "medium", "high"] as const).map((priority) => (
                     <button
                       key={priority}
                       type="button"
-                      onClick={() => setFormData({ ...formData, priority })}
+                      onClick={() => handlePriorityChange(priority)}
                       className={`flex-1 py-3 px-4 rounded-xl text-sm font-medium border-2 transition-all ${
-                        formData.priority === priority
+                        watch("priority") === priority
                           ? priority === "high"
                             ? "border-red-500 bg-red-50 text-red-700"
                             : priority === "medium"
@@ -133,19 +172,22 @@ const SubmitIssue: React.FC = () => {
                     </button>
                   ))}
                 </div>
+                {errors.priority && (
+                  <p className="text-red-500 text-sm mt-1">{errors.priority.message}</p>
+                )}
               </div>
 
               <div className="space-y-2">
                 <Label>Description</Label>
-                <textarea
+                <Textarea
                   placeholder="Describe your issue in detail..."
                   rows={5}
-                  value={formData.description}
-                  onChange={(e) =>
-                    setFormData({ ...formData, description: e.target.value })
-                  }
-                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none"
+                  className={errors.description ? "border-red-500" : ""}
+                  {...register("description")}
                 />
+                {errors.description && (
+                  <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>
+                )}
               </div>
 
               <Button type="submit" className="w-full gap-2" size="lg">

@@ -7,15 +7,36 @@ import { Mail, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "@/assets/logo/logo.png";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+const forgotPasswordSchema = z.object({
+  email: z.string().email("Please enter a valid email address"),
+});
+
+type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
 
 const ForgotPassword = () => {
-  const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Password reset link sent to:", email);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    watch,
+  } = useForm<ForgotPasswordFormData>({
+    resolver: zodResolver(forgotPasswordSchema),
+    defaultValues: {
+      email: "",
+    },
+  });
+
+  const onSubmit = (data: ForgotPasswordFormData) => {
+    console.log("Password reset link sent to:", data.email);
     setSubmitted(true);
+    reset(); // Reset form after submission
   };
 
   return (
@@ -48,7 +69,7 @@ const ForgotPassword = () => {
               </h2>
               <p className="text-gray-600 mb-8">
                 We&apos;ve sent a password reset link to{" "}
-                <strong>{email}</strong>.<br />
+                <strong>{watch("email")}</strong>.<br />
                 Please check your inbox (and spam folder) and follow the
                 instructions.
               </p>
@@ -59,7 +80,7 @@ const ForgotPassword = () => {
               </Link>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div className="space-y-2">
                 <Label
                   htmlFor="email"
@@ -73,12 +94,15 @@ const ForgotPassword = () => {
                     id="email"
                     type="email"
                     placeholder="Enter your email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="pl-12 h-12 text-base border-gray-300 focus:border-primary focus:ring-primary"
-                    required
+                    className={`pl-12 h-12 text-base border-gray-300 focus:border-primary focus:ring-primary ${
+                      errors.email ? "border-red-500" : ""
+                    }`}
+                    {...register("email")}
                   />
                 </div>
+                {errors.email && (
+                  <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+                )}
               </div>
 
               <Button

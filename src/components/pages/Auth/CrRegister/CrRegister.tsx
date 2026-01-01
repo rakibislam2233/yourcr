@@ -31,6 +31,27 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import Navbar from "@/components/common/Navbar";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+// --- Validation Schema ---
+const registrationSchema = z.object({
+  fullName: z.string().min(2, "Full name must be at least 2 characters"),
+  email: z.string().email("Please enter a valid email address"),
+  phone: z.string().min(11, "Phone number must be at least 11 digits"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+  institutionName: z.string().min(2, "Institution name is required"),
+  institutionType: z.string().min(1, "Institution type is required"),
+  department: z.string().min(2, "Department is required"),
+  district: z.string().min(2, "District is required"),
+  batchSession: z.string().min(4, "Batch/Session is required"),
+  section: z.string().min(1, "Section is required"),
+  classRoll: z.string().min(1, "Class roll is required"),
+  crPosition: z.string().min(1, "CR position is required"),
+});
+
+type RegistrationFormData = z.infer<typeof registrationSchema>;
 
 // --- Types & Constants ---
 enum RegistrationStep {
@@ -172,36 +193,48 @@ const CrRegister: React.FC = () => {
   );
   const [showPassword, setShowPassword] = useState(false);
 
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    password: "",
-    institutionName: "",
-    institutionType: "",
-    department: "",
-    district: "",
-    batchSession: "",
-    section: "",
-    classRoll: "",
-    crPosition: "",
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    watch,
+    trigger,
+  } = useForm<RegistrationFormData>({
+    resolver: zodResolver(registrationSchema),
+    defaultValues: {
+      fullName: "",
+      email: "",
+      phone: "",
+      password: "",
+      institutionName: "",
+      institutionType: "",
+      department: "",
+      district: "",
+      batchSession: "",
+      section: "",
+      classRoll: "",
+      crPosition: "",
+    },
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  const handleContinue = async () => {
+    // Validate current step fields before proceeding
+    let isValid = false;
 
-  const handleSelectChange = (name: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+    if (currentStep === RegistrationStep.PERSONAL_INFO) {
+      isValid = await trigger(['fullName', 'email', 'phone', 'password']);
+    } else if (currentStep === RegistrationStep.INSTITUTION_INFO) {
+      isValid = await trigger(['institutionName', 'institutionType', 'department', 'district']);
+    } else if (currentStep === RegistrationStep.CR_DETAILS) {
+      isValid = await trigger(['batchSession', 'section', 'classRoll', 'crPosition']);
+    }
 
-  const handleContinue = () => {
-    if (currentStep < RegistrationStep.CR_DETAILS) {
+    if (isValid && currentStep < RegistrationStep.CR_DETAILS) {
       setCurrentStep((prev) => (prev + 1) as RegistrationStep);
-    } else {
-      alert("Registration Successful!");
-      console.log("Submitted Data:", formData);
+    } else if (isValid && currentStep === RegistrationStep.CR_DETAILS) {
+      // Final submission
+      handleSubmit(onSubmit)();
     }
   };
 
@@ -209,6 +242,11 @@ const CrRegister: React.FC = () => {
     if (currentStep > RegistrationStep.PERSONAL_INFO) {
       setCurrentStep((prev) => (prev - 1) as RegistrationStep);
     }
+  };
+
+  const onSubmit = (data: RegistrationFormData) => {
+    alert("Registration Successful!");
+    console.log("Submitted Data:", data);
   };
 
   return (
@@ -254,14 +292,16 @@ const CrRegister: React.FC = () => {
                   <div className="relative">
                     <IdCard className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#536793] opacity-50 pointer-events-none" />
                     <Input
-                      name="fullName"
+                      {...register("fullName")}
                       placeholder="e.g. Rahim Ahmed"
-                      className="pl-10 h-12 bg-[#f6f6f8]"
-                      value={formData.fullName}
-                      onChange={handleChange}
-                      required
+                      className={`pl-10 h-12 bg-[#f6f6f8] ${
+                        errors.fullName ? "border-red-500" : ""
+                      }`}
                     />
                   </div>
+                  {errors.fullName && (
+                    <p className="text-red-500 text-sm mt-1">{errors.fullName.message}</p>
+                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -269,15 +309,17 @@ const CrRegister: React.FC = () => {
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#536793] opacity-50 pointer-events-none" />
                     <Input
-                      name="email"
+                      {...register("email")}
                       type="email"
                       placeholder="rahim@example.com"
-                      className="pl-10 h-12 bg-[#f6f6f8]"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
+                      className={`pl-10 h-12 bg-[#f6f6f8] ${
+                        errors.email ? "border-red-500" : ""
+                      }`}
                     />
                   </div>
+                  {errors.email && (
+                    <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -288,15 +330,17 @@ const CrRegister: React.FC = () => {
                     </div>
                     <Phone className="absolute left-20 top-1/2 -translate-y-1/2 w-5 h-5 text-[#536793] opacity-50 pointer-events-none z-10" />
                     <Input
-                      name="phone"
+                      {...register("phone")}
                       type="tel"
                       placeholder="1XXX-XXXXXX"
-                      className="rounded-l-none pl-16 h-12 bg-[#f6f6f8]"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      required
+                      className={`rounded-l-none pl-16 h-12 bg-[#f6f6f8] ${
+                        errors.phone ? "border-red-500" : ""
+                      }`}
                     />
                   </div>
+                  {errors.phone && (
+                    <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -304,13 +348,12 @@ const CrRegister: React.FC = () => {
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#536793] opacity-50 pointer-events-none" />
                     <Input
-                      name="password"
+                      {...register("password")}
                       type={showPassword ? "text" : "password"}
                       placeholder="Create a strong password"
-                      className="pl-10 pr-12 h-12 bg-[#f6f6f8]"
-                      value={formData.password}
-                      onChange={handleChange}
-                      required
+                      className={`pl-10 pr-12 h-12 bg-[#f6f6f8] ${
+                        errors.password ? "border-red-500" : ""
+                      }`}
                     />
                     <button
                       type="button"
@@ -327,6 +370,9 @@ const CrRegister: React.FC = () => {
                   <p className="text-xs text-[#536793]">
                     Must be at least 8 characters long.
                   </p>
+                  {errors.password && (
+                    <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -359,26 +405,27 @@ const CrRegister: React.FC = () => {
                   <div className="relative">
                     <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#536793] opacity-50 pointer-events-none" />
                     <Input
-                      name="institutionName"
+                      {...register("institutionName")}
                       placeholder="e.g. Dhaka University"
-                      className="pl-10 h-12 bg-[#f6f6f8]"
-                      value={formData.institutionName}
-                      onChange={handleChange}
-                      required
+                      className={`pl-10 h-12 bg-[#f6f6f8] ${
+                        errors.institutionName ? "border-red-500" : ""
+                      }`}
                     />
                   </div>
+                  {errors.institutionName && (
+                    <p className="text-red-500 text-sm mt-1">{errors.institutionName.message}</p>
+                  )}
                 </div>
 
                 <div className="space-y-2">
                   <Label>Institution Type</Label>
                   <Select
-                    value={formData.institutionType}
-                    onValueChange={(value) =>
-                      handleSelectChange("institutionType", value)
-                    }
-                    required
+                    value={watch("institutionType")}
+                    onValueChange={(value) => setValue("institutionType", value)}
                   >
-                    <SelectTrigger className="w-full h-12 bg-[#f6f6f8] border-[#d1d8e5] focus:border-[#2458c6] focus:ring-1 focus:ring-[#2458c6]">
+                    <SelectTrigger className={`w-full h-12 bg-[#f6f6f8] border-[#d1d8e5] focus:border-[#2458c6] focus:ring-1 focus:ring-[#2458c6] ${
+                      errors.institutionType ? "border-red-500" : ""
+                    }`}>
                       <SelectValue placeholder="Select type" />
                     </SelectTrigger>
                     <SelectContent>
@@ -388,6 +435,9 @@ const CrRegister: React.FC = () => {
                       <SelectItem value="madrasa">Madrasa</SelectItem>
                     </SelectContent>
                   </Select>
+                  {errors.institutionType && (
+                    <p className="text-red-500 text-sm mt-1">{errors.institutionType.message}</p>
+                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -395,14 +445,16 @@ const CrRegister: React.FC = () => {
                   <div className="relative">
                     <MdCategory className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#536793] opacity-50 pointer-events-none" />
                     <Input
-                      name="department"
+                      {...register("department")}
                       placeholder="e.g. CSE, EEE, BBA"
-                      className="pl-10 h-12 bg-[#f6f6f8]"
-                      value={formData.department}
-                      onChange={handleChange}
-                      required
+                      className={`pl-10 h-12 bg-[#f6f6f8] ${
+                        errors.department ? "border-red-500" : ""
+                      }`}
                     />
                   </div>
+                  {errors.department && (
+                    <p className="text-red-500 text-sm mt-1">{errors.department.message}</p>
+                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -410,14 +462,16 @@ const CrRegister: React.FC = () => {
                   <div className="relative">
                     <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#536793] opacity-50 pointer-events-none" />
                     <Input
-                      name="district"
+                      {...register("district")}
                       placeholder="e.g. Dhaka"
-                      className="pl-10 h-12 bg-[#f6f6f8]"
-                      value={formData.district}
-                      onChange={handleChange}
-                      required
+                      className={`pl-10 h-12 bg-[#f6f6f8] ${
+                        errors.district ? "border-red-500" : ""
+                      }`}
                     />
                   </div>
+                  {errors.district && (
+                    <p className="text-red-500 text-sm mt-1">{errors.district.message}</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -448,14 +502,16 @@ const CrRegister: React.FC = () => {
                   <div className="relative">
                     <MdCalendarMonth className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#536793] opacity-50 pointer-events-none" />
                     <Input
-                      name="batchSession"
+                      {...register("batchSession")}
                       placeholder="e.g. 2023-24"
-                      className="pl-10 h-12 bg-[#f6f6f8]"
-                      value={formData.batchSession}
-                      onChange={handleChange}
-                      required
+                      className={`pl-10 h-12 bg-[#f6f6f8] ${
+                        errors.batchSession ? "border-red-500" : ""
+                      }`}
                     />
                   </div>
+                  {errors.batchSession && (
+                    <p className="text-red-500 text-sm mt-1">{errors.batchSession.message}</p>
+                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -463,14 +519,16 @@ const CrRegister: React.FC = () => {
                   <div className="relative">
                     <Group className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#536793] opacity-50 pointer-events-none" />
                     <Input
-                      name="section"
+                      {...register("section")}
                       placeholder="e.g. A"
-                      className="pl-10 h-12 bg-[#f6f6f8]"
-                      value={formData.section}
-                      onChange={handleChange}
-                      required
+                      className={`pl-10 h-12 bg-[#f6f6f8] ${
+                        errors.section ? "border-red-500" : ""
+                      }`}
                     />
                   </div>
+                  {errors.section && (
+                    <p className="text-red-500 text-sm mt-1">{errors.section.message}</p>
+                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -478,26 +536,27 @@ const CrRegister: React.FC = () => {
                   <div className="relative">
                     <Tag className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#536793] opacity-50 pointer-events-none" />
                     <Input
-                      name="classRoll"
+                      {...register("classRoll")}
                       placeholder="e.g. 01"
-                      className="pl-10 h-12 bg-[#f6f6f8]"
-                      value={formData.classRoll}
-                      onChange={handleChange}
-                      required
+                      className={`pl-10 h-12 bg-[#f6f6f8] ${
+                        errors.classRoll ? "border-red-500" : ""
+                      }`}
                     />
                   </div>
+                  {errors.classRoll && (
+                    <p className="text-red-500 text-sm mt-1">{errors.classRoll.message}</p>
+                  )}
                 </div>
 
                 <div className="space-y-2">
                   <Label>CR Position</Label>
                   <Select
-                    value={formData.crPosition}
-                    onValueChange={(value) =>
-                      handleSelectChange("crPosition", value)
-                    }
-                    required
+                    value={watch("crPosition")}
+                    onValueChange={(value) => setValue("crPosition", value)}
                   >
-                    <SelectTrigger className="h-12 bg-[#f6f6f8] border-[#d1d8e5] focus:border-[#2458c6] focus:ring-1 focus:ring-[#2458c6]">
+                    <SelectTrigger className={`h-12 bg-[#f6f6f8] border-[#d1d8e5] focus:border-[#2458c6] focus:ring-1 focus:ring-[#2458c6] ${
+                      errors.crPosition ? "border-red-500" : ""
+                    }`}>
                       <SelectValue placeholder="Select position" />
                     </SelectTrigger>
                     <SelectContent>
@@ -508,6 +567,9 @@ const CrRegister: React.FC = () => {
                       </SelectItem>
                     </SelectContent>
                   </Select>
+                  {errors.crPosition && (
+                    <p className="text-red-500 text-sm mt-1">{errors.crPosition.message}</p>
+                  )}
                 </div>
               </div>
             </div>
