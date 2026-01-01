@@ -88,11 +88,7 @@ const StudentHome: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Welcome Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="bg-gradient-to-r from-primary to-primary/80 rounded-2xl p-8 text-white"
-      >
+      <motion.div className="bg-linear-to-r from-primary to-primary/80 rounded-2xl p-8 text-white">
         <h1 className="text-2xl font-bold">Welcome back, Sakib! 👋</h1>
         <p className="text-white/80 mt-2">
           Here&apos;s what&apos;s happening in your class today.
@@ -143,9 +139,6 @@ const StudentHome: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Today's Schedule */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
           className="lg:col-span-2 bg-white rounded-2xl p-6 border border-gray-100"
         >
           <div className="flex items-center justify-between mb-6">
@@ -163,9 +156,6 @@ const StudentHome: React.FC = () => {
             {upcomingItems.map((item, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.5 + index * 0.1 }}
                 className="flex items-center gap-4 p-4 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors"
               >
                 <div className={`p-3 rounded-xl ${item.color} text-white`}>
@@ -188,9 +178,6 @@ const StudentHome: React.FC = () => {
 
         {/* Recent Notices */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
           className="bg-white rounded-2xl p-6 border border-gray-100"
         >
           <div className="flex items-center justify-between mb-6">
@@ -208,9 +195,6 @@ const StudentHome: React.FC = () => {
             {recentNotices.map((notice, index) => (
               <motion.div
                 key={notice.id}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.6 + index * 0.1 }}
                 className="p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer"
               >
                 <div className="flex items-start gap-3">
@@ -246,9 +230,6 @@ const StudentHome: React.FC = () => {
 
       {/* Today's Classes Timeline */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.7 }}
         className="bg-white rounded-2xl p-6 border border-gray-100"
       >
         <h2 className="text-lg font-semibold text-gray-900 mb-6">
@@ -260,9 +241,6 @@ const StudentHome: React.FC = () => {
             {todayClasses.map((cls, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.8 + index * 0.1 }}
                 className="flex items-center gap-4 pl-2"
               >
                 <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center z-10">

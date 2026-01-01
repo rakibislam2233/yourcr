@@ -90,8 +90,6 @@ const ViewTeachers: React.FC = () => {
 
       {/* Search */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
         className="relative max-w-md"
       >
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -107,9 +105,6 @@ const ViewTeachers: React.FC = () => {
         {teachers.map((teacher, index) => (
           <motion.div
             key={teacher.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 + index * 0.05 }}
             className="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-xl transition-all duration-300"
           >
             <div className="flex items-start gap-4">

@@ -1,20 +1,20 @@
 "use client";
 
-import React from "react";
+import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import {
   Building2,
+  Calendar,
+  ExternalLink,
+  Globe,
+  GraduationCap,
+  Mail,
   MapPin,
   Phone,
-  Mail,
-  Globe,
-  Calendar,
   Users,
-  GraduationCap,
-  ExternalLink,
 } from "lucide-react";
+import React from "react";
 import PageHeader from "../shared/PageHeader";
-import { Button } from "@/components/ui/button";
 
 const institutionData = {
   name: "Dhaka Polytechnic Institute",
@@ -53,11 +53,7 @@ const ViewInstitution: React.FC = () => {
       />
 
       {/* Institution Overview Card */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="bg-gradient-to-r from-primary to-primary/80 rounded-2xl p-8 text-white"
-      >
+      <motion.div className="bg-gradient-to-r from-primary to-primary/80 rounded-2xl p-8 text-white">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-center gap-6">
             <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center">
@@ -76,7 +72,10 @@ const ViewInstitution: React.FC = () => {
               </div>
             </div>
           </div>
-          <Button variant="secondary" className="gap-2 bg-white/20 hover:bg-white/30 text-white border-0">
+          <Button
+            variant="secondary"
+            className="gap-2 bg-white/20 hover:bg-white/30 text-white border-0"
+          >
             <Globe className="w-4 h-4" />
             Visit Website
             <ExternalLink className="w-3 h-3" />
@@ -86,12 +85,7 @@ const ViewInstitution: React.FC = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Contact Information */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="bg-white rounded-2xl p-6 border border-gray-100"
-        >
+        <motion.div className="bg-white rounded-2xl p-6 border border-gray-100">
           <h3 className="text-lg font-semibold text-gray-900 mb-6">
             Contact Information
           </h3>
@@ -145,9 +139,6 @@ const ViewInstitution: React.FC = () => {
 
         {/* Your Information */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
           className="bg-white rounded-2xl p-6 border border-gray-100"
         >
           <h3 className="text-lg font-semibold text-gray-900 mb-6">
@@ -192,9 +183,7 @@ const ViewInstitution: React.FC = () => {
             </div>
             <div className="p-4 bg-primary/5 rounded-xl col-span-2 border border-primary/20">
               <p className="text-sm text-gray-500">Class Representative</p>
-              <p className="font-semibold text-primary mt-1">
-                {yourInfo.cr}
-              </p>
+              <p className="font-semibold text-primary mt-1">{yourInfo.cr}</p>
             </div>
           </div>
         </motion.div>
@@ -202,8 +191,6 @@ const ViewInstitution: React.FC = () => {
 
       {/* Institution Stats */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
         className="grid grid-cols-1 md:grid-cols-4 gap-4"
       >

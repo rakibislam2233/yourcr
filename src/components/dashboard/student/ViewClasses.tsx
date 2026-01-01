@@ -89,41 +89,22 @@ const ViewClasses: React.FC = () => {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-xl p-5 border border-gray-100"
-        >
+        <motion.div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Today&apos;s Classes</p>
           <p className="text-2xl font-bold text-gray-900 mt-1">3</p>
         </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="bg-white rounded-xl p-5 border border-gray-100"
-        >
+        <motion.div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Classes Attended</p>
           <p className="text-2xl font-bold text-green-600 mt-1">45/48</p>
         </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="bg-white rounded-xl p-5 border border-gray-100"
-        >
+        <motion.div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Recordings Available</p>
           <p className="text-2xl font-bold text-blue-600 mt-1">12</p>
         </motion.div>
       </div>
 
       {/* Upcoming Classes */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="bg-white rounded-2xl border border-gray-100"
-      >
+      <motion.div className="bg-white rounded-2xl border border-gray-100">
         <div className="p-6 border-b border-gray-100">
           <h3 className="text-lg font-semibold text-gray-900">
             Upcoming Classes
@@ -133,9 +114,6 @@ const ViewClasses: React.FC = () => {
           {upcomingClasses.map((cls, index) => (
             <motion.div
               key={cls.id}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4 + index * 0.1 }}
               className="p-6 hover:bg-gray-50/50 transition-colors"
             >
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
@@ -201,7 +179,11 @@ const ViewClasses: React.FC = () => {
                     disabled={cls.status === "scheduled"}
                   >
                     <ExternalLink className="w-4 h-4" />
-                    {cls.status === "live" ? "Join Now" : cls.status === "upcoming" ? "Join" : "Scheduled"}
+                    {cls.status === "live"
+                      ? "Join Now"
+                      : cls.status === "upcoming"
+                      ? "Join"
+                      : "Scheduled"}
                   </Button>
                 </div>
               </div>
@@ -211,12 +193,7 @@ const ViewClasses: React.FC = () => {
       </motion.div>
 
       {/* Recent Classes with Recordings */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-        className="bg-white rounded-2xl border border-gray-100"
-      >
+      <motion.div className="bg-white rounded-2xl border border-gray-100">
         <div className="p-6 border-b border-gray-100">
           <h3 className="text-lg font-semibold text-gray-900">
             Recent Classes
@@ -226,9 +203,6 @@ const ViewClasses: React.FC = () => {
           {recentClasses.map((cls, index) => (
             <motion.div
               key={cls.id}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.6 + index * 0.1 }}
               className="p-6 hover:bg-gray-50/50 transition-colors"
             >
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
@@ -254,7 +228,10 @@ const ViewClasses: React.FC = () => {
                   </div>
                 </div>
                 {cls.recording ? (
-                  <Button variant="outline" className="gap-2 ml-14 lg:ml-0 w-fit">
+                  <Button
+                    variant="outline"
+                    className="gap-2 ml-14 lg:ml-0 w-fit"
+                  >
                     <Play className="w-4 h-4" />
                     Watch Recording
                   </Button>

@@ -163,50 +163,26 @@ const ViewAssessments: React.FC = () => {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-xl p-5 border border-gray-100"
-        >
+        <motion.div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Total</p>
           <p className="text-2xl font-bold text-gray-900 mt-1">12</p>
         </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="bg-white rounded-xl p-5 border border-gray-100"
-        >
+        <motion.div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Upcoming</p>
           <p className="text-2xl font-bold text-blue-600 mt-1">3</p>
         </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="bg-white rounded-xl p-5 border border-gray-100"
-        >
+        <motion.div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Pending Submission</p>
           <p className="text-2xl font-bold text-orange-600 mt-1">1</p>
         </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="bg-white rounded-xl p-5 border border-gray-100"
-        >
+        <motion.div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Avg. Score</p>
           <p className="text-2xl font-bold text-green-600 mt-1">87%</p>
         </motion.div>
       </div>
 
       {/* Filter Tabs */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-        className="flex gap-2 overflow-x-auto pb-2"
-      >
+      <motion.div className="flex gap-2 overflow-x-auto pb-2">
         {["all", "ongoing", "upcoming", "completed"].map((filter) => (
           <button
             key={filter}
@@ -232,9 +208,6 @@ const ViewAssessments: React.FC = () => {
           return (
             <motion.div
               key={assessment.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 + index * 0.1 }}
               className="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-lg transition-shadow"
             >
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
@@ -256,16 +229,18 @@ const ViewAssessments: React.FC = () => {
                       >
                         {statusConfig.label}
                       </span>
-                      {assessment.status === "ongoing" && !assessment.submitted && (
-                        <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-red-100 text-red-700">
-                          Not Submitted
-                        </span>
-                      )}
-                      {assessment.status === "ongoing" && assessment.submitted && (
-                        <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700">
-                          Submitted
-                        </span>
-                      )}
+                      {assessment.status === "ongoing" &&
+                        !assessment.submitted && (
+                          <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-red-100 text-red-700">
+                            Not Submitted
+                          </span>
+                        )}
+                      {assessment.status === "ongoing" &&
+                        assessment.submitted && (
+                          <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700">
+                            Submitted
+                          </span>
+                        )}
                     </div>
                     <p className="text-sm text-primary font-medium mt-1">
                       {assessment.subject}
@@ -287,30 +262,33 @@ const ViewAssessments: React.FC = () => {
                 </div>
 
                 <div className="flex items-center gap-4 pl-18 lg:pl-0">
-                  {assessment.status === "completed" && assessment.score !== undefined && (
-                    <div className="text-right">
-                      <p className="text-sm text-gray-500">Your Score</p>
-                      <p className="font-bold text-2xl text-primary">
-                        {assessment.score}/{assessment.totalMarks}
-                      </p>
-                    </div>
-                  )}
-                  {assessment.status === "ongoing" && assessment.daysLeft !== undefined && (
-                    <div className="text-right">
-                      <p className="text-sm text-gray-500">Days Left</p>
-                      <p className="font-bold text-2xl text-orange-600">
-                        {assessment.daysLeft}
-                      </p>
-                    </div>
-                  )}
-                  {assessment.status === "upcoming" && assessment.daysLeft !== undefined && (
-                    <div className="text-right">
-                      <p className="text-sm text-gray-500">Days Left</p>
-                      <p className="font-bold text-2xl text-blue-600">
-                        {assessment.daysLeft}
-                      </p>
-                    </div>
-                  )}
+                  {assessment.status === "completed" &&
+                    assessment.score !== undefined && (
+                      <div className="text-right">
+                        <p className="text-sm text-gray-500">Your Score</p>
+                        <p className="font-bold text-2xl text-primary">
+                          {assessment.score}/{assessment.totalMarks}
+                        </p>
+                      </div>
+                    )}
+                  {assessment.status === "ongoing" &&
+                    assessment.daysLeft !== undefined && (
+                      <div className="text-right">
+                        <p className="text-sm text-gray-500">Days Left</p>
+                        <p className="font-bold text-2xl text-orange-600">
+                          {assessment.daysLeft}
+                        </p>
+                      </div>
+                    )}
+                  {assessment.status === "upcoming" &&
+                    assessment.daysLeft !== undefined && (
+                      <div className="text-right">
+                        <p className="text-sm text-gray-500">Days Left</p>
+                        <p className="font-bold text-2xl text-blue-600">
+                          {assessment.daysLeft}
+                        </p>
+                      </div>
+                    )}
                   {assessment.status === "ongoing" && !assessment.submitted && (
                     <Button className="gap-2">
                       <ExternalLink className="w-4 h-4" />

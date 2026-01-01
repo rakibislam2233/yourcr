@@ -76,11 +76,7 @@ const SubmitIssue: React.FC = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Submit Form */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="lg:col-span-2"
-        >
+        <motion.div className="lg:col-span-2">
           <div className="bg-white rounded-2xl border border-gray-100 p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-6">
               New Issue
@@ -161,11 +157,7 @@ const SubmitIssue: React.FC = () => {
         </motion.div>
 
         {/* Previous Issues */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-        >
+        <motion.div>
           <div className="bg-white rounded-2xl border border-gray-100 p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-6">
               Your Recent Issues
@@ -174,9 +166,6 @@ const SubmitIssue: React.FC = () => {
               {previousIssues.map((issue, index) => (
                 <motion.div
                   key={issue.id}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.2 + index * 0.1 }}
                   className="p-4 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer group"
                 >
                   <div className="flex items-start justify-between">
@@ -194,7 +183,9 @@ const SubmitIssue: React.FC = () => {
                               : "bg-orange-100 text-orange-700"
                           }`}
                         >
-                          {issue.status === "resolved" ? "Resolved" : "In Progress"}
+                          {issue.status === "resolved"
+                            ? "Resolved"
+                            : "In Progress"}
                         </span>
                       </div>
                       <h4 className="font-medium text-gray-900 mt-2 text-sm">
@@ -218,13 +209,10 @@ const SubmitIssue: React.FC = () => {
           </div>
 
           {/* Tips Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="bg-primary/5 rounded-2xl border border-primary/20 p-6 mt-6"
-          >
-            <h4 className="font-semibold text-gray-900 mb-3">Tips for Submitting Issues</h4>
+          <motion.div className="bg-primary/5 rounded-2xl border border-primary/20 p-6 mt-6">
+            <h4 className="font-semibold text-gray-900 mb-3">
+              Tips for Submitting Issues
+            </h4>
             <ul className="space-y-2 text-sm text-gray-600">
               <li className="flex items-start gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5" />

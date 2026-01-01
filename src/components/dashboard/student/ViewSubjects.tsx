@@ -112,35 +112,24 @@ const ViewSubjects: React.FC = () => {
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
           className="bg-white rounded-xl p-5 border border-gray-100"
         >
           <p className="text-sm text-gray-500">Total Subjects</p>
           <p className="text-2xl font-bold text-gray-900 mt-1">8</p>
         </motion.div>
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
           className="bg-white rounded-xl p-5 border border-gray-100"
         >
           <p className="text-sm text-gray-500">Total Credits</p>
           <p className="text-2xl font-bold text-gray-900 mt-1">29</p>
         </motion.div>
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
           className="bg-white rounded-xl p-5 border border-gray-100"
         >
           <p className="text-sm text-gray-500">Theory</p>
           <p className="text-2xl font-bold text-blue-600 mt-1">3</p>
         </motion.div>
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
           className="bg-white rounded-xl p-5 border border-gray-100"
         >
           <p className="text-sm text-gray-500">Theory + Lab</p>
@@ -153,9 +142,6 @@ const ViewSubjects: React.FC = () => {
         {subjects.map((subject, index) => (
           <motion.div
             key={subject.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 + index * 0.05 }}
             className="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-lg transition-all"
           >
             <div className="flex items-start justify-between mb-4">

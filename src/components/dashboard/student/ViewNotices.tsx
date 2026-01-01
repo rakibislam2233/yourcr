@@ -20,7 +20,8 @@ const notices = [
   {
     id: 1,
     title: "Mid-Term Examination Schedule",
-    content: "Mid-term examinations will be held from December 15-20, 2024. Please check the detailed schedule attached. All students must bring their ID cards.",
+    content:
+      "Mid-term examinations will be held from December 15-20, 2024. Please check the detailed schedule attached. All students must bring their ID cards.",
     type: "important",
     author: "CR - Rakib Ahmed",
     date: "2 hours ago",
@@ -30,7 +31,8 @@ const notices = [
   {
     id: 2,
     title: "Class Cancelled - Software Engineering",
-    content: "Tomorrow's Software Engineering class has been cancelled due to faculty meeting. Makeup class will be scheduled for next week.",
+    content:
+      "Tomorrow's Software Engineering class has been cancelled due to faculty meeting. Makeup class will be scheduled for next week.",
     type: "alert",
     author: "CR - Rakib Ahmed",
     date: "5 hours ago",
@@ -40,7 +42,8 @@ const notices = [
   {
     id: 3,
     title: "Project Submission Deadline Extended",
-    content: "The deadline for the Database project has been extended to December 10, 2024. Please utilize this extra time to improve your submissions.",
+    content:
+      "The deadline for the Database project has been extended to December 10, 2024. Please utilize this extra time to improve your submissions.",
     type: "info",
     author: "CR - Rakib Ahmed",
     date: "1 day ago",
@@ -50,7 +53,8 @@ const notices = [
   {
     id: 4,
     title: "Industrial Visit Announcement",
-    content: "An industrial visit to Walton Hi-Tech Industries is scheduled for December 25, 2024. Interested students please register by December 15.",
+    content:
+      "An industrial visit to Walton Hi-Tech Industries is scheduled for December 25, 2024. Interested students please register by December 15.",
     type: "info",
     author: "CR - Rakib Ahmed",
     date: "2 days ago",
@@ -60,7 +64,8 @@ const notices = [
   {
     id: 5,
     title: "Lab Equipment Guidelines",
-    content: "New guidelines for using lab equipment have been issued. Please read and follow them strictly to avoid any accidents.",
+    content:
+      "New guidelines for using lab equipment have been issued. Please read and follow them strictly to avoid any accidents.",
     type: "general",
     author: "CR - Rakib Ahmed",
     date: "3 days ago",
@@ -70,7 +75,8 @@ const notices = [
   {
     id: 6,
     title: "Scholarship Application Open",
-    content: "Merit-based scholarship applications are now open for the current semester. Eligible students can apply through the portal.",
+    content:
+      "Merit-based scholarship applications are now open for the current semester. Eligible students can apply through the portal.",
     type: "info",
     author: "CR - Rakib Ahmed",
     date: "4 days ago",
@@ -121,8 +127,11 @@ const ViewNotices: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredNotices = notices.filter((notice) => {
-    const matchesFilter = activeFilter === "all" || notice.type === activeFilter;
-    const matchesSearch = notice.title.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesFilter =
+      activeFilter === "all" || notice.type === activeFilter;
+    const matchesSearch = notice.title
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
     return matchesFilter && matchesSearch;
   });
 
@@ -139,11 +148,7 @@ const ViewNotices: React.FC = () => {
       />
 
       {/* Filter and Search */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between"
-      >
+      <motion.div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <div className="flex gap-2 overflow-x-auto pb-2 sm:pb-0">
           {["all", "important", "alert", "info", "general"].map((filter) => (
             <button
@@ -187,11 +192,10 @@ const ViewNotices: React.FC = () => {
           return (
             <motion.div
               key={notice.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
               className={`bg-white rounded-2xl border overflow-hidden hover:shadow-lg transition-all cursor-pointer ${
-                notice.read ? "border-gray-100" : "border-primary/30 bg-primary/5"
+                notice.read
+                  ? "border-gray-100"
+                  : "border-primary/30 bg-primary/5"
               }`}
             >
               <div className="p-6">
