@@ -42,15 +42,11 @@ const MyProfile: React.FC = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Profile Card */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="lg:col-span-1"
-        >
+        <motion.div className="lg:col-span-1">
           <div className="bg-white rounded-2xl border border-gray-100 p-6">
             <div className="flex flex-col items-center">
               <div className="relative">
-                <div className="w-28 h-28 bg-gradient-to-br from-emerald-500 to-emerald-400 rounded-2xl flex items-center justify-center text-white text-3xl font-bold">
+                <div className="w-28 h-28 bg-linear-to-br from-emerald-500 to-emerald-400 rounded-2xl flex items-center justify-center text-white text-3xl font-bold">
                   SH
                 </div>
                 <button className="absolute -bottom-2 -right-2 p-2 bg-white rounded-xl border border-gray-200 shadow-sm hover:bg-gray-50 transition-colors">
@@ -125,12 +121,7 @@ const MyProfile: React.FC = () => {
         </motion.div>
 
         {/* Settings Forms */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="lg:col-span-2 space-y-6"
-        >
+        <motion.div className="lg:col-span-2 space-y-6">
           {/* Personal Information */}
           <div className="bg-white rounded-2xl border border-gray-100 p-6">
             <div className="flex items-center gap-3 mb-6">
@@ -230,7 +221,9 @@ const MyProfile: React.FC = () => {
             <div className="space-y-4">
               <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
                 <div>
-                  <p className="font-medium text-gray-900">Email Notifications</p>
+                  <p className="font-medium text-gray-900">
+                    Email Notifications
+                  </p>
                   <p className="text-sm text-gray-500">
                     Receive updates via email
                   </p>
@@ -240,7 +233,10 @@ const MyProfile: React.FC = () => {
                     type="checkbox"
                     checked={notifications.email}
                     onChange={(e) =>
-                      setNotifications({ ...notifications, email: e.target.checked })
+                      setNotifications({
+                        ...notifications,
+                        email: e.target.checked,
+                      })
                     }
                     className="sr-only peer"
                   />
@@ -249,7 +245,9 @@ const MyProfile: React.FC = () => {
               </div>
               <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
                 <div>
-                  <p className="font-medium text-gray-900">Push Notifications</p>
+                  <p className="font-medium text-gray-900">
+                    Push Notifications
+                  </p>
                   <p className="text-sm text-gray-500">
                     Browser push notifications
                   </p>
@@ -259,7 +257,10 @@ const MyProfile: React.FC = () => {
                     type="checkbox"
                     checked={notifications.push}
                     onChange={(e) =>
-                      setNotifications({ ...notifications, push: e.target.checked })
+                      setNotifications({
+                        ...notifications,
+                        push: e.target.checked,
+                      })
                     }
                     className="sr-only peer"
                   />
@@ -278,7 +279,10 @@ const MyProfile: React.FC = () => {
                     type="checkbox"
                     checked={notifications.notices}
                     onChange={(e) =>
-                      setNotifications({ ...notifications, notices: e.target.checked })
+                      setNotifications({
+                        ...notifications,
+                        notices: e.target.checked,
+                      })
                     }
                     className="sr-only peer"
                   />
@@ -297,7 +301,10 @@ const MyProfile: React.FC = () => {
                     type="checkbox"
                     checked={notifications.classes}
                     onChange={(e) =>
-                      setNotifications({ ...notifications, classes: e.target.checked })
+                      setNotifications({
+                        ...notifications,
+                        classes: e.target.checked,
+                      })
                     }
                     className="sr-only peer"
                   />

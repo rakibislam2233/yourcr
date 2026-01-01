@@ -90,7 +90,7 @@ const StudentSidebar: React.FC = () => {
       {/* Logo Section */}
       <div className="p-6 border-b border-gray-100">
         <Link href="/" className="flex items-center gap-3">
-          <div className="relative w-48 h-10 mx-auto">
+          <div className="relative w-40 h-8 mx-auto">
             <Image
               src="/logo.png"
               alt="YourCR Logo"
