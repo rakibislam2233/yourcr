@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 import { MdCampaign } from "react-icons/md";
 
@@ -21,9 +22,11 @@ const HeroSection: React.FC = () => {
             faculty. Announcements, polls, and resources in one place.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-            <button className="h-12 px-8 rounded-lg bg-primary hover:bg-primary-hover   cursor-pointer flex items-center justify-center gap-2 text-white">
-              <span>Get Started as CR</span>
-            </button>
+            <Link href="/auth/cr-register">
+              <button className="h-12 px-8 rounded-lg bg-primary hover:bg-primary-hover   cursor-pointer flex items-center justify-center gap-2 text-white">
+                <span>Register as CR</span>
+              </button>
+            </Link>
             <button className="h-12 px-8 rounded-lg bg-white dark:bg-surface-dark border border-border-light dark:border-border-dark hover:border-primary  dark:text-white  cursor-pointer flex items-center justify-center">
               How It Works
             </button>
