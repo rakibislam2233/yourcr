@@ -25,12 +25,14 @@ const ForgotPassword = () => {
         <div className="mx-auto w-full max-w-md">
           {/* Brand */}
           <div className="mb-10 flex items-center justify-center gap-3">
-            <Image src={logo} alt="Your CR Logo" className="h-10 w-auto" />
+            <Link href="/">
+              <Image src={logo} alt="Your CR Logo" className="h-8 w-auto" />
+            </Link>
           </div>
 
           {/* Heading */}
           <div className="mb-8 text-center lg:text-left">
-            <h1 className="mb-2 text-3xl sm:text-4xl font-black leading-tight tracking-tight text-gray-900">
+            <h1 className="mb-2 text-2xl sm:text-4xl font-black leading-tight tracking-tight text-gray-900">
               Forgot Your Password?
             </h1>
             <p className="text-base text-gray-600">
@@ -50,7 +52,7 @@ const ForgotPassword = () => {
                 Please check your inbox (and spam folder) and follow the
                 instructions.
               </p>
-              <Link href="/auth">
+              <Link href="/auth/login">
                 <Button className="w-full h-12 text-base font-bold">
                   Back to Login
                 </Button>
@@ -83,7 +85,7 @@ const ForgotPassword = () => {
                 type="submit"
                 className="w-full h-12 text-base font-bold bg-primary hover:bg-blue-700"
               >
-                Send Reset Link
+                Send Otp
               </Button>
             </form>
           )}
@@ -92,7 +94,7 @@ const ForgotPassword = () => {
           {!submitted && (
             <div className="mt-8 text-center">
               <Link
-                href="/auth"
+                href="/auth/login"
                 className="inline-flex items-center text-primary hover:underline text-sm"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />

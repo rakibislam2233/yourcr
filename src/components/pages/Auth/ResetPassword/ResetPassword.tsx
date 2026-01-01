@@ -36,7 +36,9 @@ const ResetPassword = () => {
       <div className="flex flex-1 flex-col justify-center bg-white px-6 py-12 lg:px-20 xl:px-24">
         <div className="mx-auto w-full max-w-md">
           <div className="mb-10 flex items-center justify-center gap-3">
-            <Image src={logo} alt="Your CR Logo" className="h-10 w-auto" />
+            <Link href="/">
+              <Image src={logo} alt="Your CR Logo" className="h-8 w-auto" />
+            </Link>
           </div>
 
           <div className="mb-8 text-center lg:text-left">

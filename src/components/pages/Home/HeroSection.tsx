@@ -13,19 +13,19 @@ const HeroSection: React.FC = () => {
         <div className="flex flex-col gap-8 text-center lg:text-left z-10">
           <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.1] tracking-tight">
             Simplify Class <br />
-            <span className="relative inline-block">Management</span>
-            with Your CR
+            <span className="relative inline-block">Management</span> with{" "}
+            <span className="text-primary">Your CR</span>
           </h1>
           <p className="text-lg sm:text-xl text-text-muted dark:text-gray-300 max-w-xl mx-auto lg:mx-0 leading-relaxed">
             The all-in-one platform bridging the gap between students, reps, and
             faculty. Announcements, polls, and resources in one place.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-            <button className="h-14 px-8 rounded-xl bg-primary hover:bg-primary-hover text-text-main  cursor-pointer flex items-center justify-center gap-2 text-white">
+            <button className="h-12 px-8 rounded-lg bg-primary hover:bg-primary-hover   cursor-pointer flex items-center justify-center gap-2 text-white">
               <span>Get Started as CR</span>
             </button>
-            <button className="h-14 px-8 rounded-xl bg-white dark:bg-surface-dark border border-border-light dark:border-border-dark hover:border-primary text-text-main dark:text-white  cursor-pointer flex items-center justify-center">
-              Student Login
+            <button className="h-12 px-8 rounded-lg bg-white dark:bg-surface-dark border border-border-light dark:border-border-dark hover:border-primary  dark:text-white  cursor-pointer flex items-center justify-center">
+              How It Works
             </button>
           </div>
           <div className="flex items-center justify-center lg:justify-start gap-4 pt-4 opacity-80">

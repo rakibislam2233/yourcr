@@ -1,3 +1,4 @@
+import CTA from "@/components/pages/Home/CTA";
 import HeroSection from "@/components/pages/Home/HeroSection";
 import HowItWorks from "@/components/pages/Home/HowItWorks";
 import StatsSection from "@/components/pages/Home/StatsSection";
@@ -11,6 +12,7 @@ export default function HomePage() {
       <WhyChooseUs />
       <HowItWorks />
       <StatsSection />
+      <CTA />
       <TestimonialsCarousel />
     </section>
   );

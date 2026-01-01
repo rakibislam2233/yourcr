@@ -26,13 +26,15 @@ const Login = () => {
         <div className="mx-auto w-full max-w-md">
           {/* Brand Header */}
           <div className="mb-10 flex items-center justify-center gap-3">
-            <Image src={logo} alt="Your CR Logo" className="h-10 w-auto" />
+            <Link href="/">
+              <Image src={logo} alt="Your CR Logo" className="h-8 w-auto" />
+            </Link>
           </div>
 
           {/* Text Content */}
           <div className="mb-8 text-center lg:text-left">
             <h1 className="mb-2 text-3xl sm:text-4xl font-black leading-tight tracking-tight text-gray-900">
-              Student Portal
+              Login to Your Account
             </h1>
             <p className="text-base text-gray-600">
               Welcome back! Please enter your credentials to access class
@@ -42,20 +44,20 @@ const Login = () => {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-            {/* Student ID or Email */}
+            {/* Email */}
             <div className="flex flex-col gap-1.5">
               <Label
-                htmlFor="student_id"
+                htmlFor="email"
                 className="text-sm font-medium text-gray-700"
               >
-                Student ID or Email
+                Email
               </Label>
               <div className="relative">
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
-                  id="student_id"
+                  id="email"
                   type="text"
-                  placeholder="e.g. 202310156 or student@university.edu"
+                  placeholder="e.g. student@university.edu"
                   className="pl-12 h-12 text-base border-gray-300 focus:border-primary focus:ring-primary"
                 />
               </div>
@@ -118,29 +120,6 @@ const Login = () => {
               Log In
             </Button>
           </form>
-
-          {/* Footer Info */}
-          <p className="mt-8 text-center text-sm text-gray-600">
-            Don&lsquo;t have an account? <br className="sm:hidden" />
-            Please contact your{" "}
-            <span className="font-medium text-gray-900">
-              Class Representative
-            </span>
-            .
-          </p>
-
-          {/* CR Login Link */}
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
-              Are you a CR?{" "}
-              <Link
-                href="/auth/cr-login"
-                className="font-semibold text-primary hover:underline"
-              >
-                CR Login
-              </Link>
-            </p>
-          </div>
         </div>
       </div>
 
