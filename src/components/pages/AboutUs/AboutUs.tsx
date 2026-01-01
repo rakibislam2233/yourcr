@@ -278,27 +278,6 @@ const AboutUs = () => {
           </div>
         </div>
       </div>
-
-      {/* CTA Banner */}
-      <div className="flex w-full justify-center bg-primary px-5 py-16 md:py-20">
-        <div className="flex w-full max-w-7xl flex-1 flex-col items-center gap-6 text-center">
-          <h2 className="max-w-[600px] text-3xl font-black tracking-tight text-white md:text-4xl">
-            Ready to transform your academic experience?
-          </h2>
-          <p className="max-w-[600px] text-lg text-white/80">
-            Join thousands of students and faculty members who are already using
-            Your CR.
-          </p>
-          <div className="flex gap-4 pt-2">
-            <button className="rounded-lg bg-white px-8 py-3 font-bold text-primary shadow-lg transition-colors hover:bg-gray-100">
-              Get Started Now
-            </button>
-            <button className="rounded-lg border border-white bg-transparent px-8 py-3 font-bold text-white transition-colors hover:bg-white/10">
-              Contact Sales
-            </button>
-          </div>
-        </div>
-      </div>
     </section>
   );
 };

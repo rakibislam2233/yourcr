@@ -1,16 +1,16 @@
 "use client";
+import logo from "@/assets/logo/logo.png"; // তোমার লোগো পাথ ঠিক আছে ধরে নিচ্ছি
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeOff, Mail, Lock } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import Image from "next/image";
-import logo from "@/assets/logo/logo.png"; // তোমার লোগো পাথ ঠিক আছে ধরে নিচ্ছি
-import { Checkbox } from "@/components/ui/checkbox";
 
-const StudentLogin = () => {
+const Login = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -164,4 +164,4 @@ const StudentLogin = () => {
   );
 };
 
-export default StudentLogin;
+export default Login;

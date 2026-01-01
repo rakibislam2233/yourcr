@@ -111,7 +111,7 @@ const ViewClasses: React.FC = () => {
           </h3>
         </div>
         <div className="divide-y divide-gray-100">
-          {upcomingClasses.map((cls, index) => (
+          {upcomingClasses.map((cls) => (
             <motion.div
               key={cls.id}
               className="p-6 hover:bg-gray-50/50 transition-colors"
@@ -200,7 +200,7 @@ const ViewClasses: React.FC = () => {
           </h3>
         </div>
         <div className="divide-y divide-gray-100">
-          {recentClasses.map((cls, index) => (
+          {recentClasses.map((cls) => (
             <motion.div
               key={cls.id}
               className="p-6 hover:bg-gray-50/50 transition-colors"

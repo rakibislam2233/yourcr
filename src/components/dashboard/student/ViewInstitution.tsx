@@ -53,7 +53,7 @@ const ViewInstitution: React.FC = () => {
       />
 
       {/* Institution Overview Card */}
-      <motion.div className="bg-gradient-to-r from-primary to-primary/80 rounded-2xl p-8 text-white">
+      <motion.div className="bg-linear-to-r from-primary to-primary/80 rounded-2xl p-8 text-white">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-center gap-6">
             <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center">
