@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import {Mukta} from "next/font/google";
+import { Syne } from "next/font/google";
 import "./globals.css";
 
-const mukta = Mukta({
+const mukta = Syne({
   variable: "--font-geist-sans",
   subsets: ["latin"],
-  weight: ["400"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {

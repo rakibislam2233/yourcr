@@ -1,12 +1,12 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
-import { cn } from "@/lib/utils";
-import Link from "next/link";
-import { Button } from "../ui/button";
 import logo from "@/assets/logo/logo.png";
+import { cn } from "@/lib/utils";
+import { Menu, X } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { Button } from "../ui/button";
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -52,7 +52,7 @@ const Navbar: React.FC = () => {
         }
       )}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-5">
+      <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-5">
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link href="/" className="flex items-center">

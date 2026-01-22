@@ -1,9 +1,8 @@
-import React from "react";
 
 const AboutHero = () => {
   return (
     <section className="relative px-5 py-12 md:py-24  flex justify-center">
-      <div className="w-full max-w-7xl mx-auto">
+      <div className="w-full container mx-auto">
         <div className="flex flex-col-reverse lg:flex-row gap-10 lg:gap-16 items-center">
           {/* Text Content */}
           <div className="flex flex-col gap-6 flex-1 text-center lg:text-left">

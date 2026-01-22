@@ -1,10 +1,9 @@
 import { Eye, Target } from "lucide-react";
-import React from "react";
 
 const MissionVision = () => {
   return (
     <section className="px-5 py-16 lg:py-24">
-      <div className="max-w-7xl mx-auto flex flex-col gap-12">
+      <div className="container mx-auto flex flex-col gap-12">
         <div className="text-center max-w-[700px] mx-auto flex flex-col gap-4">
           <h2 className="text-3xl lg:text-4xl font-bold leading-tight">
             Driven by Purpose

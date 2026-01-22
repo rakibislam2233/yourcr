@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
 import {
-  MessageSquare,
-  Bell,
-  LayoutDashboard,
-  BarChart3,
-  Users,
-  LogInIcon,
+    BarChart3,
+    Bell,
+    LayoutDashboard,
+    LogInIcon,
+    MessageSquare,
+    Users,
 } from "lucide-react";
+import { useState } from "react";
 
 const HowItWorks = () => {
   const [activeView, setActiveView] = useState<"students" | "reps">("students");
@@ -17,7 +17,7 @@ const HowItWorks = () => {
     <main className="min-h-screen bg-background-light font-display text-gray-900">
       {/* Toggle Control */}
       <div className="sticky top-0 z-40 bg-background-light py-8">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto container px-4 sm:px-6 lg:px-8">
           <div className="mx-auto flex w-full max-w-md items-center justify-center rounded-xl bg-white p-1.5 border border-gray-200">
             <button
               onClick={() => setActiveView("students")}
@@ -47,7 +47,7 @@ const HowItWorks = () => {
 
       {/* Dual Column Process Flow */}
       <section className="pb-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto container px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
             {/* Column 1: Students */}
             <div

@@ -1,6 +1,5 @@
 
-import AboutUs from "@/components/pages/AboutUs/AboutUs";
-import React from "react";
+import AboutUs from "@/pages/AboutUs/AboutUs";
 
 const page = () => {
   return <AboutUs />;

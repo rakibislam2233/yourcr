@@ -1,14 +1,13 @@
-import React from "react";
-import {
-  Facebook,
-  Instagram,
-  Twitter,
-  Linkedin,
-  Copyright,
-} from "lucide-react";
-import Link from "next/link";
 import logo from "@/assets/logo/logo.png";
+import {
+    Copyright,
+    Facebook,
+    Instagram,
+    Linkedin,
+    Twitter,
+} from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 const Footer = () => {
   const quickLinks = [
     "Home",
@@ -46,7 +45,7 @@ const Footer = () => {
         <div className="absolute right-16 top-20 size-16 bg-linear-to-r from-[#6D788B] to-[#1E293B] rounded-full "></div>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 py-16 md:py-20">
+      <div className="relative z-10 container mx-auto px-6 py-16 md:py-20">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* Left: Logo + Description */}
           <div className="space-y-6">

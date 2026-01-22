@@ -1,9 +1,9 @@
-import CTA from "@/components/pages/Home/CTA";
-import HeroSection from "@/components/pages/Home/HeroSection";
-import HowItWorks from "@/components/pages/Home/HowItWorks";
-import StatsSection from "@/components/pages/Home/StatsSection";
-import TestimonialsCarousel from "@/components/pages/Home/TestimonialsCarousel";
-import WhyChooseUs from "@/components/pages/Home/WhyChooseUs";
+import CTA from "@/pages/Home/CTA";
+import HeroSection from "@/pages/Home/HeroSection";
+import HowItWorks from "@/pages/Home/HowItWorks";
+import StatsSection from "@/pages/Home/StatsSection";
+import TestimonialsCarousel from "@/pages/Home/TestimonialsCarousel";
+import WhyChooseUs from "@/pages/Home/WhyChooseUs";
 
 export default function HomePage() {
   return (

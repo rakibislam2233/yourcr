@@ -1,5 +1,4 @@
-import ContactUs from "@/components/pages/ContactUs/ContactUs";
-import React from "react";
+import ContactUs from "@/pages/ContactUs/ContactUs";
 
 const page = () => {
   return <ContactUs />;

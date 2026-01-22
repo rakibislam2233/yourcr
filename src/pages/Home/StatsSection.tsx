@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useRef } from "react";
-import {
-  motion,
-  useInView,
-  useMotionValue,
-  useSpring,
-  useTransform,
-} from "framer-motion";
 import { Button } from "@/components/ui/button";
+import {
+    motion,
+    useInView,
+    useMotionValue,
+    useSpring,
+    useTransform,
+} from "framer-motion";
+import React, { useRef } from "react";
 
 const stats = [
   {
@@ -80,7 +80,7 @@ const StatsSection = () => {
         <div className="absolute bottom-20 right-10 w-80 h-80 bg-purple-100 rounded-full blur-3xl opacity-30"></div>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <motion.div className="space-y-8 text-center lg:text-left">
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground">

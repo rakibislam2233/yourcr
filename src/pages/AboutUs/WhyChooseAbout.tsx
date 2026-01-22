@@ -21,7 +21,7 @@ const WhyChooseAbout = () => {
 
   return (
     <section className="w-full px-5 py-16 lg:py-24">
-      <div className="max-w-7xl mx-auto flex flex-col gap-12">
+      <div className="container mx-auto flex flex-col gap-12">
         <div className="flex flex-col md:flex-row justify-between items-end gap-6 border-b border-[#e9e8ce] dark:border-[#3a392a] pb-8">
           <h2 className="text-3xl lg:text-4xl font-bold leading-tight max-w-lg">
             Why universities and students choose Your CR?

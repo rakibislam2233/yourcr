@@ -1,12 +1,12 @@
 
 import {
-  Users,
-  Calendar,
-  Bell,
-  FileText,
-  MessageCircle,
-  Network,
-  Sparkles,
+    Bell,
+    Calendar,
+    FileText,
+    MessageCircle,
+    Network,
+    Sparkles,
+    Users,
 } from "lucide-react";
 
 const features = [
@@ -63,7 +63,7 @@ const WhyChooseUs = () => {
         <div className="absolute bottom-20 right-10 w-72 sm:w-96 h-72 sm:h-96 bg-purple-100 rounded-full blur-3xl opacity-30"></div>
       </div>
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div className="relative z-10 w-full container mx-auto px-4 sm:px-6 lg:px-8 text-center">
         {/* Badge */}
         <div className="inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 bg-primary/10 border border-primary rounded-lg mx-auto mb-8 sm:mb-10">
           <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />

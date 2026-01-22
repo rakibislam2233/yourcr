@@ -1,13 +1,12 @@
 "use client";
 
 import { Badge, School } from "lucide-react";
-import Image from "next/image";
 import {
-  MdCastForEducation,
-  MdForum,
-  MdGroups,
-  MdTrackChanges,
-  MdVisibility,
+    MdCastForEducation,
+    MdForum,
+    MdGroups,
+    MdTrackChanges,
+    MdVisibility,
 } from "react-icons/md";
 
 const AboutUs = () => {
@@ -15,7 +14,7 @@ const AboutUs = () => {
     <section className="w-full pt-16 md:pt-20 space-y-5">
       {/* Hero Section */}
       <div className="flex flex-1 justify-center bg-white px-5 py-5">
-        <div className="flex w-full max-w-7xl flex-1 flex-col">
+        <div className="flex w-full container flex-1 flex-col">
           <div className="flex flex-col gap-6 px-4 py-10 md:gap-8 md:flex-row">
             <div className="flex flex-1 flex-col gap-6 md:min-w-[400px] md:gap-8 md:justify-center">
               <div className="flex flex-col gap-2 text-left">
@@ -44,7 +43,7 @@ const AboutUs = () => {
 
       {/* Stats Section */}
       <div className="flex flex-1 justify-center bg-gray-50  px-5 py-10 md:py-12">
-        <div className="flex w-full max-w-7xl flex-1 flex-col">
+        <div className="flex w-full container flex-1 flex-col">
           <div className="flex flex-wrap gap-4 px-4">
             <div className="flex min-w-[158px] flex-1 flex-col gap-2 rounded-lg border border-[#e2e8f0] bg-white p-6 ">
               <div className="flex items-center gap-2">
@@ -85,7 +84,7 @@ const AboutUs = () => {
 
       {/* Mission & Vision */}
       <div className="flex flex-1 justify-center bg-white px-5 py-5">
-        <div className="flex w-full max-w-7xl flex-1 flex-col">
+        <div className="flex w-full container flex-1 flex-col">
           <div className="flex flex-col gap-10 px-4 py-16">
             <div className="flex flex-col items-center gap-4 text-center">
               <h1 className="max-w-[720px] text-4xl font-bold leading-tight text-[#121317]  md:text-[32px]">
@@ -135,7 +134,7 @@ const AboutUs = () => {
 
       {/* Why Your CR? */}
       <div className="flex flex-1 justify-center bg-gray-50 px-5 py-5">
-        <div className="flex w-full max-w-7xl flex-1 flex-col">
+        <div className="flex w-full container flex-1 flex-col">
           <div className="flex flex-col gap-10 px-4 py-16">
             <div className="flex flex-col gap-4">
               <h1 className="max-w-[720px] text-4xl font-bold leading-tight text-[#121317]  md:text-[32px]">
@@ -181,97 +180,6 @@ const AboutUs = () => {
                     Streamline announcements and ensure important updates reach
                     every student instantly.
                   </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Team Section */}
-      <div className="flex flex-1 justify-center bg-white px-5 py-5">
-        <div className="flex w-full max-w-7xl flex-1 flex-col">
-          <div className="flex flex-col gap-10 px-4 py-16">
-            <div className="flex flex-col items-center gap-4 text-center">
-              <h1 className="text-4xl font-bold leading-tight text-[#121317]  md:text-[32px]">
-                The Team Behind the Tool
-              </h1>
-              <p className="max-w-[600px] text-base font-normal text-[#64748B] ">
-                We are a group of educators, developers, and former class
-                representatives passionate about making academic life easier.
-              </p>
-            </div>
-            <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
-              {/* Sarah Jenkins */}
-              <div className="flex flex-col items-center gap-3">
-                <div className="aspect-square w-full overflow-hidden rounded-xl">
-                  <Image
-                    width={300}
-                    height={200}
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSHNFS2L8Ul9KujrBUGxC2wgf-0YZqL8jw9a4Uf42A9plFTizMUseL_OHp6tXYVgQDyxGw5e-rb03SlIkTO7VOv7w5w-QA0SCTetk1E6RmbcHMh-t3UV3sb-6as1TUKRFl0Bs1H0exwMLXZBHvulTB24xvuJzhcvc5IHClSF4USQpbRAl1t8eNk3JR8P6xpdAlnhgLRX94GvVG2P3V3FDRrc03x_toK9oO5NZ_Y9umIWSuHvuxPbvNuHyFii-WQT7DP78t5eCMI-I"
-                    alt="Portrait of Sarah Jenkins, Founder & CEO"
-                    className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
-                  />
-                </div>
-                <div className="text-center">
-                  <h3 className="text-lg font-bold text-[#121317] ">
-                    Sarah Jenkins
-                  </h3>
-                  <p className="text-sm text-[#64748B] ">Founder & CEO</p>
-                </div>
-              </div>
-              {/* David Chen */}
-              <div className="flex flex-col items-center gap-3">
-                <div className="aspect-square w-full overflow-hidden rounded-xl">
-                  <Image
-                    width={300}
-                    height={200}
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXzzML_vCj1smBGdycSY2LxVnfhxOMBucIeCMvE8A9AgVK9Tifq-OnChZ_uqoyFL0A7gEtCuNrva_czcU7CNU5IcjTLLbpThX0Y0BlMsDtRvedmFDjJ4Qu3hQ0yCbYC-lA3Nf4UBSqdgxEiHH0TZwHyOshnnlpilFcGppTo_5Q7OwHYz98cTBL0sBNzdlDDVEaO7KR0CCfBeQ-xSnlmPmRuBRaXTRvTQ-CHz8mAz4BRlk-KB-QSINl0BO2DmTJd0lpZ2Nemm4aJ-0"
-                    alt="Portrait of David Chen, Head of Product"
-                    className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
-                  />
-                </div>
-                <div className="text-center">
-                  <h3 className="text-lg font-bold text-[#121317] ">
-                    David Chen
-                  </h3>
-                  <p className="text-sm text-[#64748B] ">Head of Product</p>
-                </div>
-              </div>
-              {/* Maya Patel */}
-              <div className="flex flex-col items-center gap-3">
-                <div className="aspect-square w-full overflow-hidden rounded-xl">
-                  <Image
-                    width={300}
-                    height={200}
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQxnRVBo0SRbNLQ4Cf3P9HI1Lou23ijw6jgbCshEHY-S5641v_9Ko2hkuJfjAtuP8Z0Ij1yg7CUzk-5TCuig6W2v7AV6IC8m7N7QNsDtD9fBAid1JNBTDyXvXasP5PVJ8w1RTZkoIUsMknspbxr3IBVGsbggAne8cKPkYEmEs1bfQ-wAUEeigOn3ZaTaO6EN4a7vSoRI3wamVb085NVkbRZt0Psbnk3HHttrydjMf5clpwL1hWysvZz9jr76LIdlcpU79lvQGRzvs"
-                    alt="Portrait of Maya Patel, Community Lead"
-                    className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
-                  />
-                </div>
-                <div className="text-center">
-                  <h3 className="text-lg font-bold text-[#121317] ">
-                    Maya Patel
-                  </h3>
-                  <p className="text-sm text-[#64748B] ">Community Lead</p>
-                </div>
-              </div>
-              {/* James Wilson */}
-              <div className="flex flex-col items-center gap-3">
-                <div className="aspect-square w-full overflow-hidden rounded-xl">
-                  <Image
-                    width={300}
-                    height={200}
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfOanewN3OejadAgqgH3p_s_4hJUExVUJA_a1ix4VsPfCT2PYEcTQ1XwDIUy8PVuAW7gP_LgaA2nyVahQaI0NwUbC2J8YbzdIyG1Jxc5equ-00L2REcoEhJT2EKRMq5eT54aOKx3e2cMiA1QcQKrAT1kditJ7wIcUZ3hldjpW9itoBQNC8XgtHr2PSCli39DOLDSH-lWysvaOR4xUKLemSU00t0LIeROR_yVtSY7Jo4M2is0C9CTNtNSFhz-ou9Vl02uhIZ9CRH_8"
-                    alt="Portrait of James Wilson, Lead Developer"
-                    className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
-                  />
-                </div>
-                <div className="text-center">
-                  <h3 className="text-lg font-bold text-[#121317] ">
-                    James Wilson
-                  </h3>
-                  <p className="text-sm text-[#64748B] ">Lead Developer</p>
                 </div>
               </div>
             </div>

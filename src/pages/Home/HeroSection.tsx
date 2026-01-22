@@ -9,7 +9,7 @@ const HeroSection: React.FC = () => {
     <section className="relative flex flex-col items-center justify-center h-screen px-4 py-12 md:py-20 lg:px-8 overflow-hidden">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/10 rounded-full blur-[120px] -z-10 pointer-events-none" />
 
-      <div className="container mx-auto max-w-7xl w-full grid lg:grid-cols-2 gap-12 items-center">
+      <div className="container mx-auto container w-full grid lg:grid-cols-2 gap-12 items-center">
         {/* Left Content */}
         <div className="flex flex-col gap-8 text-center lg:text-left z-10">
           <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.1] tracking-tight">

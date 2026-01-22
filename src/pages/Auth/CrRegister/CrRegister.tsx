@@ -1,38 +1,38 @@
 "use client";
-import React, { useState } from "react";
 import {
-  User,
-  Mail,
-  Phone,
-  Eye,
-  EyeOff,
-  School,
-  Building2,
-  Group,
-  Tag,
-  ArrowLeft,
-  ArrowRight,
-  CheckCircle2,
-  IdCard,
-  Badge,
-  Lock,
-  MapPin,
+    ArrowLeft,
+    ArrowRight,
+    Badge,
+    Building2,
+    CheckCircle2,
+    Eye,
+    EyeOff,
+    Group,
+    IdCard,
+    Lock,
+    Mail,
+    MapPin,
+    Phone,
+    School,
+    Tag,
+    User,
 } from "lucide-react";
+import React, { useState } from "react";
 import { MdCalendarMonth, MdCategory } from "react-icons/md";
 
 // shadcn/ui components
+import Navbar from "@/components/common/Navbar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from "@/components/ui/select";
-import Navbar from "@/components/common/Navbar";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 // --- Validation Schema ---
@@ -93,7 +93,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-[#f6f6f8]">
     <Navbar />
     <main className="flex grow flex-col items-center justify-start py-10 px-4 sm:px-6 mt-16">
-      <div className="flex w-full max-w-7xl mx-auto flex-col gap-8">
+      <div className="flex w-full container mx-auto flex-col gap-8">
         {children}
         <footer className="mt-8 text-center text-sm text-[#536793] py-4 border-t border-transparent">
           <p>© 2026 Your CR. Built for students in Bangladesh.</p>
