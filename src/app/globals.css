@@ -40,6 +40,11 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* Container & Max-width customization */
+  --breakpoint-2xl: 1280px;
+  --max-width-2xl: 1280px;
+  --container-2xl: 1280px;
 }
 
 :root {
@@ -120,7 +125,17 @@
   }
 }
 
-
+@layer utilities {
+  /* Force 2xl breakpoint to max 1280px */
+  @media (min-width: 1536px) {
+    .container {
+      max-width: 1280px !important;
+    }
+    .max-w-2xl {
+      max-width: 1280px !important;
+    }
+  }
+}
 
 * {
   box-sizing: border-box;
@@ -159,17 +174,6 @@ body {
     background-position: 200% 0;
   }
 }
-
-/* Container */
-.container {
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 2rem;
-  padding-right: 2rem;
-  max-width: 1280px;
-}
-
 
 /* ========================================
    Accessibility

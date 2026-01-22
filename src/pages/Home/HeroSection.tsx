@@ -1,4 +1,3 @@
-"use client";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,6 +7,18 @@ import { MdCampaign } from "react-icons/md";
 const HeroSection: React.FC = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center px-5 py-20 lg:py-24 overflow-hidden">
+      <div
+        className="absolute inset-0 z-0"
+        style={{
+          backgroundImage: `
+        linear-gradient(to right, rgba(229,231,235,0.8) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(229,231,235,0.8) 1px, transparent 1px),
+        radial-gradient(circle 500px at 20% 20%, rgba(139,92,246,0.3), transparent),
+        radial-gradient(circle 500px at 80% 80%, rgba(59,130,246,0.3), transparent)
+      `,
+          backgroundSize: "48px 48px, 48px 48px, 100% 100%, 100% 100%",
+        }}
+      />
       {/* Background glow blob - smaller on mobile */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] md:w-[800px] md:h-[800px] bg-primary/10 rounded-full blur-[80px] md:blur-[120px] -z-10 pointer-events-none" />
 
