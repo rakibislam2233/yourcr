@@ -32,7 +32,7 @@ const mockSubjects = [
 export default function EditSubjectPage() {
   const router = useRouter();
   const params = useParams();
-  const subjectId = parseInt(params.id as string);
+  const subjectId = parseInt(params?.id as string);
 
   const [formData, setFormData] = useState({
     code: "",

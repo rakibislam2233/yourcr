@@ -50,7 +50,7 @@ const mockTeachers = [
 export default function EditTeacherPage() {
   const router = useRouter();
   const params = useParams();
-  const teacherId = parseInt(params.id as string);
+  const teacherId = parseInt(params?.id as string);
   const [subjectInput, setSubjectInput] = useState("");
   const [subjects, setSubjects] = useState<string[]>([]);
 

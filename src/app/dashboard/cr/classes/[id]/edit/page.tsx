@@ -21,7 +21,7 @@ const mockClasses: Record<string, { subject: string; teacher: string; date: stri
 export default function EditClassPage() {
   const router = useRouter();
   const params = useParams();
-  const classId = params.id as string;
+  const classId = params?.id as string;
 
   const [formData, setFormData] = useState({
     subject: "",

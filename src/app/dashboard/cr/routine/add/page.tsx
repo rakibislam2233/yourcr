@@ -26,8 +26,8 @@ const colorOptions = [
 function AddRoutineContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const defaultDay = searchParams.get("day") || "Saturday";
-  const defaultTime = searchParams.get("time") || "8:00 AM";
+  const defaultDay = searchParams?.get("day") || "Saturday";
+  const defaultTime = searchParams?.get("time") || "8:00 AM";
 
   const [formData, setFormData] = useState({
     day: defaultDay,

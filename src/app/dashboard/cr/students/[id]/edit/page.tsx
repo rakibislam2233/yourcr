@@ -29,7 +29,7 @@ const mockStudents = [
 export default function EditStudentPage() {
   const router = useRouter();
   const params = useParams();
-  const studentId = parseInt(params.id as string);
+  const studentId = parseInt(params?.id as string);
 
   const [formData, setFormData] = useState({
     roll: "",

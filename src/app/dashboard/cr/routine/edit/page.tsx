@@ -34,8 +34,8 @@ const mockRoutineData: Record<string, Record<string, { subject: string; teacher:
 function EditRoutineContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const day = searchParams.get("day") || "Saturday";
-  const time = searchParams.get("time") || "8:00 AM";
+  const day = searchParams?.get("day") || "Saturday";
+  const time = searchParams?.get("time") || "8:00 AM";
 
   const [formData, setFormData] = useState({
     day: day,

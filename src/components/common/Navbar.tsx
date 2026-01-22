@@ -39,7 +39,7 @@ const Navbar: React.FC = () => {
     if (href === "/") {
       return pathName === "/";
     }
-    return pathName.startsWith(href);
+    return pathName?.startsWith(href);
   };
 
   return (

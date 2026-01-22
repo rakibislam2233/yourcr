@@ -1,5 +1,5 @@
 "use client";
-import logo from "@/assets/logo/logo.png"; // তোমার লোগো পাথ ঠিক আছে ধরে নিচ্ছি
+import logo from "@/assets/logo/logo.png";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -15,8 +15,7 @@ import { z } from "zod";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
-  password: z.string().min(1, "Password is required"),
-  remember: z.boolean().default(false),
+  password: z.string().min(1, "Password is required")
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -36,7 +35,6 @@ const Login = () => {
     defaultValues: {
       email: "",
       password: "",
-      remember: false,
     },
   });
 
@@ -45,9 +43,6 @@ const Login = () => {
     router.push("/dashboard/student");
   };
 
-  const handleCheckboxChange = (checked: boolean) => {
-    setValue("remember", checked);
-  };
 
   return (
     <section className="flex min-h-screen w-full flex-col lg:flex-row">
@@ -140,8 +135,6 @@ const Login = () => {
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="remember"
-                  checked={watch("remember")}
-                  onCheckedChange={handleCheckboxChange}
                 />
                 <Label
                   htmlFor="remember"

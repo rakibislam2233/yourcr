@@ -92,7 +92,7 @@ const CrSidebar: React.FC = () => {
     if (href === "/dashboard/cr") {
       return pathname === href;
     }
-    return pathname.startsWith(href);
+    return pathname?.startsWith(href);
   };
 
   const SidebarContent = () => (

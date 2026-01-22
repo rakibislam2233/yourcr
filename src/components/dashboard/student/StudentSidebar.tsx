@@ -82,7 +82,7 @@ const StudentSidebar: React.FC = () => {
     if (href === "/dashboard/student") {
       return pathname === href;
     }
-    return pathname.startsWith(href);
+    return pathname?.startsWith(href);
   };
 
   const SidebarContent = () => (

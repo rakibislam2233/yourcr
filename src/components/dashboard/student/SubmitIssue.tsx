@@ -64,9 +64,7 @@ const submitIssueSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters"),
   category: z.string().min(1, "Please select a category"),
   description: z.string().min(10, "Description must be at least 10 characters"),
-  priority: z.enum(["low", "medium", "high"], {
-    required_error: "Please select a priority level",
-  }),
+  priority: z.enum(["low", "medium", "high"]),
 });
 
 type SubmitIssueFormData = z.infer<typeof submitIssueSchema>;

@@ -28,7 +28,7 @@ const mockNotices: Record<string, { title: string; content: string; type: string
 export default function EditNoticePage() {
   const router = useRouter();
   const params = useParams();
-  const noticeId = params.id as string;
+  const noticeId = params?.id as string;
 
   const [formData, setFormData] = useState({
     title: "",

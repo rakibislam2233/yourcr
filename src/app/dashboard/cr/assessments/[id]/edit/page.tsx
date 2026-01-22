@@ -9,7 +9,14 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter, useParams } from "next/navigation";
 
-const typeOptions = ["Exam", "Assignment", "Quiz", "Lab", "Presentation", "Project"];
+const typeOptions = [
+  "Exam",
+  "Assignment",
+  "Quiz",
+  "Lab",
+  "Presentation",
+  "Project",
+];
 const subjectOptions = [
   "Database Management System",
   "Software Engineering",
@@ -20,18 +27,75 @@ const subjectOptions = [
 ];
 
 // Mock data for fetching assessment info
-const mockAssessments: Record<string, { title: string; subject: string; type: string; date: string; time: string; totalMarks: string; venue: string; description: string }> = {
-  "1": { title: "Mid-Term Examination", subject: "Database Management System", type: "Exam", date: "2024-12-15", time: "10:00 AM - 1:00 PM", totalMarks: "50", venue: "Exam Hall A", description: "" },
-  "2": { title: "Assignment 3", subject: "Software Engineering", type: "Assignment", date: "2024-12-10", time: "11:59 PM", totalMarks: "20", venue: "", description: "Complete the UML diagrams for the project" },
-  "3": { title: "Lab Report", subject: "Computer Networks", type: "Lab", date: "2024-12-08", time: "5:00 PM", totalMarks: "15", venue: "", description: "" },
-  "4": { title: "Quiz 2", subject: "Operating Systems", type: "Quiz", date: "2024-12-05", time: "9:00 AM", totalMarks: "10", venue: "Room 301", description: "" },
-  "5": { title: "Presentation", subject: "AI & Machine Learning", type: "Presentation", date: "2024-12-03", time: "2:00 PM", totalMarks: "25", venue: "Seminar Hall", description: "" },
+const mockAssessments: Record<
+  string,
+  {
+    title: string;
+    subject: string;
+    type: string;
+    date: string;
+    time: string;
+    totalMarks: string;
+    venue: string;
+    description: string;
+  }
+> = {
+  "1": {
+    title: "Mid-Term Examination",
+    subject: "Database Management System",
+    type: "Exam",
+    date: "2024-12-15",
+    time: "10:00 AM - 1:00 PM",
+    totalMarks: "50",
+    venue: "Exam Hall A",
+    description: "",
+  },
+  "2": {
+    title: "Assignment 3",
+    subject: "Software Engineering",
+    type: "Assignment",
+    date: "2024-12-10",
+    time: "11:59 PM",
+    totalMarks: "20",
+    venue: "",
+    description: "Complete the UML diagrams for the project",
+  },
+  "3": {
+    title: "Lab Report",
+    subject: "Computer Networks",
+    type: "Lab",
+    date: "2024-12-08",
+    time: "5:00 PM",
+    totalMarks: "15",
+    venue: "",
+    description: "",
+  },
+  "4": {
+    title: "Quiz 2",
+    subject: "Operating Systems",
+    type: "Quiz",
+    date: "2024-12-05",
+    time: "9:00 AM",
+    totalMarks: "10",
+    venue: "Room 301",
+    description: "",
+  },
+  "5": {
+    title: "Presentation",
+    subject: "AI & Machine Learning",
+    type: "Presentation",
+    date: "2024-12-03",
+    time: "2:00 PM",
+    totalMarks: "25",
+    venue: "Seminar Hall",
+    description: "",
+  },
 };
 
 export default function EditAssessmentPage() {
   const router = useRouter();
   const params = useParams();
-  const assessmentId = params.id as string;
+  const assessmentId = params?.id as string;
 
   const [formData, setFormData] = useState({
     title: "",
@@ -86,7 +150,9 @@ export default function EditAssessmentPage() {
               <Input
                 id="title"
                 value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, title: e.target.value })
+                }
                 placeholder="e.g., Mid-Term Examination"
                 required
               />
@@ -96,13 +162,17 @@ export default function EditAssessmentPage() {
               <select
                 id="subject"
                 value={formData.subject}
-                onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, subject: e.target.value })
+                }
                 className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 required
               >
                 <option value="">Select a subject</option>
                 {subjectOptions.map((s) => (
-                  <option key={s} value={s}>{s}</option>
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
                 ))}
               </select>
             </div>
@@ -111,11 +181,15 @@ export default function EditAssessmentPage() {
               <select
                 id="type"
                 value={formData.type}
-                onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, type: e.target.value })
+                }
                 className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               >
                 {typeOptions.map((t) => (
-                  <option key={t} value={t}>{t}</option>
+                  <option key={t} value={t}>
+                    {t}
+                  </option>
                 ))}
               </select>
             </div>
@@ -125,7 +199,9 @@ export default function EditAssessmentPage() {
                 id="totalMarks"
                 type="number"
                 value={formData.totalMarks}
-                onChange={(e) => setFormData({ ...formData, totalMarks: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, totalMarks: e.target.value })
+                }
                 placeholder="e.g., 50"
                 required
               />
@@ -136,7 +212,9 @@ export default function EditAssessmentPage() {
                 id="date"
                 type="date"
                 value={formData.date}
-                onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, date: e.target.value })
+                }
                 required
               />
             </div>
@@ -145,7 +223,9 @@ export default function EditAssessmentPage() {
               <Input
                 id="time"
                 value={formData.time}
-                onChange={(e) => setFormData({ ...formData, time: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, time: e.target.value })
+                }
                 placeholder="e.g., 10:00 AM - 1:00 PM or 11:59 PM"
                 required
               />
@@ -155,7 +235,9 @@ export default function EditAssessmentPage() {
               <Input
                 id="venue"
                 value={formData.venue}
-                onChange={(e) => setFormData({ ...formData, venue: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, venue: e.target.value })
+                }
                 placeholder="e.g., Exam Hall A"
               />
             </div>
@@ -164,7 +246,9 @@ export default function EditAssessmentPage() {
               <textarea
                 id="description"
                 value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
                 placeholder="Add any additional instructions or details..."
                 rows={4}
                 className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary resize-none"
