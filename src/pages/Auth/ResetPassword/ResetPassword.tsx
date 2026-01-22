@@ -1,15 +1,15 @@
 "use client";
-import React, { useState } from "react";
+import logo from "@/assets/logo/logo.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeOff, CheckCircle, ArrowLeft } from "lucide-react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ArrowLeft, CheckCircle, Eye, EyeOff } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
-import logo from "@/assets/logo/logo.png";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
 const resetPasswordSchema = z.object({
@@ -58,7 +58,7 @@ const ResetPassword = () => {
           </div>
 
           <div className="mb-8 text-center lg:text-left">
-            <h1 className="mb-2 text-3xl sm:text-4xl font-black leading-tight tracking-tight text-gray-900">
+            <h1 className="mb-2 text-3xl sm:text-4xl  leading-tight tracking-tight text-gray-900">
               Set New Password
             </h1>
             <p className="text-base text-gray-600">

@@ -1,14 +1,14 @@
 "use client";
-import React, { useState } from "react";
+import logo from "@/assets/logo/logo.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Mail, ArrowLeft } from "lucide-react";
-import Link from "next/link";
-import Image from "next/image";
-import logo from "@/assets/logo/logo.png";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ArrowLeft, Mail } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const forgotPasswordSchema = z.object({
@@ -53,7 +53,7 @@ const ForgotPassword = () => {
 
           {/* Heading */}
           <div className="mb-8 text-center lg:text-left">
-            <h1 className="mb-2 text-2xl sm:text-4xl font-black leading-tight tracking-tight text-gray-900">
+            <h1 className="mb-2 text-2xl sm:text-4xl  leading-tight tracking-tight text-gray-900">
               Forgot Your Password?
             </h1>
             <p className="text-base text-gray-600">

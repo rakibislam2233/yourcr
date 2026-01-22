@@ -5,7 +5,7 @@ const CTA: React.FC = () => {
   return (
     <section className="py-32 bg-gray-50 relative overflow-hidden">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-        <h2 className="text-4xl sm:text-5xl font-black  dark:text-white mb-8 tracking-tight">
+        <h2 className="text-4xl sm:text-5xl   dark:text-white mb-8 tracking-tight">
           Ready to lead your class better?
         </h2>
         <p className="text-xl text-text-muted dark:text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed">

@@ -7,7 +7,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Mail, MapPin, Phone } from "lucide-react";
+import { LocateIcon, Mail, MapPin, Phone, PhoneCall } from "lucide-react";
+import contactUsImage from "@/assets/contact/contact-us.png";
+import Image from "next/image";
+import { MdEmail, MdLocationOn } from "react-icons/md";
 
 const formSchema = z.object({
   fullName: z.string().min(2, "Full name is required"),
@@ -39,23 +42,29 @@ const ContactUs = () => {
   };
 
   return (
-    <section className="w-full pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-16">
-      <h1 className="text-3xl font-semibold text-center mb-8">Contact Us</h1>
+    <section className="w-full pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-16 px-4 sm:px-6">
+      {/* Header - matching your original screenshot style */}
+      <div className="mx-auto max-w-4xl text-center mb-10">
+        <h1 className="text-4xl font-bold text-gray-900 sm:text-5xl">
+          Contact Us
+        </h1>
+        <p className="mt-4 text-lg text-gray-600">
+          We&apos;d love to hear from you! Please fill out the form below and we
+          will get back to you as soon as possible.
+        </p>
+      </div>
 
       {/* Main Form Section */}
-      <div className="container mx-auto px-4 sm:px-6  pb-16">
+      <div className="w-full container mx-auto   pb-16">
         <div className="bg-white rounded-2xl  border border-gray-100/80 overflow-hidden">
           <div className="grid md:grid-cols-2 gap-0">
-            {/* Left: Illustration Area (woman with laptop) */}
-            <div className="hidden md:flex items-center justify-center bg-blue-50/40 p-8 relative">
-              <div className="text-center">
-                {/* You can replace this with a real illustration / SVG / image */}
-                <div className="text-9xl mb-6 opacity-90">💻👩‍💼</div>
-                <p className="text-gray-600 text-lg font-medium">
-                  We're here to help!
-                </p>
-              </div>
-            </div>
+            <Image
+              src={contactUsImage}
+              alt="Contact Us"
+              width={500}
+              height={500}
+              className="object-cover mx-auto"
+            />
 
             {/* Right: Form */}
             <div className="p-6 md:p-10">
@@ -132,7 +141,7 @@ const ContactUs = () => {
 
                 <Button
                   type="submit"
-                  className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-medium mt-2"
+                  className="w-full h-12 bg-primary cursor-pointer text-white font-medium mt-2"
                 >
                   Submit
                 </Button>
@@ -142,20 +151,48 @@ const ContactUs = () => {
         </div>
 
         {/* Bottom Contact Info Chips */}
-        <div className="mt-10 flex flex-wrap justify-center gap-4 md:gap-8">
-          <div className="flex items-center gap-2 bg-white px-5 py-3 rounded-full shadow-sm border border-gray-100">
-            <Mail className="h-5 w-5 text-blue-600" />
-            <span className="text-gray-700 font-medium">support@ourcr.com</span>
+        <div className="mt-16 flex flex-col md:flex-row justify-center gap-4 md:gap-8">
+          {/* Contact Chips */}
+          <div className="w-full border border-[#DBEAFE] p-5 rounded-lg flex items-center gap-3">
+            <div className="size-12 flex justify-center items-center rounded-full bg-[#DBEAFE]">
+              <MdEmail className="size-5 text-primary" />
+            </div>
+            <div className="space-y-1">
+              <h2 className="text-lg font-semibold text-gray-900 mt-2">
+                Contact Email
+              </h2>
+              <p className="text-sm text-gray-600 text-center">
+                <a href="mailto:0u9tD@example.com">0u9tD@example.com</a>
+              </p>
+            </div>
           </div>
-
-          <div className="flex items-center gap-2 bg-white px-5 py-3 rounded-full shadow-sm border border-gray-100">
-            <MapPin className="h-5 w-5 text-green-600" />
-            <span className="text-gray-700 font-medium">Dhaka, Bangladesh</span>
+          {/* Contact Chips */}
+          <div className="w-full border border-[#DBEAFE] p-5 rounded-lg flex items-center gap-3">
+            <div className="size-12 flex justify-center items-center rounded-full bg-[#DBEAFE]">
+              <MdLocationOn className="size-5 text-primary" />
+            </div>
+            <div className="space-y-1">
+              <h2 className="text-lg font-semibold text-gray-900 mt-2">
+                Location
+              </h2>
+              <p className="text-sm text-gray-600 text-center">
+                Dhaka Bangladesh
+              </p>
+            </div>
           </div>
-
-          <div className="flex items-center gap-2 bg-white px-5 py-3 rounded-full shadow-sm border border-gray-100">
-            <Phone className="h-5 w-5 text-purple-600" />
-            <span className="text-gray-700 font-medium">+880 1X XXX XXXX</span>
+          {/* Contact Chips */}
+          <div className="w-full border border-[#DBEAFE] p-5 rounded-lg flex items-center gap-3">
+            <div className="size-12 flex justify-center items-center rounded-full bg-[#DBEAFE]">
+              <PhoneCall className="size-5 text-primary" />
+            </div>
+            <div className="space-y-1">
+              <h2 className="text-lg font-semibold text-gray-900 mt-2">
+                Contact Phone
+              </h2>
+              <p className="text-sm text-gray-600 text-center">
+                +880 1319101179
+              </p>
+            </div>
           </div>
         </div>
       </div>

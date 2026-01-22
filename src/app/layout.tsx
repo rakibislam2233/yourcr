@@ -4,8 +4,9 @@ import "./globals.css";
 
 const mukta = Syne({
   variable: "--font-geist-sans",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  // subsets: [""],
+  // display:"auto",
+  weight: ["400", "500", "600"],
 });
 
 export const metadata: Metadata = {

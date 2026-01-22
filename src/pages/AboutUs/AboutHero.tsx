@@ -13,7 +13,7 @@ const AboutHero = () => {
               </span>
             </div>
 
-            <h1 className="text-4xl lg:text-6xl font-black leading-tight tracking-[-0.033em]">
+            <h1 className="text-4xl lg:text-6xl  leading-tight tracking-[-0.033em]">
               Empowering Classrooms,{" "}
               <span className="relative whitespace-nowrap">
                 Connecting Campus

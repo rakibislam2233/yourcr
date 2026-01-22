@@ -18,7 +18,7 @@ const AboutUs = () => {
           <div className="flex flex-col gap-6 px-4 py-10 md:gap-8 md:flex-row">
             <div className="flex flex-1 flex-col gap-6 md:min-w-[400px] md:gap-8 md:justify-center">
               <div className="flex flex-col gap-2 text-left">
-                <h1 className="text-4xl font-black leading-tight tracking-[-0.033em] text-[#121317]  md:text-5xl">
+                <h1 className="text-4xl  leading-tight tracking-[-0.033em] text-[#121317]  md:text-5xl">
                   Bridging the Gap Between Students and Faculty
                 </h1>
                 <h2 className="mt-2 text-sm font-normal leading-normal text-[#64748B]  md:text-lg">

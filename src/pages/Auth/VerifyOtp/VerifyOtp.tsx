@@ -1,11 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import logo from "@/assets/logo/logo.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, CheckCircle } from "lucide-react";
-import Link from "next/link";
 import Image from "next/image";
-import logo from "@/assets/logo/logo.png";
+import Link from "next/link";
+import React, { useState } from "react";
 
 const VerifyOtp = () => {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
@@ -49,7 +49,7 @@ const VerifyOtp = () => {
           </div>
 
           <div className="mb-8 text-center lg:text-left">
-            <h1 className="mb-2 text-3xl sm:text-4xl font-black leading-tight tracking-tight text-gray-900">
+            <h1 className="mb-2 text-3xl sm:text-4xl  leading-tight tracking-tight text-gray-900">
               Verify Your Email
             </h1>
             <p className="text-base text-gray-600">
