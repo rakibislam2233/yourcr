@@ -1,12 +1,13 @@
 "use client";
 
 import { Badge, School } from "lucide-react";
+import Image from "next/image";
 import {
-    MdCastForEducation,
-    MdForum,
-    MdGroups,
-    MdTrackChanges,
-    MdVisibility,
+  MdCastForEducation,
+  MdForum,
+  MdGroups,
+  MdTrackChanges,
+  MdVisibility,
 } from "react-icons/md";
 
 const AboutUs = () => {
@@ -30,12 +31,12 @@ const AboutUs = () => {
                 <span className="truncate">Join Our Mission</span>
               </button>
             </div>
-            <div
-              className="aspect-video w-full flex-1 rounded-xl bg-cover bg-center bg-no-repeat shadow-lg md:h-auto"
-              style={{
-                backgroundImage: `url(https://lh3.googleusercontent.com/aida-public/AB6AXuDuDhA3kpfxcpSNThyAjHxWdHb4BcORVENsohDQAHAIDnNn1Ar-WK43PBQ7kbJBHtorq8k7unON5GYmdxfqICC4ymGUXNBhhDOngOn8iqiffzmsVCVBhmnUcam1m7B7fUMpYuM_RdJdS8WZX-gc14AyeMvSWqWeYFdYrtOhJtAdeN3nQ2Ixzajlb1LskEfpCAvD13WDwGLBMN28l89L_9QKSWlXcq-yPiF4SSJ1Mcno97XDjsMzqMfNGE-BWNMH__R3RIStn46gRtU)`,
-              }}
-              aria-label="Students and faculty collaborating in a modern university setting"
+            <Image
+              src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+              alt="Hero Image"
+              width={600}
+              height={500}
+              className="object-cover rounded-lg"
             />
           </div>
         </div>

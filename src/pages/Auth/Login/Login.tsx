@@ -18,7 +18,7 @@ const loginSchema = z.object({
   password: z.string().min(1, "Password is required")
 });
 
-type LoginFormData = z.infer<typeof loginSchema>;
+type LoginFormData = z.infer<typeof loginSchema>;a
 
 const Login = () => {
   const router = useRouter();
