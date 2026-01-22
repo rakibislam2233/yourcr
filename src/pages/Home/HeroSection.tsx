@@ -11,7 +11,7 @@ const HeroSection: React.FC = () => {
       {/* Background glow blob - smaller on mobile */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] md:w-[800px] md:h-[800px] bg-primary/10 rounded-full blur-[80px] md:blur-[120px] -z-10 pointer-events-none" />
 
-      <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-12 lg:gap-16 items-center">
+      <div className="w-full container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-12 lg:gap-16 items-center">
         {/* Left - Text content */}
         <div className="flex flex-col gap-7 md:gap-9 text-center lg:text-left z-10 order-2 lg:order-1">
           <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl font-semibold ">
