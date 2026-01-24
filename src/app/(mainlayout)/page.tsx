@@ -12,8 +12,8 @@ export default function HomePage() {
       <WhyChooseUs />
       <HowItWorks />
       <StatsSection />
-      <CTA />
       <TestimonialsCarousel />
+      <CTA />
     </section>
   );
 }

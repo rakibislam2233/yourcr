@@ -6,7 +6,7 @@ import { MdCampaign } from "react-icons/md";
 
 const HeroSection: React.FC = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-5 py-20 lg:py-24 overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center py-20 lg:py-24 overflow-hidden">
       <div
         className="absolute inset-0 z-0"
         style={{
@@ -22,7 +22,7 @@ const HeroSection: React.FC = () => {
       {/* Background glow blob - smaller on mobile */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] md:w-[800px] md:h-[800px] bg-primary/10 rounded-full blur-[80px] md:blur-[120px] -z-10 pointer-events-none" />
 
-      <div className="w-full container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-12 lg:gap-16 items-center">
+      <div className="w-full container mx-auto px-4 md:px-6  grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-12 lg:gap-16 items-center">
         {/* Left - Text content */}
         <div className="flex flex-col gap-7 md:gap-9 text-center lg:text-left z-10 order-2 lg:order-1">
           <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl font-semibold ">

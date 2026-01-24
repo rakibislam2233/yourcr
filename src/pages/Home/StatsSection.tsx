@@ -73,7 +73,7 @@ const AnimatedCounter = ({
 
 const StatsSection = () => {
   return (
-    <section className="relative w-full py-24 md:py-32 lg:py-40 bg-linear-to-b from-[#F8FAFC] to-white overflow-hidden">
+    <section className="relative w-full py-24 md:py-32  bg-linear-to-l from-[#F8FAFC] to-white overflow-hidden">
       {/* Background Blurs */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-20 left-10 w-96 h-96 bg-blue-100 rounded-full blur-3xl opacity-30"></div>

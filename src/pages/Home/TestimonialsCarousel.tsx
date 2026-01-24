@@ -68,7 +68,7 @@ const TestimonialCarousel = () => {
   const t = testimonials[current];
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 sm:p-6">
+    <div className="w-fullrelative flex items-center justify-center py-16">
       <div className="max-w-5xl w-full">
         {/* Simple Header */}
         <div className="text-center mb-12">
