@@ -5,7 +5,7 @@ import { getNewAccessToken } from "./authHelper";
 const BACKEND_API_URL =
   process.env.NEXT_PUBLIC_BASE_API_URL || "http://localhost:5000/api/v1";
 
-type FetchOptions = RequestInit & {
+type FetchOptions = Omit<RequestInit, "headers"> & {
   headers?: Record<string, string>;
 };
 
@@ -17,23 +17,25 @@ const serverFetchHelper = async (
   const accessToken = await getCookie("accessToken");
 
   //to stop recursion loop
-  if (endpoint !== "/auth/refresh-token") { 
+  if (endpoint !== "/auth/refresh-token") {
     await getNewAccessToken();
   }
 
-  const config: RequestInit = {
-    headers: {
-      "Content-Type": "application/json",
-      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
-      ...headers,
-    },
-    ...restOptions,
-    cache: options.cache || "no-store",
+  const requestHeaders: Record<string, string> = {
+    "Content-Type": "application/json",
+    ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+    ...headers,
   };
 
   if (restOptions.body instanceof FormData) {
-    delete config.headers["Content-Type"];
+    delete requestHeaders["Content-Type"];
   }
+
+  const config: RequestInit = {
+    headers: requestHeaders,
+    ...restOptions,
+    cache: options.cache || "no-store",
+  };
 
   try {
     const response = await fetch(`${BACKEND_API_URL}${endpoint}`, config);
