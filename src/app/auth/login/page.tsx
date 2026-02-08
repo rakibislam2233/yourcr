@@ -1,7 +1,9 @@
-import Login from "@/pages/Auth/Login/Login";
+import { LoginForm } from "@/components/auth/LoginForm";
 
-const page = () => {
-  return <Login />;
-};
-
-export default page;
+export default function LoginPage() {
+  return (
+    <div className="flex items-center justify-center min-h-[calc(100vh-64px)] bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <LoginForm />
+    </div>
+  );
+}

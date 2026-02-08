@@ -1,7 +1,9 @@
-import VerifyOtp from "@/pages/Auth/VerifyOtp/VerifyOtp";
+import { VerifyOtpForm } from "@/components/auth/VerifyOtpForm";
 
-const page = () => {
-  return <VerifyOtp />;
-};
-
-export default page;
+export default function VerifyOtpPage() {
+  return (
+    <div className="flex items-center justify-center min-h-[calc(100vh-64px)] bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <VerifyOtpForm />
+    </div>
+  );
+}

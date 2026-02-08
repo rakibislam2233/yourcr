@@ -1,13 +1,13 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
-    motion,
-    useInView,
-    useMotionValue,
-    useSpring,
-    useTransform,
+  motion,
+  useInView,
+  useMotionValue,
+  useSpring,
+  useTransform,
 } from "framer-motion";
+import { Bell, CheckCircle, School, Users } from "lucide-react";
 import React, { useRef } from "react";
 
 const stats = [
@@ -15,29 +15,29 @@ const stats = [
     number: 120,
     suffix: "+",
     label: "Active CRs",
-    desc: "Class Representatives using OUR CR to manage their classes.",
-    color: "text-green-600"
+
+    icon: Users,
   },
   {
     number: 3500,
     suffix: "+",
     label: "Connected Students",
-    desc: "Students receiving notices, updates, and class info instantly.",
-    color: "text-red-600"
+
+    icon: School,
   },
   {
     number: 1000,
     suffix: "+",
-    label: "Announcements Shared",
-    desc: "Notices and announcements made clearer and better organized.",
-    color: "text-blue-600",
+    label: "Announcements",
+
+    icon: Bell,
   },
   {
     number: 800,
     suffix: "+",
-    label: "Student Issues Solved",
-    desc: "Problems resolved efficiently through digital CR-Student communication.",
-    color: "text-purple-600"
+    label: "Issues Solved",
+
+    icon: CheckCircle,
   },
 ];
 
@@ -50,8 +50,8 @@ const AnimatedCounter = ({
 }) => {
   const ref = useRef<HTMLSpanElement>(null);
   const motionValue = useMotionValue(0);
-  const springValue = useSpring(motionValue, { duration: 3000 });
-  const isInView = useInView(ref, { once: true });
+  const springValue = useSpring(motionValue, { duration: 2500, bounce: 0 });
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
 
   React.useEffect(() => {
     if (isInView) {
@@ -61,11 +61,11 @@ const AnimatedCounter = ({
 
   const displayValue = useTransform(
     springValue,
-    (current) => Math.round(current) + suffix
+    (current) => Math.round(current) + suffix,
   );
 
   return (
-    <motion.span ref={ref} className="font-bold text-5xl md:text-6xl">
+    <motion.span ref={ref} className="tracking-tight">
       {displayValue}
     </motion.span>
   );
@@ -73,55 +73,42 @@ const AnimatedCounter = ({
 
 const StatsSection = () => {
   return (
-    <section className="relative w-full py-24 md:py-32  bg-linear-to-l from-[#F8FAFC] to-white overflow-hidden">
-      {/* Background Blurs */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-20 left-10 w-96 h-96 bg-blue-100 rounded-full blur-3xl opacity-30"></div>
-        <div className="absolute bottom-20 right-10 w-80 h-80 bg-purple-100 rounded-full blur-3xl opacity-30"></div>
-      </div>
+    <section className="relative w-full py-20 border-y border-slate-100 bg-white overflow-hidden">
+      {/* Subtle Background Pattern (Matches Hero) */}
+      <div
+        className="absolute inset-0 z-0 opacity-40 pointer-events-none"
+        style={{
+          backgroundImage: `
+            radial-gradient(circle 800px at 10% 10%, rgba(59,130,246,0.03), transparent),
+            radial-gradient(circle 800px at 90% 90%, rgba(139,92,246,0.03), transparent)
+          `,
+        }}
+      />
 
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <motion.div className="space-y-8 text-center lg:text-left">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground">
-              Our CR In <span className="text-primary">Numbers</span>
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl">
-              A simple idea that&apos;s making class management smarter. These
-              numbers show how YOUR CR is helping Class Representatives and
-              students stay more connected every day.
-            </p>
-            <Button size="lg" className="h-14 px-10 cursor-pointer ">
-              Learn More
-            </Button>
-          </motion.div>
+      <div className="w-full container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="flex flex-wrap justify-center gap-6 lg:gap-10">
+          {stats.map((stat, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className="flex-1 min-w-[200px] max-w-[280px] flex flex-col items-center text-center py-6 px-4 border border-gray-100 rounded-lg hover:border-primary transition-all duration-300 cursor-pointer"
+            >
+              <div className="mb-4 p-3 rounded-2xl bg-slate-50 border border-slate-100 text-primary">
+                <stat.icon className="w-6 h-6 sm:w-8 sm:h-8" />
+              </div>
 
-          {/* Right Stats Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={index}
-                className="group relative bg-white/80 backdrop-blur-sm rounded-xl p-8 border border-gray-200 cursor-pointer"
-              >
-                {/* Gradient Hover Glow */}
-                <div
-                  className={`absolute inset-0 rounded-xl bg-linear-to-br opacity-0 group-hover:opacity-20 transition-opacity duration-300 -z-10`}
-                ></div>
+              <div className="text-4xl font-extrabold text-slate-900 mb-2">
+                <AnimatedCounter value={stat.number} suffix={stat.suffix} />
+              </div>
 
-                <div className="space-y-4">
-                  <div className={stat.color}>
-                    <AnimatedCounter value={stat.number} suffix={stat.suffix} />
-                  </div>
-                  <h3 className="text-xl font-bold text-foreground">
-                    {stat.label}
-                  </h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {stat.desc}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+              <h3 className="text-sm font-medium text-slate-500 tracking-wide">
+                {stat.label}
+              </h3>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>

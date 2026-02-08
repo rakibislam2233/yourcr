@@ -84,25 +84,19 @@ const TestimonialCarousel = () => {
   const t = testimonials[current];
 
   return (
-    <div className="relative w-full flex items-center justify-center py-20 bg-gradient-to-b from-white to-gray-50 overflow-hidden">
+    <div className="relative w-full flex items-center justify-center py-20 bg-linear-to-b from-white to-gray-50 overflow-hidden">
       {/* Decorative Elements */}
       <div className="absolute top-10 left-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
       <div className="absolute bottom-10 right-10 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl" />
 
       <div className="max-w-6xl w-full px-4 relative z-10">
         <div className="text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <h2 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-600 mb-4">
-              What Users Say
-            </h2>
-            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-              Trusted by students and class representatives across the campus
-            </p>
-          </motion.div>
+          <h2 className="text-4xl md:text-5xl font-bold  mb-4">
+            What <span className="text-primary">Users</span> Say
+          </h2>
+          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+            Trusted by students and class representatives across the campus
+          </p>
         </div>
 
         <div className="relative h-[500px] md:h-[400px] w-full flex items-center justify-center">
@@ -117,6 +111,18 @@ const TestimonialCarousel = () => {
               transition={{
                 x: { type: "spring", stiffness: 300, damping: 30 },
                 opacity: { duration: 0.2 },
+              }}
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={1}
+              onDragEnd={(e, { offset, velocity }) => {
+                const swipe = swipePower(offset.x, velocity.x);
+
+                if (swipe < -swipeConfidenceThreshold) {
+                  paginate(1);
+                } else if (swipe > swipeConfidenceThreshold) {
+                  paginate(-1);
+                }
               }}
               className="absolute w-full max-w-4xl"
             >
@@ -141,7 +147,7 @@ const TestimonialCarousel = () => {
                     <Quote className="w-12 h-12 text-blue-100 fill-current absolute top-6 right-8 hidden md:block rotate-180" />
 
                     <p className="text-xl md:text-2xl text-gray-700 leading-relaxed font-medium">
-                      "{t.quote}"
+                      &quot;{t.quote}&quot;
                     </p>
 
                     <div>
@@ -158,10 +164,10 @@ const TestimonialCarousel = () => {
         </div>
 
         {/* Controls */}
-        <div className="flex items-center justify-center gap-6 mt-8">
+        <div className="flex items-center justify-center gap-6 mt-16">
           <button
             onClick={() => paginate(-1)}
-            className="p-3 rounded-full bg-white border border-gray-200 shadow-sm hover:shadow-md hover:bg-gray-50 transition-all active:scale-95 group"
+            className="p-3 rounded-full bg-white border border-gray-200 shadow-sm hover:shadow-md hover:bg-gray-50 transition-all active:scale-95 group cursor-pointer"
             aria-label="Previous testimonial"
           >
             <ChevronLeft className="w-5 h-5 text-gray-600 group-hover:text-primary transition-colors" />
@@ -187,7 +193,7 @@ const TestimonialCarousel = () => {
 
           <button
             onClick={() => paginate(1)}
-            className="p-3 rounded-full bg-white border border-gray-200 shadow-sm hover:shadow-md hover:bg-gray-50 transition-all active:scale-95 group"
+            className="p-3 rounded-full bg-white border border-gray-200 shadow-sm hover:shadow-md hover:bg-gray-50 transition-all active:scale-95 group cursor-pointer"
             aria-label="Next testimonial"
           >
             <ChevronRight className="w-5 h-5 text-gray-600 group-hover:text-primary transition-colors" />
