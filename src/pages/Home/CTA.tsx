@@ -4,7 +4,7 @@ const CTA: React.FC = () => {
   return (
     <section className="w-full py-24 ">
       {/* Gradient Background */}
-      <div className="container mx-auto bg-linear-to-r from-blue-400 via-purple-400 to-purple-500 rounded-3xl  ">
+      <div className="container mx-auto bg-linear-to-r from-[#2456C4]  to-[#1E293B] rounded-3xl  ">
         {/* Decorative Background Shapes */}
         <div className="absolute inset-0 overflow-hidden rounded-3xl">
           <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
@@ -27,12 +27,12 @@ const CTA: React.FC = () => {
           {/* Buttons */}
           <div className="flex flex-col justify-center sm:flex-row gap-4 ">
             <Button
-              variant="outline"
-              className="bg-transparent border border-white/30 text-white hover:bg-white/10 backdrop-blur-sm px-6 h-12 text-base cursor-pointer"
+              variant="default"
+              className="bg-transparent border border-white/30 text-white hover:bg-transparent  backdrop-blur-sm px-6 h-12 text-base cursor-pointer"
             >
               Login as CR
             </Button>
-            <Button className="bg-white text-purple-600 hover:bg-gray-100 px-6 h-12 text-base font-semibold cursor-pointer">
+            <Button className="bg-white text-primary hover:bg-gray-100 px-6 h-12 text-base font-semibold cursor-pointer">
               Join as Student 
             </Button>
           </div>
