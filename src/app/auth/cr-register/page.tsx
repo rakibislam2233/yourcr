@@ -1,7 +1,7 @@
-import CrRegister from "@/pages/Auth/CrRegister/CrRegister";
+import { CrRegisterForm } from "@/components/auth/CrRegisterForm";
 
 const page = () => {
-  return <CrRegister />;
+  return <CrRegisterForm />;
 };
 
 export default page;

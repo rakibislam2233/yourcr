@@ -29,3 +29,20 @@ export type LoginValues = z.infer<typeof loginSchema>;
 export type ForgotPasswordValues = z.infer<typeof forgotPasswordSchema>;
 export type VerifyOtpValues = z.infer<typeof verifyOtpSchema>;
 export type ResetPasswordValues = z.infer<typeof resetPasswordSchema>;
+
+export const registrationSchema = z.object({
+  fullName: z.string().min(2, "Full name must be at least 2 characters"),
+  email: z.string().email("Please enter a valid email address"),
+  phone: z.string().min(11, "Phone number must be at least 11 digits"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+  institutionName: z.string().min(2, "Institution name is required"),
+  institutionType: z.string().min(1, "Institution type is required"),
+  department: z.string().min(2, "Department is required"),
+  district: z.string().min(2, "District is required"),
+  batchSession: z.string().min(4, "Batch/Session is required"),
+  section: z.string().min(1, "Section is required"),
+  classRoll: z.string().min(1, "Class roll is required"),
+  crPosition: z.string().min(1, "CR position is required"),
+});
+
+export type RegistrationValues = z.infer<typeof registrationSchema>;

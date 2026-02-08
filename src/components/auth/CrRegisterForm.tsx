@@ -1,4 +1,5 @@
 "use client";
+
 import {
   ArrowLeft,
   ArrowRight,
@@ -17,8 +18,16 @@ import {
   Tag,
   User,
 } from "lucide-react";
-import React, { useState } from "react";
+import React, {
+  useActionState,
+  useEffect,
+  useState,
+  useTransition,
+} from "react";
 import { MdCalendarMonth, MdCategory } from "react-icons/md";
+
+// shadcn/ui components
+import Navbar from "@/components/common/Navbar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -28,27 +37,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { registrationSchema, RegistrationValues } from "@/lib/auth-schemas";
+import { registerCr } from "@/services/auth.service";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-// --- Validation Schema ---
-const registrationSchema = z.object({
-  fullName: z.string().min(2, "Full name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address"),
-  phone: z.string().min(11, "Phone number must be at least 11 digits"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
-  institutionName: z.string().min(2, "Institution name is required"),
-  institutionType: z.string().min(1, "Institution type is required"),
-  department: z.string().min(2, "Department is required"),
-  district: z.string().min(2, "District is required"),
-  batchSession: z.string().min(4, "Batch/Session is required"),
-  section: z.string().min(1, "Section is required"),
-  classRoll: z.string().min(1, "Class roll is required"),
-  crPosition: z.string().min(1, "CR position is required"),
-});
-
-type RegistrationFormData = z.infer<typeof registrationSchema>;
+import { toast } from "sonner";
 
 // --- Types & Constants ---
 enum RegistrationStep {
@@ -88,6 +82,7 @@ const STEPS: StepInfo[] = [
 // --- Layout Component ---
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-[#f6f6f8]">
+    <Navbar />
     <main className="flex grow flex-col items-center justify-start py-10 px-4 sm:px-6 mt-16">
       <div className="flex w-full container mx-auto flex-col gap-8">
         {children}
@@ -182,21 +177,36 @@ const Stepper: React.FC<{ currentStep: RegistrationStep }> = ({
   );
 };
 
-// --- Main CrRegister Component ---
-const CrRegister: React.FC = () => {
+const initialState = {
+  success: false,
+  message: "",
+  inputs: {},
+};
+
+// --- Main CrRegisterForm Component ---
+export function CrRegisterForm() {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState<RegistrationStep>(
     RegistrationStep.PERSONAL_INFO,
   );
   const [showPassword, setShowPassword] = useState(false);
+  const [isPendingTransitions, startTransition] = useTransition();
+
+  const [state, formAction, isPendingAction] = useActionState(
+    registerCr,
+    initialState,
+  );
+
+  const isPending = isPendingAction || isPendingTransitions;
 
   const {
     register,
-    handleSubmit,
     formState: { errors },
     setValue,
     watch,
     trigger,
-  } = useForm<RegistrationFormData>({
+    getValues,
+  } = useForm<RegistrationValues>({
     resolver: zodResolver(registrationSchema),
     defaultValues: {
       fullName: "",
@@ -214,8 +224,18 @@ const CrRegister: React.FC = () => {
     },
   });
 
+  useEffect(() => {
+    if (state.success) {
+      toast.success(state.message);
+      // Determine redirection? Usually login or dashboard depending on auth flow
+      // Assuming login for now as usually registration requires login after
+      router.push("/auth/login");
+    } else if (state.message && !state.errors) {
+      toast.error(state.message);
+    }
+  }, [state, router]);
+
   const handleContinue = async () => {
-    // Validate current step fields before proceeding
     let isValid = false;
 
     if (currentStep === RegistrationStep.PERSONAL_INFO) {
@@ -236,11 +256,21 @@ const CrRegister: React.FC = () => {
       ]);
     }
 
-    if (isValid && currentStep < RegistrationStep.CR_DETAILS) {
-      setCurrentStep((prev) => (prev + 1) as RegistrationStep);
-    } else if (isValid && currentStep === RegistrationStep.CR_DETAILS) {
-      // Final submission
-      handleSubmit(onSubmit)();
+    if (isValid) {
+      if (currentStep < RegistrationStep.CR_DETAILS) {
+        setCurrentStep((prev) => (prev + 1) as RegistrationStep);
+      } else {
+        // Final submission
+        const data = getValues();
+        const formData = new FormData();
+        Object.entries(data).forEach(([key, value]) =>
+          formData.append(key, value),
+        );
+
+        startTransition(() => {
+          formAction(formData);
+        });
+      }
     }
   };
 
@@ -250,10 +280,8 @@ const CrRegister: React.FC = () => {
     }
   };
 
-  const onSubmit = (data: RegistrationFormData) => {
-    alert("Registration Successful!");
-    console.log("Submitted Data:", data);
-  };
+  // We don't use the form's native onSubmit because we handle steps manually
+  // and dispatch to server action at the end.
 
   return (
     <Layout>
@@ -270,7 +298,7 @@ const CrRegister: React.FC = () => {
       <div className="flex flex-col gap-8 lg:flex-row lg:items-start">
         <Stepper currentStep={currentStep} />
 
-        <div className="flex-1 rounded-2xl border border-[#e8ebf2] bg-white  overflow-hidden min-h-[500px]">
+        <div className="flex-1 rounded-2xl border border-[#e8ebf2] bg-white overflow-hidden min-h-[500px]">
           <div className="p-6 sm:p-8">
             {/* Step 1: Personal Info */}
             <div
@@ -322,12 +350,17 @@ const CrRegister: React.FC = () => {
                       placeholder="rahim@example.com"
                       className={`pl-10 h-12 bg-[#f6f6f8] ${
                         errors.email ? "border-red-500" : ""
-                      }`}
+                      } ${state.errors?.email ? "border-red-500" : ""}`}
                     />
                   </div>
                   {errors.email && (
                     <p className="text-red-500 text-sm mt-1">
                       {errors.email.message}
+                    </p>
+                  )}
+                  {state.errors?.email && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {state.errors.email[0]}
                     </p>
                   )}
                 </div>
@@ -630,9 +663,12 @@ const CrRegister: React.FC = () => {
                 onClick={handleContinue}
                 className="flex h-12 w-full min-w-[200px] cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#2458c6] px-8 text-base font-bold text-white shadow-lg shadow-[#2458c6]/20 transition-all hover:bg-blue-700 hover:shadow-[#2458c6]/30 sm:w-auto"
                 type="button"
+                disabled={isPending}
               >
                 {currentStep === RegistrationStep.CR_DETAILS
-                  ? "Finish Registration"
+                  ? isPending
+                    ? "Registering..."
+                    : "Finish Registration"
                   : "Continue"}
                 <ArrowRight className="w-5 h-5" />
               </button>
@@ -642,6 +678,4 @@ const CrRegister: React.FC = () => {
       </div>
     </Layout>
   );
-};
-
-export default CrRegister;
+}
