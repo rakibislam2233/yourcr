@@ -85,6 +85,16 @@ export async function loginUser(
         maxAge: 3600 * 24 * 90,
         path: "/",
       });
+
+      // Save user role for middleware access
+      if (loginData?.user?.role) {
+        await setCookie("userRole", loginData.user.role, {
+          secure: isProduction,
+          httpOnly: true,
+          maxAge: 3600 * 24 * 90,
+          path: "/",
+        });
+      }
     }
 
     // 3. Handle Profile Completion
@@ -97,7 +107,20 @@ export async function loginUser(
       };
     }
 
-    // 4. Final Success Case
+    // 4. Handle Pending Approval
+    if (loginData?.isCrApproved === false) {
+      return {
+        success: true,
+        message: res.message,
+        data: {
+          redirect: "/auth/cr-register/pending",
+          isCrApproved: false,
+        },
+        timestamp: Date.now(),
+      };
+    }
+
+    // 5. Final Success Case
     return {
       success: true,
       message: res.message,
@@ -415,6 +438,16 @@ export async function getNewAccessToken() {
       maxAge: 3600 * 24 * 90,
       path: "/",
     });
+
+    // Refresh role cookie if user data is returned
+    if (res.data?.user?.role) {
+      await setCookie("userRole", res.data.user.role, {
+        secure: isProduction,
+        httpOnly: true,
+        maxAge: 3600 * 24 * 90,
+        path: "/",
+      });
+    }
 
     return {
       success: true,

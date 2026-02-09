@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { Modal } from "@/components/ui/modal";
 import { completeCrRegistration } from "@/services/auth.service";
 import {
   academicStepSchema,
@@ -55,9 +56,12 @@ const CompleteProfileFormContent = () => {
 
   const isPending = isPendingAction || isPendingTransitions;
 
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+
   useEffect(() => {
     if (state.success) {
       toast.success(state.message);
+      setIsSuccessModalOpen(true);
     } else if (state.message && !state.errors) {
       toast.error(state.message);
     }
@@ -110,77 +114,93 @@ const CompleteProfileFormContent = () => {
     }
   };
 
-  if (state.success) {
-    return (
-      <div className="flex flex-col items-center justify-center py-12 text-center animate-in fade-in zoom-in duration-500">
-        <div className="size-24 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-8 animate-bounce">
-          <ShieldCheck className="size-12" />
-        </div>
-        <h2 className="text-3xl font-black text-gray-900 mb-4">
-          Profile Completed!
-        </h2>
-        <p className="text-gray-600 max-w-md mx-auto mb-8 font-medium">
-          Thank you! Our administrators are now reviewing your application. You
-          will receive an email once your account is approved.
-        </p>
-        <Button
-          onClick={() => router.push("/auth/login")}
-          className="h-12 px-10 bg-primary hover:bg-blue-700 font-bold "
-        >
-          Back to Login
-        </Button>
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-8 font-outfit">
+    <div className="w-full space-y-8">
       <StepIndicator currentStep={step + 2} />
+
+      {/* Success Modal */}
+      <Modal
+        isOpen={isSuccessModalOpen}
+        onClose={() => router.push("/auth/login")}
+        title="Registration Submitted"
+      >
+        <div className="flex flex-col items-center text-center py-2">
+          <div className="size-16 bg-green-50 text-green-600 rounded-md flex items-center justify-center mb-6 border border-green-100">
+            <ShieldCheck className="size-8" />
+          </div>
+
+          <h3 className="text-xl font-bold text-gray-900 mb-3">
+            Registration Successful
+          </h3>
+
+          <p className="text-gray-500 text-sm leading-relaxed mb-8 px-2 font-medium">
+            Your profile details have been submitted for review. Our
+            administrators will verify your information shortly. We will notify
+            you via email as soon as your account is approved.
+          </p>
+
+          <div className="w-full pt-2">
+            <Button
+              onClick={() => router.push("/auth/login")}
+              className="w-full h-11 bg-gray-900 hover:bg-black text-white font-semibold rounded-md transition-all active:scale-[0.98] cursor-pointer shadow-sm"
+            >
+              Back to Login
+            </Button>
+          </div>
+        </div>
+      </Modal>
+
       <form ref={formRef}>
-        {step === 1 && (
+        <div className={step !== 1 ? "hidden" : ""}>
           <InstitutionStep
             state={{ ...state, errors: { ...state.errors, ...localErrors } }}
           />
-        )}
-        {step === 2 && (
+        </div>
+        <div className={step !== 2 ? "hidden" : ""}>
           <AcademicStep
             state={{ ...state, errors: { ...state.errors, ...localErrors } }}
           />
-        )}
-        {step === 3 && (
+        </div>
+        <div className={step !== 3 ? "hidden" : ""}>
           <DocumentationStep
             idCardPreview={idCardPreview}
             setIdCardPreview={setIdCardPreview}
             setSelectedFile={setSelectedFile}
           />
-        )}
+        </div>
       </form>
 
-      <div className="flex items-center gap-4 pt-4 border-t border-gray-100">
+      <div className="flex items-center gap-4 pt-6 border-t border-gray-100">
         {step > 1 && (
           <Button
             type="button"
             variant="outline"
             onClick={() => setStep(step - 1)}
-            className="h-12 px-6 font-bold"
+            className="h-11 px-6 font-bold border-gray-200 text-gray-600 hover:bg-gray-50 rounded-md shadow-sm transition-all active:scale-[0.98]"
             disabled={isPending}
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Back
+            Previous
           </Button>
         )}
         <Button
           type="button"
           onClick={handleContinue}
-          className="flex-1 h-12 text-base font-bold bg-primary hover:bg-blue-700 "
+          className="flex-1 h-11 text-base font-bold bg-primary hover:bg-blue-700 text-white rounded-md shadow-sm transition-all active:scale-[0.98] cursor-pointer"
           disabled={isPending}
         >
-          {step === 3
-            ? isPending
-              ? "Submitting..."
-              : "Finish Registration"
-            : "Next Step"}
-          {step !== 3 && <ArrowRight className="w-4 h-4 ml-2" />}
+          {step === 3 ? (
+            isPending ? (
+              "Submitting Info..."
+            ) : (
+              "Complete Registration"
+            )
+          ) : (
+            <>
+              Continue
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </>
+          )}
         </Button>
       </div>
     </div>
@@ -189,7 +209,13 @@ const CompleteProfileFormContent = () => {
 
 export default function CompleteProfileForm() {
   return (
-    <Suspense fallback={<div>Loading form...</div>}>
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center p-12">
+          <div className="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full" />
+        </div>
+      }
+    >
       <CompleteProfileFormContent />
     </Suspense>
   );

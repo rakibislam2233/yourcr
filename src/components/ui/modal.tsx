@@ -1,8 +1,7 @@
 "use client";
-
-import React from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
+import React from "react";
 
 interface ModalProps {
   isOpen: boolean;
@@ -48,12 +47,14 @@ export const Modal: React.FC<ModalProps> = ({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ duration: 0.2 }}
-              className={`w-full ${sizeClasses[size]} bg-white rounded-2xl shadow-2xl overflow-hidden`}
+              className={`w-full ${sizeClasses[size]} bg-white rounded-md shadow-2xl overflow-hidden`}
             >
               {/* Header */}
               <div className="flex items-center justify-between p-6 border-b border-gray-100">
                 <div>
-                  <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
+                  <h2 className="text-xl font-semibold text-gray-900">
+                    {title}
+                  </h2>
                   {description && (
                     <p className="text-sm text-gray-500 mt-1">{description}</p>
                   )}

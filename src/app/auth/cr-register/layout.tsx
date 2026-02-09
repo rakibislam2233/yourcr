@@ -5,10 +5,10 @@ import React from "react";
 
 const CrRegisterLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <section className="flex min-h-screen w-full flex-col lg:flex-row font-outfit">
+    <section className="w-full flex min-h-screen flex-col lg:flex-row  ">
       {/* Left Side: Form Content */}
-      <div className="flex flex-1 flex-col justify-center bg-white px-6 py-12 lg:px-20 xl:px-24">
-        <div className="mx-auto w-full max-w-lg">
+      <div className="w-full flex flex-1 flex-col justify-center bg-white px-6 py-12 lg:px-20 xl:px-24">
+        <div className="mx-auto w-full max-w-xl">
           {/* Brand Header */}
           <div className="mb-8 flex items-center justify-center gap-3">
             <Link href="/">

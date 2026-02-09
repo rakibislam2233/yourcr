@@ -1,13 +1,10 @@
 import { Button } from "@/components/ui/button";
-import StepIndicator from "@/pages/Auth/StepIndicator";
 import { Clock } from "lucide-react";
 import Link from "next/link";
 
 const PendingApprovalPage = () => {
   return (
     <div className="space-y-8">
-      <StepIndicator currentStep={4} />
-
       <div className="flex flex-col items-center justify-center text-center space-y-6 py-10">
         <div className="h-20 w-20 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center animate-pulse">
           <Clock className="h-10 w-10" />
