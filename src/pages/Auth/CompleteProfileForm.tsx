@@ -65,8 +65,22 @@ const CompleteProfileFormContent = () => {
       number,
       (keyof typeof registrationSchema.shape)[]
     > = {
-      1: ["institutionName", "institutionType", "department", "district"],
-      2: ["batchSession", "section", "classRoll", "crPosition"],
+      1: [
+        "institutionName",
+        "institutionType",
+        "institutionEmail",
+        "institutionPhone",
+        "address",
+        "department",
+      ],
+      2: [
+        "batchSession",
+        "batchType",
+        "academicYear",
+        "section",
+        "classRoll",
+        "crPosition",
+      ],
     };
 
     const currentFields = fieldsByStep[step];
@@ -134,7 +148,7 @@ const CompleteProfileFormContent = () => {
         </p>
         <Button
           onClick={() => router.push("/auth/login")}
-          className="h-12 px-10 bg-primary hover:bg-blue-700 font-bold shadow-lg shadow-primary/20"
+          className="h-12 px-10 bg-primary hover:bg-blue-700 font-bold "
         >
           Back to Login
         </Button>
@@ -181,7 +195,7 @@ const CompleteProfileFormContent = () => {
         <Button
           type="button"
           onClick={handleContinue}
-          className="flex-1 h-12 text-base font-bold bg-primary hover:bg-blue-700 shadow-lg shadow-primary/20"
+          className="flex-1 h-12 text-base font-bold bg-primary hover:bg-blue-700 "
           disabled={isPending}
         >
           {step === 3

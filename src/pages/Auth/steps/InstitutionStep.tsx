@@ -63,10 +63,9 @@ const InstitutionStep: React.FC<InstitutionStepProps> = ({ state }) => {
               <SelectValue placeholder="Select type" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="university">University</SelectItem>
-              <SelectItem value="college">College</SelectItem>
-              <SelectItem value="school">School</SelectItem>
-              <SelectItem value="madrasa">Madrasa</SelectItem>
+              <SelectItem value="UNIVERSITY">University</SelectItem>
+              <SelectItem value="COLLEGE">College</SelectItem>
+              <SelectItem value="POLYTECHNIC">Polytechnic</SelectItem>
             </SelectContent>
           </Select>
           {state?.errors?.institutionType && (
@@ -78,36 +77,71 @@ const InstitutionStep: React.FC<InstitutionStepProps> = ({ state }) => {
 
         <div className="grid grid-cols-2 gap-4">
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="department">Department</Label>
+            <Label htmlFor="institutionEmail">Contact Email</Label>
             <Input
-              id="department"
-              name="department"
-              defaultValue={state?.inputs?.department}
-              placeholder="e.g. CSE"
-              className={`h-12 border-gray-300 ${state?.errors?.department ? "border-red-500" : ""}`}
+              id="institutionEmail"
+              name="institutionEmail"
+              type="email"
+              defaultValue={
+                state?.inputs?.institutionEmail || state?.inputs?.email
+              }
+              placeholder="institution@example.com"
+              className={`h-12 border-gray-300 ${state?.errors?.institutionEmail ? "border-red-500" : ""}`}
             />
-            {state?.errors?.department && (
+            {state?.errors?.institutionEmail && (
               <p className="text-xs text-red-500">
-                {state.errors.department[0]}
+                {state.errors.institutionEmail[0]}
               </p>
             )}
           </div>
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="district">District</Label>
-            <div className="relative">
-              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <Input
-                id="district"
-                name="district"
-                defaultValue={state?.inputs?.district}
-                placeholder="e.g. Dhaka"
-                className={`pl-9 h-12 border-gray-300 ${state?.errors?.district ? "border-red-500" : ""}`}
-              />
-            </div>
-            {state?.errors?.district && (
-              <p className="text-xs text-red-500">{state.errors.district[0]}</p>
+            <Label htmlFor="institutionPhone">Contact Phone</Label>
+            <Input
+              id="institutionPhone"
+              name="institutionPhone"
+              defaultValue={
+                state?.inputs?.institutionPhone || state?.inputs?.phoneNumber
+              }
+              placeholder="e.g. 01XXXXXXXXX"
+              className={`h-12 border-gray-300 ${state?.errors?.institutionPhone ? "border-red-500" : ""}`}
+            />
+            {state?.errors?.institutionPhone && (
+              <p className="text-xs text-red-500">
+                {state.errors.institutionPhone[0]}
+              </p>
             )}
           </div>
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="address">Institution Address</Label>
+          <div className="relative">
+            <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Input
+              id="address"
+              name="address"
+              defaultValue={state?.inputs?.address}
+              placeholder="Full address (e.g. 123 Street, Dhaka)"
+              className={`pl-12 h-12 border-gray-300 ${state?.errors?.address ? "border-red-500" : ""}`}
+            />
+          </div>
+          {state?.errors?.address && (
+            <p className="text-sm text-red-500">{state.errors.address[0]}</p>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="department">Department</Label>
+          <Input
+            id="department"
+            name="department"
+            defaultValue={state?.inputs?.department}
+            placeholder="e.g. Computer Science and Engineering"
+            className={`h-12 border-gray-300 ${state?.errors?.department ? "border-red-500" : ""}`}
+          />
+          {state?.errors?.department && (
+            <p className="text-xs text-red-500">{state.errors.department[0]}</p>
+          )}
         </div>
       </div>
     </div>

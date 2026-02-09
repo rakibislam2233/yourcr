@@ -10,6 +10,7 @@ import {
   verifyOtpSchema,
 } from "@/validation/auth.validation";
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 
 type ActionState = {
   success: boolean;
@@ -37,6 +38,20 @@ export async function loginUser(
 
   try {
     const res = await api.post("/auth/login", parsed.data);
+
+    // Save tokens if present
+    if (res?.data?.tokens) {
+      const cookieStore = await cookies();
+      cookieStore.set("accessToken", res.data.tokens.accessToken, {
+        httpOnly: true,
+        secure: true,
+      });
+      cookieStore.set("refreshToken", res.data.tokens.refreshToken, {
+        httpOnly: true,
+        secure: true,
+      });
+    }
+
     revalidatePath("/dashboard");
     return {
       success: true,
@@ -55,15 +70,14 @@ export async function loginUser(
 // Step 1: Initial Registration
 export async function registerCr(
   prevState: ActionState,
-  formData: FormData,
+  payload: any,
 ): Promise<ActionState> {
-  const values = Object.fromEntries(formData.entries());
+  const values = Object.fromEntries(payload.entries());
 
-  // Pick only relevant fields for Step 1
   const step1Fields = {
     fullName: values.fullName,
     email: values.email,
-    phone: values.phone,
+    phoneNumber: values.phoneNumber,
     password: values.password,
   };
 
@@ -71,7 +85,7 @@ export async function registerCr(
     .pick({
       fullName: true,
       email: true,
-      phone: true,
+      phoneNumber: true,
       password: true,
     })
     .safeParse(step1Fields);
@@ -87,11 +101,23 @@ export async function registerCr(
 
   try {
     const res = await api.post("/auth/register", parsed.data);
+
+    console.log("Res", res);
+    // Set sessionId in cookies
+    const sessionId = res?.data?.sessionId;
+    if (sessionId) {
+      const cookieStore = await cookies();
+      cookieStore.set("sessionId", sessionId, {
+        httpOnly: true,
+        secure: true,
+        maxAge: 3600, // 1 hour
+      });
+    }
+
     return {
       success: true,
       message: "Initial registration successful! Verification code sent.",
-      data: res,
-      inputs: values,
+      data: res
     };
   } catch (error: any) {
     return {
@@ -102,47 +128,41 @@ export async function registerCr(
   }
 }
 
-// Step 2: Email Verification
-export async function verifyCrEmail(
-  prevState: ActionState,
-  formData: FormData,
-): Promise<ActionState> {
-  const values = Object.fromEntries(formData.entries());
-  const parsed = verifyOtpSchema.safeParse(values);
-
-  if (!parsed.success) {
-    return {
-      success: false,
-      message: "Invalid OTP format",
-      errors: parsed.error.flatten().fieldErrors,
-      inputs: values,
-    };
-  }
-
-  try {
-    const res = await api.post("/auth/verify-registration", parsed.data);
-    return {
-      success: true,
-      message: "Email verified successfully!",
-      data: res,
-    };
-  } catch (error: any) {
-    return {
-      success: false,
-      message: error.message || "Verification failed",
-      inputs: values,
-    };
-  }
-}
-
-// Step 3: Complete Profile (Institution, Academic, Document)
 export async function completeCrRegistration(
   prevState: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
   const values = Object.fromEntries(formData.entries());
+
   try {
-    const res = await api.post("/auth/complete-registration", formData);
+    // Construct the payload structure backend expects
+    const finalFormData = new FormData();
+
+    const institutionInfo = {
+      name: values.institutionName,
+      type: values.institutionType,
+      contactEmail: values.institutionEmail || values.email,
+      contactPhone: values.institutionPhone || values.phoneNumber,
+      address: values.address,
+    };
+
+    const batchInformation = {
+      name: values.batchSession,
+      batchType: values.batchType || "SEMESTER",
+      department: values.department,
+      academicYear: values.academicYear || values.batchSession,
+    };
+
+    finalFormData.append("institutionInfo", JSON.stringify(institutionInfo));
+    finalFormData.append("batchInformation", JSON.stringify(batchInformation));
+
+    // Process file
+    const file = formData.get("studentIdCard");
+    if (file) {
+      finalFormData.append("documentProof", file);
+    }
+
+    const res = await api.post("/cr-registrations", finalFormData);
     return {
       success: true,
       message: "Registration completed! Waiting for admin approval.",
@@ -159,9 +179,9 @@ export async function completeCrRegistration(
 
 export async function forgotPassword(
   prevState: ActionState,
-  formData: FormData,
+  payload: any,
 ): Promise<ActionState> {
-  const values = Object.fromEntries(formData.entries());
+  const values = Object.fromEntries(payload.entries());
   const parsed = forgotPasswordSchema.safeParse(values);
 
   if (!parsed.success) {
@@ -175,6 +195,18 @@ export async function forgotPassword(
 
   try {
     const res = await api.post("/auth/forgot-password", parsed.data);
+
+    // Set sessionId in cookies for reset password flow
+    const sessionId = res?.data?.sessionId;
+    if (sessionId) {
+      const cookieStore = await cookies();
+      cookieStore.set("sessionId", sessionId, {
+        httpOnly: true,
+        secure: true,
+        maxAge: 3600,
+      });
+    }
+
     return { success: true, message: "Reset link sent!", data: res };
   } catch (error: any) {
     return {
@@ -187,9 +219,21 @@ export async function forgotPassword(
 
 export async function verifyOtp(
   prevState: ActionState,
-  formData: FormData,
+  payload: any,
 ): Promise<ActionState> {
-  const values = Object.fromEntries(formData.entries());
+  const values = Object.fromEntries(payload.entries());
+  const cookieStore = await cookies();
+  const sessionId = cookieStore.get("sessionId")?.value;
+
+  if (!sessionId) {
+    return { success: false, message: "Session expired", inputs: values };
+  }
+
+  const data = {
+    sessionId: sessionId,
+    code: values.otp || values.code,
+  };
+
   const parsed = verifyOtpSchema.safeParse(values);
 
   if (!parsed.success) {
@@ -202,7 +246,7 @@ export async function verifyOtp(
   }
 
   try {
-    const res = await api.post("/auth/verify-otp", parsed.data);
+    const res = await api.post("/auth/verify-otp", data);
     return { success: true, message: "OTP Verified!", data: res };
   } catch (error: any) {
     return {
@@ -215,9 +259,9 @@ export async function verifyOtp(
 
 export async function resetPassword(
   prevState: ActionState,
-  formData: FormData,
+  payload: any,
 ): Promise<ActionState> {
-  const values = Object.fromEntries(formData.entries());
+  const values = Object.fromEntries(payload.entries());
 
   const parsed = resetPasswordSchema.safeParse({
     password: values.password,

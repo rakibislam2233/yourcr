@@ -45,14 +45,15 @@ export default function NotFound() {
 
           <p className="text-lg text-gray-600 mb-10 max-w-lg mx-auto leading-relaxed">
             The page you are looking for might have been removed, had its name
-            changed, or is temporarily unavailable. Let&apos;s get you back on track.
+            changed, or is temporarily unavailable. Let&apos;s get you back on
+            track.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/">
               <Button
                 size="lg"
-                className="h-14 px-8 gap-2 text-base font-bold shadow-lg shadow-primary/20 hover:shadow-primary/30 active:scale-95 transition-all"
+                className="h-14 px-8 gap-2 text-base font-bold  hover:shadow-primary/30 active:scale-95 transition-all"
               >
                 <Home className="w-5 h-5" />
                 Back to Home

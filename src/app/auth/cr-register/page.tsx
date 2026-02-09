@@ -11,7 +11,6 @@ const CrRegisterPage = () => {
           Step 1: Setup your personal and security information.
         </p>
       </div>
-
       <CrRegisterForm />
     </>
   );

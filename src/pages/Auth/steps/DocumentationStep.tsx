@@ -65,6 +65,7 @@ const DocumentationStep: React.FC<DocumentationStepProps> = ({
             </div>
             <input
               id="file-upload"
+              name="studentIdCard"
               type="file"
               className="hidden"
               accept="image/*"

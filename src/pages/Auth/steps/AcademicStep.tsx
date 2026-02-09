@@ -46,18 +46,55 @@ const AcademicStep: React.FC<AcademicStepProps> = ({ state }) => {
             )}
           </div>
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="section">Section</Label>
-            <Input
-              id="section"
-              name="section"
-              defaultValue={state?.inputs?.section}
-              placeholder="e.g. A"
-              className={`h-12 border-gray-300 ${state?.errors?.section ? "border-red-500" : ""}`}
-            />
-            {state?.errors?.section && (
-              <p className="text-xs text-red-500">{state.errors.section[0]}</p>
-            )}
+            <Label htmlFor="batchType">Batch Type</Label>
+            <Select
+              name="batchType"
+              defaultValue={state?.inputs?.batchType || "SEMESTER"}
+            >
+              <SelectTrigger
+                id="batchType"
+                className="h-12 text-base border-gray-300"
+              >
+                <SelectValue placeholder="Select type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="SEMESTER">Semester</SelectItem>
+                <SelectItem value="YEAR">Year</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="academicYear">Academic Year</Label>
+          <Input
+            id="academicYear"
+            name="academicYear"
+            defaultValue={
+              state?.inputs?.academicYear || state?.inputs?.batchSession
+            }
+            placeholder="e.g. 2024"
+            className={`h-12 border-gray-300 ${state?.errors?.academicYear ? "border-red-500" : ""}`}
+          />
+          {state?.errors?.academicYear && (
+            <p className="text-xs text-red-500">
+              {state.errors.academicYear[0]}
+            </p>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="section">Section</Label>
+          <Input
+            id="section"
+            name="section"
+            defaultValue={state?.inputs?.section}
+            placeholder="e.g. A"
+            className={`h-12 border-gray-300 ${state?.errors?.section ? "border-red-500" : ""}`}
+          />
+          {state?.errors?.section && (
+            <p className="text-xs text-red-500">{state.errors.section[0]}</p>
+          )}
         </div>
 
         <div className="flex flex-col gap-1.5">
