@@ -1,83 +1,142 @@
-import React from "react";
+"use client";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  ContactActionState,
+  submitContactForm,
+} from "@/services/contact.service";
+import { Mail, MessageSquare, Phone, User } from "lucide-react";
+import { useActionState, useEffect } from "react";
+import { toast } from "sonner";
+
+const initialState: ContactActionState = {
+  success: false,
+  message: "",
+  inputs: {
+    fullName: "",
+    email: "",
+    phone: "",
+    description: "",
+  },
+};
 
 const ContactUsForm = () => {
+  const [state, formAction, isPending] = useActionState(
+    submitContactForm,
+    initialState,
+  );
+
+  useEffect(() => {
+    if (state.success) {
+      toast.success(state.message);
+    } else if (state.message && !state.errors) {
+      toast.error(state.message);
+    }
+  }, [state]);
+
   return (
-    <div className="p-6 md:p-10">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-        <div>
-          <Label htmlFor="fullName" className="text-gray-700">
-            Full Name
-          </Label>
+    <form action={formAction} className="p-6 md:p-10 space-y-6">
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor="fullName">Full Name</Label>
+        <div className="relative">
+          <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
           <Input
             id="fullName"
-            placeholder="Enter your full name"
-            className="mt-1.5 h-11"
-            {...register("fullName")}
+            name="fullName"
+            placeholder="e.g. Rahul Islam"
+            defaultValue={state.inputs?.fullName}
+            className={`pl-12 h-12 border-gray-300 focus:border-primary focus:ring-primary ${
+              state.errors?.fullName
+                ? "border-red-500 focus-visible:ring-red-500"
+                : ""
+            }`}
           />
-          {errors.fullName && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.fullName.message}
-            </p>
-          )}
         </div>
+        {state.errors?.fullName && (
+          <p className="text-sm text-red-500 mt-1">
+            {state.errors.fullName[0]}
+          </p>
+        )}
+      </div>
 
-        <div>
-          <Label htmlFor="email" className="text-gray-700">
-            Email Address
-          </Label>
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor="email">Email Address</Label>
+        <div className="relative">
+          <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
           <Input
             id="email"
+            name="email"
             type="email"
-            placeholder="your.email@example.com"
-            className="mt-1.5 h-11"
-            {...register("email")}
+            placeholder="name@example.com"
+            defaultValue={state.inputs?.email}
+            className={`pl-12 h-12 border-gray-300 focus:border-primary focus:ring-primary ${
+              state.errors?.email
+                ? "border-red-500 focus-visible:ring-red-500"
+                : ""
+            }`}
           />
-          {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-          )}
         </div>
+        {state.errors?.email && (
+          <p className="text-sm text-red-500 mt-1">{state.errors.email[0]}</p>
+        )}
+      </div>
 
-        <div>
-          <Label htmlFor="phone" className="text-gray-700">
-            Phone Number
-          </Label>
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor="phone">Phone Number</Label>
+        <div className="relative">
+          <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
           <Input
             id="phone"
-            placeholder="+880 1X XXX XXXX"
-            className="mt-1.5 h-11"
-            {...register("phone")}
+            name="phone"
+            placeholder="01XXXXXXXXX"
+            defaultValue={state.inputs?.phone}
+            className={`pl-12 h-12 border-gray-300 focus:border-primary focus:ring-primary ${
+              state.errors?.phone
+                ? "border-red-500 focus-visible:ring-red-500"
+                : ""
+            }`}
           />
-          {errors.phone && (
-            <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
-          )}
         </div>
+        {state.errors?.phone && (
+          <p className="text-sm text-red-500 mt-1">{state.errors.phone[0]}</p>
+        )}
+      </div>
 
-        <div>
-          <Label htmlFor="description" className="text-gray-700">
-            Description
-          </Label>
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor="description">Message/Description</Label>
+        <div className="relative">
+          <MessageSquare className="absolute left-4 top-4 w-5 h-5 text-gray-400" />
           <Textarea
             id="description"
-            placeholder="Tell us how we can help you..."
+            name="description"
+            placeholder="How can we help you?"
             rows={4}
-            className="mt-1.5 resize-none"
-            {...register("description")}
+            defaultValue={state.inputs?.description}
+            className={`pl-12 pt-3 border-gray-300 focus:border-primary focus:ring-primary resize-none ${
+              state.errors?.description
+                ? "border-red-500 focus-visible:ring-red-500"
+                : ""
+            }`}
           />
-          {errors.description && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.description.message}
-            </p>
-          )}
         </div>
+        {state.errors?.description && (
+          <p className="text-sm text-red-500 mt-1">
+            {state.errors.description[0]}
+          </p>
+        )}
+      </div>
 
-        <Button
-          type="submit"
-          className="w-full h-12 bg-primary cursor-pointer text-white font-medium mt-2"
-        >
-          Submit
-        </Button>
-      </form>
-    </div>
+      <Button
+        type="submit"
+        className="w-full h-12 text-base font-bold bg-primary hover:bg-blue-700 cursor-pointer shadow-lg shadow-primary/20"
+        disabled={isPending}
+      >
+        {isPending ? "Sending Message..." : "Send Message"}
+      </Button>
+    </form>
   );
 };
 
