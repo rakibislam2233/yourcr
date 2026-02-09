@@ -61,12 +61,12 @@ const Navbar: React.FC = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-3">
-            {navLinks.map((link) => (
+            {navLinks?.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "relative px-4 py-2 rounded-md text-sm font-medium transition-all duration-200",
+                  "relative px-5 py-2 rounded-lg text-sm font-medium transition-all duration-200",
                   {
                     "bg-primary text-white": isActiveLink(link.href),
                     "text-gray-700 hover:bg-gray-100": !isActiveLink(link.href),

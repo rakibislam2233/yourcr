@@ -43,6 +43,7 @@ export const registrationSchema = z.object({
   section: z.string().min(1, "Section is required"),
   classRoll: z.string().min(1, "Class roll is required"),
   crPosition: z.string().min(1, "CR position is required"),
+  studentIdCard: z.any().optional(),
 });
 
 export type RegistrationValues = z.infer<typeof registrationSchema>;

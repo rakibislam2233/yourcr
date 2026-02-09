@@ -20,12 +20,16 @@ import {
   CheckCircle2,
   Eye,
   EyeOff,
+  FileText,
   Lock,
   Mail,
   Phone,
   School,
+  UploadCloud,
   User,
+  X,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, {
@@ -38,10 +42,11 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 // --- Types & Constants ---
-export enum RegistrationStep {
+enum RegistrationStep {
   PERSONAL_INFO = 1,
   INSTITUTION_INFO = 2,
-  CR_DETAILS = 3,
+  BATCH_INFO = 3,
+  DOCUMENT_PROOF = 4,
 }
 
 interface StepInfo {
@@ -55,20 +60,26 @@ const STEPS: StepInfo[] = [
   {
     id: RegistrationStep.PERSONAL_INFO,
     title: "Personal",
-    description: "Basic info",
+    description: "Information",
     icon: <User className="w-4 h-4" />,
   },
   {
     id: RegistrationStep.INSTITUTION_INFO,
     title: "Institution",
-    description: "School & Type",
+    description: "Information",
     icon: <School className="w-4 h-4" />,
   },
   {
-    id: RegistrationStep.CR_DETAILS,
-    title: "CR Role",
-    description: "Class details",
+    id: RegistrationStep.BATCH_INFO,
+    title: "Academic",
+    description: "Information",
     icon: <Badge className="w-4 h-4" />,
+  },
+  {
+    id: RegistrationStep.DOCUMENT_PROOF,
+    title: "Document",
+    description: "Proof",
+    icon: <FileText className="w-4 h-4" />,
   },
 ];
 
@@ -85,6 +96,8 @@ const CrRegisterForm = () => {
   );
   const [showPassword, setShowPassword] = useState(false);
   const [isPendingTransitions, startTransition] = useTransition();
+  const [idCardPreview, setIdCardPreview] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const [state, formAction, isPendingAction] = useActionState(
     registerCr,
@@ -139,24 +152,36 @@ const CrRegisterForm = () => {
         "department",
         "district",
       ]);
-    } else if (currentStep === RegistrationStep.CR_DETAILS) {
+    } else if (currentStep === RegistrationStep.BATCH_INFO) {
       isValid = await trigger([
         "batchSession",
         "section",
         "classRoll",
         "crPosition",
       ]);
+    } else if (currentStep === RegistrationStep.DOCUMENT_PROOF) {
+      if (!selectedFile) {
+        toast.error("Please upload your student ID card image");
+        return;
+      }
+      isValid = true;
     }
 
     if (isValid) {
-      if (currentStep < RegistrationStep.CR_DETAILS) {
+      if (currentStep < RegistrationStep.DOCUMENT_PROOF) {
         setCurrentStep((prev) => (prev + 1) as RegistrationStep);
       } else {
         const data = getValues();
         const formData = new FormData();
-        Object.entries(data).forEach(([key, value]) =>
-          formData.append(key, value as string),
-        );
+        Object.entries(data).forEach(([key, value]) => {
+          if (value !== undefined && value !== null) {
+            formData.append(key, value as string);
+          }
+        });
+
+        if (selectedFile) {
+          formData.append("studentIdCard", selectedFile);
+        }
 
         startTransition(() => {
           formAction(formData);
@@ -169,6 +194,31 @@ const CrRegisterForm = () => {
     if (currentStep > RegistrationStep.PERSONAL_INFO) {
       setCurrentStep((prev) => (prev - 1) as RegistrationStep);
     }
+  };
+
+  const handleFileSelect = (file: File) => {
+    if (file && file.type.startsWith("image/")) {
+      setSelectedFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setIdCardPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      toast.error("Please select a valid image file");
+    }
+  };
+
+  const onDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const onDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const file = e.dataTransfer.files[0];
+    if (file) handleFileSelect(file);
   };
 
   return (
@@ -198,7 +248,7 @@ const CrRegisterForm = () => {
                   )}
                 </div>
                 <span
-                  className={`text-xs font-bold ${isActive ? "text-primary" : "text-gray-400"}`}
+                  className={`text-[10px] sm:text-xs font-bold ${isActive ? "text-primary" : "text-gray-400"}`}
                 >
                   {step.title}
                 </span>
@@ -385,8 +435,8 @@ const CrRegisterForm = () => {
           </div>
         )}
 
-        {/* Step 3: CR Details */}
-        {currentStep === RegistrationStep.CR_DETAILS && (
+        {/* Step 3: Batch Info */}
+        {currentStep === RegistrationStep.BATCH_INFO && (
           <div className="animate-in fade-in slide-in-from-right-4 duration-300 space-y-6">
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
@@ -458,6 +508,70 @@ const CrRegisterForm = () => {
             </div>
           </div>
         )}
+
+        {/* Step 4: Document Proof */}
+        {currentStep === RegistrationStep.DOCUMENT_PROOF && (
+          <div className="animate-in fade-in slide-in-from-right-4 duration-300 space-y-6">
+            <div className="space-y-4">
+              <Label>Student ID Card (Front Image)</Label>
+              {!idCardPreview ? (
+                <div
+                  onDragOver={onDragOver}
+                  onDrop={onDrop}
+                  className="relative group border-2 border-dashed border-gray-300 rounded-2xl p-10 flex flex-col items-center justify-center gap-4 transition-all hover:border-primary hover:bg-primary/5 cursor-pointer"
+                  onClick={() =>
+                    document.getElementById("file-upload")?.click()
+                  }
+                >
+                  <div className="size-16 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
+                    <UploadCloud className="size-8" />
+                  </div>
+                  <div className="text-center">
+                    <p className="text-base font-semibold text-gray-900">
+                      Click or drag & drop to upload
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      PNG, JPG or JPEG (Max. 5MB)
+                    </p>
+                  </div>
+                  <input
+                    id="file-upload"
+                    type="file"
+                    className="hidden"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleFileSelect(file);
+                    }}
+                  />
+                </div>
+              ) : (
+                <div className="relative rounded-2xl border border-gray-200 overflow-hidden bg-gray-50 aspect-video flex items-center justify-center">
+                  <Image
+                    src={idCardPreview}
+                    alt="ID Card Preview"
+                    fill
+                    className="object-contain p-2"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIdCardPreview(null);
+                      setSelectedFile(null);
+                    }}
+                    className="absolute top-4 right-4 p-2 bg-white/80 backdrop-blur-sm rounded-full text-red-500 hover:bg-red-50 transition-colors shadow-sm"
+                  >
+                    <X className="size-5" />
+                  </button>
+                </div>
+              )}
+              <p className="text-[10px] text-gray-500 italic">
+                * This document is only used for verification purposes and will
+                not be shared publically.
+              </p>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Navigation */}
@@ -480,12 +594,12 @@ const CrRegisterForm = () => {
           className="flex-1 h-12 text-base font-bold bg-primary hover:bg-blue-700 cursor-pointer shadow-lg shadow-primary/20"
           disabled={isPending}
         >
-          {currentStep === RegistrationStep.CR_DETAILS
+          {currentStep === RegistrationStep.DOCUMENT_PROOF
             ? isPending
               ? "Registering..."
               : "Finish Registration"
             : "Continue"}
-          {currentStep !== RegistrationStep.CR_DETAILS && (
+          {currentStep !== RegistrationStep.DOCUMENT_PROOF && (
             <ArrowRight className="w-4 h-4 ml-2" />
           )}
         </Button>

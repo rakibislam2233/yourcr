@@ -4,6 +4,7 @@
 import {
   forgotPasswordSchema,
   loginSchema,
+  registrationSchema,
   resetPasswordSchema,
   verifyOtpSchema,
 } from "@/lib/auth-schemas";
@@ -55,8 +56,20 @@ export async function registerCr(
   formData: FormData,
 ): Promise<ActionState> {
   const values = Object.fromEntries(formData.entries());
+
+  // Basic validation for non-file fields
+  const parsed = registrationSchema.safeParse(values);
+  if (!parsed.success) {
+    return {
+      success: false,
+      message: "Please fill all required fields correctly",
+      errors: parsed.error.flatten().fieldErrors,
+      inputs: values,
+    };
+  }
+
   try {
-    const res = await api.post("/auth/register-cr", values);
+    const res = await api.post("/auth/register-cr", formData);
     return {
       success: true,
       message: "Registration successful!",
