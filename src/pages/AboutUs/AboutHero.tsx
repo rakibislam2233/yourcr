@@ -1,50 +1,42 @@
-
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
 const AboutHero = () => {
   return (
-    <section className="relative px-5 py-12 md:py-24  flex justify-center">
-      <div className="w-full container mx-auto">
-        <div className="flex flex-col-reverse lg:flex-row gap-10 lg:gap-16 items-center">
-          {/* Text Content */}
-          <div className="flex flex-col gap-6 flex-1 text-center lg:text-left">
-            <div className="inline-flex self-center lg:self-start items-center gap-2 rounded-full border border-[#e9e8ce] dark:border-[#3a392a] bg-white dark:bg-[#2a291a] px-3 py-1">
-              <span className="size-2 rounded-full bg-primary"></span>
-              <span className="text-xs font-medium text-[#1c1c0d] dark:text-white">
-                About Us
-              </span>
-            </div>
-
-            <h1 className="text-4xl lg:text-6xl  leading-tight tracking-[-0.033em]">
-              Empowering Classrooms,{" "}
-              <span className="relative whitespace-nowrap">
-                Connecting Campus
-              </span>
+    <section className="relative pt-24 pb-20 md:pt-32 md:pb-32 overflow-hidden">
+      <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-primary/5 pointer-events-none" />
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="flex flex-col lg:flex-row items-center gap-12">
+          <div className="flex-1 text-left space-y-8">
+            <h1 className="text-5xl md:text-6xl font-semibold leading-tight tracking-tight text-secondary">
+              Bridging the Gap Between{" "}
+              <span className="text-primary">Students</span> and Faculty
             </h1>
-
-            <p className="text-base lg:text-lg text-[#1c1c0d]/70 dark:text-white/70 max-w-[600px] mx-auto lg:mx-0">
-              Your CR is bridging the gap between students, Class
-              Representatives, and administration through seamless, democratized
-              digital communication.
+            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-2xl">
+              Your CR is the ultimate digital bridge, empowering Class
+              Representatives with centralized tools to streamline communication
+              and academic leadership.
             </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
-              <button className="flex items-center justify-center rounded-full h-12 px-8 bg-primary cursor-pointer text-white">
-                Join Your CR
-              </button>
-              <button className="flex items-center justify-center rounded-full h-12 px-8 bg-transparent border border-[#e9e8ce] dark:border-[#4a493a] text-[#1c1c0d] dark:text-white text-base font-bold hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer">
-                Meet the Team
-              </button>
+            <div className="flex flex-wrap gap-4">
+              <Button className="px-8 py-4 h-12 cursor-pointer">
+                Get Started Now
+              </Button>
+              <Button
+                variant="outline"
+                className="px-8 py-4 h-12 cursor-pointer"
+              >
+                Learn More
+              </Button>
             </div>
           </div>
-
-          {/* Image */}
-          <div className="w-full lg:w-1/2 flex justify-center lg:justify-end">
-            <div className="relative w-full aspect-square max-w-[450px] rounded-full overflow-hidden border-8 border-white dark:border-[#2a291a] shadow-2xl">
-              <div
-                className="w-full h-full bg-center bg-cover"
-                style={{
-                  backgroundImage:
-                    "url('https://lh3.googleusercontent.com/aida-public/AB6AXuB8TiGDwem70N1lMrJXe9knVkFKv2auy4hLhoIWg6Niu_HJe7kac2IgLfUUln8mHGN069tLp-kAG3kUWN8kC_g8LIqxKHkNo05pRDga1hZqHWB1YrEpVMDyXf3QEX8QkdxTL3V83OCaVSmTb36XvuKKigGbdUeSuW6tskfBcyi3drFeBJz-qZLTFGHGni8Xk1qq5pAnr46qWcMIC6BslUhoiNKM-08tvXXb04495zVgqlpt6g43addCTp1twOTd0zIfe_87ZUCmz20')",
-                }}
+          <div className="flex-1 w-full max-w-2xl">
+            <div className="relative p-1 border border-primary/10 rounded-lg bg-white">
+              <Image
+                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+                alt="Students collaborating"
+                width={800}
+                height={600}
+                className="rounded-lg object-cover w-full aspect-4/3"
+                priority
               />
             </div>
           </div>

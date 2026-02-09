@@ -1,56 +1,70 @@
-import { Bell } from "lucide-react";
+import { MessageSquare, School, Users } from "lucide-react";
 
 const WhyChooseAbout = () => {
   const reasons = [
     {
-      icon: <Bell />,
-      title: "Real-time Notices",
-      desc: "Never miss a lecture update or exam schedule change with instant, push-notification enabled alerts directly from your CR.",
+      title: "For Class Representatives",
+      description:
+        "Manage tasks effortlessly, organize real-time polls, and distribute materials with precision and speed.",
+      icon: Users,
+      color: "bg-blue-100/50",
+      textColor: "text-blue-700",
     },
     {
-      icon: "rate_review",
-      title: "Anonymous Feedback",
-      desc: "A safe space for students to voice concerns. Democratized classroom decisions with anonymous inputs and voting systems.",
+      title: "For Students",
+      description:
+        "Centralized notifications and automated calendars ensure you never miss a deadline or an important announcement.",
+      icon: School,
+      color: "bg-purple-100/50",
+      textColor: "text-purple-700",
     },
     {
-      icon: "poll",
-      title: "Event Polls",
-      desc: "Direct line to faculty and simplified event planning. Create polls for dates, venues, or topics in seconds.",
+      title: "For Faculty Members",
+      description:
+        "Instantly broadcast updates to entire batches, ensuring critical information reaches every student without delay.",
+      icon: MessageSquare,
+      color: "bg-emerald-100/50",
+      textColor: "text-emerald-700",
     },
   ];
 
   return (
-    <section className="w-full px-5 py-16 lg:py-24">
-      <div className="container mx-auto flex flex-col gap-12">
-        <div className="flex flex-col md:flex-row justify-between items-end gap-6 border-b border-[#e9e8ce] dark:border-[#3a392a] pb-8">
-          <h2 className="text-3xl lg:text-4xl font-bold leading-tight max-w-lg">
-            Why universities and students choose Your CR?
-          </h2>
-          <a
-            className="text-sm font-bold border-b-2 border-primary pb-1 hover:text-primary/80 transition-colors"
-            href="#"
-          >
-            View all features
-          </a>
-        </div>
+    <section className="py-24 bg-muted/30">
+      <div className="container mx-auto px-6">
+        <div className="flex flex-col lg:flex-row gap-16 items-start">
+          <div className="lg:w-1/3 space-y-6 lg:sticky lg:top-32">
+            <h2 className="text-4xl font-bold text-secondary">
+              Why <span className="text-primary">Your CR?</span>
+            </h2>
+            <p className="text-muted-foreground">
+              We&apos;ve built a platform that understands the unique needs of
+              every stakeholder in the academic journey.
+            </p>
+            <div className="h-1 w-24 bg-primary" />
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {reasons.map((item) => (
-            <div
-              key={item.title}
-              className="bg-background-light dark:bg-[#23220f] p-8 rounded-lg"
-            >
-              <div className="mb-4 text-[#1c1c0d] dark:text-primary">
-                <span className="material-symbols-outlined text-5xl">
-                  {item.icon}
-                </span>
+          <div className="lg:w-2/3 grid gap-6">
+            {reasons?.map((item, idx) => (
+              <div
+                key={idx}
+                className="flex gap-6 p-8 bg-white border border-border rounded-lg items-start"
+              >
+                <div
+                  className={`p-4 rounded-lg ${item.color} ${item.textColor} shrink-0`}
+                >
+                  <item.icon className="size-6" />
+                </div>
+                <div className="space-y-2">
+                  <h4 className="text-xl font-bold text-secondary">
+                    {item.title}
+                  </h4>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {item.description}
+                  </p>
+                </div>
               </div>
-              <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-              <p className="text-sm text-[#1c1c0d]/70 dark:text-white/70 leading-relaxed">
-                {item.desc}
-              </p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>
