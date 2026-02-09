@@ -19,10 +19,10 @@ import {
   Shield,
   User,
 } from "lucide-react";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import PageHeader from "../shared/PageHeader";
-import Image from "next/image";
 
 const MyProfile: React.FC = () => {
   const { user, loading, refreshProfile } = useUser();
@@ -265,7 +265,11 @@ const MyProfile: React.FC = () => {
                   System ID / Roll
                 </Label>
                 <Input
-                  defaultValue={user?.id?.slice(-8).toUpperCase() || "ST-ID"}
+                  defaultValue={
+                    user?.studentRoll ||
+                    user?.id?.slice(-8).toUpperCase() ||
+                    "ST-ID"
+                  }
                   disabled
                   className="h-11 border-gray-100 bg-gray-50/50 text-gray-400 rounded-md font-bold uppercase tracking-widest"
                 />

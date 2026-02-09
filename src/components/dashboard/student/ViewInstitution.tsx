@@ -1,6 +1,6 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
+import { useUser } from "@/providers/UserProvider";
 import { motion } from "framer-motion";
 import {
   Building2,
@@ -16,30 +16,40 @@ import {
 import React from "react";
 import PageHeader from "../shared/PageHeader";
 
-const institutionData = {
-  name: "Dhaka Polytechnic Institute",
-  shortName: "DPI",
-  type: "Polytechnic Institute",
-  establishedYear: 1955,
-  address: "Tejgaon Industrial Area, Dhaka-1208, Bangladesh",
-  phone: "+880-2-8870553",
-  email: "info@dpi.gov.bd",
-  website: "www.dpi.gov.bd",
-  totalStudents: 5000,
-  totalDepartments: 12,
-};
-
-const yourInfo = {
-  department: "Computer Technology",
-  semester: "8th Semester",
-  session: "2020-2024",
-  shift: "1st Shift",
-  group: "A",
-  roll: "CT-8001",
-  cr: "Rakib Ahmed",
-};
-
 const ViewInstitution: React.FC = () => {
+  const { user, loading } = useUser();
+
+  const institutionData = {
+    name: user?.institution?.name || "N/A",
+    shortName: user?.institution?.shortName || "N/A",
+    type: user?.institution?.type || "Polytechnic Institute",
+    establishedYear: user?.institution?.establishedYear || "N/A",
+    address: user?.institution?.address || "N/A",
+    phone: user?.institution?.phoneNumber || "N/A",
+    email: user?.institution?.email || "N/A",
+    website: user?.institution?.website || "N/A",
+    totalStudents: 5000,
+    totalDepartments: 12,
+  };
+
+  const yourInfo = {
+    department: user?.currentBatch?.department || "N/A",
+    semester: user?.currentBatch?.semester || "N/A",
+    session: user?.currentBatch?.session || "N/A",
+    shift: "1st Shift", // Placeholder
+    group: "A", // Placeholder
+    roll: user?.studentRoll || "N/A",
+    cr: "Institution Admin", // Placeholder
+  };
+
+  if (loading) {
+    return (
+      <div className="p-8 text-center text-gray-500">
+        Loading institute details...
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -72,14 +82,24 @@ const ViewInstitution: React.FC = () => {
               </div>
             </div>
           </div>
-          <Button
-            variant="secondary"
-            className="gap-2 bg-white/20 hover:bg-white/30 text-white border-0"
+          <a
+            href={
+              institutionData.website.startsWith("http")
+                ? institutionData.website
+                : `https://${institutionData.website}`
+            }
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            <Globe className="w-4 h-4" />
-            Visit Website
-            <ExternalLink className="w-3 h-3" />
-          </Button>
+            <Button
+              variant="secondary"
+              className="gap-2 bg-white/20 hover:bg-white/30 text-white border-0"
+            >
+              <Globe className="w-4 h-4" />
+              Visit Website
+              <ExternalLink className="w-3 h-3" />
+            </Button>
+          </a>
         </div>
       </motion.div>
 
@@ -138,9 +158,7 @@ const ViewInstitution: React.FC = () => {
         </motion.div>
 
         {/* Your Information */}
-        <motion.div
-          className="bg-white rounded-2xl p-6 border border-gray-100"
-        >
+        <motion.div className="bg-white rounded-2xl p-6 border border-gray-100">
           <h3 className="text-lg font-semibold text-gray-900 mb-6">
             Your Information
           </h3>
@@ -182,8 +200,10 @@ const ViewInstitution: React.FC = () => {
               </p>
             </div>
             <div className="p-4 bg-primary/5 rounded-xl col-span-2 border border-primary/20">
-              <p className="text-sm text-gray-500">Class Representative</p>
-              <p className="font-semibold text-primary mt-1">{yourInfo.cr}</p>
+              <p className="text-sm text-gray-500">Account Type</p>
+              <p className="font-semibold text-primary mt-1">
+                {user?.role || "Student"}
+              </p>
             </div>
           </div>
         </motion.div>

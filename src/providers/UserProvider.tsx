@@ -6,12 +6,16 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 interface Institution {
   id: string;
   name: string;
+  shortName?: string;
   type: string;
   logo: string | null;
+  email?: string;
+  phoneNumber?: string;
   contactEmail: string;
   contactPhone: string;
   website: string | null;
   address: string;
+  establishedYear?: string | number;
   isVerified: boolean;
   createdAt: string;
   updatedAt: string;
@@ -24,6 +28,8 @@ interface Batch {
   batchType: string;
   department: string;
   academicYear: string;
+  semester?: string;
+  session?: string;
   isActive: boolean;
   isArchived: boolean;
   createdBy: string;
@@ -40,6 +46,7 @@ interface UserProfile {
   status: string;
   role: string;
   isCr: boolean;
+  studentRoll?: string;
   institutionId: string;
   currentBatchId: string;
   createdAt: string;
