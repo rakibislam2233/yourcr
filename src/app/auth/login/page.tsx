@@ -1,7 +1,7 @@
-import Image from "next/image";
-import Link from "next/link";
 import logo from "@/assets/logo/logo.png";
 import LoginForm from "@/pages/Auth/LoginForm";
+import Image from "next/image";
+import Link from "next/link";
 
 const page = () => {
   return (
@@ -38,7 +38,7 @@ const page = () => {
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage:
-              "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDLYl09oDE2LgEJgY4KIYIYdKPW0DqiVOZDwItZuu8c1kMJ5redYr3jKiTa8Cg9o6Rc1sV0eW1qwQ66piZkF2bCxAX298Na4aSdDC4F1ec-yVR1gYDHX8ESVP1R9k0LI5egwNTRBEJwd8ptKc_0FMv_OL5lBvehCMeEU-70zFTQvpoYCsB-SIN6BwXBWZ3YPINx57rJzYSgUJv6NrXzrrFU2jHZIjjt9xWkBVEeTSx_2iopnWMsQB7M1NAC4tSHH78jZEGRUd3Yh0M')",
+              "url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200&auto=format&fit=crop')",
           }}
         />
 

@@ -44,7 +44,7 @@ const ResetPasswordPage = () => {
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1663162550974-aaf76bcdeedf')",
+              "url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1200&auto=format&fit=crop')",
           }}
         />
         <div className="absolute inset-0 bg-gray-900 opacity-40 mix-blend-multiply z-10"></div>

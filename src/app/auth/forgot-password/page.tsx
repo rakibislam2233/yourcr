@@ -39,7 +39,7 @@ const ForgotPasswordPage = () => {
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1571260899304-425eee4c7efc')",
+              "url('https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=1200&auto=format&fit=crop')",
           }}
         />
         <div className="absolute inset-0 bg-gray-900 opacity-40 mix-blend-multiply z-10"></div>

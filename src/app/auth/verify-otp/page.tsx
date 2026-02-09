@@ -39,7 +39,7 @@ const VerifyOtpPage = () => {
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1523240795612-9a054b0db644')",
+              "url('https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=1200&auto=format&fit=crop')",
           }}
         />
         <div className="absolute inset-0 bg-gray-900 opacity-40 mix-blend-multiply z-10"></div>

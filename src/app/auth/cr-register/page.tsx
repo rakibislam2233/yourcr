@@ -38,7 +38,7 @@ const CrRegisterPage = () => {
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1523050335102-c62f270a312e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')",
+              "url('https://images.unsplash.com/photo-1523580494863-6f3031224c94?q=80&w=1200&auto=format&fit=crop')",
           }}
         />
         <div className="absolute inset-0 bg-gray-900 opacity-40 mix-blend-multiply z-10"></div>
