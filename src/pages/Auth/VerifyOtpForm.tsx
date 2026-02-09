@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { verifyOtp } from "@/services/auth.service";
 import { useRouter } from "next/navigation";
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 const initialState = {

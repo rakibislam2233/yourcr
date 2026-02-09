@@ -16,11 +16,6 @@ const serverFetchHelper = async (
   const { headers, ...restOptions } = options;
   const accessToken = await getCookie("accessToken");
 
-  //to stop recursion loop
-  if (endpoint !== "/auth/refresh-token") {
-    await getNewAccessToken();
-  }
-
   const requestHeaders: Record<string, string> = {
     "Content-Type": "application/json",
     ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
@@ -38,7 +33,24 @@ const serverFetchHelper = async (
   };
 
   try {
-    const response = await fetch(`${BACKEND_API_URL}${endpoint}`, config);
+    let response = await fetch(`${BACKEND_API_URL}${endpoint}`, config);
+    if (
+      response.status === 401 &&
+      endpoint !== "/auth/login" &&
+      endpoint !== "/auth/refresh-token"
+    ) {
+      try {
+        const refreshResult = await getNewAccessToken();
+        if (refreshResult.success) {
+          const newAccessToken = await getCookie("accessToken");
+          (config.headers as Record<string, string>)["Authorization"] =
+            `Bearer ${newAccessToken}`;
+          response = await fetch(`${BACKEND_API_URL}${endpoint}`, config);
+        }
+      } catch (refreshError) {
+        console.error("Token refresh failed", refreshError);
+      }
+    }
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));

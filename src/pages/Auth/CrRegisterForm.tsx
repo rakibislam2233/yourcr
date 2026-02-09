@@ -1,20 +1,20 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { registerCr } from "@/services/auth.service";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 import StepIndicator from "./StepIndicator";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react";
 interface ActionState {
   success: boolean;
   message: string;
   errors?: Record<string, string[]>;
   inputs?: Record<string, string | number | boolean | undefined | null>;
+  timestamp?: number;
 }
 
 const initialState: ActionState = {
@@ -33,14 +33,20 @@ const CrRegisterForm = () => {
     initialState,
   );
 
+  const [lastActionTimestamp, setLastActionTimestamp] = useState<number>(0);
+
   useEffect(() => {
-    if (state.success) {
-      toast.success(state.message);
-      router.push(`/auth/cr-register/verify-email`);
-    } else if (state.message && !state.errors) {
-      toast.error(state.message);
+    if (state.timestamp && state.timestamp > lastActionTimestamp) {
+      setLastActionTimestamp(state.timestamp);
+
+      if (state.success) {
+        toast.success(state.message);
+        router.push(`/auth/cr-register/verify-email`);
+      } else if (state.message && !state.errors) {
+        toast.error(state.message);
+      }
     }
-  }, [state, router]);
+  }, [state, router, lastActionTimestamp]);
 
   return (
     <div className="w-full space-y-8">

@@ -3,51 +3,45 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { loginSchema } from "@/validation/auth.validation";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { loginUser } from "@/services/auth.service";
+import { getDefaultDashboardRoute } from "@/utils/auth-utils";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { getDefaultDashboardRoute } from "@/utils/auth-utils";
-import { loginUser } from "@/services/auth.service";
 
-type LoginFormValues = z.infer<typeof loginSchema>;
+const initialState = {
+  success: false,
+  message: "",
+  inputs: {
+    email: "",
+    password: "",
+  },
+};
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const router = useRouter();
   const searchParams = useSearchParams();
-  
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-    setError,
-  } = useForm<LoginFormValues>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
 
-  const onSubmit = async (data: LoginFormValues) => {
-    try {
-      const formData = new FormData();
-      formData.append("email", data.email);
-      formData.append("password", data.password);
-      
-      const result = await loginUser({ success: false, message: "", inputs: {} }, formData);
-      
-      if (result.success) {
-        toast.success(result.message);
+  const [state, formAction, isPending] = useActionState(
+    loginUser,
+    initialState,
+  );
 
-        const loginData = result.data;
-        const callbackUrl = searchParams.get("redirect");
+  const [lastActionTimestamp, setLastActionTimestamp] = useState<number>(0);
+
+  useEffect(() => {
+    // Check if we have a new action result to process
+    if (state.timestamp && state.timestamp > lastActionTimestamp) {
+      setLastActionTimestamp(state.timestamp);
+
+      if (state.success) {
+        toast.success(state.message);
+
+        const loginData = state.data;
+        const callbackUrl = searchParams?.get("redirect");
 
         // 1. If backend explicitly asked for a redirect (Verification, Completion, Pending)
         if (loginData?.redirect) {
@@ -66,42 +60,34 @@ const LoginForm = () => {
         if (userRole) {
           router.push(getDefaultDashboardRoute(userRole));
         } else {
-          router.push("/"); // If no role, go to home or keep at login
+          router.push("/");
         }
-      } else {
-        if (result.errors) {
-          Object.keys(result.errors).forEach((field) => {
-            setError(field as keyof LoginFormValues, {
-              type: "server",
-              message: result.errors![field][0],
-            });
-          });
-        } else if (result.message) {
-          toast.error(result.message);
-        }
+      } else if (state.message && !state.errors) {
+        toast.error(state.message);
       }
-    } catch (error) {
-      toast.error("An unexpected error occurred");
     }
-  };
+  }, [state, router, searchParams, lastActionTimestamp]);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form action={formAction} className="space-y-6">
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="email">Email</Label>
         <div className="relative">
           <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
           <Input
             id="email"
-            {...register("email")}
+            name="email"
             placeholder="name@example.com"
+            defaultValue={state.inputs?.email}
             className={`pl-12 h-12 text-base border-gray-300 focus:border-primary focus:ring-primary ${
-              errors.email ? "border-red-500 focus-visible:ring-red-500" : ""
+              state.errors?.email
+                ? "border-red-500 focus-visible:ring-red-500"
+                : ""
             }`}
           />
         </div>
-        {errors.email && (
-          <p className="text-sm text-red-500">{errors.email.message}</p>
+        {state.errors?.email && (
+          <p className="text-sm text-red-500">{state.errors.email[0]}</p>
         )}
       </div>
 
@@ -111,11 +97,14 @@ const LoginForm = () => {
           <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
           <Input
             id="password"
-            {...register("password")}
+            name="password"
             type={showPassword ? "text" : "password"}
             placeholder="••••••••"
+            defaultValue={state.inputs?.password}
             className={`pl-12 h-12 text-base border-gray-300 focus:border-primary focus:ring-primary ${
-              errors.password ? "border-red-500 focus-visible:ring-red-500" : ""
+              state.errors?.password
+                ? "border-red-500 focus-visible:ring-red-500"
+                : ""
             }`}
           />
           <button
@@ -131,14 +120,14 @@ const LoginForm = () => {
           </button>
         </div>
 
-        {errors.password && (
-          <p className="text-sm text-red-500">{errors.password.message}</p>
+        {state.errors?.password && (
+          <p className="text-sm text-red-500">{state.errors.password[0]}</p>
         )}
       </div>
 
       <div className="flex items-center justify-between py-2">
         <div className="flex items-center space-x-2">
-          <Checkbox id="remember" {...register("remember")} />
+          <Checkbox id="remember" name="remember" />
           <Label
             htmlFor="remember"
             className="text-sm font-medium text-gray-700 cursor-pointer"
@@ -157,9 +146,9 @@ const LoginForm = () => {
       <Button
         type="submit"
         className="w-full h-12 text-base font-bold bg-primary hover:bg-blue-700 cursor-pointer"
-        disabled={isSubmitting}
+        disabled={isPending}
       >
-        {isSubmitting ? "Signing in..." : "Sign in"}
+        {isPending ? "Signing in..." : "Sign in"}
       </Button>
     </form>
   );

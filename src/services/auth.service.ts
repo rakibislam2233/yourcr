@@ -11,12 +11,13 @@ import {
 } from "@/validation/auth.validation";
 import { cookies } from "next/headers";
 
-type ActionState = {
+export type ActionState = {
   success: boolean;
   message: string;
   errors?: Record<string, string[]>;
   inputs?: any;
   data?: any;
+  timestamp?: number;
 };
 
 // Helper to map backend paths to frontend routes
@@ -42,6 +43,7 @@ export async function loginUser(
       message: "Invalid fields",
       errors: parsed.error.flatten().fieldErrors,
       inputs: values,
+      timestamp: Date.now(),
     };
   }
 
@@ -53,7 +55,7 @@ export async function loginUser(
     if (loginData?.isEmailVerified === false) {
       if (loginData.sessionId) {
         await setCookie("sessionId", loginData.sessionId, {
-          secure: true,
+          secure: process.env.NODE_ENV === "production",
           httpOnly: true,
           maxAge: 3600,
           path: "/",
@@ -62,47 +64,52 @@ export async function loginUser(
       return {
         success: true,
         message: res.message || "Please verify your email.",
-        data: { redirect: mapRoute(loginData.redirect || "/verify-email") },
+        data: { redirect: "/auth/cr-register/verify-email" },
+        timestamp: Date.now(),
       };
     }
 
-    // 2. Handle Conditional Redirects (Profile completion, Pending, etc.)
-    if (loginData?.redirect) {
-      return {
-        success: true,
-        message: res.message,
-        data: { redirect: mapRoute(loginData.redirect) },
-      };
-    }
-
-    // 3. Normal Login Success - Cookies set only when no redirect is present
+    // 2. Save tokens if they exist (important for incomplete profiles that need to redirect)
     if (loginData?.tokens) {
+      const isProduction = process.env.NODE_ENV === "production";
       await setCookie("accessToken", loginData.tokens.accessToken, {
-        secure: true,
+        secure: isProduction,
         httpOnly: true,
         maxAge: 3600,
         path: "/",
       });
 
       await setCookie("refreshToken", loginData.tokens.refreshToken, {
-        secure: true,
+        secure: isProduction,
         httpOnly: true,
         maxAge: 3600 * 24 * 90,
         path: "/",
       });
     }
 
-    // 4. Final Success Case (The client-side component will handle the redirection)
+    // 3. Handle Profile Completion
+    if (loginData?.isRegistrationComplete === false) {
+      return {
+        success: true,
+        message: res.message,
+        data: { redirect: "/auth/cr-register/complete-profile" },
+        timestamp: Date.now(),
+      };
+    }
+
+    // 4. Final Success Case
     return {
       success: true,
-      message: "Login successful",
+      message: res.message,
       data: loginData,
+      timestamp: Date.now(),
     };
   } catch (error: any) {
     return {
       success: false,
       message: error.message || "Failed to login",
       inputs: values,
+      timestamp: Date.now(),
     };
   }
 }
@@ -155,12 +162,14 @@ export async function registerCr(
       success: true,
       message: res?.message,
       data: res,
+      timestamp: Date.now(),
     };
   } catch (error: any) {
     return {
       success: false,
       message: error.message || "Registration failed",
       inputs: values,
+      timestamp: Date.now(),
     };
   }
 }
@@ -204,6 +213,7 @@ export async function completeCrRegistration(
       success: true,
       message: "Registration completed! Waiting for admin approval.",
       data: res,
+      timestamp: Date.now(),
     };
   } catch (error: any) {
     console.error("Complete Profile Error:", error);
@@ -211,6 +221,7 @@ export async function completeCrRegistration(
       success: false,
       message: error.message || "Failed to complete registration",
       inputs: values,
+      timestamp: Date.now(),
     };
   }
 }
@@ -245,12 +256,18 @@ export async function forgotPassword(
       });
     }
 
-    return { success: true, message: "Reset link sent!", data: res };
+    return {
+      success: true,
+      message: "Reset link sent!",
+      data: res,
+      timestamp: Date.now(),
+    };
   } catch (error: any) {
     return {
       success: false,
       message: error.message || "Failed to send link",
       inputs: values,
+      timestamp: Date.now(),
     };
   }
 }
@@ -288,15 +305,16 @@ export async function verifyOtp(
 
     // If verification is successful, save tokens if they exist in the response
     if (res?.data?.tokens) {
+      const isProduction = process.env.NODE_ENV === "production";
       await setCookie("accessToken", res.data.tokens.accessToken, {
-        secure: true,
+        secure: isProduction,
         httpOnly: true,
         maxAge: 3600,
         path: "/",
       });
 
       await setCookie("refreshToken", res.data.tokens.refreshToken, {
-        secure: true,
+        secure: isProduction,
         httpOnly: true,
         maxAge: 3600 * 24 * 90,
         path: "/",
@@ -313,12 +331,14 @@ export async function verifyOtp(
         ...res?.data,
         redirect: res?.data?.redirect ? mapRoute(res.data.redirect) : undefined,
       },
+      timestamp: Date.now(),
     };
   } catch (error: any) {
     return {
       success: false,
       message: error.message || "Invalid OTP",
       inputs: values,
+      timestamp: Date.now(),
     };
   }
 }
@@ -340,6 +360,7 @@ export async function resetPassword(
       message: "Invalid password",
       errors: parsed.error.flatten().fieldErrors,
       inputs: values,
+      timestamp: Date.now(),
     };
   }
 
@@ -352,12 +373,14 @@ export async function resetPassword(
       success: true,
       message: "Password reset successful!",
       data: res,
+      timestamp: Date.now(),
     };
   } catch (error: any) {
     return {
       success: false,
       message: error.message || "Failed to reset password",
       inputs: values,
+      timestamp: Date.now(),
     };
   }
 }
@@ -378,20 +401,19 @@ export async function getNewAccessToken() {
       refreshToken: refreshToken,
     });
 
-    //delete old tokens
-    await deleteCookie("accessToken");
-    await deleteCookie("refreshToken");
-
+    const isProduction = process.env.NODE_ENV === "production";
     //set new tokens
     await setCookie("accessToken", res.data.accessToken, {
-      secure: true,
+      secure: isProduction,
       httpOnly: true,
       maxAge: 3600,
+      path: "/",
     });
     await setCookie("refreshToken", res.data.refreshToken, {
-      secure: true,
+      secure: isProduction,
       httpOnly: true,
-      maxAge: 3600,
+      maxAge: 3600 * 24 * 90,
+      path: "/",
     });
 
     return {
