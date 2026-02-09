@@ -235,7 +235,7 @@ const CrRegisterForm = () => {
                 <div
                   className={`size-10 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${
                     isActive
-                      ? "bg-primary border-primary text-white scale-110 shadow-lg shadow-primary/20"
+                      ? "bg-primary border-primary text-white scale-110 "
                       : isCompleted
                         ? "bg-green-500 border-green-500 text-white"
                         : "bg-white border-gray-200 text-gray-400"
@@ -591,7 +591,7 @@ const CrRegisterForm = () => {
         <Button
           type="button"
           onClick={handleContinue}
-          className="flex-1 h-12 text-base font-bold bg-primary hover:bg-blue-700 cursor-pointer shadow-lg shadow-primary/20"
+          className="flex-1 h-12 text-base font-bold bg-primary hover:bg-blue-700 cursor-pointer "
           disabled={isPending}
         >
           {currentStep === RegistrationStep.DOCUMENT_PROOF

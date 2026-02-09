@@ -131,7 +131,7 @@ const ContactUsForm = () => {
 
       <Button
         type="submit"
-        className="w-full h-12 text-base font-bold bg-primary hover:bg-blue-700 cursor-pointer shadow-lg shadow-primary/20"
+        className="w-full h-12 text-base font-bold bg-primary hover:bg-blue-700 cursor-pointer "
         disabled={isPending}
       >
         {isPending ? "Sending Message..." : "Send Message"}

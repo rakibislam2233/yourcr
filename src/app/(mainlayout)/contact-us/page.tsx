@@ -18,8 +18,8 @@ const page = () => {
       </div>
 
       {/* Main Form Section */}
-      <div className="w-full container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-2xl  border border-gray-100/80 overflow-hidden">
+      <div className="w-full container mx-auto px-4 sm:px-6">
+        <div className="bg-white rounded-lg border border-gray-100 overflow-hidden">
           <div className="grid md:grid-cols-2 gap-0">
             <Image
               src={contactUsImage}
