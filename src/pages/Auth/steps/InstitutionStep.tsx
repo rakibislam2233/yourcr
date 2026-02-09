@@ -58,7 +58,7 @@ const InstitutionStep: React.FC<InstitutionStepProps> = ({ state }) => {
           <Select value={institutionType} onValueChange={setInstitutionType}>
             <SelectTrigger
               id="institutionType"
-              className={`h-12 border-gray-300 ${state?.errors?.institutionType ? "border-red-500" : ""}`}
+              className={`h-12 text-base border-gray-300 ${state?.errors?.institutionType ? "border-red-500" : ""}`}
             >
               <SelectValue placeholder="Select type" />
             </SelectTrigger>

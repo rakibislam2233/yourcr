@@ -13,6 +13,8 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
 };
 
+import { Toaster } from "sonner";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -23,7 +25,10 @@ export default function RootLayout({
       <head>
         <meta name="google-adsense-account" content="ca-pub-1132020137464868" />
       </head>
-      <body className={`${mukta.className} antialiased`}>{children}</body>
+      <body className={`${mukta.className} antialiased`}>
+        {children}
+        <Toaster position="top-center" richColors />
+      </body>
     </html>
   );
 }

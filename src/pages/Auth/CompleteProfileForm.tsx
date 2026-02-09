@@ -43,6 +43,8 @@ const CompleteProfileFormContent = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isPendingTransitions, startTransition] = useTransition();
 
+  const [localErrors, setLocalErrors] = useState<Record<string, string[]>>({});
+
   const [state, formAction, isPendingAction] = useActionState(
     completeCrRegistration,
     initialState,
@@ -59,24 +61,41 @@ const CompleteProfileFormContent = () => {
   }, [state]);
 
   const validateLocalStep = (data: Record<string, unknown>) => {
-    const fieldsByStep: Record<number, string[]> = {
+    const fieldsByStep: Record<
+      number,
+      (keyof typeof registrationSchema.shape)[]
+    > = {
       1: ["institutionName", "institutionType", "department", "district"],
       2: ["batchSession", "section", "classRoll", "crPosition"],
     };
 
-    const fields = fieldsByStep[step];
-    if (!fields) return true;
+    const currentFields = fieldsByStep[step];
+    if (!currentFields) return true;
 
-    const stepSchema = registrationSchema.pick(
-      fields.reduce((acc, field) => ({ ...acc, [field]: true }), {}),
-    );
+    // Build the mask for picking fields
+    const mask = currentFields.reduce((acc, field) => {
+      acc[field] = true;
+      return acc;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    }, {} as any);
+
+    const stepSchema = registrationSchema.pick(mask);
 
     const result = stepSchema.safeParse(data);
     if (!result.success) {
-      const firstError = result.error.issues[0]?.message;
-      if (firstError) toast.error(firstError);
+      const formattedErrors: Record<string, string[]> = {};
+      result.error.issues.forEach((issue) => {
+        const path = issue.path[0] as string;
+        if (!formattedErrors[path]) {
+          formattedErrors[path] = [];
+        }
+        formattedErrors[path].push(issue.message);
+      });
+      setLocalErrors(formattedErrors);
       return false;
     }
+
+    setLocalErrors({});
     return true;
   };
 
@@ -89,6 +108,7 @@ const CompleteProfileFormContent = () => {
       if (!validateLocalStep(data)) return;
       setStep((prev) => prev + 1);
     } else {
+      setLocalErrors({});
       if (!selectedFile) {
         toast.error("Please upload your student ID card");
         return;
@@ -125,18 +145,17 @@ const CompleteProfileFormContent = () => {
   return (
     <div className="space-y-8 font-outfit">
       <StepIndicator currentStep={step + 2} />
-      <div className="mb-8 text-center text-gray-900 font-medium">
-        <h1 className="mb-2 text-3xl font-bold tracking-tight text-gray-900">
-          Complete Profile
-        </h1>
-        <p className="text-base text-gray-600">
-          Step {step + 2}: Provide your academic details and documents.
-        </p>
-      </div>
-
       <form ref={formRef}>
-        {step === 1 && <InstitutionStep state={state} />}
-        {step === 2 && <AcademicStep state={state} />}
+        {step === 1 && (
+          <InstitutionStep
+            state={{ ...state, errors: { ...state.errors, ...localErrors } }}
+          />
+        )}
+        {step === 2 && (
+          <AcademicStep
+            state={{ ...state, errors: { ...state.errors, ...localErrors } }}
+          />
+        )}
         {step === 3 && (
           <DocumentationStep
             idCardPreview={idCardPreview}

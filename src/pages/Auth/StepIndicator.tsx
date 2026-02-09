@@ -9,7 +9,7 @@ import {
 import React from "react";
 
 interface StepIndicatorProps {
-  currentStep: number; // 1: Personal, 2: Verify, 3: Institution, 4: Academic, 5: Document
+  currentStep: number;
 }
 
 const STEPS = [
@@ -23,14 +23,17 @@ const STEPS = [
 const StepIndicator: React.FC<StepIndicatorProps> = ({ currentStep }) => {
   return (
     <div className="relative mb-12 px-2">
-      {/* Background Line */}
-      <div className="absolute top-5 left-10 right-10 h-0.5 bg-gray-100 z-0" />
-
-      {/* Progress Line */}
-      <div
-        className="absolute top-5 left-10 h-0.5 bg-primary z-0 transition-all duration-700 ease-in-out"
-        style={{ width: `${((currentStep - 1) / (STEPS.length - 1)) * 100}%` }}
-      />
+      {/* Step Lines Container */}
+      <div className="absolute top-5 left-0 right-0 px-10 z-0">
+        <div className="relative h-0.5 w-full bg-gray-100">
+          <div
+            className="absolute top-0 left-0 h-full bg-primary transition-all duration-700 ease-in-out"
+            style={{
+              width: `${((currentStep - 1) / (STEPS.length - 1)) * 100}%`,
+            }}
+          />
+        </div>
+      </div>
 
       <div className="relative z-10 flex justify-between">
         {STEPS.map((step) => {

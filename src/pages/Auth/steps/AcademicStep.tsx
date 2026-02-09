@@ -16,7 +16,7 @@ interface ActionState {
   success: boolean;
   message: string;
   errors?: Record<string, string[]>;
-  inputs?: Record<string, any>;
+  inputs?: Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
 interface AcademicStepProps {
@@ -83,7 +83,7 @@ const AcademicStep: React.FC<AcademicStepProps> = ({ state }) => {
           <Select value={crPosition} onValueChange={setCrPosition}>
             <SelectTrigger
               id="crPosition"
-              className={`h-12 border-gray-300 ${state?.errors?.crPosition ? "border-red-500" : ""}`}
+              className={`h-12 text-base border-gray-300 ${state?.errors?.crPosition ? "border-red-500" : ""}`}
             >
               <SelectValue placeholder="Select position" />
             </SelectTrigger>

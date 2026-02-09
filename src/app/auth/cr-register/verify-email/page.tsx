@@ -1,5 +1,4 @@
 "use client";
-
 import StepIndicator from "@/pages/Auth/StepIndicator";
 import VerifyEmailStep from "@/pages/Auth/steps/VerifyEmailStep";
 import { verifyCrEmail } from "@/services/auth.service";
