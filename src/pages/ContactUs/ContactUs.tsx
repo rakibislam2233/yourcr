@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { LocateIcon, Mail, MapPin, Phone, PhoneCall } from "lucide-react";
+import { PhoneCall } from "lucide-react";
 import contactUsImage from "@/assets/contact/contact-us.png";
 import Image from "next/image";
 import { MdEmail, MdLocationOn } from "react-icons/md";

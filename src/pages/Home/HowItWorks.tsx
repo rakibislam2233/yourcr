@@ -162,7 +162,7 @@ const HowItWorks = () => {
 
                           {/* Text */}
                           <div className="pt-1.5">
-                            <div className="flex items-center gap-3 mb-2">
+                            <div className="flex flex-col items-start gap-3 mb-2">
                               <span className="text-xs font-bold text-primary/60 bg-primary/5 px-2 py-1 rounded uppercase tracking-wider">
                                 Step {step.step}
                               </span>
@@ -170,7 +170,7 @@ const HowItWorks = () => {
                                 {step.title}
                               </h4>
                             </div>
-                            <p className="text-gray-500 leading-relaxed text-sm">
+                            <p className="text-gray-500 text-start leading-relaxed text-sm">
                               {step.desc}
                             </p>
                           </div>

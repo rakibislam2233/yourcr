@@ -25,8 +25,6 @@ import React, {
   useTransition,
 } from "react";
 import { MdCalendarMonth, MdCategory } from "react-icons/md";
-
-// shadcn/ui components
 import Navbar from "@/components/common/Navbar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -82,7 +80,6 @@ const STEPS: StepInfo[] = [
 // --- Layout Component ---
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-[#f6f6f8]">
-    <Navbar />
     <main className="flex grow flex-col items-center justify-start py-10 px-4 sm:px-6 mt-16">
       <div className="flex w-full container mx-auto flex-col gap-8">
         {children}
@@ -412,9 +409,6 @@ export function CrRegisterForm() {
                       )}
                     </button>
                   </div>
-                  <p className="text-xs text-[#536793]">
-                    Must be at least 8 characters long.
-                  </p>
                   {errors.password && (
                     <p className="text-red-500 text-sm mt-1">
                       {errors.password.message}

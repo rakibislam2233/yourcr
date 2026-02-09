@@ -379,9 +379,6 @@ const CrRegister: React.FC = () => {
                       )}
                     </button>
                   </div>
-                  <p className="text-xs text-[#536793]">
-                    Must be at least 8 characters long.
-                  </p>
                   {errors.password && (
                     <p className="text-red-500 text-sm mt-1">
                       {errors.password.message}
