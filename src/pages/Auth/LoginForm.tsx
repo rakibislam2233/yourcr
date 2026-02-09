@@ -4,11 +4,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { loginUser } from "@/services/auth.service";
+import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 
 const initialState = {
   success: false,
@@ -31,7 +31,26 @@ const LoginForm = () => {
   useEffect(() => {
     if (state.success) {
       toast.success(state.message);
-      router.push("/dashboard");
+
+      const data = (state as { data?: { user?: { status: string } } }).data;
+      const userStatus = data?.user?.status;
+
+      switch (userStatus) {
+        case "PENDING_VERIFICATION":
+          router.push("/auth/verify-otp");
+          break;
+        case "PENDING_COMPLETION":
+          router.push("/auth/cr-register"); // The step component will handle the state
+          break;
+        case "PENDING_APPROVAL":
+          router.push("/auth/waiting-approval");
+          break;
+        case "APPROVED":
+          router.push("/dashboard");
+          break;
+        default:
+          router.push("/dashboard");
+      }
     } else if (state.message && !state.errors) {
       toast.error(state.message);
     }

@@ -32,7 +32,7 @@ const CrRegisterPage = () => {
       </div>
 
       {/* Right Side: Image with Overlay */}
-      <div className="hidden lg:flex lg:w-1/2 relative bg-gray-100">
+      <div className="hidden lg:flex lg:w-[40%] relative bg-gray-100">
         <div className="absolute inset-0 bg-primary/20 mix-blend-multiply z-10"></div>
         <div
           className="absolute inset-0 bg-cover bg-center"
@@ -42,7 +42,7 @@ const CrRegisterPage = () => {
           }}
         />
         <div className="absolute inset-0 bg-gray-900 opacity-40 mix-blend-multiply z-10"></div>
-      </div>
+      </div>  
     </section>
   );
 };
