@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getCookie } from "@/utils/tokenHandlers";
-import { getNewAccessToken } from "./authHelper";
+import { getNewAccessToken } from "./auth.service";
 
 const BACKEND_API_URL =
   process.env.NEXT_PUBLIC_BASE_API_URL || "http://localhost:5000/api/v1";

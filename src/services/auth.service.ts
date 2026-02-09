@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
-
 import { api } from "@/services/api";
+import { deleteCookie, getCookie, setCookie } from "@/utils/tokenHandlers";
 import {
   forgotPasswordSchema,
   loginSchema,
@@ -11,6 +11,7 @@ import {
 } from "@/validation/auth.validation";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 type ActionState = {
   success: boolean;
@@ -38,17 +39,36 @@ export async function loginUser(
 
   try {
     const res = await api.post("/auth/login", parsed.data);
-
+    
+    if (!res?.data?.isEmailVerified) {
+      //set sessionId in cookies
+      await setCookie("sessionId", res.data.sessionId, {
+        secure: true,
+        httpOnly: true,
+        maxAge: 3600, //1 hour
+        path: "/",
+        sameSite: "none",
+      });
+      //redirect to verify otp page
+      redirect("/auth/verify-otp");
+    }
     // Save tokens if present
     if (res?.data?.tokens) {
-      const cookieStore = await cookies();
-      cookieStore.set("accessToken", res.data.tokens.accessToken, {
-        httpOnly: true,
+      await setCookie("accessToken", res.data.tokens.accessToken, {
         secure: true,
+        httpOnly: true,
+        maxAge: parseInt(res.data.tokens["Max-Age"]) || 1000 * 60 * 60,
+        path: res.data.tokens.Path || "/",
+        sameSite: res.data.tokens["SameSite"] || "none",
       });
-      cookieStore.set("refreshToken", res.data.tokens.refreshToken, {
-        httpOnly: true,
+
+      await setCookie("refreshToken", res.data.tokens.refreshToken, {
         secure: true,
+        httpOnly: true,
+        maxAge:
+          parseInt(res.data.tokens["Max-Age"]) || 1000 * 60 * 60 * 24 * 90,
+        path: res.data.tokens.Path || "/",
+        sameSite: res.data.tokens["SameSite"] || "none",
       });
     }
 
@@ -67,14 +87,14 @@ export async function loginUser(
   }
 }
 
-// Step 1: Initial Registration
+// Register CR
 export async function registerCr(
   prevState: ActionState,
   payload: any,
 ): Promise<ActionState> {
   const values = Object.fromEntries(payload.entries());
 
-  const step1Fields = {
+  const registrationData = {
     fullName: values.fullName,
     email: values.email,
     phoneNumber: values.phoneNumber,
@@ -88,7 +108,7 @@ export async function registerCr(
       phoneNumber: true,
       password: true,
     })
-    .safeParse(step1Fields);
+    .safeParse(registrationData);
 
   if (!parsed.success) {
     return {
@@ -101,8 +121,6 @@ export async function registerCr(
 
   try {
     const res = await api.post("/auth/register", parsed.data);
-
-    console.log("Res", res);
     // Set sessionId in cookies
     const sessionId = res?.data?.sessionId;
     if (sessionId) {
@@ -113,11 +131,10 @@ export async function registerCr(
         maxAge: 3600, // 1 hour
       });
     }
-
     return {
       success: true,
-      message: "Initial registration successful! Verification code sent.",
-      data: res
+      message: res?.message,
+      data: res,
     };
   } catch (error: any) {
     return {
@@ -128,6 +145,7 @@ export async function registerCr(
   }
 }
 
+// Complete CR Registration
 export async function completeCrRegistration(
   prevState: ActionState,
   formData: FormData,
@@ -293,5 +311,48 @@ export async function resetPassword(
       message: error.message || "Failed to reset password",
       inputs: values,
     };
+  }
+}
+
+export async function getNewAccessToken() {
+  try {
+    const accessToken = await getCookie("accessToken");
+    const refreshToken = await getCookie("refreshToken");
+
+    //Case 1: Both tokens are missing - user is logged out
+    if (!accessToken && !refreshToken) {
+      return {
+        success: false,
+        message: "User is logged out",
+      };
+    }
+    const res = await api.post("/auth/refresh-token", {
+      refreshToken: refreshToken,
+    });
+
+    //delete old tokens
+    await deleteCookie("accessToken");
+    await deleteCookie("refreshToken");
+
+    //set new tokens
+    await setCookie("accessToken", res.data.accessToken, {
+      secure: true,
+      httpOnly: true,
+      maxAge: 3600,
+    });
+    await setCookie("refreshToken", res.data.refreshToken, {
+      secure: true,
+      httpOnly: true,
+      maxAge: 3600,
+    });
+
+    return {
+      success: true,
+      message: "Token refreshed successfully!",
+      data: res,
+    };
+  } catch (error: any) {
+    console.error("Failed to refresh token", error);
+    throw error;
   }
 }

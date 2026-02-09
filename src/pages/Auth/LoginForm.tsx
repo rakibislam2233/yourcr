@@ -32,6 +32,8 @@ const LoginForm = () => {
     if (state.success) {
       toast.success(state.message);
 
+      console.log("State", state);
+
       const data = (state as { data?: { user?: { status: string } } }).data;
       const userStatus = data?.user?.status;
 
