@@ -25,7 +25,7 @@ export default function RootLayout({
       <head>
         <meta name="google-adsense-account" content="ca-pub-1132020137464868" />
       </head>
-      <body className={`${mukta.className} antialiased`}>
+      <body className={`${mukta.className}`} suppressHydrationWarning>
         {children}
         <Toaster position="top-center" richColors />
       </body>
