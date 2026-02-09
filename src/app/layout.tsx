@@ -70,6 +70,7 @@ export const metadata: Metadata = {
   },
 };
 
+import { UserProvider } from "@/providers/UserProvider";
 import { Toaster } from "sonner";
 
 export default function RootLayout({
@@ -83,8 +84,10 @@ export default function RootLayout({
         <meta name="google-adsense-account" content="ca-pub-1132020137464868" />
       </head>
       <body className={`${mukta.className}`} suppressHydrationWarning>
-        {children}
-        <Toaster position="top-center" richColors />
+        <UserProvider>
+          {children}
+          <Toaster position="top-center" richColors />
+        </UserProvider>
       </body>
     </html>
   );

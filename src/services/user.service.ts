@@ -3,7 +3,7 @@ import { api } from "./api";
 
 export async function getMyProfile() {
   try {
-    const res = await api.get("/user/profile/me");
+    const res = await api.get("/users/profile/me");
     return res.data;
   } catch (error: any) {
     console.error("Failed to fetch profile", error);
@@ -13,7 +13,7 @@ export async function getMyProfile() {
 
 export async function updateMyProfile(data: any) {
   try {
-    const res = await api.patch("/user/profile/me", data);
+    const res = await api.patch("/users/profile/me", data);
     return res.data;
   } catch (error: any) {
     console.error("Failed to update profile", error);

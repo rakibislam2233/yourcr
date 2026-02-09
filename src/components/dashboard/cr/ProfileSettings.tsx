@@ -1,40 +1,79 @@
 "use client";
 
-import React, { useState } from "react";
-import {
-  Settings,
-  User,
-  Mail,
-  Phone,
-  Lock,
-  Bell,
-  Shield,
-  Camera,
-  Save,
-  Eye,
-  EyeOff,
-} from "lucide-react";
-import PageHeader from "../shared/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useUser } from "@/providers/UserProvider";
+import { updateMyProfile } from "@/services/user.service";
+import {
+  Building2,
+  Camera,
+  Eye,
+  EyeOff,
+  GraduationCap,
+  Lock,
+  Mail,
+  Phone,
+  Save,
+  Settings,
+  Shield,
+  User,
+} from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { toast } from "sonner";
+import PageHeader from "../shared/PageHeader";
 
 const ProfileSettings: React.FC = () => {
+  const { user, loading, refreshProfile } = useUser();
   const [showPassword, setShowPassword] = useState(false);
-  const [notifications, setNotifications] = useState({
-    email: true,
-    push: true,
-    sms: false,
-    newIssue: true,
-    newStudent: true,
-    classReminder: true,
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    phoneNumber: "",
   });
 
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        fullName: user.fullName || "",
+        email: user.email || "",
+        phoneNumber: user.phoneNumber || "",
+      });
+    }
+  }, [user]);
+
+  const handleUpdateProfile = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      setIsUpdating(true);
+      await updateMyProfile({
+        fullName: formData.fullName,
+        phoneNumber: formData.phoneNumber,
+      });
+      await refreshProfile();
+      toast.success("Profile updated successfully");
+    } catch (error) {
+      toast.error("Failed to update profile");
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  if (loading && !user) {
+    return (
+      <div className="p-12 text-center font-bold text-gray-400 animate-pulse uppercase tracking-widest">
+        Syncing CR Profile...
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-in fade-in duration-500">
       <PageHeader
         title="Profile Settings"
-        description="Manage your account settings and preferences"
+        description="Manage your CR account and institutional sync"
         icon={Settings}
         breadcrumbs={[
           { label: "Dashboard", href: "/dashboard/cr" },
@@ -43,260 +82,286 @@ const ProfileSettings: React.FC = () => {
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Profile Card */}
+        {/* Profile Details Card */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-2xl border border-gray-100 p-6">
-            <div className="flex flex-col items-center">
-              <div className="relative">
-                <div className="w-28 h-28 bg-gradient-to-br from-primary to-primary/70 rounded-2xl flex items-center justify-center text-white text-3xl font-bold">
-                  RA
+          <div className="bg-white rounded-md border border-gray-100 p-8 shadow-sm">
+            <div className="flex flex-col items-center text-center">
+              <div className="relative group">
+                <div className="w-28 h-28 bg-gradient-to-br from-primary to-blue-600 rounded-md flex items-center justify-center text-white text-3xl font-bold shadow-lg transition-transform group-hover:scale-105">
+                  {user?.profileImage ? (
+                    <img
+                      src={user.profileImage}
+                      alt={user.fullName}
+                      className="w-full h-full object-cover rounded-md"
+                    />
+                  ) : (
+                    user?.fullName
+                      ?.split(" ")
+                      .map((n: any) => n[0])
+                      .join("")
+                      .slice(0, 2) || "CR"
+                  )}
                 </div>
-                <button className="absolute -bottom-2 -right-2 p-2 bg-white rounded-xl border border-gray-200 shadow-sm hover:bg-gray-50 transition-colors">
+                <button className="absolute -bottom-2 -right-2 p-2 bg-white rounded-md border border-gray-200 shadow-md hover:bg-gray-50 transition-all active:scale-90">
                   <Camera className="w-4 h-4 text-gray-600" />
                 </button>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mt-4">
-                Rakib Ahmed
+              <h3 className="text-xl font-bold text-gray-900 mt-6 leading-tight">
+                {user?.fullName}
               </h3>
-              <p className="text-primary font-medium">Class Representative</p>
-              <p className="text-sm text-gray-500 mt-1">CT-8001</p>
-              <div className="w-full mt-6 pt-6 border-t border-gray-100">
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3 text-sm text-gray-600">
-                    <Mail className="w-4 h-4 text-gray-400" />
-                    rakib.ahmed@example.com
+              <p className="text-primary font-black text-[10px] uppercase tracking-[0.2em] mt-2 bg-primary/5 px-2 py-1 rounded">
+                Class Representative
+              </p>
+
+              <div className="w-full mt-8 pt-6 border-t border-gray-100 space-y-4 text-left">
+                <div className="flex items-center gap-4 group">
+                  <div className="size-9 rounded-md bg-gray-50 flex items-center justify-center border border-gray-100 group-hover:bg-primary/5 transition-colors">
+                    <Mail className="w-4 h-4 text-gray-400 group-hover:text-primary" />
                   </div>
-                  <div className="flex items-center gap-3 text-sm text-gray-600">
-                    <Phone className="w-4 h-4 text-gray-400" />
-                    +880 1711-123456
+                  <div>
+                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">
+                      Email Address
+                    </p>
+                    <p className="text-sm font-semibold text-gray-700 truncate">
+                      {user?.email}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4 group">
+                  <div className="size-9 rounded-md bg-gray-50 flex items-center justify-center border border-gray-100 group-hover:bg-primary/5 transition-colors">
+                    <Phone className="w-4 h-4 text-gray-400 group-hover:text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">
+                      Phone Number
+                    </p>
+                    <p className="text-sm font-semibold text-gray-700">
+                      {user?.phoneNumber || "Not provided"}
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Quick Stats */}
-          <div className="bg-white rounded-2xl border border-gray-100 p-6 mt-6">
-            <h4 className="font-semibold text-gray-900 mb-4">Account Stats</h4>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-gray-500">Member since</span>
-                <span className="font-medium text-gray-900">Jan 2024</span>
+          {/* Institutional Info Card */}
+          <div className="bg-white rounded-md border border-gray-100 p-6 mt-6 shadow-sm">
+            <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-5 border-b border-gray-50 pb-2">
+              Institutional Details
+            </h4>
+            <div className="space-y-5">
+              <div className="flex gap-4">
+                <div className="size-9 rounded-md bg-blue-50 flex items-center justify-center border border-blue-100 shrink-0">
+                  <Building2 className="size-4.5 text-blue-600" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">
+                    Institution
+                  </p>
+                  <p className="text-sm font-bold text-gray-900 truncate">
+                    {user?.institution?.name || "N/A"}
+                  </p>
+                </div>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-gray-500">Notices created</span>
-                <span className="font-medium text-gray-900">24</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-gray-500">Issues resolved</span>
-                <span className="font-medium text-gray-900">15</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-gray-500">Students managed</span>
-                <span className="font-medium text-gray-900">45</span>
+              <div className="flex gap-4">
+                <div className="size-9 rounded-md bg-indigo-50 flex items-center justify-center border border-indigo-100 shrink-0">
+                  <GraduationCap className="size-4.5 text-indigo-600" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">
+                    Department / Batch
+                  </p>
+                  <p className="text-sm font-bold text-gray-900 truncate">
+                    {user?.currentBatch?.department || "N/A"}
+                    <span className="block text-xs font-medium text-gray-500 mt-0.5">
+                      {user?.currentBatch?.name}
+                    </span>
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Settings Forms */}
+        {/* Edit Forms Container */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Personal Information */}
-          <div className="bg-white rounded-2xl border border-gray-100 p-6">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 bg-blue-100 rounded-lg">
+          <form
+            onSubmit={handleUpdateProfile}
+            className="bg-white rounded-md border border-gray-100 p-8 shadow-sm"
+          >
+            <div className="flex items-center gap-4 mb-8">
+              <div className="p-3 bg-blue-50 rounded-md border border-blue-100">
                 <User className="w-5 h-5 text-blue-600" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900">
-                Personal Information
-              </h3>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <Label>Full Name</Label>
-                <Input defaultValue="Rakib Ahmed" />
-              </div>
-              <div className="space-y-2">
-                <Label>Roll Number</Label>
-                <Input defaultValue="CT-8001" disabled />
-              </div>
-              <div className="space-y-2">
-                <Label>Email Address</Label>
-                <Input type="email" defaultValue="rakib.ahmed@example.com" />
-              </div>
-              <div className="space-y-2">
-                <Label>Phone Number</Label>
-                <Input type="tel" defaultValue="+880 1711-123456" />
+              <div>
+                <h3 className="text-lg font-bold text-gray-900 leading-none mb-1.5">
+                  Personal Identity
+                </h3>
+                <p className="text-xs text-gray-500 font-medium">
+                  Update your public profile and contact info
+                </p>
               </div>
             </div>
-            <div className="mt-6 flex justify-end">
-              <Button className="gap-2">
-                <Save className="w-4 h-4" />
-                Save Changes
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-2.5">
+                <Label className="text-sm font-bold text-gray-700">
+                  Full Name
+                </Label>
+                <Input
+                  value={formData.fullName}
+                  onChange={(e) =>
+                    setFormData({ ...formData, fullName: e.target.value })
+                  }
+                  className="h-11 border-gray-200 focus:border-primary shadow-none rounded-md font-medium"
+                />
+              </div>
+              <div className="space-y-2.5">
+                <Label className="text-sm font-bold text-gray-700">
+                  Phone Number
+                </Label>
+                <Input
+                  type="tel"
+                  value={formData.phoneNumber}
+                  onChange={(e) =>
+                    setFormData({ ...formData, phoneNumber: e.target.value })
+                  }
+                  className="h-11 border-gray-200 focus:border-primary shadow-none rounded-md font-medium"
+                />
+              </div>
+              <div className="space-y-2.5">
+                <Label className="text-sm font-bold text-gray-500">
+                  Email Address (Locked)
+                </Label>
+                <Input
+                  type="email"
+                  value={formData.email}
+                  disabled
+                  className="h-11 border-gray-100 bg-gray-50/50 text-gray-400 rounded-md font-medium italic"
+                />
+              </div>
+              <div className="space-y-2.5">
+                <Label className="text-sm font-bold text-gray-500">
+                  System Role
+                </Label>
+                <Input
+                  value={user?.role || "CR"}
+                  disabled
+                  className="h-11 border-gray-100 bg-gray-50/50 text-gray-400 rounded-md font-bold uppercase"
+                />
+              </div>
+            </div>
+
+            <div className="mt-10 flex justify-end">
+              <Button
+                type="submit"
+                disabled={isUpdating}
+                className="h-11 px-10 font-bold bg-primary hover:bg-black text-white rounded-md flex gap-2 active:scale-95 transition-all shadow-md shadow-primary/10"
+              >
+                {isUpdating ? (
+                  "Syncing..."
+                ) : (
+                  <>
+                    <Save className="w-4 h-4" /> Update CR Profile
+                  </>
+                )}
               </Button>
             </div>
-          </div>
+          </form>
 
-          {/* Change Password */}
-          <div className="bg-white rounded-2xl border border-gray-100 p-6">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 bg-orange-100 rounded-lg">
-                <Lock className="w-5 h-5 text-orange-600" />
+          {/* Security Management */}
+          <div className="bg-white rounded-md border border-gray-100 p-8 shadow-sm">
+            <div className="flex items-center gap-4 mb-8">
+              <div className="p-3 bg-amber-50 rounded-md border border-amber-100">
+                <Lock className="w-5 h-5 text-amber-600" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900">
-                Change Password
-              </h3>
+              <div>
+                <h3 className="text-lg font-bold text-gray-900 leading-none mb-1.5">
+                  Security & Access
+                </h3>
+                <p className="text-xs text-gray-500 font-medium">
+                  Protect your account with a strong password
+                </p>
+              </div>
             </div>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label>Current Password</Label>
+            <div className="space-y-6">
+              <div className="space-y-2.5">
+                <Label className="text-sm font-bold text-gray-700">
+                  Current Password
+                </Label>
                 <div className="relative">
                   <Input
                     type={showPassword ? "text" : "password"}
-                    placeholder="Enter current password"
+                    placeholder="Verify current identity"
+                    className="h-11 border-gray-200 focus:border-amber-500 rounded-md pr-12 font-medium"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-amber-600 transition-colors"
                   >
                     {showPassword ? (
-                      <EyeOff className="w-4 h-4" />
+                      <EyeOff className="w-5 h-5" />
                     ) : (
-                      <Eye className="w-4 h-4" />
+                      <Eye className="w-5 h-5" />
                     )}
                   </button>
                 </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>New Password</Label>
-                  <Input type="password" placeholder="Enter new password" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-2.5">
+                  <Label className="text-sm font-bold text-gray-700">
+                    New Password
+                  </Label>
+                  <Input
+                    type="password"
+                    placeholder="At least 8 characters"
+                    className="h-11 border-gray-200 focus:border-amber-500 rounded-md"
+                  />
                 </div>
-                <div className="space-y-2">
-                  <Label>Confirm Password</Label>
-                  <Input type="password" placeholder="Confirm new password" />
+                <div className="space-y-2.5">
+                  <Label className="text-sm font-bold text-gray-700">
+                    Confirm Password
+                  </Label>
+                  <Input
+                    type="password"
+                    placeholder="Repeat new password"
+                    className="h-11 border-gray-200 focus:border-amber-500 rounded-md"
+                  />
                 </div>
               </div>
             </div>
-            <div className="mt-6 flex justify-end">
-              <Button variant="outline" className="gap-2">
-                <Lock className="w-4 h-4" />
-                Update Password
+            <div className="mt-10 flex justify-end">
+              <Button
+                variant="outline"
+                className="h-11 px-10 font-bold border-gray-200 hover:bg-amber-50 hover:text-amber-700 hover:border-amber-200 rounded-md flex gap-2 active:scale-95 transition-all"
+              >
+                <Shield className="w-4 h-4" />
+                Sync New Credentials
               </Button>
             </div>
           </div>
 
-          {/* Notification Preferences */}
-          <div className="bg-white rounded-2xl border border-gray-100 p-6">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 bg-green-100 rounded-lg">
-                <Bell className="w-5 h-5 text-green-600" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900">
-                Notification Preferences
-              </h3>
-            </div>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                <div>
-                  <p className="font-medium text-gray-900">Email Notifications</p>
-                  <p className="text-sm text-gray-500">
-                    Receive updates via email
-                  </p>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={notifications.email}
-                    onChange={(e) =>
-                      setNotifications({ ...notifications, email: e.target.checked })
-                    }
-                    className="sr-only peer"
-                  />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                </label>
-              </div>
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                <div>
-                  <p className="font-medium text-gray-900">Push Notifications</p>
-                  <p className="text-sm text-gray-500">
-                    Browser push notifications
-                  </p>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={notifications.push}
-                    onChange={(e) =>
-                      setNotifications({ ...notifications, push: e.target.checked })
-                    }
-                    className="sr-only peer"
-                  />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                </label>
-              </div>
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                <div>
-                  <p className="font-medium text-gray-900">New Issue Alerts</p>
-                  <p className="text-sm text-gray-500">
-                    When a student submits an issue
-                  </p>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={notifications.newIssue}
-                    onChange={(e) =>
-                      setNotifications({
-                        ...notifications,
-                        newIssue: e.target.checked,
-                      })
-                    }
-                    className="sr-only peer"
-                  />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                </label>
-              </div>
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                <div>
-                  <p className="font-medium text-gray-900">Class Reminders</p>
-                  <p className="text-sm text-gray-500">
-                    30 minutes before class starts
-                  </p>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={notifications.classReminder}
-                    onChange={(e) =>
-                      setNotifications({
-                        ...notifications,
-                        classReminder: e.target.checked,
-                      })
-                    }
-                    className="sr-only peer"
-                  />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                </label>
-              </div>
-            </div>
-          </div>
-
-          {/* Danger Zone */}
-          <div className="bg-white rounded-2xl border border-red-200 p-6">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 bg-red-100 rounded-lg">
+          {/* Critical Actions */}
+          <div className="bg-red-50/40 rounded-md border border-red-100 p-8 shadow-sm">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="p-3 bg-red-100 rounded-md">
                 <Shield className="w-5 h-5 text-red-600" />
               </div>
-              <h3 className="text-lg font-semibold text-red-600">Danger Zone</h3>
+              <h3 className="text-lg font-bold text-red-700 uppercase tracking-tighter">
+                Deactivate CR Portal
+              </h3>
             </div>
-            <p className="text-gray-600 mb-4">
-              Once you delete your account, there is no going back. Please be
-              certain.
+            <p className="text-red-800/60 text-sm mb-8 font-medium leading-relaxed">
+              Caution: This will permanently delete your institutional access,
+              all student records you manage, and reset your CR status. This
+              action is irreversible.
             </p>
-            <Button variant="outline" className="text-red-600 border-red-300 hover:bg-red-50">
-              Delete Account
+            <Button
+              variant="outline"
+              className="h-11 px-8 font-bold text-red-600 border-red-200 bg-white hover:bg-red-600 hover:text-white transition-all rounded-md shadow-sm"
+            >
+              Confirm Permanent Deletion
             </Button>
           </div>
         </div>

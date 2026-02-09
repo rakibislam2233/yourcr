@@ -1,9 +1,11 @@
 "use client";
 
 import logo from "@/assets/logo/logo.png";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupLabel,
   SidebarHeader,
@@ -13,12 +15,15 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
+import { useUser } from "@/providers/UserProvider";
+import { logoutUser } from "@/services/auth.service";
 import {
   Bell,
   BookOpen,
   Building2,
   Calendar,
   LayoutDashboard,
+  LogOut,
   MessageSquare,
   School,
   User,
@@ -26,8 +31,9 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import * as React from "react";
+import { toast } from "sonner";
 
 const menuGroups = [
   {
@@ -109,7 +115,9 @@ const menuGroups = [
 
 const CrSidebar: React.FC = () => {
   const pathname = usePathname();
+  const router = useRouter();
   const { state, isMobile } = useSidebar();
+  const { user, loading } = useUser();
   const isCollapsed = state === "collapsed" && !isMobile;
 
   const isActive = (href: string) => {
@@ -118,18 +126,28 @@ const CrSidebar: React.FC = () => {
     return pathname === href || pathname?.startsWith(href + "/");
   };
 
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+      toast.success("Logged out successfully");
+      router.push("/auth/login");
+    } catch (error) {
+      toast.error("Failed to logout");
+    }
+  };
+
   return (
-    <Sidebar collapsible="icon" className="border-r border-gray-200 bg-white">
+    <Sidebar collapsible="icon" className="border-r border-gray-100 bg-white">
       <div className="flex flex-col h-full">
         {/* Header - Logo */}
         <SidebarHeader
           className={cn(
-            "h-20 border-b border-gray-100 flex  justify-center items-center transition-all",
+            "h-20 border-b border-gray-50 flex justify-center items-center transition-all",
           )}
         >
           <Link href="/" className="flex items-center">
             {isCollapsed ? (
-              <div className="w-10 h-10 bg-primary rounded-md flex items-center justify-center text-white font-bold text-lg">
+              <div className="w-10 h-10 bg-primary rounded-md flex items-center justify-center text-white font-bold text-lg shadow-sm">
                 CR
               </div>
             ) : (
@@ -146,11 +164,11 @@ const CrSidebar: React.FC = () => {
         </SidebarHeader>
 
         {/* Content */}
-        <SidebarContent className="flex-1 py-2 px-3 overflow-y-auto no-scrollbar">
+        <SidebarContent className="flex-1 py-4 px-3 overflow-y-auto no-scrollbar">
           {menuGroups.map((group) => (
-            <SidebarGroup key={group.label}>
+            <SidebarGroup key={group.label} className="mb-4 last:mb-0">
               {!isCollapsed && (
-                <SidebarGroupLabel className="px-3 mb-2 border-b rounded-none border-gray-200 font-semibold  tracking-widest text-gray-400">
+                <SidebarGroupLabel className="px-3 mb-2 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">
                   {group.label}
                 </SidebarGroupLabel>
               )}
@@ -164,22 +182,22 @@ const CrSidebar: React.FC = () => {
                         <SidebarMenuButton
                           tooltip={isCollapsed ? item.label : undefined}
                           className={cn(
-                            "w-full h-11  cursor-pointer flex items-center rounded-md transition-none",
-                            isCollapsed ? "justify-center p-0" : "px-3 gap-3",
+                            "w-full h-10 cursor-pointer flex items-center rounded-md transition-all active:scale-[0.98]",
+                            isCollapsed ? "justify-center" : "px-3 gap-3",
                             active
-                              ? "bg-primary text-white hover:bg-primary hover:text-white"
-                              : "text-gray-600 bg-transparent hover:bg-gray-100 hover:text-gray-600",
+                              ? "bg-primary text-white shadow-md shadow-primary/20"
+                              : "text-gray-500 hover:bg-gray-50 hover:text-gray-900",
                           )}
                         >
                           <item.icon
                             className={cn(
                               "shrink-0",
-                              isCollapsed ? "size-8" : "size-6",
+                              isCollapsed ? "size-6" : "size-5",
                               active ? "text-white" : "text-gray-400",
                             )}
                           />
                           {!isCollapsed && (
-                            <span className="text-sm font-semibold truncate leading-none">
+                            <span className="text-sm font-semibold tracking-tight">
                               {item.label}
                             </span>
                           )}
@@ -192,6 +210,55 @@ const CrSidebar: React.FC = () => {
             </SidebarGroup>
           ))}
         </SidebarContent>
+
+        {/* Footer - User Profile */}
+        <SidebarFooter className="p-4 border-t border-gray-50">
+          <div
+            className={cn(
+              "flex items-center gap-3",
+              isCollapsed ? "justify-center" : "px-2",
+            )}
+          >
+            <Avatar className="h-9 w-9 rounded-md border border-gray-200">
+              <AvatarImage src={user?.profileImage} alt={user?.fullName} />
+              <AvatarFallback className="bg-primary text-white text-xs font-bold rounded-md">
+                {user?.fullName
+                  ?.split(" ")
+                  .map((n: string) => n[0])
+                  .join("")
+                  .slice(0, 2) || "CR"}
+              </AvatarFallback>
+            </Avatar>
+            {!isCollapsed && (
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-bold text-gray-900 truncate">
+                  {loading ? "Loading..." : user?.fullName || "User Account"}
+                </p>
+                <p className="text-[10px] font-semibold text-gray-400 truncate uppercase tracking-tighter">
+                  {user?.email || "cr.portal@yourcr.com"}
+                </p>
+              </div>
+            )}
+          </div>
+          {!isCollapsed && (
+            <button
+              onClick={handleLogout}
+              className="mt-4 w-full h-10 flex items-center gap-3 px-3 rounded-md text-red-500 font-bold text-sm hover:bg-red-50 transition-colors active:scale-95 group"
+            >
+              <LogOut className="size-5 group-hover:translate-x-0.5 transition-transform" />
+              Sign Out
+            </button>
+          )}
+          {isCollapsed && (
+            <button
+              onClick={handleLogout}
+              className="mt-4 h-10 w-full flex items-center justify-center rounded-md text-red-500 hover:bg-red-50 transition-colors"
+              title="Sign Out"
+            >
+              <LogOut className="size-6" />
+            </button>
+          )}
+        </SidebarFooter>
       </div>
     </Sidebar>
   );

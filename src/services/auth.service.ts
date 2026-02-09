@@ -462,8 +462,17 @@ export async function getNewAccessToken() {
 
 // Logout
 export async function logoutUser() {
-  await deleteCookie("accessToken");
-  await deleteCookie("refreshToken");
-  await deleteCookie("userRole");
+  try {
+    const refreshToken = await getCookie("refreshToken");
+    if (refreshToken) {
+      await api.post("/auth/logout", { refreshToken });
+    }
+  } catch (error) {
+    console.error("Backend logout failed", error);
+  } finally {
+    await deleteCookie("accessToken");
+    await deleteCookie("refreshToken");
+    await deleteCookie("userRole");
+  }
   return { success: true };
 }
