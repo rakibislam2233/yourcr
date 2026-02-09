@@ -1,10 +1,8 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { verifyOtp } from "@/services/auth.service";
-import { ShieldCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
@@ -37,23 +35,14 @@ const VerifyOtpForm = () => {
   return (
     <form action={formAction} className="space-y-6">
       <div className="flex flex-col gap-4">
-        <div className="flex justify-center">
-          <div className="p-4 bg-primary/10 rounded-full">
-            <ShieldCheck className="w-8 h-8 text-primary" />
-          </div>
-        </div>
-
         <div className="space-y-2 text-center mb-4">
-          <Label htmlFor="otp" className="text-gray-700">
-            Verification Code
-          </Label>
           <Input
             id="otp"
             name="otp"
             placeholder="0 0 0 0 0 0"
             maxLength={6}
             defaultValue={state.inputs?.otp}
-            className={`h-16 text-center text-3xl font-bold tracking-[0.5em] border-2 border-gray-200 focus:border-primary focus:ring-primary ${
+            className={`h-16 text-center text-2xl font-bold tracking-[0.2em]  ${
               state.errors?.otp
                 ? "border-red-500 focus-visible:ring-red-500"
                 : ""

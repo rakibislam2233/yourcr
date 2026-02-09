@@ -17,7 +17,7 @@ const VerifyOtpPage = () => {
           </div>
 
           {/* Text Content */}
-          <div className="mb-8 text-center">
+          <div className="mb-8">
             <h1 className="mb-2 text-3xl font-bold tracking-tight text-gray-900">
               Verify Your Account
             </h1>
@@ -39,7 +39,7 @@ const VerifyOtpPage = () => {
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1557200134-90327ee9fafa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')",
+              "url('https://images.unsplash.com/photo-1523240795612-9a054b0db644')",
           }}
         />
         <div className="absolute inset-0 bg-gray-900 opacity-40 mix-blend-multiply z-10"></div>
