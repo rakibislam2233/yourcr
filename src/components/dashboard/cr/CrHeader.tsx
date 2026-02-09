@@ -1,13 +1,36 @@
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Bell, ChevronDown, Search } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { useUser } from "@/providers/UserProvider";
+import { logoutUser } from "@/services/auth.service";
+import { Bell, ChevronDown, LogOut, Search, User } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 import React from "react";
+import { toast } from "sonner";
 
 const CrHeader: React.FC = () => {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, loading } = useUser();
+
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+      toast.success("Logged out successfully");
+      router.push("/auth/login");
+    } catch (error) {
+      toast.error("Failed to logout");
+    }
+  };
 
   const generateBreadcrumbs = () => {
     if (!pathname) return null;
@@ -21,7 +44,7 @@ const CrHeader: React.FC = () => {
         <span key={index} className="flex items-center">
           {index > 0 && <span className="text-gray-300 mx-2">/</span>}
           <span
-            className={`text-xs font-bold ${isLast ? "text-gray-900" : "text-gray-400"}`}
+            className={`text-[10px] font-bold tracking-wider uppercase ${isLast ? "text-gray-900" : "text-gray-400"}`}
           >
             {label}
           </span>
@@ -31,47 +54,87 @@ const CrHeader: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full h-20 shrink-0 bg-white border-b border-gray-200 px-4 flex items-center justify-between gap-4">
+    <header className="sticky top-0 z-40 w-full h-20 shrink-0 bg-white border-b border-gray-100 px-6 flex items-center justify-between gap-4">
       {/* Left: Nav & Context */}
       <div className="flex items-center gap-4">
-        <SidebarTrigger className="h-8 w-8 rounded-md border border-gray-200 transition-none" />
+        <SidebarTrigger className="h-9 w-9 rounded-md border border-gray-200 transition-all hover:bg-gray-50 active:scale-95" />
         <div className="h-4 w-px bg-gray-200 hidden sm:block" />
         <nav className="hidden sm:flex items-center">
           {generateBreadcrumbs()}
         </nav>
       </div>
 
-      {/* Center: Search */}
-      <div className="flex-1 max-w-md hidden md:block">
-        <div className="relative">
-          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+      {/* Center: Search - Clean & Minimalist */}
+      <div className="flex-1 max-w-sm hidden md:block">
+        <div className="relative group">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-primary transition-colors" />
           <input
             type="text"
-            placeholder="Search..."
-            className="w-full h-9 bg-gray-50 border border-gray-200 rounded-md pl-9 pr-4 text-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-none"
+            placeholder="Search anything..."
+            className="w-full h-10 bg-gray-50/50 border border-gray-200 rounded-md pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary focus:bg-white transition-all shadow-sm"
           />
         </div>
       </div>
 
-      {/* Right: Personal */}
-      <div className="flex items-center gap-2">
-        <button className="p-2 text-gray-400 rounded-md transition-none active:bg-gray-100">
+      {/* Right: Personal & Notifications */}
+      <div className="flex items-center gap-3">
+        <button className="h-9 w-9 flex items-center justify-center text-gray-400 rounded-md hover:bg-gray-50 hover:text-gray-900 border border-transparent hover:border-gray-100 transition-all active:scale-95 relative">
           <Bell className="w-4 h-4" />
+          <span className="absolute top-2 right-2.5 w-1.5 h-1.5 bg-red-500 rounded-full border border-white" />
         </button>
-        <div className="w-px h-6 bg-gray-200 mx-1 hidden sm:block" />
-        <div className="flex items-center gap-2 px-2 py-1 rounded-md border border-transparent active:bg-gray-50 cursor-pointer">
-          <div className="hidden sm:flex flex-col text-right">
-            <span className="text-xs font-bold text-gray-900">Rakib Ahmed</span>
-            <span className="text-[10px] text-gray-400">Admin</span>
-          </div>
-          <Avatar className="h-8 w-8 rounded-md border border-gray-200">
-            <AvatarImage src="/avatar-placeholder.png" alt="User" />
-            <AvatarFallback className="bg-primary text-white text-[10px] font-bold rounded-md">
-              RA
-            </AvatarFallback>
-          </Avatar>
-          <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
-        </div>
+
+        <div className="w-px h-6 bg-gray-100 mx-1 hidden sm:block" />
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <div className="flex items-center gap-3 pl-2 pr-1 py-1 rounded-md border border-transparent hover:border-gray-100 hover:bg-gray-50 cursor-pointer transition-all active:scale-98 group">
+              <div className="hidden sm:flex flex-col text-right">
+                <span className="text-xs font-bold text-gray-900 leading-tight">
+                  {loading
+                    ? "Loading..."
+                    : user?.fullName || "Class Representative"}
+                </span>
+                <span className="text-[10px] font-semibold text-primary uppercase tracking-tighter">
+                  {user?.role || "CR"}
+                </span>
+              </div>
+              <Avatar className="h-9 w-9 rounded-md border border-gray-200 shadow-sm transition-transform group-hover:scale-105">
+                <AvatarImage src={user?.profileImage} alt={user?.fullName} />
+                <AvatarFallback className="bg-primary text-white text-xs font-bold rounded-md uppercase">
+                  {user?.fullName
+                    ?.split(" ")
+                    .map((n: string) => n[0])
+                    .join("")
+                    .slice(0, 2) || "CR"}
+                </AvatarFallback>
+              </Avatar>
+              <ChevronDown className="w-3.5 h-3.5 text-gray-400 group-hover:text-gray-900 transition-colors" />
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            align="end"
+            className="w-56 mt-2 rounded-md border-gray-100 shadow-xl p-1 animate-in slide-in-from-top-1 duration-200"
+          >
+            <DropdownMenuLabel className="px-2 py-1.5 text-xs font-bold text-gray-400 uppercase tracking-widest">
+              My Account
+            </DropdownMenuLabel>
+            <DropdownMenuItem
+              onClick={() => router.push("/dashboard/cr/profile")}
+              className="px-2 py-2 text-sm font-semibold text-gray-700 rounded-md hover:bg-gray-50 cursor-pointer flex items-center gap-2"
+            >
+              <User className="w-4 h-4 text-gray-400" />
+              View Profile
+            </DropdownMenuItem>
+            <DropdownMenuSeparator className="bg-gray-50" />
+            <DropdownMenuItem
+              onClick={handleLogout}
+              className="px-2 py-2 text-sm font-bold text-red-600 rounded-md hover:bg-red-50 cursor-pointer flex items-center gap-2 transition-colors"
+            >
+              <LogOut className="w-4 h-4" />
+              Sign Out
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   );

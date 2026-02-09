@@ -7,10 +7,6 @@ import {
   UserRole,
 } from "./utils/auth-utils";
 
-/**
- * Middleware handles route protection and role-based access control.
- * It uses cookies to verify authentication status and user roles.
- */
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -62,7 +58,6 @@ export async function middleware(request: NextRequest) {
 
   return NextResponse.next();
 }
-
 export default middleware;
 
 export const config = {

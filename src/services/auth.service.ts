@@ -459,3 +459,11 @@ export async function getNewAccessToken() {
     throw error;
   }
 }
+
+// Logout
+export async function logoutUser() {
+  await deleteCookie("accessToken");
+  await deleteCookie("refreshToken");
+  await deleteCookie("userRole");
+  return { success: true };
+}
