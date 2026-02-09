@@ -9,81 +9,81 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { RegistrationValues } from "@/lib/auth-schemas";
 import { Tag } from "lucide-react";
-import {
-  FieldErrors,
-  UseFormRegister,
-  UseFormSetValue,
-  UseFormWatch,
-} from "react-hook-form";
+import { useState } from "react";
 
-interface AcademicStepProps {
-  register: UseFormRegister<RegistrationValues>;
-  errors: FieldErrors<RegistrationValues>;
-  watch: UseFormWatch<RegistrationValues>;
-  setValue: UseFormSetValue<RegistrationValues>;
+interface ActionState {
+  success: boolean;
+  message: string;
+  errors?: Record<string, string[]>;
+  inputs?: Record<string, any>;
 }
 
-const AcademicStep: React.FC<AcademicStepProps> = ({
-  register,
-  errors,
-  watch,
-  setValue,
-}) => {
+interface AcademicStepProps {
+  state?: ActionState;
+}
+
+const AcademicStep: React.FC<AcademicStepProps> = ({ state }) => {
+  const [crPosition, setCrPosition] = useState(state?.inputs?.crPosition || "");
+
   return (
     <div className="animate-in fade-in slide-in-from-right-4 duration-300 space-y-6">
       <div className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div className="flex flex-col gap-1.5">
-            <Label>Batch/Session</Label>
+            <Label htmlFor="batchSession">Batch/Session</Label>
             <Input
-              {...register("batchSession")}
+              id="batchSession"
+              name="batchSession"
+              defaultValue={state?.inputs?.batchSession}
               placeholder="e.g. 2023-24"
-              className={`h-12 border-gray-300 ${errors.batchSession ? "border-red-500" : ""}`}
+              className={`h-12 border-gray-300 ${state?.errors?.batchSession ? "border-red-500" : ""}`}
             />
-            {errors.batchSession && (
+            {state?.errors?.batchSession && (
               <p className="text-xs text-red-500">
-                {errors.batchSession.message}
+                {state.errors.batchSession[0]}
               </p>
             )}
           </div>
           <div className="flex flex-col gap-1.5">
-            <Label>Section</Label>
+            <Label htmlFor="section">Section</Label>
             <Input
-              {...register("section")}
+              id="section"
+              name="section"
+              defaultValue={state?.inputs?.section}
               placeholder="e.g. A"
-              className={`h-12 border-gray-300 ${errors.section ? "border-red-500" : ""}`}
+              className={`h-12 border-gray-300 ${state?.errors?.section ? "border-red-500" : ""}`}
             />
-            {errors.section && (
-              <p className="text-xs text-red-500">{errors.section.message}</p>
+            {state?.errors?.section && (
+              <p className="text-xs text-red-500">{state.errors.section[0]}</p>
             )}
           </div>
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <Label>Class Roll</Label>
+          <Label htmlFor="classRoll">Class Roll</Label>
           <div className="relative">
             <Tag className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <Input
-              {...register("classRoll")}
+              id="classRoll"
+              name="classRoll"
+              defaultValue={state?.inputs?.classRoll}
               placeholder="e.g. 01"
-              className={`pl-12 h-12 border-gray-300 ${errors.classRoll ? "border-red-500" : ""}`}
+              className={`pl-12 h-12 border-gray-300 ${state?.errors?.classRoll ? "border-red-500" : ""}`}
             />
           </div>
-          {errors.classRoll && (
-            <p className="text-sm text-red-500">{errors.classRoll.message}</p>
+          {state?.errors?.classRoll && (
+            <p className="text-sm text-red-500">{state.errors.classRoll[0]}</p>
           )}
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <Label>CR Position</Label>
-          <Select
-            value={watch("crPosition")}
-            onValueChange={(val) => setValue("crPosition", val)}
-          >
+          <Label htmlFor="crPosition">CR Position</Label>
+          <input type="hidden" name="crPosition" value={crPosition} />
+          <Select value={crPosition} onValueChange={setCrPosition}>
             <SelectTrigger
-              className={`h-12 border-gray-300 ${errors.crPosition ? "border-red-500" : ""}`}
+              id="crPosition"
+              className={`h-12 border-gray-300 ${state?.errors?.crPosition ? "border-red-500" : ""}`}
             >
               <SelectValue placeholder="Select position" />
             </SelectTrigger>
@@ -93,8 +93,8 @@ const AcademicStep: React.FC<AcademicStepProps> = ({
               <SelectItem value="coordinator">Coordinator</SelectItem>
             </SelectContent>
           </Select>
-          {errors.crPosition && (
-            <p className="text-sm text-red-500">{errors.crPosition.message}</p>
+          {state?.errors?.crPosition && (
+            <p className="text-sm text-red-500">{state.errors.crPosition[0]}</p>
           )}
         </div>
       </div>

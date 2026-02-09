@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
+import { api } from "@/services/api";
 import {
   forgotPasswordSchema,
   loginSchema,
   registrationSchema,
   resetPasswordSchema,
   verifyOtpSchema,
-} from "@/lib/auth-schemas";
-import { api } from "@/services/api";
+} from "@/validation/auth.validation";
 import { revalidatePath } from "next/cache";
 
 type ActionState = {
@@ -16,6 +16,7 @@ type ActionState = {
   message: string;
   errors?: Record<string, string[]>;
   inputs?: any;
+  data?: any;
 };
 
 export async function loginUser(
@@ -41,7 +42,7 @@ export async function loginUser(
       success: true,
       message: "Logged in successfully!",
       data: res,
-    } as any;
+    };
   } catch (error: any) {
     return {
       success: false,
@@ -51,34 +52,106 @@ export async function loginUser(
   }
 }
 
+// Step 1: Initial Registration
 export async function registerCr(
   prevState: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
   const values = Object.fromEntries(formData.entries());
 
-  // Basic validation for non-file fields
-  const parsed = registrationSchema.safeParse(values);
+  // Pick only relevant fields for Step 1
+  const step1Fields = {
+    fullName: values.fullName,
+    email: values.email,
+    phone: values.phone,
+    password: values.password,
+  };
+
+  const parsed = registrationSchema
+    .pick({
+      fullName: true,
+      email: true,
+      phone: true,
+      password: true,
+    })
+    .safeParse(step1Fields);
+
   if (!parsed.success) {
     return {
       success: false,
-      message: "Please fill all required fields correctly",
+      message: "Please fix the errors in the form",
       errors: parsed.error.flatten().fieldErrors,
       inputs: values,
     };
   }
 
   try {
-    const res = await api.post("/auth/register-cr", formData);
+    const res = await api.post("/auth/register", parsed.data);
     return {
       success: true,
-      message: "Registration successful!",
+      message: "Initial registration successful! Verification code sent.",
       data: res,
-    } as any;
+      inputs: values,
+    };
   } catch (error: any) {
     return {
       success: false,
       message: error.message || "Registration failed",
+      inputs: values,
+    };
+  }
+}
+
+// Step 2: Email Verification
+export async function verifyCrEmail(
+  prevState: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const values = Object.fromEntries(formData.entries());
+  const parsed = verifyOtpSchema.safeParse(values);
+
+  if (!parsed.success) {
+    return {
+      success: false,
+      message: "Invalid OTP format",
+      errors: parsed.error.flatten().fieldErrors,
+      inputs: values,
+    };
+  }
+
+  try {
+    const res = await api.post("/auth/verify-registration", parsed.data);
+    return {
+      success: true,
+      message: "Email verified successfully!",
+      data: res,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      message: error.message || "Verification failed",
+      inputs: values,
+    };
+  }
+}
+
+// Step 3: Complete Profile (Institution, Academic, Document)
+export async function completeCrRegistration(
+  prevState: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const values = Object.fromEntries(formData.entries());
+  try {
+    const res = await api.post("/auth/complete-registration", formData);
+    return {
+      success: true,
+      message: "Registration completed! Waiting for admin approval.",
+      data: res,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      message: error.message || "Failed to complete registration",
       inputs: values,
     };
   }
@@ -102,7 +175,7 @@ export async function forgotPassword(
 
   try {
     const res = await api.post("/auth/forgot-password", parsed.data);
-    return { success: true, message: "Reset link sent!", data: res } as any;
+    return { success: true, message: "Reset link sent!", data: res };
   } catch (error: any) {
     return {
       success: false,
@@ -130,7 +203,7 @@ export async function verifyOtp(
 
   try {
     const res = await api.post("/auth/verify-otp", parsed.data);
-    return { success: true, message: "OTP Verified!", data: res } as any;
+    return { success: true, message: "OTP Verified!", data: res };
   } catch (error: any) {
     return {
       success: false,
@@ -169,7 +242,7 @@ export async function resetPassword(
       success: true,
       message: "Password reset successful!",
       data: res,
-    } as any;
+    };
   } catch (error: any) {
     return {
       success: false,
