@@ -13,10 +13,10 @@ interface FAQItem {
 
 const FAQ_ITEMS: FAQItem[] = [
   {
-    id: "what-is-our",
-    question: "What is OUR?",
+    id: "what-is-YourCR",
+    question: "What is YourCR?",
     answer:
-      "OUR CR is a digital platform that helps Class Representatives (CRs) manage class schedules, notices, assignments, and student issues — all in one organized place.",
+      "YourCR is a digital platform that helps Class Representatives (CRs) manage class schedules, notices, assignments, and student issues — all in one organized place.",
   },
   {
     id: "who-can-use",
@@ -44,9 +44,9 @@ const FAQ_ITEMS: FAQItem[] = [
   },
   {
     id: "mobile",
-    question: "Is OUR CR available on mobile?",
+    question: "Is YourCR available on mobile?",
     answer:
-      "Yes, OUR CR is fully mobile-responsive and works smoothly on phones and tablets.",
+      "Yes, YourCR is fully mobile-responsive and works smoothly on phones and tablets.",
   },
 ];
 

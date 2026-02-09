@@ -111,7 +111,7 @@ const Footer = () => {
 
             <div className="flex items-center gap-2 text-sm text-gray-400">
               <Copyright className="w-4 h-4" />
-              <span>2025 OUR CR. All rights reserved.</span>
+              <span>2025 YourCR. All rights reserved.</span>
             </div>
           </div>
         </div>
