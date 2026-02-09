@@ -181,13 +181,17 @@ const TestimonialCarousel = () => {
                   setDirection(idx > current ? 1 : -1);
                   setCurrent(idx);
                 }}
-                className={`transition-all duration-300 rounded-full h-2.5 ${
-                  idx === current
-                    ? "w-8 bg-primary shadow-lg shadow-blue-500/30"
-                    : "w-2.5 bg-gray-300 hover:bg-gray-400"
-                }`}
+                className="group p-2 cursor-pointer outline-none"
                 aria-label={`Go to testimonial ${idx + 1}`}
-              />
+              >
+                <div
+                  className={`transition-all duration-300 rounded-full h-2.5 ${
+                    idx === current
+                      ? "w-8 bg-primary shadow-lg shadow-blue-500/30"
+                      : "w-2.5 bg-gray-300 group-hover:bg-gray-400"
+                  }`}
+                />
+              </button>
             ))}
           </div>
 

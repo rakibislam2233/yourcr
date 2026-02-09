@@ -1,10 +1,10 @@
 import logo from "@/assets/logo/logo.png";
 import {
-    Copyright,
-    Facebook,
-    Instagram,
-    Linkedin,
-    Twitter,
+  Copyright,
+  Facebook,
+  Instagram,
+  Linkedin,
+  Twitter,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -71,7 +71,7 @@ const Footer = () => {
 
           {/* Center: Quick Links */}
           <div className="space-y-6">
-            <h4 className="text-lg font-semibold text-white">Quick Links</h4>
+            <h2 className="text-lg font-semibold text-white">Quick Links</h2>
             <ul className="space-y-3">
               {quickLinks.map((link) => (
                 <li key={link}>
@@ -93,7 +93,7 @@ const Footer = () => {
           {/* Right: Social + Copyright */}
           <div className="space-y-8">
             <div className="space-y-6">
-              <h4 className="text-lg font-semibold text-white">Follow Us On</h4>
+              <h2 className="text-lg font-semibold text-white">Follow Us On</h2>
               <div className="flex gap-4">
                 {socialLinks.map(({ Icon, href, hover }, i) => (
                   <a
@@ -101,6 +101,7 @@ const Footer = () => {
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label={`Follow us on Social Media`}
                     className={`w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-2xl ${hover}`}
                   >
                     <Icon className="w-6 h-6 text-white" />

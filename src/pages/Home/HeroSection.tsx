@@ -100,9 +100,9 @@ const HeroSection: React.FC = () => {
                 <MdCampaign className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
               <div>
-                <h4 className="font-semibold text-sm sm:text-base">
+                <p className="font-bold text-sm sm:text-base">
                   New Announcement
-                </h4>
+                </p>
                 <p className="text-xs sm:text-sm text-text-muted dark:text-gray-400 mt-0.5">
                   Class schedule updated for CS-101
                 </p>

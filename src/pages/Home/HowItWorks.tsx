@@ -163,7 +163,7 @@ const HowItWorks = () => {
                           {/* Text */}
                           <div className="pt-1.5">
                             <div className="flex flex-col items-start gap-3 mb-2">
-                              <span className="text-xs font-bold text-primary/60 bg-primary/5 px-2 py-1 rounded uppercase tracking-wider">
+                              <span className="text-xs font-bold text-primary bg-primary/5 px-2 py-1 rounded uppercase tracking-wider">
                                 Step {step.step}
                               </span>
                               <h4 className="text-lg font-bold text-gray-900">
