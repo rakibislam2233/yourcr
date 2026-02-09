@@ -1,5 +1,6 @@
-import StudentSidebar from "@/components/dashboard/student/StudentSidebar";
 import StudentHeader from "@/components/dashboard/student/StudentHeader";
+import StudentSidebar from "@/components/dashboard/student/StudentSidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 export default function StudentDashboardLayout({
   children,
@@ -7,14 +8,23 @@ export default function StudentDashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen bg-gray-50/50">
-      <StudentSidebar />
-      <div className="flex-1 flex flex-col lg:ml-0">
-        <StudentHeader />
-        <main className="flex-1 p-4 lg:p-6 overflow-auto">
-          {children}
-        </main>
+    <SidebarProvider
+      style={{ "--sidebar-width": "19rem" } as React.CSSProperties}
+    >
+      <div className="flex min-h-screen w-full bg-white">
+        <StudentSidebar />
+        <SidebarInset className="flex flex-col bg-white overflow-hidden">
+          <StudentHeader />
+          <main className="flex-1 overflow-y-auto pt-6 pb-20 px-6">
+            <div className="max-w-7xl mx-auto">{children}</div>
+          </main>
+          <footer className="h-12 flex items-center justify-center border-t border-gray-100 bg-white">
+            <p className="text-sm font-bold text-gray-400">
+              © {new Date().getFullYear()} YourCR Student Portal
+            </p>
+          </footer>
+        </SidebarInset>
       </div>
-    </div>
+    </SidebarProvider>
   );
 }

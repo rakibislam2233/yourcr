@@ -1,194 +1,236 @@
 "use client";
 
-import React, { useState } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import logo from "@/assets/logo/logo.png";
 import {
-  LayoutDashboard,
-  Building2,
-  BookOpen,
-  Users,
-  Calendar,
-  UserPlus,
-  Video,
+  Sidebar,
+  SidebarContent,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from "@/components/ui/sidebar";
+import {
   Bell,
-  ClipboardList,
+  BookOpen,
+  Building2,
+  Calendar,
+  ChevronDown,
+  LayoutDashboard,
   MessageSquare,
-  Settings,
-  Menu,
-  X,
-  LogOut,
+  Users,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import * as React from "react";
 
 const menuItems = [
   {
     icon: LayoutDashboard,
     label: "Dashboard",
     href: "/dashboard/cr",
+    subItems: [
+      { label: "Overview", href: "/dashboard/cr" },
+      { label: "Statistics", href: "/dashboard/cr/stats" },
+    ],
   },
   {
     icon: Building2,
-    label: "My Institution",
+    label: "Institution",
     href: "/dashboard/cr/institution",
+    subItems: [
+      { label: "My College", href: "/dashboard/cr/institution" },
+      { label: "Department", href: "/dashboard/cr/institution/dept" },
+    ],
   },
   {
     icon: BookOpen,
-    label: "Manage Subjects",
-    href: "/dashboard/cr/subjects",
+    label: "Academy",
+    subItems: [
+      { label: "All Subjects", href: "/dashboard/cr/subjects" },
+      { label: "Resources", href: "/dashboard/cr/subjects/materials" },
+    ],
   },
   {
     icon: Users,
-    label: "Manage Teachers",
-    href: "/dashboard/cr/teachers",
+    label: "Users",
+    subItems: [
+      { label: "Teachers", href: "/dashboard/cr/teachers" },
+      { label: "Students List", href: "/dashboard/cr/students" },
+    ],
   },
   {
     icon: Calendar,
-    label: "Manage Routine",
-    href: "/dashboard/cr/routine",
-  },
-  {
-    icon: UserPlus,
-    label: "Manage Students",
-    href: "/dashboard/cr/students",
-  },
-  {
-    icon: Video,
-    label: "Manage Classes",
-    href: "/dashboard/cr/classes",
+    label: "Schedule",
+    subItems: [
+      { label: "Daily Routine", href: "/dashboard/cr/routine" },
+      { label: "Class Links", href: "/dashboard/cr/classes" },
+    ],
   },
   {
     icon: Bell,
-    label: "Manage Notices",
-    href: "/dashboard/cr/notices",
-  },
-  {
-    icon: ClipboardList,
-    label: "Manage Assessments",
-    href: "/dashboard/cr/assessments",
+    label: "Broadcast",
+    subItems: [
+      { label: "Notices", href: "/dashboard/cr/notices" },
+      { label: "Assessments", href: "/dashboard/cr/assessments" },
+    ],
   },
   {
     icon: MessageSquare,
-    label: "Student Issues",
-    href: "/dashboard/cr/issues",
-  },
-  {
-    icon: Bell,
-    label: "Notifications",
-    href: "/dashboard/cr/notifications",
-  },
-  {
-    icon: Settings,
-    label: "Profile Settings",
-    href: "/dashboard/cr/profile",
+    label: "Feedbacks",
+    subItems: [{ label: "Student Issues", href: "/dashboard/cr/issues" }],
   },
 ];
 
 const CrSidebar: React.FC = () => {
   const pathname = usePathname();
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [openGroups, setOpenGroups] = React.useState<string[]>([]);
+  const { state, setOpen, isMobile } = useSidebar();
+  const isCollapsed = state === "collapsed" && !isMobile;
 
   const isActive = (href: string) => {
-    if (href === "/dashboard/cr") {
-      return pathname === href;
-    }
-    return pathname?.startsWith(href);
+    if (href === "/dashboard/cr") return pathname === href;
+    return (
+      pathname === href ||
+      (href !== "/dashboard/cr" && pathname?.startsWith(href + "/"))
+    );
   };
 
-  const SidebarContent = () => (
-    <>
-      {/* Logo Section */}
-      <div className="p-6 border-b border-gray-100">
-        <Link href="/" className="flex items-center gap-3">
-          <div className="relative w-44 h-10 mx-auto">
-            <Image
-              src="/logo.png"
-              alt="YourCR Logo"
-              fill
-              className="object-contain"
-            />
-          </div>
-        </Link>
-      </div>
+  const isGroupActive = (item: (typeof menuItems)[0]) => {
+    return (
+      item.subItems?.some((sub) => isActive(sub.href)) ||
+      (item.href ? isActive(item.href) : false)
+    );
+  };
 
-      {/* Navigation */}
-      <nav className="flex-1 px-3 py-4 overflow-y-auto">
-        <ul className="space-y-2">
-          {menuItems.map((item) => {
-            const Icon = item.icon;
-            const active = isActive(item.href);
+  React.useEffect(() => {
+    const activeGroup = menuItems.find(
+      (group) =>
+        group.subItems?.some((sub) => pathname === sub.href) ||
+        (group.href && pathname === group.href),
+    );
+    if (activeGroup && !openGroups.includes(activeGroup.label)) {
+      setOpenGroups((prev) => [...prev, activeGroup.label]);
+    }
+  }, [pathname, openGroups]);
 
-            return (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  onClick={() => setIsMobileOpen(false)}
-                  className={`flex items-center gap-3 px-4 py-4 rounded transition-colors ${
-                    active
-                      ? "bg-primary text-white"
-                      : "text-gray-600 hover:bg-gray-100"
-                  }`}
-                >
-                  <Icon
-                    className={`w-5 h-5 ${
-                      active ? "text-white" : "text-gray-500"
-                    }`}
-                  />
-                  <span className="font-medium">{item.label}</span>
-                  {active && (
-                    <div className="ml-auto w-1.5 h-1.5 rounded-full bg-white" />
-                  )}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
-
-      {/* Logout Button */}
-      <div className="p-4 border-t border-gray-100">
-        <button className="flex items-center gap-3 w-full px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-red-600 rounded-xl transition-colors">
-          <LogOut className="w-5 h-5" />
-          <span className="font-medium text-sm">Logout</span>
-        </button>
-      </div>
-    </>
-  );
+  const toggleGroup = (label: string) => {
+    if (isCollapsed) {
+      setOpen(true);
+      if (!openGroups.includes(label)) {
+        setOpenGroups((prev) => [...prev, label]);
+      }
+    } else {
+      setOpenGroups((prev) =>
+        prev.includes(label)
+          ? prev.filter((l) => l !== label)
+          : [...prev, label],
+      );
+    }
+  };
 
   return (
-    <>
-      {/* Mobile Menu Button */}
-      <button
-        onClick={() => setIsMobileOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-xl shadow-lg border border-gray-100"
-      >
-        <Menu className="w-6 h-6 text-gray-600" />
-      </button>
+    <Sidebar
+      collapsible="icon"
+      className="border-r border-gray-200 bg-white shadow-none"
+    >
+      <div className="flex flex-col h-full">
+        <SidebarHeader
+          className={`p-[25px] border-b border-gray-100 flex flex-col justify-center items-center gap-5 transition-all`}
+        >
+          <Link href="/" className="flex justify-center items-center gap-4 px-2">
+            {isCollapsed ? (
+              <div className="w-12 h-12 bg-primary rounded-md flex items-center justify-center text-white font-bold text-lg shrink-0 transition-all">
+                CR
+              </div>
+            ) : (
+              <Image
+                src={logo}
+                alt="YourCR Logo"
+                width={140}
+                height={80}
+                className="w-40 mx-auto transition-all"
+              />
+            )}
+          </Link>
+        </SidebarHeader>
 
-      {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex lg:flex-col w-72 bg-white border-r border-gray-100 h-screen sticky top-0">
-        <SidebarContent />
-      </aside>
+        <SidebarContent className="p-3 no-scrollbar flex-1">
+          <SidebarMenu className="space-y-1.5">
+            {menuItems.map((item) => {
+              const groupActive = isGroupActive(item);
+              const exactActive = item.href ? isActive(item.href) : false;
+              const isOpen = openGroups.includes(item.label) && !isCollapsed;
 
-      {/* Mobile Sidebar */}
-      {isMobileOpen && (
-        <>
-          <div
-            onClick={() => setIsMobileOpen(false)}
-            className="lg:hidden fixed inset-0 bg-black/50 z-40 transition-opacity"
-          />
-          <aside className="lg:hidden fixed left-0 top-0 bottom-0 w-72 bg-white z-50 flex flex-col shadow-2xl">
-            <button
-              onClick={() => setIsMobileOpen(false)}
-              className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-lg"
-            >
-              <X className="w-5 h-5 text-gray-500" />
-            </button>
-            <SidebarContent />
-          </aside>
-        </>
-      )}
-    </>
+              return (
+                <SidebarMenuItem key={item.label}>
+                  <SidebarMenuButton
+                    onClick={() => toggleGroup(item.label)}
+                    tooltip={
+                      isCollapsed
+                        ? {
+                            children: item.label,
+                            className:
+                              "bg-primary text-white border-primary font-bold text-[14px] px-5 py-2.5",
+                          }
+                        : undefined
+                    }
+                    className={`w-full transition-all font-bold text-sm flex items-center gap-5 ${
+                      isCollapsed ? "h-16 justify-center" : "h-14 px-4"
+                    } ${
+                      exactActive && !item.subItems
+                        ? "bg-primary text-white"
+                        : groupActive
+                          ? "text-primary bg-primary/5"
+                          : "text-gray-600 active:bg-gray-100"
+                    } rounded-md`}
+                  >
+                    <item.icon
+                      className={`shrink-0 transition-all ${isCollapsed ? "size-9" : "size-8"}`}
+                    />
+                    {!isCollapsed && (
+                      <span className="flex-1 text-left">{item.label}</span>
+                    )}
+                    {!isCollapsed && item.subItems && (
+                      <ChevronDown
+                        className={`w-4 h-4 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                      />
+                    )}
+                  </SidebarMenuButton>
+
+                  {isOpen && item.subItems && (
+                    <div className="mt-1.5 ml-5 border-l-2 border-gray-200 pl-4 py-1.5 space-y-1.5">
+                      {item.subItems.map((sub) => {
+                        const activeSub = isActive(sub.href);
+                        return (
+                          <Link
+                            key={sub.label}
+                            href={sub.href}
+                            className={`flex items-center h-11 px-4 rounded-md text-[13px] font-bold transition-all relative ${
+                              activeSub
+                                ? "bg-primary text-white"
+                                : "text-gray-500 active:bg-gray-50"
+                            }`}
+                          >
+                            {!activeSub && (
+                              <div
+                                className={`absolute -left-[17px] top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 border-white bg-gray-300 transition-all`}
+                              />
+                            )}
+                            {sub.label}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  )}
+                </SidebarMenuItem>
+              );
+            })}
+          </SidebarMenu>
+        </SidebarContent>
+      </div>
+    </Sidebar>
   );
 };
 

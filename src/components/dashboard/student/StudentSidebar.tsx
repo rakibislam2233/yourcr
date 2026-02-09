@@ -1,198 +1,220 @@
 "use client";
 
-import React, { useState } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import logo from "@/assets/logo/logo.png";
 import {
-  Home,
-  Bell,
-  Calendar,
-  ClipboardList,
-  Video,
+  Sidebar,
+  SidebarContent,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from "@/components/ui/sidebar";
+import {
   BookOpen,
-  Users,
-  Building2,
-  MessageSquare,
-  User,
-  Menu,
-  X,
-  LogOut,
+  Calendar,
+  ChevronDown,
+  ClipboardList,
+  Home,
+  Video,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import * as React from "react";
 
 const menuItems = [
   {
     icon: Home,
-    label: "Home",
+    label: "Gateway",
     href: "/dashboard/student",
-  },
-  {
-    icon: Bell,
-    label: "Notices",
-    href: "/dashboard/student/notices",
-  },
-  {
-    icon: Calendar,
-    label: "Routine",
-    href: "/dashboard/student/routine",
-  },
-  {
-    icon: ClipboardList,
-    label: "Assessments",
-    href: "/dashboard/student/assessments",
-  },
-  {
-    icon: Video,
-    label: "Classes",
-    href: "/dashboard/student/classes",
+    subItems: [
+      { label: "Home Overview", href: "/dashboard/student" },
+      { label: "Performance", href: "/dashboard/student/performance" },
+    ],
   },
   {
     icon: BookOpen,
-    label: "Subjects",
-    href: "/dashboard/student/subjects",
+    label: "Study Hub",
+    subItems: [
+      { label: "My Subjects", href: "/dashboard/student/subjects" },
+      { label: "Materials", href: "/dashboard/student/subjects/materials" },
+    ],
   },
   {
-    icon: Users,
-    label: "Teachers",
-    href: "/dashboard/student/teachers",
+    icon: ClipboardList,
+    label: "Exercises",
+    subItems: [
+      { label: "Assignments", href: "/dashboard/student/assessments" },
+      { label: "Results", href: "/dashboard/student/results" },
+    ],
   },
   {
-    icon: Building2,
-    label: "My Institute",
-    href: "/dashboard/student/institution",
+    icon: Calendar,
+    label: "Planning",
+    subItems: [
+      { label: "Routine", href: "/dashboard/student/routine" },
+      { label: "Attendance", href: "/dashboard/student/attendance" },
+    ],
   },
   {
-    icon: MessageSquare,
-    label: "Submit Issue",
-    href: "/dashboard/student/issues",
-  },
-  {
-    icon: User,
-    label: "My Profile",
-    href: "/dashboard/student/profile",
+    icon: Video,
+    label: "Live Connect",
+    subItems: [
+      { label: "Live Classes", href: "/dashboard/student/classes" },
+      { label: "Notices", href: "/dashboard/student/notices" },
+    ],
   },
 ];
 
 const StudentSidebar: React.FC = () => {
   const pathname = usePathname();
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [openGroups, setOpenGroups] = React.useState<string[]>([]);
+  const { state, setOpen, isMobile } = useSidebar();
+  const isCollapsed = state === "collapsed" && !isMobile;
 
   const isActive = (href: string) => {
-    if (href === "/dashboard/student") {
-      return pathname === href;
-    }
-    return pathname?.startsWith(href);
+    if (href === "/dashboard/student") return pathname === href;
+    return (
+      pathname === href ||
+      (href !== "/dashboard/student" && pathname?.startsWith(href + "/"))
+    );
   };
 
-  const SidebarContent = () => (
-    <>
-      {/* Logo Section */}
-      <div className="p-6 border-b border-gray-100">
-        <Link href="/" className="flex items-center gap-3">
-          <div className="relative w-40 h-8 mx-auto">
-            <Image
-              src="/logo.png"
-              alt="YourCR Logo"
-              fill
-              className="object-contain"
-            />
-          </div>
-        </Link>
-      </div>
+  const isGroupActive = (item: (typeof menuItems)[0]) => {
+    return (
+      item.subItems?.some((sub) => isActive(sub.href)) ||
+      (item.href ? isActive(item.href) : false)
+    );
+  };
 
-      {/* Navigation */}
-      <nav className="flex-1 px-3 py-4 overflow-y-auto">
-        <ul className="space-y-3">
-          {menuItems.map((item) => {
-            const Icon = item.icon;
-            const active = isActive(item.href);
+  React.useEffect(() => {
+    const activeGroup = menuItems.find(
+      (group) =>
+        group.subItems?.some((sub) => pathname === sub.href) ||
+        (group.href && pathname === group.href),
+    );
+    if (activeGroup && !openGroups.includes(activeGroup.label)) {
+      setOpenGroups((prev) => [...prev, activeGroup.label]);
+    }
+  }, [pathname, openGroups]);
 
-            return (
-              <motion.li key={item.href}>
-                <Link
-                  href={item.href}
-                  onClick={() => setIsMobileOpen(false)}
-                  className={`flex items-center gap-3 px-4 py-4 rounded transition-all duration-200 group ${
-                    active
-                      ? "bg-primary text-white "
-                      : "text-gray-600 hover:bg-gray-100"
-                  }`}
-                >
-                  <Icon
-                    className={`w-5 h-5 transition-transform group-hover:scale-110 ${
-                      active ? "text-white" : "text-gray-500"
-                    }`}
-                  />
-                  <span className="font-medium text-sm">{item.label}</span>
-                  {active && (
-                    <motion.div
-                      layoutId="studentActiveIndicator"
-                      className="ml-auto w-1.5 h-1.5 rounded-full bg-white"
-                    />
-                  )}
-                </Link>
-              </motion.li>
-            );
-          })}
-        </ul>
-      </nav>
-
-      {/* Logout Button */}
-      <div className="p-4 border-t border-gray-100">
-        <button className="flex items-center gap-3 w-full px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-red-600 rounded-xl transition-colors">
-          <LogOut className="w-5 h-5" />
-          <span className="font-medium text-sm">Logout</span>
-        </button>
-      </div>
-    </>
-  );
+  const toggleGroup = (label: string) => {
+    if (isCollapsed) {
+      setOpen(true);
+      if (!openGroups.includes(label)) {
+        setOpenGroups((prev) => [...prev, label]);
+      }
+    } else {
+      setOpenGroups((prev) =>
+        prev.includes(label)
+          ? prev.filter((l) => l !== label)
+          : [...prev, label],
+      );
+    }
+  };
 
   return (
-    <>
-      {/* Mobile Menu Button */}
-      <button
-        onClick={() => setIsMobileOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-xl shadow-lg border border-gray-100"
-      >
-        <Menu className="w-6 h-6 text-gray-600" />
-      </button>
+    <Sidebar
+      collapsible="icon"
+      className="border-r border-gray-200 bg-white shadow-none transition-all duration-300"
+    >
+      <div className="flex flex-col h-full overflow-x-hidden">
+        <SidebarHeader
+          className={`p-[25px] border-b border-gray-100 flex flex-col justify-center items-center gap-5 shrink-0 transition-all`}
+        >
+          <Link href="/" className="flex items-center gap-4 px-2">
+            {isCollapsed ? (
+              <div className="w-12 h-12 bg-emerald-600 rounded-md flex items-center justify-center text-white font-bold text-lg shrink-0 transition-all">
+                ST
+              </div>
+            ) : (
+              <Image
+                src={logo}
+                alt="YourCR Logo"
+                width={140}
+                height={80}
+                className="w-40 transition-all"
+              />
+            )}
+          </Link>
+        </SidebarHeader>
 
-      {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex lg:flex-col w-72 bg-white border-r border-gray-100 h-screen sticky top-0">
-        <SidebarContent />
-      </aside>
+        <SidebarContent className="p-3 no-scrollbar flex-1">
+          <SidebarMenu className="space-y-1.5">
+            {menuItems.map((item) => {
+              const groupActive = isGroupActive(item);
+              const exactActive = item.href ? isActive(item.href) : false;
+              const isOpen = openGroups.includes(item.label) && !isCollapsed;
 
-      {/* Mobile Sidebar */}
-      <AnimatePresence>
-        {isMobileOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsMobileOpen(false)}
-              className="lg:hidden fixed inset-0 bg-black/50 z-40"
-            />
-            <motion.aside
-              initial={{ x: "-100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "-100%" }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="lg:hidden fixed left-0 top-0 bottom-0 w-72 bg-white z-50 flex flex-col shadow-2xl"
-            >
-              <button
-                onClick={() => setIsMobileOpen(false)}
-                className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-lg"
-              >
-                <X className="w-5 h-5 text-gray-500" />
-              </button>
-              <SidebarContent />
-            </motion.aside>
-          </>
-        )}
-      </AnimatePresence>
-    </>
+              return (
+                <SidebarMenuItem key={item.label}>
+                  <SidebarMenuButton
+                    onClick={() => toggleGroup(item.label)}
+                    tooltip={
+                      isCollapsed
+                        ? {
+                            children: item.label,
+                            className:
+                              "bg-emerald-600 text-white border-emerald-600 font-bold text-[14px] px-5 py-2.5",
+                          }
+                        : undefined
+                    }
+                    className={`w-full transition-all font-bold text-sm flex items-center gap-5 ${
+                      isCollapsed ? "h-16 justify-center" : "h-14 px-4"
+                    } ${
+                      exactActive && !item.subItems
+                        ? "bg-emerald-600 text-white"
+                        : groupActive
+                          ? "text-emerald-600 bg-emerald-50"
+                          : "text-gray-600 active:bg-emerald-50"
+                    } rounded-md`}
+                  >
+                    <item.icon
+                      className={`shrink-0 transition-all ${isCollapsed ? "size-9" : "size-8"}`}
+                    />
+                    {!isCollapsed && (
+                      <span className="flex-1 text-left">{item.label}</span>
+                    )}
+                    {!isCollapsed && item.subItems && (
+                      <ChevronDown
+                        className={`w-4 h-4 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                      />
+                    )}
+                  </SidebarMenuButton>
+
+                  {isOpen && item.subItems && (
+                    <div className="mt-1.5 ml-5 border-l-2 border-emerald-100/60 pl-4 py-1.5 space-y-1.5">
+                      {item.subItems.map((sub) => {
+                        const activeSub = isActive(sub.href);
+                        return (
+                          <Link
+                            key={sub.label}
+                            href={sub.href}
+                            className={`flex items-center h-11 px-4 rounded-md text-[13px] font-bold transition-all relative ${
+                              activeSub
+                                ? "bg-emerald-600 text-white"
+                                : "text-gray-500 active:bg-gray-50"
+                            }`}
+                          >
+                            {!activeSub && (
+                              <div
+                                className={`absolute -left-[17px] top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 border-white bg-gray-300 transition-all`}
+                              />
+                            )}
+                            {sub.label}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  )}
+                </SidebarMenuItem>
+              );
+            })}
+          </SidebarMenu>
+        </SidebarContent>
+      </div>
+    </Sidebar>
   );
 };
 
