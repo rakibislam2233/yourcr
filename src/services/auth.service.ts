@@ -9,9 +9,7 @@ import {
   resetPasswordSchema,
   verifyOtpSchema,
 } from "@/validation/auth.validation";
-import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 type ActionState = {
   success: boolean;
@@ -39,44 +37,67 @@ export async function loginUser(
 
   try {
     const res = await api.post("/auth/login", parsed.data);
-    
-    if (!res?.data?.isEmailVerified) {
-      //set sessionId in cookies
-      await setCookie("sessionId", res.data.sessionId, {
+    const loginData = res.data;
+
+    // Helper to map backend paths to frontend routes
+    const mapRoute = (backendPath: string) => {
+      if (backendPath === "/verify-email")
+        return "/auth/cr-register/verify-email";
+      if (backendPath === "/cr-registration/complete-profile")
+        return "/auth/cr-register/complete-profile";
+      if (backendPath === "/cr-registration/pending")
+        return "/auth/cr-register/pending";
+      return backendPath;
+    };
+
+    // 1. Handle Email Verification - Set sessionId and return redirect
+    if (loginData?.isEmailVerified === false) {
+      if (loginData.sessionId) {
+        await setCookie("sessionId", loginData.sessionId, {
+          secure: true,
+          httpOnly: true,
+          maxAge: 3600,
+          path: "/",
+        });
+      }
+      return {
+        success: true,
+        message: res.message || "Please verify your email.",
+        data: { redirect: mapRoute(loginData.redirect || "/verify-email") },
+      };
+    }
+
+    // 2. Handle Conditional Redirects (Profile completion, Pending, etc.)
+    if (loginData?.redirect) {
+      return {
+        success: true,
+        message: res.message,
+        data: { redirect: mapRoute(loginData.redirect) },
+      };
+    }
+
+    // 3. Normal Login Success - Cookies set only when no redirect is present
+    if (loginData?.tokens) {
+      await setCookie("accessToken", loginData.tokens.accessToken, {
         secure: true,
         httpOnly: true,
-        maxAge: 3600, //1 hour
+        maxAge: 3600,
         path: "/",
-        sameSite: "none",
-      });
-      //redirect to verify otp page
-      redirect("/auth/verify-otp");
-    }
-    // Save tokens if present
-    if (res?.data?.tokens) {
-      await setCookie("accessToken", res.data.tokens.accessToken, {
-        secure: true,
-        httpOnly: true,
-        maxAge: parseInt(res.data.tokens["Max-Age"]) || 1000 * 60 * 60,
-        path: res.data.tokens.Path || "/",
-        sameSite: res.data.tokens["SameSite"] || "none",
       });
 
-      await setCookie("refreshToken", res.data.tokens.refreshToken, {
+      await setCookie("refreshToken", loginData.tokens.refreshToken, {
         secure: true,
         httpOnly: true,
-        maxAge:
-          parseInt(res.data.tokens["Max-Age"]) || 1000 * 60 * 60 * 24 * 90,
-        path: res.data.tokens.Path || "/",
-        sameSite: res.data.tokens["SameSite"] || "none",
+        maxAge: 3600 * 24 * 90,
+        path: "/",
       });
     }
 
-    revalidatePath("/dashboard");
+    // 4. Final Success Case (The client-side component will handle the redirection)
     return {
       success: true,
-      message: "Logged in successfully!",
-      data: res,
+      message: "Login successful",
+      data: loginData,
     };
   } catch (error: any) {
     return {

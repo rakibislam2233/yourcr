@@ -4,6 +4,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { loginUser } from "@/services/auth.service";
+import { getDefaultDashboardRoute } from "@/utils/auth-utils";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -32,26 +33,29 @@ const LoginForm = () => {
     if (state.success) {
       toast.success(state.message);
 
-      console.log("State", state);
+      const loginData = state.data;
+      const callbackUrl = new URLSearchParams(window.location.search).get(
+        "redirect",
+      );
 
-      const data = (state as { data?: { user?: { status: string } } }).data;
-      const userStatus = data?.user?.status;
+      // 1. If backend explicitly asked for a redirect (Verification, Completion, Pending)
+      if (loginData?.redirect) {
+        router.push(loginData.redirect);
+        return;
+      }
 
-      switch (userStatus) {
-        case "PENDING_VERIFICATION":
-          router.push("/auth/verify-otp");
-          break;
-        case "PENDING_COMPLETION":
-          router.push("/auth/cr-register"); // The step component will handle the state
-          break;
-        case "PENDING_APPROVAL":
-          router.push("/auth/waiting-approval");
-          break;
-        case "APPROVED":
-          router.push("/dashboard");
-          break;
-        default:
-          router.push("/dashboard");
+      // 2. If there was a callbackUrl (unauthenticated user trying to access a page)
+      if (callbackUrl) {
+        router.push(callbackUrl);
+        return;
+      }
+
+      // 3. Normal Dashboard Redirect based on Role (Using utility function)
+      const userRole = loginData?.user?.role;
+      if (userRole) {
+        router.push(getDefaultDashboardRoute(userRole));
+      } else {
+        router.push("/"); // If no role, go to home or keep at login
       }
     } else if (state.message && !state.errors) {
       toast.error(state.message);

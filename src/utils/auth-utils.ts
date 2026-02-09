@@ -1,36 +1,36 @@
-export type UserRole = "ADMIN" | "DOCTOR" | "PATIENT";
+export type UserRole = "CR" | "STUDENT";
 
-// exact : ["/my-profile", "settings"]
-//   patterns: [/^\/dashboard/, /^\/patient/], // Routes starting with /dashboard/* /patient/*
 export type RouteConfig = {
   exact: string[];
   patterns: RegExp[];
 };
 
-export const authRoutes = ["/login", "/register", "/forgot-password"];
+export const authRoutes = [
+  "/auth/login",
+  "/auth/register",
+  "/auth/cr-register",
+  "/auth/verify-otp",
+  "/auth/forgot-password",
+  "/auth/reset-password",
+];
 
 export const commonProtectedRoutes: RouteConfig = {
-  exact: ["/my-profile", "/settings", "/change-password", "/reset-password"],
-  patterns: [], // [/password/change-password, /password/reset-password => /password/*]
+  exact: ["/profile", "/settings", "/change-password"],
+  patterns: [/^\/profile/, /^\/settings/],
 };
 
-export const doctorProtectedRoutes: RouteConfig = {
-  patterns: [/^\/doctor/], // Routes starting with /doctor/* , /assitants, /appointments/*
-  exact: [], // "/assistants"
+export const crProtectedRoutes: RouteConfig = {
+  patterns: [/^\/dashboard\/cr/],
+  exact: [],
 };
 
-export const adminProtectedRoutes: RouteConfig = {
-  patterns: [/^\/admin/], // Routes starting with /admin/*
-  exact: [], // "/admins"
-};
-
-export const patientProtectedRoutes: RouteConfig = {
-  patterns: [/^\/dashboard/], // Routes starting with /dashboard/*
-  exact: [], // "/dashboard"
+export const studentProtectedRoutes: RouteConfig = {
+  patterns: [/^\/dashboard\/student/],
+  exact: [],
 };
 
 export const isAuthRoute = (pathname: string) => {
-  return authRoutes.some((route: string) => route === pathname);
+  return authRoutes.some((route: string) => pathname.startsWith(route));
 };
 
 export const isRouteMatches = (
@@ -41,20 +41,16 @@ export const isRouteMatches = (
     return true;
   }
   return routes.patterns.some((pattern: RegExp) => pattern.test(pathname));
-  // if pathname === /dashboard/my-appointments => matches /^\/dashboard/ => true
 };
 
 export const getRouteOwner = (
   pathname: string,
-): "ADMIN" | "DOCTOR" | "PATIENT" | "COMMON" | null => {
-  if (isRouteMatches(pathname, adminProtectedRoutes)) {
-    return "ADMIN";
+): "CR" | "STUDENT" | "COMMON" | null => {
+  if (isRouteMatches(pathname, crProtectedRoutes)) {
+    return "CR";
   }
-  if (isRouteMatches(pathname, doctorProtectedRoutes)) {
-    return "DOCTOR";
-  }
-  if (isRouteMatches(pathname, patientProtectedRoutes)) {
-    return "PATIENT";
+  if (isRouteMatches(pathname, studentProtectedRoutes)) {
+    return "STUDENT";
   }
   if (isRouteMatches(pathname, commonProtectedRoutes)) {
     return "COMMON";
@@ -63,16 +59,13 @@ export const getRouteOwner = (
 };
 
 export const getDefaultDashboardRoute = (role: UserRole): string => {
-  if (role === "ADMIN") {
-    return "/admin/dashboard";
+  if (role === "CR") {
+    return "/dashboard/cr";
   }
-  if (role === "DOCTOR") {
-    return "/doctor/dashboard";
+  if (role === "STUDENT") {
+    return "/dashboard/student";
   }
-  if (role === "PATIENT") {
-    return "/dashboard";
-  }
-  return "/";
+  return "/auth/login";
 };
 
 export const isValidRedirectForRole = (
