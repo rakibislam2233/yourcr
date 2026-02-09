@@ -1,4 +1,4 @@
-import Navbar from "@/components/common/Navbar";
+
 import React from "react";
 
 export default function AuthLayout({
@@ -8,7 +8,6 @@ export default function AuthLayout({
 }) {
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar />
       <main className="grow">{children}</main>
     </div>
   );
