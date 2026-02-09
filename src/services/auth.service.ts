@@ -19,6 +19,16 @@ type ActionState = {
   data?: any;
 };
 
+// Helper to map backend paths to frontend routes
+const mapRoute = (backendPath: string) => {
+  if (backendPath === "/verify-email") return "/auth/cr-register/verify-email";
+  if (backendPath === "/cr-registration/complete-profile")
+    return "/auth/cr-register/complete-profile";
+  if (backendPath === "/cr-registration/pending")
+    return "/auth/cr-register/pending";
+  return backendPath;
+};
+
 export async function loginUser(
   prevState: ActionState,
   formData: FormData,
@@ -38,17 +48,6 @@ export async function loginUser(
   try {
     const res = await api.post("/auth/login", parsed.data);
     const loginData = res.data;
-
-    // Helper to map backend paths to frontend routes
-    const mapRoute = (backendPath: string) => {
-      if (backendPath === "/verify-email")
-        return "/auth/cr-register/verify-email";
-      if (backendPath === "/cr-registration/complete-profile")
-        return "/auth/cr-register/complete-profile";
-      if (backendPath === "/cr-registration/pending")
-        return "/auth/cr-register/pending";
-      return backendPath;
-    };
 
     // 1. Handle Email Verification - Set sessionId and return redirect
     if (loginData?.isEmailVerified === false) {
@@ -174,24 +173,24 @@ export async function completeCrRegistration(
   const values = Object.fromEntries(formData.entries());
 
   try {
-    // Construct the payload structure backend expects
-    const finalFormData = new FormData();
-
+    // 1. Construct the payload structure backend expects
     const institutionInfo = {
       name: values.institutionName,
       type: values.institutionType,
-      contactEmail: values.institutionEmail || values.email,
-      contactPhone: values.institutionPhone || values.phoneNumber,
+      contactEmail: values.institutionEmail,
+      contactPhone: values.institutionPhone,
       address: values.address,
     };
 
     const batchInformation = {
-      name: values.batchSession,
-      batchType: values.batchType || "SEMESTER",
+      name: values.name, // Matches AcademicStep 'name' field
+      batchType: values.batchType,
       department: values.department,
-      academicYear: values.academicYear || values.batchSession,
+      academicYear: values.academicYear,
     };
 
+    // 2. Prepare final FormData for submission
+    const finalFormData = new FormData();
     finalFormData.append("institutionInfo", JSON.stringify(institutionInfo));
     finalFormData.append("batchInformation", JSON.stringify(batchInformation));
 
@@ -200,7 +199,6 @@ export async function completeCrRegistration(
     if (file) {
       finalFormData.append("documentProof", file);
     }
-
     const res = await api.post("/cr-registrations", finalFormData);
     return {
       success: true,
@@ -208,6 +206,7 @@ export async function completeCrRegistration(
       data: res,
     };
   } catch (error: any) {
+    console.error("Complete Profile Error:", error);
     return {
       success: false,
       message: error.message || "Failed to complete registration",
@@ -286,7 +285,35 @@ export async function verifyOtp(
 
   try {
     const res = await api.post("/auth/verify-otp", data);
-    return { success: true, message: "OTP Verified!", data: res };
+
+    // If verification is successful, save tokens if they exist in the response
+    if (res?.data?.tokens) {
+      await setCookie("accessToken", res.data.tokens.accessToken, {
+        secure: true,
+        httpOnly: true,
+        maxAge: 3600,
+        path: "/",
+      });
+
+      await setCookie("refreshToken", res.data.tokens.refreshToken, {
+        secure: true,
+        httpOnly: true,
+        maxAge: 3600 * 24 * 90,
+        path: "/",
+      });
+
+      // Verification successful, we can remove the sessionId
+      await deleteCookie("sessionId");
+    }
+
+    return {
+      success: true,
+      message: res?.message,
+      data: {
+        ...res?.data,
+        redirect: res?.data?.redirect ? mapRoute(res.data.redirect) : undefined,
+      },
+    };
   } catch (error: any) {
     return {
       success: false,

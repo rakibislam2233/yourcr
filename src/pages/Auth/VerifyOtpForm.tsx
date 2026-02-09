@@ -25,7 +25,7 @@ const VerifyOtpForm = () => {
   useEffect(() => {
     if (state.success) {
       toast.success(state.message);
-      router.push("/auth/reset-password");
+      router.push(state.data?.redirect || "/auth/reset-password");
     } else if (state.message && !state.errors) {
       toast.error(state.message);
     }

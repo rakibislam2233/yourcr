@@ -129,20 +129,6 @@ const InstitutionStep: React.FC<InstitutionStepProps> = ({ state }) => {
             <p className="text-sm text-red-500">{state.errors.address[0]}</p>
           )}
         </div>
-
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="department">Department</Label>
-          <Input
-            id="department"
-            name="department"
-            defaultValue={state?.inputs?.department}
-            placeholder="e.g. Computer Science and Engineering"
-            className={`h-12 border-gray-300 ${state?.errors?.department ? "border-red-500" : ""}`}
-          />
-          {state?.errors?.department && (
-            <p className="text-xs text-red-500">{state.errors.department[0]}</p>
-          )}
-        </div>
       </div>
     </div>
   );

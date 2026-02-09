@@ -1,7 +1,10 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { completeCrRegistration } from "@/services/auth.service";
-import { registrationSchema } from "@/validation/auth.validation";
+import {
+  academicStepSchema,
+  institutionStepSchema,
+} from "@/validation/auth.validation";
 import { ArrowLeft, ArrowRight, ShieldCheck } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -61,41 +64,15 @@ const CompleteProfileFormContent = () => {
   }, [state]);
 
   const validateLocalStep = (data: Record<string, unknown>) => {
-    const fieldsByStep: Record<
-      number,
-      (keyof typeof registrationSchema.shape)[]
-    > = {
-      1: [
-        "institutionName",
-        "institutionType",
-        "institutionEmail",
-        "institutionPhone",
-        "address",
-        "department",
-      ],
-      2: [
-        "batchSession",
-        "batchType",
-        "academicYear",
-        "section",
-        "classRoll",
-        "crPosition",
-      ],
-    };
+    let result;
+    if (step === 1) {
+      result = institutionStepSchema.safeParse(data);
+    } else if (step === 2) {
+      result = academicStepSchema.safeParse(data);
+    } else {
+      return true;
+    }
 
-    const currentFields = fieldsByStep[step];
-    if (!currentFields) return true;
-
-    // Build the mask for picking fields
-    const mask = currentFields.reduce((acc, field) => {
-      acc[field] = true;
-      return acc;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    }, {} as any);
-
-    const stepSchema = registrationSchema.pick(mask);
-
-    const result = stepSchema.safeParse(data);
     if (!result.success) {
       const formattedErrors: Record<string, string[]> = {};
       result.error.issues.forEach((issue) => {
