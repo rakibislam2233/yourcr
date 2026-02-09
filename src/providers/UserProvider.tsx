@@ -48,10 +48,13 @@ interface UserProfile {
   currentBatch?: Batch;
 }
 
+import { logoutUser as logoutService } from "@/services/auth.service";
+
 interface UserContextType {
   user: UserProfile | null;
   loading: boolean;
   refreshProfile: () => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -66,7 +69,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       setLoading(true);
       const response = await getMyProfile();
-      // Based on the specific response format provided: response.data
       const profileData = response.data || response;
       setUser(profileData);
     } catch (error) {
@@ -77,12 +79,20 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  const logout = async () => {
+    try {
+      await logoutService();
+    } finally {
+      setUser(null);
+    }
+  };
+
   useEffect(() => {
     refreshProfile();
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, loading, refreshProfile }}>
+    <UserContext.Provider value={{ user, loading, refreshProfile, logout }}>
       {children}
     </UserContext.Provider>
   );

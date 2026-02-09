@@ -22,6 +22,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import PageHeader from "../shared/PageHeader";
+import Image from "next/image";
 
 const MyProfile: React.FC = () => {
   const { user, loading, refreshProfile } = useUser();
@@ -90,9 +91,11 @@ const MyProfile: React.FC = () => {
           <div className="bg-white rounded-md border border-gray-100 p-8 shadow-sm">
             <div className="flex flex-col items-center text-center">
               <div className="relative group">
-                <div className="w-28 h-28 bg-gradient-to-br from-emerald-500 to-emerald-400 rounded-md flex items-center justify-center text-white text-3xl font-bold shadow-lg transition-transform group-hover:scale-105">
+                <div className="w-28 h-28 bg-linear-to-br from-emerald-500 to-emerald-400 rounded-md flex items-center justify-center text-white text-3xl font-bold shadow-lg transition-transform group-hover:scale-105">
                   {user?.profileImage ? (
-                    <img
+                    <Image
+                      width={100}
+                      height={100}
                       src={user.profileImage}
                       alt={user.fullName}
                       className="w-full h-full object-cover rounded-md"
@@ -100,6 +103,7 @@ const MyProfile: React.FC = () => {
                   ) : (
                     user?.fullName
                       ?.split(" ")
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
                       .map((n: any) => n[0])
                       .join("")
                       .slice(0, 2) || "ST"

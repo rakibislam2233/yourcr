@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useUser } from "@/providers/UserProvider";
-import { logoutUser } from "@/services/auth.service";
 import { Bell, ChevronDown, LogOut, Search, User } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
@@ -20,11 +19,11 @@ import { toast } from "sonner";
 const StudentHeader: React.FC = () => {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, loading } = useUser();
+  const { user, loading, logout } = useUser();
 
   const handleLogout = async () => {
     try {
-      await logoutUser();
+      await logout();
       toast.success("Logged out successfully");
       router.push("/auth/login");
     } catch (error) {

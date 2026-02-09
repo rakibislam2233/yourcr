@@ -1,52 +1,63 @@
 "use client";
 
-import React from "react";
+import { Button } from "@/components/ui/button";
+import { useUser } from "@/providers/UserProvider";
 import {
   Building2,
-  MapPin,
-  Phone,
-  Mail,
-  Globe,
   Calendar,
-  Users,
-  GraduationCap,
   Edit,
   ExternalLink,
+  Globe,
+  GraduationCap,
+  Mail,
+  MapPin,
+  Phone,
+  Users,
 } from "lucide-react";
-import PageHeader from "../shared/PageHeader";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import React from "react";
+import PageHeader from "../shared/PageHeader";
 
 const InstitutionPage: React.FC = () => {
+  const { user, loading } = useUser();
+
   const institutionData = {
-    name: "Dhaka Polytechnic Institute",
-    shortName: "DPI",
-    type: "Polytechnic Institute",
-    establishedYear: 1955,
-    address: "Tejgaon Industrial Area, Dhaka-1208, Bangladesh",
-    phone: "+880-2-8870553",
-    email: "info@dpi.gov.bd",
-    website: "www.dpi.gov.bd",
-    totalStudents: 5000,
-    totalDepartments: 12,
+    name: user?.institution?.name || "N/A",
+    shortName: user?.institution?.shortName || "N/A",
+    type: user?.institution?.type || "Polytechnic Institute",
+    establishedYear: user?.institution?.establishedYear || "N/A",
+    address: user?.institution?.address || "N/A",
+    phone: user?.institution?.phoneNumber || "N/A",
+    email: user?.institution?.email || "N/A",
+    website: user?.institution?.website || "N/A",
+    totalStudents: 5000, // Placeholder
+    totalDepartments: 12, // Placeholder
   };
 
   const classInfo = {
-    department: "Computer Technology",
-    semester: "8th Semester",
-    session: "2020-2024",
-    shift: "1st Shift",
-    group: "A",
+    department: user?.currentBatch?.department || "N/A",
+    semester: user?.currentBatch?.semester || "N/A",
+    session: user?.currentBatch?.session || "N/A",
+    shift: "1st Shift", // Placeholder
+    group: "A", // Placeholder
   };
 
   const departmentInfo = {
-    name: "Computer Technology",
-    code: "CT",
-    head: "Engr. Md. Abdul Karim",
-    totalStudents: 450,
-    totalTeachers: 25,
-    labs: 8,
+    name: user?.currentBatch?.department || "N/A",
+    code: "N/A",
+    head: "N/A",
+    totalStudents: 450, // Placeholder
+    totalTeachers: 25, // Placeholder
+    labs: 8, // Placeholder
   };
+
+  if (loading) {
+    return (
+      <div className="p-8 text-center text-gray-500">
+        Loading institution details...
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -89,11 +100,24 @@ const InstitutionPage: React.FC = () => {
             </div>
           </div>
           <div className="flex gap-3">
-            <Button variant="secondary" className="gap-2 bg-white/20 hover:bg-white/30 text-white border-0">
-              <Globe className="w-4 h-4" />
-              Visit Website
-              <ExternalLink className="w-3 h-3" />
-            </Button>
+            <a
+              href={
+                institutionData.website.startsWith("http")
+                  ? institutionData.website
+                  : `https://${institutionData.website}`
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button
+                variant="secondary"
+                className="gap-2 bg-white/20 hover:bg-white/30 text-white border-0"
+              >
+                <Globe className="w-4 h-4" />
+                Visit Website
+                <ExternalLink className="w-3 h-3" />
+              </Button>
+            </a>
           </div>
         </div>
       </div>
@@ -158,7 +182,7 @@ const InstitutionPage: React.FC = () => {
             <h3 className="text-lg font-semibold text-gray-900">
               Your Class Information
             </h3>
-            <Link href="/dashboard/cr/institution/edit">
+            <Link href="/dashboard/cr/profile">
               <Button variant="ghost" size="sm">
                 <Edit className="w-4 h-4" />
               </Button>
