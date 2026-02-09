@@ -1,7 +1,6 @@
 "use client";
 
 import logo from "@/assets/logo/logo.png";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Sidebar,
   SidebarContent,
@@ -16,6 +15,7 @@ import {
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import { useUser } from "@/providers/UserProvider";
+import { logoutUser } from "@/services/auth.service";
 import {
   Bell,
   BookOpen,
@@ -33,6 +33,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import * as React from "react";
 import { toast } from "sonner";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const menuGroups = [
   {
@@ -111,7 +112,7 @@ const StudentSidebar: React.FC = () => {
   const pathname = usePathname();
   const router = useRouter();
   const { state, isMobile } = useSidebar();
-  const { user, loading, logout } = useUser();
+  const { user, loading } = useUser();
   const isCollapsed = state === "collapsed" && !isMobile;
 
   const isActive = (href: string) => {
@@ -122,7 +123,7 @@ const StudentSidebar: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      await logout();
+      await logoutUser();
       toast.success("Logged out successfully");
       router.push("/auth/login");
     } catch (error) {
@@ -205,7 +206,7 @@ const StudentSidebar: React.FC = () => {
           ))}
         </SidebarContent>
 
-        {/* Footer - User Profile & Academic Context */}
+        {/* Footer - User Profile */}
         <SidebarFooter className="p-4 border-t border-emerald-50">
           <div
             className={cn(
@@ -215,7 +216,7 @@ const StudentSidebar: React.FC = () => {
           >
             <Avatar className="h-9 w-9 rounded-md border border-emerald-100">
               <AvatarImage src={user?.profileImage} alt={user?.fullName} />
-              <AvatarFallback className="bg-emerald-600 text-white text-xs font-bold rounded-md uppercase">
+              <AvatarFallback className="bg-emerald-600 text-white text-xs font-bold rounded-md">
                 {user?.fullName
                   ?.split(" ")
                   .map((n: string) => n[0])
@@ -229,38 +230,11 @@ const StudentSidebar: React.FC = () => {
                   {loading ? "Loading..." : user?.fullName || "Student Account"}
                 </p>
                 <p className="text-[10px] font-semibold text-emerald-500 truncate uppercase tracking-tighter">
-                  {user?.role}
+                  {user?.email || "student.portal@yourcr.com"}
                 </p>
               </div>
             )}
           </div>
-
-          {!isCollapsed && (
-            <div className="mt-4 px-2 py-3 bg-emerald-50/50 rounded-lg space-y-2">
-              <div className="space-y-0.5">
-                <p className="text-[9px] font-bold text-emerald-400 uppercase tracking-widest leading-none">
-                  Institution
-                </p>
-                <p className="text-[11px] font-bold text-gray-700 truncate">
-                  {user?.institution?.name || "N/A"}
-                </p>
-              </div>
-              <div className="space-y-0.5">
-                <p className="text-[9px] font-bold text-emerald-400 uppercase tracking-widest leading-none">
-                  Batch & Dept
-                </p>
-                <div className="flex items-center gap-1.5 flex-wrap">
-                  <span className="px-1.5 py-0.5 bg-emerald-600/10 text-emerald-600 text-[9px] font-bold rounded">
-                    {user?.currentBatch?.name || "N/A"}
-                  </span>
-                  <span className="text-[10px] font-semibold text-gray-500 truncate">
-                    {user?.currentBatch?.department || "N/A"}
-                  </span>
-                </div>
-              </div>
-            </div>
-          )}
-
           {!isCollapsed && (
             <button
               onClick={handleLogout}

@@ -4,7 +4,6 @@ import logo from "@/assets/logo/logo.png";
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupLabel,
   SidebarHeader,
@@ -14,7 +13,6 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import { useUser } from "@/providers/UserProvider";
 import {
   Bell,
   BookOpen,
@@ -112,7 +110,6 @@ const menuGroups = [
 const CrSidebar: React.FC = () => {
   const pathname = usePathname();
   const { state, isMobile } = useSidebar();
-  const { user } = useUser();
   const isCollapsed = state === "collapsed" && !isMobile;
 
   const isActive = (href: string) => {
@@ -177,7 +174,7 @@ const CrSidebar: React.FC = () => {
                           <item.icon
                             className={cn(
                               "shrink-0",
-                              isCollapsed ? "size-6" : "size-6",
+                              isCollapsed ? "size-8" : "size-6",
                               active ? "text-white" : "text-gray-400",
                             )}
                           />
@@ -195,33 +192,6 @@ const CrSidebar: React.FC = () => {
             </SidebarGroup>
           ))}
         </SidebarContent>
-
-        {/* Footer - User Context */}
-        {!isCollapsed && (
-          <SidebarFooter className="p-4 border-t border-gray-100 bg-gray-50/30">
-            <div className="space-y-1">
-              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-none">
-                Institution
-              </p>
-              <p className="text-xs font-bold text-gray-900 truncate">
-                {user?.institution?.name || "N/A"}
-              </p>
-            </div>
-            <div className="mt-3 space-y-1">
-              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-none">
-                Batch & Dept.
-              </p>
-              <div className="flex items-center gap-1.5 flex-wrap">
-                <span className="px-1.5 py-0.5 bg-primary/10 text-primary text-[10px] font-bold rounded">
-                  {user?.currentBatch?.name || "N/A"}
-                </span>
-                <span className="text-[10px] font-semibold text-gray-500 truncate">
-                  {user?.currentBatch?.department || "N/A"}
-                </span>
-              </div>
-            </div>
-          </SidebarFooter>
-        )}
       </div>
     </Sidebar>
   );
