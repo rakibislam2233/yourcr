@@ -1,5 +1,4 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -42,11 +41,10 @@ const ContactUs = () => {
   };
 
   return (
-    <section className="w-full pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-16 px-4 sm:px-6">
-      {/* Header - matching your original screenshot style */}
+    <section className="relative pt-24 pb-20 md:pt-32 md:pb-32 bg-white">
       <div className="mx-auto max-w-4xl text-center mb-10">
         <h1 className="text-4xl font-bold text-gray-900 sm:text-5xl">
-          Contact Us
+          Contact <span className="text-primary">Us</span>
         </h1>
         <p className="mt-4 text-lg text-gray-600">
           We&apos;d love to hear from you! Please fill out the form below and we
@@ -55,7 +53,7 @@ const ContactUs = () => {
       </div>
 
       {/* Main Form Section */}
-      <div className="w-full container mx-auto   pb-16">
+      <div className="w-full container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-2xl  border border-gray-100/80 overflow-hidden">
           <div className="grid md:grid-cols-2 gap-0">
             <Image
