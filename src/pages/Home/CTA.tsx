@@ -5,7 +5,8 @@ const CTA = () => {
   return (
     <section className="w-full py-16 overflow-hidden">
       <div className="w-full container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-linear-to-r from-[#2456C4]  to-[#1E293B] rounded-lg">
+        <div className="bg-linear-to-r from-[#2456C4]  to-[#1E293B] rounded-lg relative">
+          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
           <div className="relative z-10 px-8  py-16  grid md:grid-cols-2 gap-8 items-end">
             <div className="max-w-xl">
               <h2 className="text-2xl sm:text-3xl  text-white mb-6 leading-tight">
