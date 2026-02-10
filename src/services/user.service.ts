@@ -67,7 +67,7 @@ export async function updateInstitutionBatch(
     const institutionInfo = {
       name: values.institutionName,
       shortName: values.shortName,
-      establisYear: values.establisYear,
+      establishedYear: values.establishedYear,
       type: values.institutionType,
       contactEmail: values.contactEmail,
       contactPhone: values.contactPhone,

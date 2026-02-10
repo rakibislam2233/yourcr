@@ -13,7 +13,7 @@ export default async function EditInstitutionPage() {
     name: user?.institution?.name || "",
     shortName: user?.institution?.shortName || "",
     type: user?.institution?.type || "",
-    establishedYear: user?.institution?.establisYear || "",
+    establishedYear: user?.institution?.establishedYear || "",
     address: user?.institution?.address || "",
     phone: user?.institution?.contactPhone || "",
     email: user?.institution?.contactEmail || "",

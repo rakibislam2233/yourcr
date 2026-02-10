@@ -165,7 +165,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
                 >
                   <SelectValue placeholder="Select type" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="w-[--radix-select-trigger-width]">
                   <SelectItem value="UNIVERSITY">University</SelectItem>
                   <SelectItem value="COLLEGE">College</SelectItem>
                   <SelectItem value="POLYTECHNIC">Polytechnic</SelectItem>
@@ -181,7 +181,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
 
           <div className="flex flex-col gap-1.5">
             <Label
-              htmlFor="establisYear"
+              htmlFor="establishedYear"
               className="text-sm font-semibold text-gray-700"
             >
               Established Year
@@ -189,12 +189,12 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
             <div className="relative">
               <CalendarDays className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <Input
-                id="establisYear"
-                name="establisYear"
+                id="establishedYear"
+                name="establishedYear"
                 type="number"
                 placeholder="e.g. 1955"
                 defaultValue={
-                  (state.inputs?.establisYear as string) ||
+                  (state.inputs?.establishedYear as string) ||
                   defaultData.establishedYear
                 }
                 className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all"
@@ -364,7 +364,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
                 >
                   <SelectValue placeholder="Select type" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="w-[--radix-select-trigger-width]">
                   <SelectItem value="SEMESTER">Semester</SelectItem>
                   <SelectItem value="YEAR">Year</SelectItem>
                 </SelectContent>
