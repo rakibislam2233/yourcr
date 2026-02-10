@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getCookie } from "@/utils/tokenHandlers";
-import { getNewAccessToken } from "./auth.service";
 
 const BACKEND_API_URL =
   process.env.NEXT_PUBLIC_BASE_API_URL || "http://localhost:5000/api/v1";
@@ -42,18 +41,76 @@ const serverFetchHelper = async (
   try {
     let response = await fetch(`${BACKEND_API_URL}${endpoint}`, config);
 
-    // Refresh Token Logic
+    // Refresh Token Logic - Handle 401 by attempting token refresh
     if (
       response.status === 401 &&
       endpoint !== "/auth/login" &&
       endpoint !== "/auth/refresh-token"
     ) {
-      const refreshResult = await getNewAccessToken();
-      if (refreshResult.success) {
-        const newAccessToken = await getCookie("accessToken");
-        (config.headers as Record<string, string>)["Authorization"] =
-          `Bearer ${newAccessToken}`;
-        response = await fetch(`${BACKEND_API_URL}${endpoint}`, config);
+      const refreshToken = await getCookie("refreshToken");
+
+      if (refreshToken) {
+        try {
+          // Attempt to refresh the token
+          const refreshResponse = await fetch(
+            `${BACKEND_API_URL}/auth/refresh-token`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ refreshToken }),
+            },
+          );
+
+          if (refreshResponse.ok) {
+            const refreshData = await refreshResponse.json();
+            const newAccessToken = refreshData.data?.accessToken;
+            const newRefreshToken = refreshData.data?.refreshToken;
+
+            if (newAccessToken) {
+              // Update the authorization header with new token
+              (config.headers as Record<string, string>)["Authorization"] =
+                `Bearer ${newAccessToken}`;
+
+              // Store new tokens using server action
+              const { setCookie } = await import("@/utils/tokenHandlers");
+              const isProduction = process.env.NODE_ENV === "production";
+
+              await setCookie("accessToken", newAccessToken, {
+                secure: isProduction,
+                httpOnly: true,
+                maxAge: 3600,
+                path: "/",
+              });
+
+              if (newRefreshToken) {
+                await setCookie("refreshToken", newRefreshToken, {
+                  secure: isProduction,
+                  httpOnly: true,
+                  maxAge: 3600 * 24 * 90,
+                  path: "/",
+                });
+              }
+
+              // Update role cookie if available
+              if (refreshData.data?.user?.role) {
+                await setCookie("userRole", refreshData.data.user.role, {
+                  secure: isProduction,
+                  httpOnly: true,
+                  maxAge: 3600 * 24 * 90,
+                  path: "/",
+                });
+              }
+
+              // Retry the original request with new token
+              response = await fetch(`${BACKEND_API_URL}${endpoint}`, config);
+            }
+          }
+        } catch (refreshError) {
+          console.error("Token refresh failed:", refreshError);
+          // Continue with the original 401 response
+        }
       }
     }
 

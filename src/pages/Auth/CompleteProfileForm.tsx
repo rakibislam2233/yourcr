@@ -56,7 +56,7 @@ export default function CompleteProfileForm() {
 
   const isPending = isPendingAction || isPendingTransitions;
 
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     if (state.success) {
