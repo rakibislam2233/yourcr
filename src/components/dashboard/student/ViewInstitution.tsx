@@ -58,7 +58,7 @@ const ViewInstitution: React.FC<ViewInstitutionProps> = ({ user }) => {
       <PageHeader
         title="My Institute"
         description="View your institution details"
-        icon={Building2}
+        icon={<Building2 />}
         breadcrumbs={[
           { label: "Home", href: "/dashboard/student" },
           { label: "My Institute" },

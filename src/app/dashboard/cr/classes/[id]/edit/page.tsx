@@ -51,7 +51,7 @@ export default function EditClassPage() {
       <PageHeader
         title="Edit Class"
         description="Update class information"
-        icon={Video}
+        icon={<Video />}
         breadcrumbs={[
           { label: "Dashboard", href: "/dashboard/cr" },
           { label: "Manage Classes", href: "/dashboard/cr/classes" },

@@ -36,7 +36,7 @@ export default function AddNoticePage() {
       <PageHeader
         title="Create Notice"
         description="Create a new notice or announcement"
-        icon={Bell}
+        icon={<Bell />}
         breadcrumbs={[
           { label: "Dashboard", href: "/dashboard/cr" },
           { label: "Manage Notices", href: "/dashboard/cr/notices" },

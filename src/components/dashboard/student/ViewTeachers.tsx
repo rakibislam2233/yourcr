@@ -81,7 +81,7 @@ const ViewTeachers: React.FC = () => {
       <PageHeader
         title="Teachers"
         description="View teachers assigned to your class"
-        icon={Users}
+        icon={<Users />}
         breadcrumbs={[
           { label: "Home", href: "/dashboard/student" },
           { label: "Teachers" },

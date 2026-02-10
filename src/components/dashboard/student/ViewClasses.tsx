@@ -80,7 +80,7 @@ const ViewClasses: React.FC = () => {
       <PageHeader
         title="Online Classes"
         description="Join your online classes and view recordings"
-        icon={Video}
+        icon={<Video />}
         breadcrumbs={[
           { label: "Home", href: "/dashboard/student" },
           { label: "Classes" },

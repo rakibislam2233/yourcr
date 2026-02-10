@@ -126,7 +126,7 @@ export default function EditAssessmentPage() {
       <PageHeader
         title="Edit Assessment"
         description="Update assessment information"
-        icon={ClipboardList}
+        icon={<ClipboardList />}
         breadcrumbs={[
           { label: "Dashboard", href: "/dashboard/cr" },
           { label: "Manage Assessments", href: "/dashboard/cr/assessments" },

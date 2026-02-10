@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
@@ -51,7 +52,12 @@ const PageHeader: React.FC<PageHeaderProps> = ({
         <div className="flex items-center gap-4">
           {icon && (
             <div className="p-3 rounded-xl bg-primary/10 text-primary">
-              {icon}
+              {React.isValidElement(icon)
+                ? React.cloneElement(icon as React.ReactElement, {
+                    className: "w-6 h-6",
+                    ...(icon.props as any),
+                  })
+                : icon}
             </div>
           )}
           <div>

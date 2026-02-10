@@ -199,7 +199,7 @@ export default function NotificationsPage() {
       <PageHeader
         title="Notifications"
         description="View and manage all your notifications"
-        icon={Bell}
+        icon={<Bell />}
         breadcrumbs={[
           { label: "Dashboard", href: "/dashboard/cr" },
           { label: "Notifications" },

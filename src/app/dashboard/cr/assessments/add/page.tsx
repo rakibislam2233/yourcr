@@ -43,7 +43,7 @@ export default function AddAssessmentPage() {
       <PageHeader
         title="Create Assessment"
         description="Create a new exam, assignment, or quiz"
-        icon={ClipboardList}
+        icon={<ClipboardList />}
         breadcrumbs={[
           { label: "Dashboard", href: "/dashboard/cr" },
           { label: "Manage Assessments", href: "/dashboard/cr/assessments" },

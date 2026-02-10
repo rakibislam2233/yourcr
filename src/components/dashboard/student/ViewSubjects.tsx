@@ -102,7 +102,7 @@ const ViewSubjects: React.FC = () => {
       <PageHeader
         title="Subjects"
         description="View all subjects for this semester"
-        icon={BookOpen}
+        icon={<BookOpen />}
         breadcrumbs={[
           { label: "Home", href: "/dashboard/student" },
           { label: "Subjects" },

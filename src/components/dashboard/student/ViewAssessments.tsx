@@ -154,7 +154,7 @@ const ViewAssessments: React.FC = () => {
       <PageHeader
         title="Assessments"
         description="View your exams, assignments, and quizzes"
-        icon={ClipboardList}
+        icon={<ClipboardList />}
         breadcrumbs={[
           { label: "Home", href: "/dashboard/student" },
           { label: "Assessments" },

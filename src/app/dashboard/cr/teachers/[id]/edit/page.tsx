@@ -112,7 +112,7 @@ export default function EditTeacherPage() {
       <PageHeader
         title="Edit Teacher"
         description="Update teacher information"
-        icon={Users}
+        icon={<Users />}
         breadcrumbs={[
           { label: "Dashboard", href: "/dashboard/cr" },
           { label: "Manage Teachers", href: "/dashboard/cr/teachers" },

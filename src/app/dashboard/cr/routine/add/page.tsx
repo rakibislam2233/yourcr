@@ -50,7 +50,7 @@ function AddRoutineContent() {
       <PageHeader
         title="Add Class to Routine"
         description="Add a new class to the schedule"
-        icon={Calendar}
+        icon={<Calendar />}
         breadcrumbs={[
           { label: "Dashboard", href: "/dashboard/cr" },
           { label: "Manage Routine", href: "/dashboard/cr/routine" },

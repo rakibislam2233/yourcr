@@ -99,7 +99,7 @@ const SubmitIssue: React.FC = () => {
       <PageHeader
         title="Submit Issue"
         description="Report an issue or request to your Class Representative"
-        icon={MessageSquare}
+        icon={<MessageSquare />}
         breadcrumbs={[
           { label: "Home", href: "/dashboard/student" },
           { label: "Submit Issue" },

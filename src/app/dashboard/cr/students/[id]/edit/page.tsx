@@ -65,7 +65,7 @@ export default function EditStudentPage() {
       <PageHeader
         title="Edit Student"
         description="Update student information"
-        icon={UserPlus}
+        icon={<UserPlus />}
         breadcrumbs={[
           { label: "Dashboard", href: "/dashboard/cr" },
           { label: "Manage Students", href: "/dashboard/cr/students" },

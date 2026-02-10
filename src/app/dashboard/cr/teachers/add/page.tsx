@@ -90,7 +90,7 @@ export default function AddTeacherPage() {
       <PageHeader
         title="Add New Teacher"
         description="Add a new teacher to your class"
-        icon={Users}
+        icon={<Users />}
         breadcrumbs={[
           { label: "Dashboard", href: "/dashboard/cr" },
           { label: "Manage Teachers", href: "/dashboard/cr/teachers" },

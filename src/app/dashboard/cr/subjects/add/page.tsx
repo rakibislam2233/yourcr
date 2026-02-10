@@ -46,7 +46,7 @@ export default function AddSubjectPage() {
       <PageHeader
         title="Add New Subject"
         description="Add a new subject to your class"
-        icon={BookOpen}
+        icon={<BookOpen />}
         breadcrumbs={[
           { label: "Dashboard", href: "/dashboard/cr" },
           { label: "Manage Subjects", href: "/dashboard/cr/subjects" },

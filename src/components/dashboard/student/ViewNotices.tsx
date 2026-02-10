@@ -140,7 +140,7 @@ const ViewNotices: React.FC = () => {
       <PageHeader
         title="Notices"
         description="Stay updated with class announcements and notices"
-        icon={Bell}
+        icon={<Bell />}
         breadcrumbs={[
           { label: "Home", href: "/dashboard/student" },
           { label: "Notices" },

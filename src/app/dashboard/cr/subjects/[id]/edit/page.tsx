@@ -72,7 +72,7 @@ export default function EditSubjectPage() {
       <PageHeader
         title="Edit Subject"
         description="Update subject information"
-        icon={BookOpen}
+        icon={<BookOpen />}
         breadcrumbs={[
           { label: "Dashboard", href: "/dashboard/cr" },
           { label: "Manage Subjects", href: "/dashboard/cr/subjects" },

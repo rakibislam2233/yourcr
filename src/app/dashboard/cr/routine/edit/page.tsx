@@ -73,7 +73,7 @@ function EditRoutineContent() {
       <PageHeader
         title="Edit Class"
         description="Update class information"
-        icon={Calendar}
+        icon={<Calendar />}
         breadcrumbs={[
           { label: "Dashboard", href: "/dashboard/cr" },
           { label: "Manage Routine", href: "/dashboard/cr/routine" },

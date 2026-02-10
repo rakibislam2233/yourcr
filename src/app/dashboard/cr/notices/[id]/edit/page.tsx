@@ -55,7 +55,7 @@ export default function EditNoticePage() {
       <PageHeader
         title="Edit Notice"
         description="Update notice information"
-        icon={Bell}
+        icon={<Bell />}
         breadcrumbs={[
           { label: "Dashboard", href: "/dashboard/cr" },
           { label: "Manage Notices", href: "/dashboard/cr/notices" },

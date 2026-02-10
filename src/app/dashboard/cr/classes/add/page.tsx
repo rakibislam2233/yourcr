@@ -34,7 +34,7 @@ export default function AddClassPage() {
       <PageHeader
         title="Schedule New Class"
         description="Schedule an online class"
-        icon={Video}
+        icon={<Video />}
         breadcrumbs={[
           { label: "Dashboard", href: "/dashboard/cr" },
           { label: "Manage Classes", href: "/dashboard/cr/classes" },
