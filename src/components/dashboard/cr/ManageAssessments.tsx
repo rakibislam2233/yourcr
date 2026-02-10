@@ -1,23 +1,23 @@
 "use client";
 
-import React, { useState } from "react";
-import {
-  ClipboardList,
-  Plus,
-  Calendar,
-  Clock,
-  FileText,
-  Download,
-  Edit,
-  Trash2,
-  CheckCircle,
-  AlertCircle,
-  Timer,
-} from "lucide-react";
-import PageHeader from "../shared/PageHeader";
 import { Button } from "@/components/ui/button";
 import { ConfirmModal } from "@/components/ui/modal";
+import {
+  AlertCircle,
+  Calendar,
+  CheckCircle,
+  ClipboardList,
+  Clock,
+  Download,
+  Edit,
+  FileText,
+  Plus,
+  Timer,
+  Trash2,
+} from "lucide-react";
 import Link from "next/link";
+import React, { useState } from "react";
+import PageHeader from "../shared/PageHeader";
 
 interface Assessment {
   id: number;
@@ -149,9 +149,11 @@ const getTypeColor = (type: string) => {
 };
 
 const ManageAssessments: React.FC = () => {
-  const [assessments, setAssessments] = useState<Assessment[]>(initialAssessments);
+  const [assessments, setAssessments] =
+    useState<Assessment[]>(initialAssessments);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [selectedAssessment, setSelectedAssessment] = useState<Assessment | null>(null);
+  const [selectedAssessment, setSelectedAssessment] =
+    useState<Assessment | null>(null);
 
   const handleDelete = (assessment: Assessment) => {
     setSelectedAssessment(assessment);
@@ -165,16 +167,20 @@ const ManageAssessments: React.FC = () => {
     }
   };
 
-  const upcomingCount = assessments.filter((a) => a.status === "upcoming").length;
+  const upcomingCount = assessments.filter(
+    (a) => a.status === "upcoming",
+  ).length;
   const ongoingCount = assessments.filter((a) => a.status === "ongoing").length;
-  const completedCount = assessments.filter((a) => a.status === "completed").length;
+  const completedCount = assessments.filter(
+    (a) => a.status === "completed",
+  ).length;
 
   return (
     <div className="space-y-6">
       <PageHeader
         title="Manage Assessments"
         description="Create and manage exams, assignments, and quizzes"
-        icon={ClipboardList}
+        icon={<ClipboardList className="w-6 h-6" />}
         breadcrumbs={[
           { label: "Dashboard", href: "/dashboard/cr" },
           { label: "Manage Assessments" },
@@ -193,19 +199,27 @@ const ManageAssessments: React.FC = () => {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Total Assessments</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">{assessments.length}</p>
+          <p className="text-2xl font-bold text-gray-900 mt-1">
+            {assessments.length}
+          </p>
         </div>
         <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Upcoming</p>
-          <p className="text-2xl font-bold text-blue-600 mt-1">{upcomingCount}</p>
+          <p className="text-2xl font-bold text-blue-600 mt-1">
+            {upcomingCount}
+          </p>
         </div>
         <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Ongoing</p>
-          <p className="text-2xl font-bold text-orange-600 mt-1">{ongoingCount}</p>
+          <p className="text-2xl font-bold text-orange-600 mt-1">
+            {ongoingCount}
+          </p>
         </div>
         <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Completed</p>
-          <p className="text-2xl font-bold text-green-600 mt-1">{completedCount}</p>
+          <p className="text-2xl font-bold text-green-600 mt-1">
+            {completedCount}
+          </p>
         </div>
       </div>
 
@@ -223,7 +237,7 @@ const ManageAssessments: React.FC = () => {
                 <div className="flex items-start gap-4">
                   <div
                     className={`w-14 h-14 ${getTypeColor(
-                      assessment.type
+                      assessment.type,
                     )} rounded-xl flex items-center justify-center text-white`}
                   >
                     <ClipboardList className="w-7 h-7" />
@@ -285,7 +299,9 @@ const ManageAssessments: React.FC = () => {
                         Results
                       </Button>
                     )}
-                    <Link href={`/dashboard/cr/assessments/${assessment.id}/edit`}>
+                    <Link
+                      href={`/dashboard/cr/assessments/${assessment.id}/edit`}
+                    >
                       <Button variant="ghost" size="sm">
                         <Edit className="w-4 h-4" />
                       </Button>

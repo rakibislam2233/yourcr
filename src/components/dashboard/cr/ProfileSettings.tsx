@@ -79,7 +79,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
       <PageHeader
         title="Profile Settings"
         description="Manage your CR account and institutional sync"
-        icon={Settings}
+        icon={<Settings />}
         breadcrumbs={[
           { label: "Dashboard", href: "/dashboard/cr" },
           { label: "Profile Settings" },

@@ -80,7 +80,7 @@ const MyProfile: React.FC<MyProfileProps> = ({ user }) => {
       <PageHeader
         title="My Profile"
         description="View your institutional identity and manage portal settings"
-        icon={User}
+        icon={<User />}
         breadcrumbs={[
           { label: "Home", href: "/dashboard/student" },
           { label: "My Profile" },

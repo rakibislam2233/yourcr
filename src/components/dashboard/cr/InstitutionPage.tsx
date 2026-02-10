@@ -33,10 +33,11 @@ const InstitutionPage: React.FC<InstitutionPageProps> = ({ user }) => {
 
   const classInfo = {
     department: user?.currentBatch?.department || "N/A",
-    semester: user?.currentBatch?.semester || "N/A",
+    academicYear: user?.currentBatch?.academicYear || "N/A",
+    semester: user?.currentBatch?.semester,
     session: user?.currentBatch?.session || "N/A",
-    shift: "1st Shift", // Placeholder
-    group: "A", // Placeholder
+    shift: user?.currentBatch?.shift,
+    group: user?.currentBatch?.group,
   };
   if (!user) {
     return (
@@ -171,7 +172,7 @@ const InstitutionPage: React.FC<InstitutionPageProps> = ({ user }) => {
               </Button>
             </Link>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="p-4 bg-gray-50 rounded-xl">
               <p className="text-sm text-gray-500">Department</p>
               <p className="font-semibold text-gray-900 mt-1">
@@ -179,17 +180,41 @@ const InstitutionPage: React.FC<InstitutionPageProps> = ({ user }) => {
               </p>
             </div>
             <div className="p-4 bg-gray-50 rounded-xl">
-              <p className="text-sm text-gray-500">Semester</p>
+              <p className="text-sm text-gray-500">Academic Year</p>
               <p className="font-semibold text-gray-900 mt-1">
-                {classInfo.semester}
+                {classInfo.academicYear}
               </p>
             </div>
+            {classInfo.semester && (
+              <div className="p-4 bg-gray-50 rounded-xl">
+                <p className="text-sm text-gray-500">Semester</p>
+                <p className="font-semibold text-gray-900 mt-1">
+                  {classInfo.semester}
+                </p>
+              </div>
+            )}
             <div className="p-4 bg-gray-50 rounded-xl">
               <p className="text-sm text-gray-500">Session</p>
               <p className="font-semibold text-gray-900 mt-1">
                 {classInfo.session}
               </p>
             </div>
+            {classInfo.shift && (
+              <div className="p-4 bg-gray-50 rounded-xl">
+                <p className="text-sm text-gray-500">Shift</p>
+                <p className="font-semibold text-gray-900 mt-1">
+                  {classInfo.shift}
+                </p>
+              </div>
+            )}
+            {classInfo.group && (
+              <div className="p-4 bg-gray-50 rounded-xl">
+                <p className="text-sm text-gray-500">Group / Class</p>
+                <p className="font-semibold text-gray-900 mt-1">
+                  {classInfo.group}
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>

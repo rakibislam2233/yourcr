@@ -1,22 +1,22 @@
 "use client";
 
-import React, { useState } from "react";
-import {
-  Video,
-  Plus,
-  ExternalLink,
-  Calendar,
-  Clock,
-  Users,
-  Link as LinkIcon,
-  Copy,
-  Edit,
-  Trash2,
-} from "lucide-react";
-import PageHeader from "../shared/PageHeader";
 import { Button } from "@/components/ui/button";
 import { ConfirmModal } from "@/components/ui/modal";
+import {
+  Calendar,
+  Clock,
+  Copy,
+  Edit,
+  ExternalLink,
+  Link as LinkIcon,
+  Plus,
+  Trash2,
+  Users,
+  Video,
+} from "lucide-react";
 import Link from "next/link";
+import React, { useState } from "react";
+import PageHeader from "../shared/PageHeader";
 
 interface OnlineClass {
   id: number;
@@ -92,7 +92,7 @@ const ManageClasses: React.FC = () => {
       <PageHeader
         title="Manage Classes"
         description="Manage online class schedules and meeting links"
-        icon={Video}
+        icon={<Video className="w-6 h-6" />}
         breadcrumbs={[
           { label: "Dashboard", href: "/dashboard/cr" },
           { label: "Manage Classes" },
@@ -124,23 +124,34 @@ const ManageClasses: React.FC = () => {
         <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Upcoming</p>
           <p className="text-2xl font-bold text-green-600 mt-1">
-            {classes.filter((c) => c.status === "upcoming" || c.status === "scheduled").length}
+            {
+              classes.filter(
+                (c) => c.status === "upcoming" || c.status === "scheduled",
+              ).length
+            }
           </p>
         </div>
         <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Total Scheduled</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">{classes.length}</p>
+          <p className="text-2xl font-bold text-gray-900 mt-1">
+            {classes.length}
+          </p>
         </div>
       </div>
 
       {/* Classes List */}
       <div className="bg-white rounded-2xl border border-gray-100">
         <div className="p-6 border-b border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-900">Scheduled Classes</h3>
+          <h3 className="text-lg font-semibold text-gray-900">
+            Scheduled Classes
+          </h3>
         </div>
         <div className="divide-y divide-gray-100">
           {classes.map((cls) => (
-            <div key={cls.id} className="p-6 hover:bg-gray-50/50 transition-colors">
+            <div
+              key={cls.id}
+              className="p-6 hover:bg-gray-50/50 transition-colors"
+            >
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                 <div className="flex items-start gap-4">
                   <div
@@ -148,8 +159,8 @@ const ManageClasses: React.FC = () => {
                       cls.status === "live"
                         ? "bg-red-100"
                         : cls.status === "upcoming"
-                        ? "bg-green-100"
-                        : "bg-gray-100"
+                          ? "bg-green-100"
+                          : "bg-gray-100"
                     }`}
                   >
                     <Video
@@ -157,14 +168,16 @@ const ManageClasses: React.FC = () => {
                         cls.status === "live"
                           ? "text-red-600"
                           : cls.status === "upcoming"
-                          ? "text-green-600"
-                          : "text-gray-600"
+                            ? "text-green-600"
+                            : "text-gray-600"
                       }`}
                     />
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <h4 className="font-semibold text-gray-900">{cls.subject}</h4>
+                      <h4 className="font-semibold text-gray-900">
+                        {cls.subject}
+                      </h4>
                       {cls.status === "live" && (
                         <span className="flex items-center gap-1 px-2 py-0.5 bg-red-100 text-red-600 text-xs font-medium rounded-full">
                           <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />
@@ -194,7 +207,9 @@ const ManageClasses: React.FC = () => {
                 <div className="flex items-center gap-2 pl-14 lg:pl-0">
                   <div className="flex items-center gap-2 px-3 py-2 bg-gray-100 rounded-lg">
                     <LinkIcon className="w-4 h-4 text-gray-500" />
-                    <span className="text-sm text-gray-600">{cls.platform}</span>
+                    <span className="text-sm text-gray-600">
+                      {cls.platform}
+                    </span>
                   </div>
                   <Button
                     variant="outline"

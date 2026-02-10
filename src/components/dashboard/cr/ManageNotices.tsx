@@ -151,7 +151,7 @@ const ManageNotices: React.FC = () => {
       <PageHeader
         title="Manage Notices"
         description="Create and manage class notices and announcements"
-        icon={Bell}
+        icon={<Bell className="w-6 h-6" />}
         breadcrumbs={[
           { label: "Dashboard", href: "/dashboard/cr" },
           { label: "Manage Notices" },
