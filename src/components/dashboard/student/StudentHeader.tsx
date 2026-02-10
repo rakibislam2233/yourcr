@@ -97,9 +97,12 @@ const StudentHeader: React.FC = () => {
                   Student
                 </span>
               </div>
-              <Avatar className="h-9 w-9 rounded-md border border-emerald-200 shadow-sm transition-transform group-hover:scale-105">
-                <AvatarImage src={user?.profileImage} alt={user?.fullName} />
-                <AvatarFallback className="bg-emerald-600 text-white text-xs font-bold rounded-md uppercase">
+              <Avatar className="size-10 rounded-full border border-emerald-200 shadow-sm transition-transform group-hover:scale-105">
+                <AvatarImage
+                  src={user?.profileImage || "https://github.com/shadcn.png"}
+                  alt={user?.fullName || "Student"}
+                />
+                <AvatarFallback className="bg-emerald-600 text-white text-xs font-bold rounded-full uppercase">
                   {user?.fullName
                     ?.split(" ")
                     .map((n: string) => n[0])
