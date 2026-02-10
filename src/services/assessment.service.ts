@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import { revalidatePath } from "next/cache";
@@ -60,7 +61,7 @@ export async function createAssessment(prevState: any, formData: FormData) {
     return {
       success: false,
       message: response.message || "Failed to create assessment",
-      errors: response.data?.errors,
+      errors: (response.data as any)?.errors,
       timestamp: Date.now(),
     };
   } catch (error: any) {
@@ -98,7 +99,7 @@ export async function updateAssessment(
     return {
       success: false,
       message: response.message || "Failed to update assessment",
-      errors: response.data?.errors,
+      errors: (response.data as any)?.errors,
       timestamp: Date.now(),
     };
   } catch (error: any) {

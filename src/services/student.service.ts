@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import { revalidatePath } from "next/cache";
@@ -69,7 +70,7 @@ export async function createStudent(prevState: any, formData: FormData) {
     return {
       success: false,
       message: response.message || "Failed to create student",
-      errors: response.data?.errors,
+      errors: (response.data as any)?.errors,
       timestamp: Date.now(),
     };
   } catch (error: any) {
@@ -113,7 +114,7 @@ export async function updateStudent(
     return {
       success: false,
       message: response.message || "Failed to update student",
-      errors: response.data?.errors,
+      errors: (response.data as any)?.errors,
       timestamp: Date.now(),
     };
   } catch (error: any) {

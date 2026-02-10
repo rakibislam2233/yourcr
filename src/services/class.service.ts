@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import { revalidatePath } from "next/cache";
@@ -67,7 +68,7 @@ export async function createClass(prevState: any, formData: FormData) {
     return {
       success: false,
       message: response.message || "Failed to schedule class",
-      errors: response.data?.errors,
+      errors: (response.data as any)?.errors,
       timestamp: Date.now(),
     };
   } catch (error: any) {
@@ -112,7 +113,7 @@ export async function updateClass(
     return {
       success: false,
       message: response.message || "Failed to update class",
-      errors: response.data?.errors,
+      errors: (response.data as any)?.errors,
       timestamp: Date.now(),
     };
   } catch (error: any) {

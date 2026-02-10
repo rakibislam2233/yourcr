@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import { revalidatePath } from "next/cache";
@@ -57,7 +58,7 @@ export async function createRoutine(prevState: any, formData: FormData) {
     return {
       success: false,
       message: response.message || "Failed to create routine",
-      errors: response.data?.errors,
+      errors: (response.data as any)?.errors,
       timestamp: Date.now(),
     };
   } catch (error: any) {
@@ -93,7 +94,7 @@ export async function updateRoutine(
     return {
       success: false,
       message: response.message || "Failed to update routine",
-      errors: response.data?.errors,
+      errors: (response.data as any)?.errors,
       timestamp: Date.now(),
     };
   } catch (error: any) {

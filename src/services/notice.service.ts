@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import { revalidatePath } from "next/cache";
@@ -56,7 +57,7 @@ export async function createNotice(prevState: any, formData: FormData) {
     return {
       success: false,
       message: response.message || "Failed to create notice",
-      errors: response.data?.errors,
+      errors: (response.data as any)?.errors,
       timestamp: Date.now(),
     };
   } catch (error: any) {
@@ -91,7 +92,7 @@ export async function updateNotice(
     return {
       success: false,
       message: response.message || "Failed to update notice",
-      errors: response.data?.errors,
+      errors: (response.data as any)?.errors,
       timestamp: Date.now(),
     };
   } catch (error: any) {

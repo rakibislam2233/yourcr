@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 import { api } from "@/services/api";
 import { contactValidationSchema } from "@/validation/contact.validation";

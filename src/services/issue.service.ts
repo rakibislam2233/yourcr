@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import { revalidatePath } from "next/cache";
@@ -58,7 +59,7 @@ export async function createIssue(prevState: any, formData: FormData) {
     return {
       success: false,
       message: response.message || "Failed to create issue",
-      errors: response.data?.errors,
+      errors: (response.data as any)?.errors,
       timestamp: Date.now(),
     };
   } catch (error: any) {
@@ -94,7 +95,7 @@ export async function updateIssue(
     return {
       success: false,
       message: response.message || "Failed to update issue",
-      errors: response.data?.errors,
+      errors: (response.data as any)?.errors,
       timestamp: Date.now(),
     };
   } catch (error: any) {

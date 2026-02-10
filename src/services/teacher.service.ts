@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import { revalidatePath } from "next/cache";
@@ -43,7 +45,32 @@ export async function getTeacherById(id: string) {
 // Create teacher action
 export async function createTeacher(prevState: any, formData: FormData) {
   try {
-    const response = await api.post<Teacher>("/teachers", formData);
+    // Prepare FormData with proper structure
+    const finalFormData = new FormData();
+
+    // Add text fields
+    const name = formData.get("name");
+    const designation = formData.get("designation");
+    const department = formData.get("department");
+    const email = formData.get("email");
+    const phone = formData.get("phone");
+    const subjects = formData.get("subjects");
+
+    if (name) finalFormData.append("name", name.toString());
+    if (designation)
+      finalFormData.append("designation", designation.toString());
+    if (department) finalFormData.append("department", department.toString());
+    if (email) finalFormData.append("email", email.toString());
+    if (phone) finalFormData.append("phone", phone.toString());
+    if (subjects) finalFormData.append("subjects", subjects.toString());
+
+    // Add photo file if exists
+    const photo = formData.get("photo");
+    if (photo && photo instanceof File && photo.size > 0) {
+      finalFormData.append("photo", photo);
+    }
+
+    const response = await api.post<Teacher>("/teachers", finalFormData);
 
     if (response.success) {
       revalidatePath("/dashboard/cr/teachers");
@@ -58,7 +85,7 @@ export async function createTeacher(prevState: any, formData: FormData) {
     return {
       success: false,
       message: response.message || "Failed to create teacher",
-      errors: response.data?.errors,
+      errors: (response.data as any)?.errors,
       timestamp: Date.now(),
     };
   } catch (error: any) {
@@ -93,7 +120,7 @@ export async function updateTeacher(
     return {
       success: false,
       message: response.message || "Failed to update teacher",
-      errors: response.data?.errors,
+      errors: (response.data as any)?.errors,
       timestamp: Date.now(),
     };
   } catch (error: any) {
