@@ -8,13 +8,7 @@ export default async function CrDashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  let user = null;
-  try {
-    const res = await getMyProfile();
-    user = res?.data || null;
-  } catch (error) {
-    console.error("CR layout profile fetch failed", error);
-  }
+  const user = await getMyProfile();
 
   return (
     <SidebarProvider

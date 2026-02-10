@@ -77,7 +77,7 @@ const ManageRoutine: React.FC = () => {
       <PageHeader
         title="Institutional Routine"
         description="Share and manage batch routines"
-        icon={Calendar}
+        icon={<Calendar className="w-6 h-6" />}
         breadcrumbs={[
           { label: "Dashboard", href: "/dashboard/cr" },
           { label: "Manage Routine" },

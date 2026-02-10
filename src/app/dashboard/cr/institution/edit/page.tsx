@@ -39,7 +39,7 @@ export default function EditInstitutionPage() {
       <PageHeader
         title="Edit Institution"
         description="Update your institution and class details"
-        icon={Building2}
+        icon={<Building2 />}
         breadcrumbs={[
           { label: "Dashboard", href: "/dashboard/cr" },
           { label: "My Institution", href: "/dashboard/cr/institution" },
@@ -58,14 +58,18 @@ export default function EditInstitutionPage() {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Institution Details */}
         <div className="bg-white rounded-2xl border border-gray-100 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-6">Institution Details</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-6">
+            Institution Details
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label htmlFor="name">Institution Name</Label>
               <Input
                 id="name"
                 value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
                 required
               />
             </div>
@@ -74,7 +78,9 @@ export default function EditInstitutionPage() {
               <Input
                 id="shortName"
                 value={formData.shortName}
-                onChange={(e) => setFormData({ ...formData, shortName: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, shortName: e.target.value })
+                }
                 required
               />
             </div>
@@ -83,7 +89,9 @@ export default function EditInstitutionPage() {
               <Input
                 id="type"
                 value={formData.type}
-                onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, type: e.target.value })
+                }
                 required
               />
             </div>
@@ -93,7 +101,9 @@ export default function EditInstitutionPage() {
                 id="establishedYear"
                 type="number"
                 value={formData.establishedYear}
-                onChange={(e) => setFormData({ ...formData, establishedYear: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, establishedYear: e.target.value })
+                }
                 required
               />
             </div>
@@ -102,7 +112,9 @@ export default function EditInstitutionPage() {
               <Input
                 id="address"
                 value={formData.address}
-                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, address: e.target.value })
+                }
                 required
               />
             </div>
@@ -111,7 +123,9 @@ export default function EditInstitutionPage() {
               <Input
                 id="phone"
                 value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, phone: e.target.value })
+                }
                 required
               />
             </div>
@@ -121,7 +135,9 @@ export default function EditInstitutionPage() {
                 id="email"
                 type="email"
                 value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
                 required
               />
             </div>
@@ -130,7 +146,9 @@ export default function EditInstitutionPage() {
               <Input
                 id="website"
                 value={formData.website}
-                onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, website: e.target.value })
+                }
                 required
               />
             </div>
@@ -139,14 +157,18 @@ export default function EditInstitutionPage() {
 
         {/* Class Information */}
         <div className="bg-white rounded-2xl border border-gray-100 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-6">Class Information</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-6">
+            Class Information
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label htmlFor="department">Department</Label>
               <Input
                 id="department"
                 value={formData.department}
-                onChange={(e) => setFormData({ ...formData, department: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, department: e.target.value })
+                }
                 required
               />
             </div>
@@ -155,7 +177,9 @@ export default function EditInstitutionPage() {
               <Input
                 id="semester"
                 value={formData.semester}
-                onChange={(e) => setFormData({ ...formData, semester: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, semester: e.target.value })
+                }
                 required
               />
             </div>
@@ -164,7 +188,9 @@ export default function EditInstitutionPage() {
               <Input
                 id="session"
                 value={formData.session}
-                onChange={(e) => setFormData({ ...formData, session: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, session: e.target.value })
+                }
                 required
               />
             </div>
@@ -173,7 +199,9 @@ export default function EditInstitutionPage() {
               <Input
                 id="shift"
                 value={formData.shift}
-                onChange={(e) => setFormData({ ...formData, shift: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, shift: e.target.value })
+                }
                 required
               />
             </div>
@@ -182,7 +210,9 @@ export default function EditInstitutionPage() {
               <Input
                 id="group"
                 value={formData.group}
-                onChange={(e) => setFormData({ ...formData, group: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, group: e.target.value })
+                }
                 required
               />
             </div>

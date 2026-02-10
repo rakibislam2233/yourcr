@@ -8,14 +8,7 @@ export default async function StudentDashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  let user = null;
-  try {
-    const res = await getMyProfile();
-    user = res?.data || null;
-  } catch (error) {
-    console.error("Student layout profile fetch failed", error);
-  }
-
+  const user = await getMyProfile();
   return (
     <SidebarProvider
       style={{ "--sidebar-width": "19rem" } as React.CSSProperties}

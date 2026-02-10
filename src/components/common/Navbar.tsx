@@ -9,8 +9,7 @@ import NavLink from "./NavLink";
 import UserDropdown from "./UserDropdown";
 
 const Navbar = async () => {
-  const res = await getMyProfile();
-  const user = res?.data || null;
+  const user = await getMyProfile();
   const navLinks = [
     { href: "/", label: "Home" },
     { href: "/about-us", label: "About Us" },

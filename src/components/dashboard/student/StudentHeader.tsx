@@ -5,14 +5,7 @@ import { Bell, Search } from "lucide-react";
 import Breadcrumbs from "../shared/Breadcrumbs";
 
 const StudentHeader = async () => {
-  let user = null;
-  try {
-    const res = await getMyProfile();
-    user = res?.data || null;
-  } catch (error) {
-    console.error("StudentHeader profile fetch failed", error);
-  }
-
+  const user = await getMyProfile();
   return (
     <header className="sticky top-0 z-40 w-full h-20 shrink-0 bg-white border-b border-gray-100 px-6 flex items-center justify-between gap-4">
       {/* Left: Nav & Context */}

@@ -2,12 +2,10 @@ import type { Metadata } from "next";
 import { Syne } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
-
 const mukta = Syne({
   variable: "--font-geist-sans",
   weight: ["400", "500", "600"],
 });
-
 export const metadata: Metadata = {
   title: {
     default: "Your CR - Simplified Class Management",
@@ -70,24 +68,17 @@ export const metadata: Metadata = {
     apple: "/apple-touch-icon.png",
   },
 };
-import PushNotificationManager from "@/components/common/PushNotificationManager";
-import { getMyProfile } from "@/services/user.service";
-
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const res = await getMyProfile();
-  const user = res?.data || null;
-
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
         <meta name="google-adsense-account" content="ca-pub-1132020137464868" />
       </head>
       <body className={`${mukta.className}`} suppressHydrationWarning>
-        <PushNotificationManager user={user} />
         {children}
         <Toaster position="top-center" richColors />
       </body>

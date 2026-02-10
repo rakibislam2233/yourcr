@@ -41,7 +41,7 @@ const ViewRoutine: React.FC = () => {
       <PageHeader
         title="Institutional Routine"
         description="View your latest class and exam schedules"
-        icon={Calendar}
+        icon={<Calendar className="w-6 h-6" />}
         breadcrumbs={[
           { label: "Home", href: "/dashboard/student" },
           { label: "Routine" },

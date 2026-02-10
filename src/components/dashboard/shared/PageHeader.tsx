@@ -1,10 +1,8 @@
 "use client";
-
-import React from "react";
 import { motion } from "framer-motion";
-import { ChevronRight, LucideIcon } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-
+import React from "react";
 interface BreadcrumbItem {
   label: string;
   href?: string;
@@ -13,7 +11,7 @@ interface BreadcrumbItem {
 interface PageHeaderProps {
   title: string;
   description?: string;
-  icon?: LucideIcon;
+  icon?: React.ReactNode;
   breadcrumbs?: BreadcrumbItem[];
   action?: React.ReactNode;
 }
@@ -21,7 +19,7 @@ interface PageHeaderProps {
 const PageHeader: React.FC<PageHeaderProps> = ({
   title,
   description,
-  icon: Icon,
+  icon,
   breadcrumbs,
   action,
 }) => {
@@ -51,9 +49,9 @@ const PageHeader: React.FC<PageHeaderProps> = ({
 
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          {Icon && (
+          {icon && (
             <div className="p-3 rounded-xl bg-primary/10 text-primary">
-              <Icon className="w-6 h-6" />
+              {icon}
             </div>
           )}
           <div>
