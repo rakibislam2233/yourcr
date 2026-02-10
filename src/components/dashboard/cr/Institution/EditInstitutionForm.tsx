@@ -53,6 +53,7 @@ interface EditInstitutionFormProps {
     shift: string;
     group: string;
     batchType: string;
+    logo?: string;
   };
 }
 
@@ -74,7 +75,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
     if (state.success && state.message) {
       toast.success(state.message);
       router.push("/dashboard/cr/institution");
-    } else if (!state.success && state.message) {
+    } else if (!state.success && state.message && !state.errors) {
       toast.error(state.message);
     }
   }, [state, router]);
@@ -82,7 +83,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
   return (
     <form action={formAction} className="space-y-8">
       {/* Logo Upload Section */}
-      <LogoUploadField />
+      <LogoUploadField defaultLogo={defaultData.logo} />
       {/* Institution Details */}
       <div className="bg-white rounded-md border border-gray-200 p-8">
         <h3 className="text-xl font-bold text-gray-900 mb-8">

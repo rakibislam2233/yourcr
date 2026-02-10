@@ -88,8 +88,8 @@ export async function updateInstitutionBatch(
     finalFormData.append("institutionInfo", JSON.stringify(institutionInfo));
     finalFormData.append("batchInformation", JSON.stringify(batchInformation));
     // Process file
-    const file = formData.get("logo");
-    if (file) {
+    const file = formData.get("logo") as File | null;
+    if (file && file.size > 0) {
       finalFormData.append("logo", file);
     }
     // 3. Call API

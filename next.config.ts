@@ -7,7 +7,6 @@ const nextConfig: NextConfig = {
     // Optimize image sizes for different devices
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-
     // Cache optimized images for 1 year
     minimumCacheTTL: 31536000,
     // Remote patterns
@@ -15,6 +14,12 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "images.unsplash.com",
+      },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        port: "",
+        pathname: "/**",
       },
       {
         protocol: "https",
