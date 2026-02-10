@@ -17,7 +17,6 @@ const serverFetchHelper = async (
   options: FetchOptions,
 ): Promise<ApiResponse> => {
   const { headers, ...restOptions } = options;
-  /* Robust token retrieval: Check headers first (from middleware), then cookies */
   const { headers: headersList } = await import("next/headers");
   const headersInstance = await headersList();
   const authHeader = headersInstance.get("Authorization");
@@ -28,11 +27,6 @@ const serverFetchHelper = async (
   } else {
     accessToken = (await getCookie("accessToken")) || "";
   }
-
-  /* Automatic token refresh is now handled by Middleware */
-  // if (endpoint !== "/auth/refresh-token") {
-  //   await getNewAccessToken();
-  // }
 
   const requestHeaders: Record<string, string> = {
     "Content-Type": "application/json",

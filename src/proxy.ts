@@ -6,7 +6,6 @@ import {
   isAuthRoute,
   UserRole,
 } from "./utils/auth-utils";
-
 const BACKEND_API_URL =
   process.env.NEXT_PUBLIC_BASE_API_URL || "http://localhost:5000/api/v1";
 
@@ -114,7 +113,6 @@ export async function middleware(request: NextRequest) {
       return response;
     }
   }
-
   const routeOwner = getRouteOwner(pathname);
   const isAuth = isAuthRoute(pathname);
 
@@ -124,7 +122,6 @@ export async function middleware(request: NextRequest) {
     loginUrl.searchParams.set("redirect", pathname);
     return NextResponse.redirect(loginUrl);
   }
-
   // 4. Handle authenticated users
   // We only treat them as fully authenticated if they have BOTH the token and the role
   if (accessToken && userRole) {
