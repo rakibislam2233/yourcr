@@ -8,7 +8,6 @@ const Stats = async () => {
         value={45}
         icon="Users"
         color="blue"
-        trend={{ value: 5, isPositive: true }}
       />
       <StatsCard
         title="Active Subjects"
@@ -21,7 +20,6 @@ const Stats = async () => {
         value={3}
         icon="MessageSquare"
         color="orange"
-        trend={{ value: 2, isPositive: false }}
       />
       <StatsCard
         title="Assessments"

@@ -32,11 +32,7 @@ const iconMap: Record<string, LucideIcon> = {
 interface StatsCardProps {
   title: string;
   value: string | number;
-  icon: string; // Changed from LucideIcon to string
-  trend?: {
-    value: number;
-    isPositive: boolean;
-  };
+  icon: string;
   color?: "blue" | "green" | "purple" | "orange" | "red";
   delay?: number;
 }
@@ -73,31 +69,17 @@ const StatsCard: React.FC<StatsCardProps> = ({
   title,
   value,
   icon: iconName,
-  trend,
   color = "blue",
 }) => {
   const colors = colorClasses[color];
-  const Icon = iconMap[iconName] || Users; // Fallback to Users if icon not found
+  const Icon = iconMap[iconName] || Users;
 
   return (
-    <motion.div className="bg-white rounded-2xl p-6  border border-gray-100 ">
+    <motion.div className="bg-white rounded-md p-6  border border-gray-200">
       <div className="flex items-center justify-between">
         <div className="space-y-2">
           <p className="text-sm font-medium text-gray-500">{title}</p>
           <p className="text-3xl font-bold text-gray-900">{value}</p>
-          {trend && (
-            <div className="flex items-center gap-1">
-              <span
-                className={`text-sm font-medium ${
-                  trend.isPositive ? "text-green-600" : "text-red-600"
-                }`}
-              >
-                {trend.isPositive ? "+" : "-"}
-                {Math.abs(trend.value)}%
-              </span>
-              <span className="text-xs text-gray-400">vs last month</span>
-            </div>
-          )}
         </div>
         <div className={`p-4 rounded-2xl ${colors.icon}`}>
           <Icon className="w-7 h-7" />

@@ -29,7 +29,7 @@ const QuickActions = () => {
     },
   ];
   return (
-    <div className="bg-white rounded-2xl p-6 border border-gray-100">
+    <div className="bg-white rounded-md p-6 border border-gray-100">
       <h2 className="text-lg font-semibold text-gray-900 mb-6">
         Quick Actions
       </h2>

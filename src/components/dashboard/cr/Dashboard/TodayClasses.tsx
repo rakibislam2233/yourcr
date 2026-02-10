@@ -24,7 +24,7 @@ const TodayClasses = async () => {
     },
   ];
   return (
-    <div className="bg-white rounded-2xl p-6 border border-gray-100">
+    <div className="bg-white rounded-md p-6 border border-gray-100">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-lg font-semibold text-gray-900">
           Today&apos;s Classes
@@ -40,7 +40,7 @@ const TodayClasses = async () => {
         {upcomingClasses.map((cls) => (
           <div
             key={cls.subject}
-            className="p-4 rounded-xl bg-linear-to-br from-primary/5 to-primary/10 border border-primary/10"
+            className="p-4 rounded-md bg-linear-to-br from-primary/10 to-primary/10 border border-primary/10"
           >
             <h3 className="font-semibold text-gray-900">{cls.subject}</h3>
             <p className="text-sm text-gray-600 mt-1">{cls.teacher}</p>

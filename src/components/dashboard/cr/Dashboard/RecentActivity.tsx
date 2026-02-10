@@ -6,7 +6,6 @@ import {
   MessageSquare,
   Users,
 } from "lucide-react";
-import Link from "next/link";
 
 const RecentActivity = async () => {
   //   const recentActivities = await getRecentActivities();
@@ -45,15 +44,9 @@ const RecentActivity = async () => {
     },
   ];
   return (
-    <section className="lg:col-span-2 bg-white rounded-2xl p-6 border border-gray-100">
+    <section className="lg:col-span-2 bg-white rounded-md p-6 border border-gray-100">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-lg font-semibold text-gray-900">Recent Activity</h2>
-        <Link
-          href="#"
-          className="text-sm text-primary hover:underline flex items-center gap-1"
-        >
-          View all <ArrowRight className="w-4 h-4" />
-        </Link>
       </div>
       <div className="space-y-4">
         {recentActivities.map((activity) => (
