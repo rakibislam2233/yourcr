@@ -1,127 +1,56 @@
 "use client";
 
+import { SearchFilter } from "@/components/shared/SearchFilter";
 import { Button } from "@/components/ui/button";
 import { ConfirmModal } from "@/components/ui/modal";
-import {
-  BookOpen,
-  Edit,
-  Mail,
-  Phone,
-  Plus,
-  Search,
-  Trash2,
-  Users,
-} from "lucide-react";
+import { deleteTeacher, Teacher } from "@/services/teacher.service";
+import { BookOpen, Edit, Mail, Phone, Plus, Trash2, Users } from "lucide-react";
 import Link from "next/link";
-import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { useState, useTransition } from "react";
+import { toast } from "sonner";
 import PageHeader from "../shared/PageHeader";
 
-interface Teacher {
-  id: number;
-  name: string;
-  designation: string;
-  department: string;
-  email: string;
-  phone: string;
-  subjects: string[];
-  image: string;
-  color: string;
+interface ManageTeachersProps {
+  initialTeachers: Teacher[];
 }
 
-const initialTeachers: Teacher[] = [
-  {
-    id: 1,
-    name: "Dr. Kamal Ahmed",
-    designation: "Professor",
-    department: "Computer Technology",
-    email: "kamal.ahmed@dpi.edu.bd",
-    phone: "+880 1711-234567",
-    subjects: ["Database Management", "Data Structures"],
-    image: "KA",
-    color: "bg-blue-500",
-  },
-  {
-    id: 2,
-    name: "Prof. Rina Begum",
-    designation: "Associate Professor",
-    department: "Computer Technology",
-    email: "rina.begum@dpi.edu.bd",
-    phone: "+880 1812-345678",
-    subjects: ["Software Engineering", "OOP"],
-    image: "RB",
-    color: "bg-green-500",
-  },
-  {
-    id: 3,
-    name: "Mr. Jahid Hassan",
-    designation: "Assistant Professor",
-    department: "Computer Technology",
-    email: "jahid.hassan@dpi.edu.bd",
-    phone: "+880 1913-456789",
-    subjects: ["Computer Networks", "Network Security"],
-    image: "JH",
-    color: "bg-purple-500",
-  },
-  {
-    id: 4,
-    name: "Dr. Fatema Khatun",
-    designation: "Professor",
-    department: "Computer Technology",
-    email: "fatema.khatun@dpi.edu.bd",
-    phone: "+880 1614-567890",
-    subjects: ["Operating Systems", "System Programming"],
-    image: "FK",
-    color: "bg-orange-500",
-  },
-  {
-    id: 5,
-    name: "Mr. Rezaul Karim",
-    designation: "Lecturer",
-    department: "Computer Technology",
-    email: "rezaul.karim@dpi.edu.bd",
-    phone: "+880 1515-678901",
-    subjects: ["Artificial Intelligence", "Machine Learning"],
-    image: "RK",
-    color: "bg-pink-500",
-  },
-  {
-    id: 6,
-    name: "Ms. Nusrat Jahan",
-    designation: "Lecturer",
-    department: "Computer Technology",
-    email: "nusrat.jahan@dpi.edu.bd",
-    phone: "+880 1916-789012",
-    subjects: ["Web Development", "UI/UX Design"],
-    image: "NJ",
-    color: "bg-cyan-500",
-  },
-];
-
-const ManageTeachers: React.FC = () => {
-  const [teachers, setTeachers] = useState<Teacher[]>(initialTeachers);
-  const [searchQuery, setSearchQuery] = useState("");
+const ManageTeachers: React.FC<ManageTeachersProps> = ({ initialTeachers }) => {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
-
-  const filteredTeachers = teachers.filter(
-    (teacher) =>
-      teacher.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      teacher.designation.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      teacher.subjects.some((s) =>
-        s.toLowerCase().includes(searchQuery.toLowerCase()),
-      ),
-  );
 
   const handleDelete = (teacher: Teacher) => {
     setSelectedTeacher(teacher);
     setIsDeleteModalOpen(true);
   };
 
-  const handleConfirmDelete = () => {
-    if (selectedTeacher) {
-      setTeachers(teachers.filter((t) => t.id !== selectedTeacher.id));
-      setSelectedTeacher(null);
-    }
+  const handleConfirmDelete = async () => {
+    if (!selectedTeacher) return;
+
+    startTransition(async () => {
+      const result = await deleteTeacher(selectedTeacher.id);
+
+      if (result.success) {
+        toast.success(result.message);
+        setIsDeleteModalOpen(false);
+        setSelectedTeacher(null);
+        router.refresh();
+      } else {
+        toast.error(result.message);
+      }
+    });
+  };
+
+  // Get initials from name
+  const getInitials = (name: string) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
   };
 
   return (
@@ -144,99 +73,145 @@ const ManageTeachers: React.FC = () => {
         }
       />
 
-      {/* Search */}
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-        <input
-          type="text"
-          placeholder="Search teachers..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
-        />
-      </div>
+      {/* Search and Filters */}
+      <SearchFilter
+        searchPlaceholder="Search teachers by name, designation, or subject..."
+        filters={[
+          {
+            name: "department",
+            label: "All Departments",
+            options: [
+              { label: "Computer Technology", value: "Computer Technology" },
+              { label: "Electronics", value: "Electronics" },
+              { label: "Mechanical", value: "Mechanical" },
+              { label: "Civil", value: "Civil" },
+            ],
+          },
+          {
+            name: "designation",
+            label: "All Designations",
+            options: [
+              { label: "Professor", value: "Professor" },
+              { label: "Associate Professor", value: "Associate Professor" },
+              { label: "Assistant Professor", value: "Assistant Professor" },
+              { label: "Lecturer", value: "Lecturer" },
+            ],
+          },
+        ]}
+      />
 
       {/* Teachers Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredTeachers.map((teacher) => (
-          <div
-            key={teacher.id}
-            className="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-md transition-shadow group"
-          >
-            <div className="flex items-start gap-4">
-              <div
-                className={`w-16 h-16 ${teacher.color} rounded-2xl flex items-center justify-center text-white text-xl font-bold shadow-lg`}
-              >
-                {teacher.image}
-              </div>
-              <div className="flex-1">
-                <h3 className="font-semibold text-gray-900">{teacher.name}</h3>
-                <p className="text-sm text-primary font-medium">
-                  {teacher.designation}
-                </p>
-                <p className="text-xs text-gray-500 mt-1">
-                  {teacher.department}
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-5 space-y-3">
-              <div className="flex items-center gap-3 text-sm text-gray-600">
-                <div className="p-2 bg-gray-50 rounded-lg">
-                  <Mail className="w-4 h-4 text-gray-400" />
+      {initialTeachers.length === 0 ? (
+        <div className="bg-white rounded-2xl p-12 text-center border border-gray-100">
+          <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            No teachers found
+          </h3>
+          <p className="text-gray-500 mb-6">
+            Get started by adding your first teacher.
+          </p>
+          <Link href="/dashboard/cr/teachers/add">
+            <Button className="gap-2">
+              <Plus className="w-4 h-4" />
+              Add Teacher
+            </Button>
+          </Link>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {initialTeachers.map((teacher) => (
+            <div
+              key={teacher.id}
+              className="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-md transition-shadow group"
+            >
+              <div className="flex items-start gap-4">
+                <div
+                  className={`w-16 h-16 ${teacher.color} rounded-2xl flex items-center justify-center text-white text-xl font-bold shadow-lg`}
+                >
+                  {teacher.photo ? (
+                    <img
+                      src={teacher.photo}
+                      alt={teacher.name}
+                      className="w-full h-full object-cover rounded-2xl"
+                    />
+                  ) : (
+                    getInitials(teacher.name)
+                  )}
                 </div>
-                <span className="truncate">{teacher.email}</span>
-              </div>
-              <div className="flex items-center gap-3 text-sm text-gray-600">
-                <div className="p-2 bg-gray-50 rounded-lg">
-                  <Phone className="w-4 h-4 text-gray-400" />
+                <div className="flex-1">
+                  <h3 className="font-semibold text-gray-900">
+                    {teacher.name}
+                  </h3>
+                  <p className="text-sm text-primary font-medium">
+                    {teacher.designation}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {teacher.department}
+                  </p>
                 </div>
-                <span>{teacher.phone}</span>
               </div>
-            </div>
 
-            <div className="mt-5 pt-5 border-t border-gray-100">
-              <div className="flex items-center gap-2 mb-2">
-                <BookOpen className="w-4 h-4 text-gray-400" />
-                <span className="text-sm font-medium text-gray-700">
-                  Subjects
-                </span>
+              <div className="mt-5 space-y-3">
+                <div className="flex items-center gap-3 text-sm text-gray-600">
+                  <div className="p-2 bg-gray-50 rounded-lg">
+                    <Mail className="w-4 h-4 text-gray-400" />
+                  </div>
+                  <span className="truncate">{teacher.email}</span>
+                </div>
+                <div className="flex items-center gap-3 text-sm text-gray-600">
+                  <div className="p-2 bg-gray-50 rounded-lg">
+                    <Phone className="w-4 h-4 text-gray-400" />
+                  </div>
+                  <span>{teacher.phone}</span>
+                </div>
               </div>
-              <div className="flex flex-wrap gap-2">
-                {teacher.subjects.map((subject) => (
-                  <span
-                    key={subject}
-                    className="px-3 py-1 bg-primary/5 text-primary text-xs font-medium rounded-full"
-                  >
-                    {subject}
-                  </span>
-                ))}
-              </div>
-            </div>
 
-            <div className="mt-5 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-              <Link
-                href={`/dashboard/cr/teachers/${teacher.id}/edit`}
-                className="flex-1"
-              >
-                <Button variant="outline" size="sm" className="w-full gap-1">
-                  <Edit className="w-3 h-3" />
-                  Edit
+              {teacher.subjects && teacher.subjects.length > 0 && (
+                <div className="mt-5 pt-5 border-t border-gray-100">
+                  <div className="flex items-center gap-2 mb-2">
+                    <BookOpen className="w-4 h-4 text-gray-400" />
+                    <span className="text-sm font-medium text-gray-700">
+                      Subjects
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {teacher.subjects.map((subject, index) => (
+                      <span
+                        key={index}
+                        className="px-3 py-1 bg-primary/5 text-primary text-xs font-medium rounded-full"
+                      >
+                        {subject}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="mt-5 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <Link
+                  href={`/dashboard/cr/teachers/${teacher.id}/edit`}
+                  className="flex-1"
+                >
+                  <Button variant="outline" size="sm" className="w-full gap-1">
+                    <Edit className="w-3 h-3" />
+                    Edit
+                  </Button>
+                </Link>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex-1 gap-1 text-red-600 hover:text-red-700 hover:bg-red-50"
+                  onClick={() => handleDelete(teacher)}
+                  disabled={isPending}
+                >
+                  <Trash2 className="w-3 h-3" />
+                  Delete
                 </Button>
-              </Link>
-              <Button
-                variant="outline"
-                size="sm"
-                className="flex-1 gap-1 text-red-600 hover:text-red-700 hover:bg-red-50"
-                onClick={() => handleDelete(teacher)}
-              >
-                <Trash2 className="w-3 h-3" />
-                Delete
-              </Button>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       {/* Delete Confirmation Modal */}
       <ConfirmModal
@@ -245,9 +220,10 @@ const ManageTeachers: React.FC = () => {
         onConfirm={handleConfirmDelete}
         title="Delete Teacher"
         description={`Are you sure you want to remove "${selectedTeacher?.name}" from your class? This action cannot be undone.`}
-        confirmText="Delete"
+        confirmText={isPending ? "Deleting..." : "Delete"}
         cancelText="Cancel"
         variant="danger"
+        disabled={isPending}
       />
     </div>
   );

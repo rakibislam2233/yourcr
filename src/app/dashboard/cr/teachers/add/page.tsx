@@ -1,17 +1,9 @@
 "use client";
-
 import PageHeader from "@/components/dashboard/shared/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { createTeacher } from "@/services/teacher.service";
 import {
   ArrowLeft,
   BookOpen,
@@ -25,20 +17,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-const teacherSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  designation: z.string().min(1, "Designation is required"),
-  department: z.string().min(2, "Department is required"),
-  email: z.string().email("Please enter a valid email address"),
-  phone: z.string().min(10, "Phone number must be at least 10 digits"),
-  color: z.string().min(1, "Color is required"),
-});
-
-type TeacherFormData = z.infer<typeof teacherSchema>;
+import { useActionState, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const designationOptions = [
   "Professor",
@@ -57,28 +37,32 @@ const colorOptions = [
   { value: "bg-cyan-500", label: "Cyan" },
 ];
 
+const initialState = {
+  success: false,
+  message: "",
+};
+
 export default function AddTeacherPage() {
   const router = useRouter();
+  const [state, formAction, isPending] = useActionState(
+    createTeacher,
+    initialState,
+  );
   const [subjectInput, setSubjectInput] = useState("");
   const [subjects, setSubjects] = useState<string[]>([]);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    watch,
-    setValue,
-  } = useForm<TeacherFormData>({
-    resolver: zodResolver(teacherSchema),
-    defaultValues: {
-      name: "",
-      designation: "Lecturer",
-      department: "Computer Technology",
-      email: "",
-      phone: "",
-      color: "bg-blue-500",
-    },
-  });
+  // Handle success/error messages
+  useEffect(() => {
+    if (state.message) {
+      if (state.success) {
+        toast.success(state.message);
+        router.push("/dashboard/cr/teachers");
+      } else {
+        toast.error(state.message);
+      }
+    }
+  }, [state, router]);
 
   const handleAddSubject = () => {
     if (subjectInput.trim() && !subjects.includes(subjectInput.trim())) {
@@ -91,20 +75,29 @@ export default function AddTeacherPage() {
     setSubjects(subjects.filter((s) => s !== subject));
   };
 
-  const onSubmit = (data: TeacherFormData) => {
-    // Add subjects to the form data
-    const teacherData = {
-      ...data,
-      subjects: subjects,
-    };
-    console.log("Adding teacher:", teacherData);
-    router.push("/dashboard/cr/teachers");
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPhotoPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleFormSubmit = (formData: FormData) => {
+    // Add subjects as a JSON string
+    if (subjects.length > 0) {
+      formData.append("subjects", JSON.stringify(subjects));
+    }
+    formAction(formData);
   };
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Add New Teacher"
+        title="Add Teacher"
         description="Add a new teacher to your class"
         icon={<Users />}
         breadcrumbs={[
@@ -123,8 +116,9 @@ export default function AddTeacherPage() {
       />
 
       <div className="bg-white rounded-2xl border border-gray-100 p-6">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form action={handleFormSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+            {/* Name */}
             <div className="flex flex-col gap-1.5">
               <Label
                 htmlFor="name"
@@ -136,17 +130,15 @@ export default function AddTeacherPage() {
                 <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="name"
+                  name="name"
                   placeholder="e.g., Dr. Kamal Ahmed"
-                  className={`pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium ${errors.name ? "border-red-500" : ""}`}
-                  {...register("name")}
+                  required
+                  className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
                 />
               </div>
-              {errors.name && (
-                <p className="text-red-500 text-xs font-medium mt-1">
-                  {errors.name.message}
-                </p>
-              )}
             </div>
+
+            {/* Designation */}
             <div className="flex flex-col gap-1.5">
               <Label
                 htmlFor="designation"
@@ -154,29 +146,21 @@ export default function AddTeacherPage() {
               >
                 Designation
               </Label>
-              <Select
-                value={watch("designation")}
-                onValueChange={(value) => setValue("designation", value)}
+              <select
+                id="designation"
+                name="designation"
+                required
+                className="h-12 px-4 text-base border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50/30 transition-all font-medium"
               >
-                <SelectTrigger
-                  className={`h-12 border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 ${errors.designation ? "border-red-500" : ""}`}
-                >
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {designationOptions.map((d) => (
-                    <SelectItem key={d} value={d}>
-                      {d}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {errors.designation && (
-                <p className="text-red-500 text-xs font-medium mt-1">
-                  {errors.designation.message}
-                </p>
-              )}
+                {designationOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
             </div>
+
+            {/* Department */}
             <div className="flex flex-col gap-1.5">
               <Label
                 htmlFor="department"
@@ -188,17 +172,57 @@ export default function AddTeacherPage() {
                 <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="department"
+                  name="department"
                   placeholder="e.g., Computer Technology"
-                  className={`pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium ${errors.department ? "border-red-500" : ""}`}
-                  {...register("department")}
+                  required
+                  className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
                 />
               </div>
-              {errors.department && (
-                <p className="text-red-500 text-xs font-medium mt-1">
-                  {errors.department.message}
-                </p>
-              )}
             </div>
+
+            {/* Email */}
+            <div className="flex flex-col gap-1.5">
+              <Label
+                htmlFor="email"
+                className="text-sm font-semibold text-gray-700"
+              >
+                Email Address
+              </Label>
+              <div className="relative">
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="e.g., kamal.ahmed@dpi.edu.bd"
+                  required
+                  className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                />
+              </div>
+            </div>
+
+            {/* Phone */}
+            <div className="flex flex-col gap-1.5">
+              <Label
+                htmlFor="phone"
+                className="text-sm font-semibold text-gray-700"
+              >
+                Phone Number
+              </Label>
+              <div className="relative">
+                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Input
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  placeholder="e.g., +880 1711-234567"
+                  required
+                  className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                />
+              </div>
+            </div>
+
+            {/* Color */}
             <div className="flex flex-col gap-1.5">
               <Label
                 htmlFor="color"
@@ -206,96 +230,74 @@ export default function AddTeacherPage() {
               >
                 Avatar Color
               </Label>
-              <Select
-                value={watch("color")}
-                onValueChange={(value) => setValue("color", value)}
+              <select
+                id="color"
+                name="color"
+                required
+                className="h-12 px-4 text-base border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50/30 transition-all font-medium"
               >
-                <SelectTrigger
-                  className={`h-12 border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 ${errors.color ? "border-red-500" : ""}`}
-                >
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {colorOptions.map((c) => (
-                    <SelectItem key={c.value} value={c.value}>
-                      {c.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {errors.color && (
-                <p className="text-red-500 text-xs font-medium mt-1">
-                  {errors.color.message}
-                </p>
-              )}
+                {colorOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
             </div>
-            <div className="flex flex-col gap-1.5">
-              <Label
-                htmlFor="email"
-                className="text-sm font-semibold text-gray-700"
-              >
-                Email
-              </Label>
-              <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="e.g., teacher@dpi.edu.bd"
-                  className={`pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium ${errors.email ? "border-red-500" : ""}`}
-                  {...register("email")}
-                />
-              </div>
-              {errors.email && (
-                <p className="text-red-500 text-xs font-medium mt-1">
-                  {errors.email.message}
-                </p>
-              )}
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <Label
-                htmlFor="phone"
-                className="text-sm font-semibold text-gray-700"
-              >
-                Phone
-              </Label>
-              <div className="relative">
-                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <Input
-                  id="phone"
-                  placeholder="e.g., +880 1711-234567"
-                  className={`pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium ${errors.phone ? "border-red-500" : ""}`}
-                  {...register("phone")}
-                />
-              </div>
-              {errors.phone && (
-                <p className="text-red-500 text-xs font-medium mt-1">
-                  {errors.phone.message}
-                </p>
-              )}
-            </div>
+
+            {/* Photo Upload */}
             <div className="flex flex-col gap-1.5 md:col-span-2">
-              <Label className="text-sm font-semibold text-gray-700">
-                Subjects
+              <Label
+                htmlFor="photo"
+                className="text-sm font-semibold text-gray-700"
+              >
+                Photo (Optional)
+              </Label>
+              <Input
+                id="photo"
+                name="photo"
+                type="file"
+                accept="image/*"
+                onChange={handlePhotoChange}
+                className="h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+              />
+              {photoPreview && (
+                <div className="mt-2">
+                  <img
+                    src={photoPreview}
+                    alt="Preview"
+                    className="w-24 h-24 object-cover rounded-lg border border-gray-200"
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Subjects */}
+            <div className="flex flex-col gap-1.5 md:col-span-2">
+              <Label
+                htmlFor="subjectInput"
+                className="text-sm font-semibold text-gray-700"
+              >
+                Subjects (Optional)
               </Label>
               <div className="flex gap-2">
                 <div className="relative flex-1">
                   <BookOpen className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <Input
+                    id="subjectInput"
                     value={subjectInput}
                     onChange={(e) => setSubjectInput(e.target.value)}
-                    placeholder="Enter subject name and press Add"
                     onKeyPress={(e) =>
                       e.key === "Enter" &&
                       (e.preventDefault(), handleAddSubject())
                     }
+                    placeholder="e.g., Database Management"
                     className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
                   />
                 </div>
                 <Button
                   type="button"
                   onClick={handleAddSubject}
-                  className="gap-1 h-12"
+                  className="h-12 px-6 gap-2"
                 >
                   <Plus className="w-4 h-4" />
                   Add
@@ -306,13 +308,13 @@ export default function AddTeacherPage() {
                   {subjects.map((subject) => (
                     <span
                       key={subject}
-                      className="px-3 py-1.5 bg-primary/10 text-primary text-sm rounded-full flex items-center gap-2"
+                      className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/5 text-primary text-sm font-medium rounded-lg"
                     >
                       {subject}
                       <button
                         type="button"
                         onClick={() => handleRemoveSubject(subject)}
-                        className="hover:text-red-500"
+                        className="hover:bg-primary/10 rounded-full p-0.5 transition-colors"
                       >
                         <X className="w-3 h-3" />
                       </button>
@@ -325,12 +327,12 @@ export default function AddTeacherPage() {
 
           <div className="flex gap-3 pt-4 border-t border-gray-100">
             <Link href="/dashboard/cr/teachers" className="flex-1">
-              <Button type="button" variant="outline" className="w-full">
+              <Button type="button" variant="outline" className="w-full h-12">
                 Cancel
               </Button>
             </Link>
-            <Button type="submit" className="flex-1">
-              Add Teacher
+            <Button type="submit" className="flex-1 h-12" disabled={isPending}>
+              {isPending ? "Adding Teacher..." : "Add Teacher"}
             </Button>
           </div>
         </form>
