@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { useUser } from "@/providers/UserProvider";
+import { motion } from "framer-motion";
 import {
   ChevronDown,
   LayoutDashboard,
@@ -67,7 +68,7 @@ const Navbar: React.FC = () => {
       await logout();
       toast.success("Logged out successfully");
       router.push("/auth/login");
-    } catch (error) {
+    } catch {
       toast.error("Failed to logout");
     }
   };
@@ -123,18 +124,10 @@ const Navbar: React.FC = () => {
           {/* Desktop Auth Buttons - Conditional Rendering */}
           <div className="hidden md:flex items-center gap-5">
             {!loading && user ? (
-              <DropdownMenu>
+              <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
                   <div className="flex items-center gap-3 cursor-pointer group">
-                    <div className="flex flex-col text-right">
-                      <span className="text-sm font-bold text-gray-900 leading-tight">
-                        {user.fullName}
-                      </span>
-                      <span className="text-[10px] font-bold text-primary uppercase">
-                        {user.role}
-                      </span>
-                    </div>
-                    <Avatar className="h-10 w-10 rounded-full border-2 border-primary/20 group-hover:border-primary transition-colors">
+                    <Avatar className="size-12 rounded-full border-2 border-primary/20 group-hover:border-primary transition-colors">
                       <AvatarImage
                         src={
                           user.profileImage || "https://github.com/shadcn.png"
@@ -144,32 +137,49 @@ const Navbar: React.FC = () => {
                         {user.fullName?.[0]}
                       </AvatarFallback>
                     </Avatar>
-                    <ChevronDown className="w-4 h-4 text-gray-400 group-hover:text-gray-900 transition-colors" />
+                    <ChevronDown className="w-4 h-4 text-gray-400 group-hover:text-gray-900 transition-transform duration-200 group-data-[state=open]:rotate-180" />
                   </div>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56 mt-2">
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    onClick={() => router.push(getDashboardHref())}
+                <DropdownMenuContent
+                  align="end"
+                  className="w-56 mt-3 p-0 border-none shadow-none bg-transparent overflow-visible"
+                >
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                    className="bg-white rounded-md border border-gray-100 shadow-md p-1 overflow-hidden"
                   >
-                    <LayoutDashboard className="mr-2 h-4 w-4" />
-                    <span>Dashboard</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => router.push(`${getDashboardHref()}/profile`)}
-                  >
-                    <User className="mr-2 h-4 w-4" />
-                    <span>Profile</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    onClick={handleLogout}
-                    className="text-red-600 focus:text-red-600"
-                  >
-                    <LogOut className="mr-2 h-4 w-4" />
-                    <span>Log out</span>
-                  </DropdownMenuItem>
+                    <DropdownMenuLabel className="px-3 py-2 font-bold text-gray-400">
+                      My Account
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator className="bg-gray-50" />
+                    <DropdownMenuItem
+                      onClick={() => router.push(getDashboardHref())}
+                      className="px-3 py-2.5 text-sm font-semibold text-gray-700 focus:bg-primary focus:text-white rounded-md cursor-pointer flex items-center gap-2 transition-colors"
+                    >
+                      <LayoutDashboard className="h-4 w-4" />
+                      <span>Dashboard</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() =>
+                        router.push(`${getDashboardHref()}/profile`)
+                      }
+                      className="px-3 py-2.5 text-sm font-semibold text-gray-700 focus:bg-primary focus:text-white rounded-md cursor-pointer flex items-center gap-2 transition-colors"
+                    >
+                      <User className="h-4 w-4" />
+                      <span>Profile</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator className="bg-gray-50" />
+                    <DropdownMenuItem
+                      onClick={handleLogout}
+                      className="px-3 py-2.5 text-sm font-bold text-red-600 focus:bg-red-50 focus:text-red-600 rounded-md cursor-pointer flex items-center gap-2 transition-colors"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      <span>Log out</span>
+                    </DropdownMenuItem>
+                  </motion.div>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (

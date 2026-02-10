@@ -16,6 +16,8 @@ import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 
+import { motion } from "framer-motion";
+
 const CrHeader: React.FC = () => {
   const pathname = usePathname();
   const router = useRouter();
@@ -26,7 +28,7 @@ const CrHeader: React.FC = () => {
       await logout();
       toast.success("Logged out successfully");
       router.push("/auth/login");
-    } catch (error) {
+    } catch {
       toast.error("Failed to logout");
     }
   };
@@ -84,22 +86,15 @@ const CrHeader: React.FC = () => {
 
         <div className="w-px h-6 bg-gray-100 mx-1 hidden sm:block" />
 
-        <DropdownMenu>
+        <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
             <div className="flex items-center gap-3 pl-2 pr-1 py-1 rounded-md border border-transparent hover:border-gray-100 hover:bg-gray-50 cursor-pointer transition-all active:scale-98 group">
-              <div className="hidden sm:flex flex-col text-right">
-                <span className="text-xs font-bold text-gray-900 leading-tight">
-                  {loading
-                    ? "Loading..."
-                    : user?.fullName || "Class Representative"}
-                </span>
-                <span className="text-[10px] font-semibold text-primary uppercase tracking-tighter">
-                  {user?.role || "CR"}
-                </span>
-              </div>
-              <Avatar className="h-9 w-9 rounded-md border border-gray-200 shadow-sm transition-transform group-hover:scale-105">
-                <AvatarImage src={user?.profileImage} alt={user?.fullName} />
-                <AvatarFallback className="bg-primary text-white text-xs font-bold rounded-md uppercase">
+              <Avatar className="size-10 rounded-full border border-gray-200 shadow-sm transition-transform group-hover:scale-105">
+                <AvatarImage
+                  src={user?.profileImage || "https://github.com/shadcn.png"}
+                  alt={user?.fullName || "Class Representative"}
+                />
+                <AvatarFallback className="bg-primary text-white text-xs font-bold rounded-full uppercase">
                   {user?.fullName
                     ?.split(" ")
                     .map((n: string) => n[0])
@@ -107,31 +102,38 @@ const CrHeader: React.FC = () => {
                     .slice(0, 2) || "CR"}
                 </AvatarFallback>
               </Avatar>
-              <ChevronDown className="w-3.5 h-3.5 text-gray-400 group-hover:text-gray-900 transition-colors" />
+              <ChevronDown className="w-3.5 h-3.5 text-gray-400 group-hover:text-gray-900 transition-transform duration-200 group-data-[state=open]:rotate-180" />
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent
             align="end"
-            className="w-56 mt-2 rounded-md border-gray-100 shadow-xl p-1 animate-in slide-in-from-top-1 duration-200"
+            className="w-56 mt-2 p-0 border-none shadow-none bg-transparent overflow-visible"
           >
-            <DropdownMenuLabel className="px-2 py-1.5 text-xs font-bold text-gray-400 uppercase tracking-widest">
-              My Account
-            </DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => router.push("/dashboard/cr/profile")}
-              className="px-2 py-2 text-sm font-semibold text-gray-700 rounded-md hover:bg-gray-50 cursor-pointer flex items-center gap-2"
+            <motion.div
+              initial={{ opacity: 0, y: 10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="bg-white rounded-md border border-gray-100 shadow-md  p-1 overflow-hidden"
             >
-              <User className="w-4 h-4 text-gray-400" />
-              View Profile
-            </DropdownMenuItem>
-            <DropdownMenuSeparator className="bg-gray-50" />
-            <DropdownMenuItem
-              onClick={handleLogout}
-              className="px-2 py-2 text-sm font-bold text-red-600 rounded-md hover:bg-red-50 cursor-pointer flex items-center gap-2 transition-colors"
-            >
-              <LogOut className="w-4 h-4" />
-              Sign Out
-            </DropdownMenuItem>
+              <DropdownMenuLabel className="px-2 py-1.5 text-xs font-bold text-gray-400 uppercase tracking-widest">
+                My Account
+              </DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => router.push("/dashboard/cr/profile")}
+                className="px-2 py-2.5 text-sm font-semibold text-gray-700 focus:bg-primary focus:text-white rounded-lg cursor-pointer flex items-center gap-2 transition-colors"
+              >
+                <User className="w-4 h-4" />
+                View Profile
+              </DropdownMenuItem>
+              <DropdownMenuSeparator className="bg-gray-50" />
+              <DropdownMenuItem
+                onClick={handleLogout}
+                className="px-2 py-2.5 text-sm font-bold text-red-600 focus:bg-red-50 focus:text-red-600 rounded-lg cursor-pointer flex items-center gap-2 transition-colors"
+              >
+                <LogOut className="w-4 h-4" />
+                Sign Out
+              </DropdownMenuItem>
+            </motion.div>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

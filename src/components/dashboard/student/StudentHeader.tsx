@@ -16,6 +16,8 @@ import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 
+import { motion } from "framer-motion";
+
 const StudentHeader: React.FC = () => {
   const pathname = usePathname();
   const router = useRouter();
@@ -26,7 +28,7 @@ const StudentHeader: React.FC = () => {
       await logout();
       toast.success("Logged out successfully");
       router.push("/auth/login");
-    } catch (error) {
+    } catch {
       toast.error("Failed to logout");
     }
   };
@@ -84,7 +86,7 @@ const StudentHeader: React.FC = () => {
 
         <div className="w-px h-6 bg-gray-100 mx-1 hidden sm:block" />
 
-        <DropdownMenu>
+        <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
             <div className="flex items-center gap-3 pl-2 pr-1 py-1 rounded-md border border-transparent hover:border-emerald-50 hover:bg-emerald-50/50 cursor-pointer transition-all active:scale-98 group">
               <div className="hidden sm:flex flex-col text-right">
@@ -105,31 +107,39 @@ const StudentHeader: React.FC = () => {
                     .slice(0, 2) || "ST"}
                 </AvatarFallback>
               </Avatar>
-              <ChevronDown className="w-3.5 h-3.5 text-gray-400 group-hover:text-emerald-600 transition-colors" />
+              <ChevronDown className="w-3.5 h-3.5 text-gray-400 group-hover:text-emerald-600 transition-transform duration-200 group-data-[state=open]:rotate-180" />
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent
             align="end"
-            className="w-56 mt-2 rounded-md border-gray-100 shadow-xl p-1 animate-in slide-in-from-top-1 duration-200"
+            className="w-56 mt-2 p-0 border-none shadow-none bg-transparent overflow-visible"
           >
-            <DropdownMenuLabel className="px-2 py-1.5 text-xs font-bold text-gray-400 uppercase tracking-widest">
-              Student Account
-            </DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => router.push("/dashboard/student/profile")}
-              className="px-2 py-2 text-sm font-semibold text-gray-700 rounded-md hover:bg-emerald-50 cursor-pointer flex items-center gap-2"
+            <motion.div
+              initial={{ opacity: 0, y: 10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 10, scale: 0.95 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="bg-white rounded-xl border border-gray-100 shadow-xl p-1 overflow-hidden"
             >
-              <User className="w-4 h-4 text-emerald-500" />
-              View Profile
-            </DropdownMenuItem>
-            <DropdownMenuSeparator className="bg-gray-50" />
-            <DropdownMenuItem
-              onClick={handleLogout}
-              className="px-2 py-2 text-sm font-bold text-red-600 rounded-md hover:bg-red-50 cursor-pointer flex items-center gap-2 transition-colors"
-            >
-              <LogOut className="w-4 h-4" />
-              Sign Out
-            </DropdownMenuItem>
+              <DropdownMenuLabel className="px-2 py-1.5 text-xs font-bold text-gray-400 uppercase tracking-widest">
+                Student Account
+              </DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => router.push("/dashboard/student/profile")}
+                className="px-2 py-2.5 text-sm font-semibold text-gray-700 focus:bg-emerald-600 focus:text-white rounded-lg cursor-pointer flex items-center gap-2 transition-colors"
+              >
+                <User className="w-4 h-4" />
+                View Profile
+              </DropdownMenuItem>
+              <DropdownMenuSeparator className="bg-gray-50" />
+              <DropdownMenuItem
+                onClick={handleLogout}
+                className="px-2 py-2.5 text-sm font-bold text-red-600 focus:bg-red-50 focus:text-red-600 rounded-lg cursor-pointer flex items-center gap-2 transition-colors"
+              >
+                <LogOut className="w-4 h-4" />
+                Sign Out
+              </DropdownMenuItem>
+            </motion.div>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
