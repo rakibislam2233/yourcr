@@ -315,7 +315,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
                   <Input
                     type={showPassword ? "text" : "password"}
                     placeholder="Verify current identity"
-                    className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-amber-500 rounded-md pr-12 font-medium"
+                    className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-amber-500 pr-12 font-medium"
                   />
                   <button
                     type="button"
@@ -340,7 +340,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
                     <Input
                       type="password"
                       placeholder="At least 8 characters"
-                      className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-amber-500 rounded-md font-medium"
+                      className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-amber-500 font-medium"
                     />
                   </div>
                 </div>
@@ -353,7 +353,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
                     <Input
                       type="password"
                       placeholder="Repeat new password"
-                      className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-amber-500 rounded-md font-medium"
+                      className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-amber-500 font-medium"
                     />
                   </div>
                 </div>
