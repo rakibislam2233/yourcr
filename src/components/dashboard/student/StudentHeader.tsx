@@ -122,7 +122,7 @@ const StudentHeader: React.FC = () => {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.95 }}
               transition={{ duration: 0.2, ease: "easeOut" }}
-              className="bg-white rounded-xl border border-gray-100 shadow-xl p-1 overflow-hidden"
+              className="bg-white rounded-md border border-gray-100 shadow-md p-1 overflow-hidden"
             >
               <DropdownMenuLabel className="px-2 py-1.5 text-xs font-bold text-gray-400 uppercase tracking-widest">
                 Student Account
