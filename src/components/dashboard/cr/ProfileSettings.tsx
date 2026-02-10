@@ -306,15 +306,16 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
               </div>
             </div>
             <div className="space-y-6">
-              <div className="space-y-2.5">
-                <Label className="text-sm font-bold text-gray-700">
+              <div className="flex flex-col gap-1.5">
+                <Label className="text-sm font-semibold text-gray-700">
                   Current Password
                 </Label>
                 <div className="relative">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <Input
                     type={showPassword ? "text" : "password"}
                     placeholder="Verify current identity"
-                    className="h-11 border-gray-200 focus:border-amber-500 rounded-md pr-12 font-medium"
+                    className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-amber-500 rounded-md pr-12 font-medium"
                   />
                   <button
                     type="button"
@@ -329,26 +330,32 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
                   </button>
                 </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-2.5">
-                  <Label className="text-sm font-bold text-gray-700">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                <div className="flex flex-col gap-1.5">
+                  <Label className="text-sm font-semibold text-gray-700">
                     New Password
                   </Label>
-                  <Input
-                    type="password"
-                    placeholder="At least 8 characters"
-                    className="h-11 border-gray-200 focus:border-amber-500 rounded-md"
-                  />
+                  <div className="relative">
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Input
+                      type="password"
+                      placeholder="At least 8 characters"
+                      className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-amber-500 rounded-md font-medium"
+                    />
+                  </div>
                 </div>
-                <div className="space-y-2.5">
-                  <Label className="text-sm font-bold text-gray-700">
+                <div className="flex flex-col gap-1.5">
+                  <Label className="text-sm font-semibold text-gray-700">
                     Confirm Password
                   </Label>
-                  <Input
-                    type="password"
-                    placeholder="Repeat new password"
-                    className="h-11 border-gray-200 focus:border-amber-500 rounded-md"
-                  />
+                  <div className="relative">
+                    <Shield className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Input
+                      type="password"
+                      placeholder="Repeat new password"
+                      className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-amber-500 rounded-md font-medium"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
