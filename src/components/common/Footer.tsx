@@ -54,7 +54,13 @@ const Footer = () => {
                 href="/"
                 className="flex items-center space-x-2 text-xl font-bold"
               >
-                <Image src={logo} alt="logo" width={160} height={100} />
+                <Image
+                  src={logo}
+                  alt="logo"
+                  width={160}
+                  height={100}
+                  style={{ height: "auto" }}
+                />
               </Link>
             </div>
 

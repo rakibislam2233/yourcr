@@ -200,6 +200,7 @@ const HowItWorks = () => {
                             : "CR managing class"
                         }
                         fill
+                        sizes="(max-width: 768px) 256px, 320px"
                         className="object-cover"
                       />
                     </div>

@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getCookie } from "@/utils/tokenHandlers";
-
+import { deleteCookie, getCookie, setCookie } from "@/utils/tokenHandlers";
 const BACKEND_API_URL =
   process.env.NEXT_PUBLIC_BASE_API_URL || "http://localhost:5000/api/v1";
 
 type FetchOptions = Omit<RequestInit, "headers"> & {
   headers?: Record<string, string>;
 };
-
 export interface ApiResponse<T = any> {
   success: boolean;
   message: string;
@@ -62,9 +60,9 @@ const serverFetchHelper = async (
               body: JSON.stringify({ refreshToken }),
             },
           );
-
           if (refreshResponse.ok) {
             const refreshData = await refreshResponse.json();
+            console.log("Refresh Data", refreshData);
             const newAccessToken = refreshData.data?.accessToken;
             const newRefreshToken = refreshData.data?.refreshToken;
 
@@ -72,9 +70,6 @@ const serverFetchHelper = async (
               // Update the authorization header with new token
               (config.headers as Record<string, string>)["Authorization"] =
                 `Bearer ${newAccessToken}`;
-
-              // Store new tokens using server action
-              const { setCookie } = await import("@/utils/tokenHandlers");
               const isProduction = process.env.NODE_ENV === "production";
 
               await setCookie("accessToken", newAccessToken, {
@@ -92,7 +87,6 @@ const serverFetchHelper = async (
                   path: "/",
                 });
               }
-
               // Update role cookie if available
               if (refreshData.data?.user?.role) {
                 await setCookie("userRole", refreshData.data.user.role, {
@@ -102,14 +96,20 @@ const serverFetchHelper = async (
                   path: "/",
                 });
               }
-
               // Retry the original request with new token
               response = await fetch(`${BACKEND_API_URL}${endpoint}`, config);
             }
+          } else {
+            // Refresh token is invalid or expired - clear all cookies
+            await deleteCookie("accessToken");
+            await deleteCookie("refreshToken");
+            await deleteCookie("userRole");
           }
         } catch (refreshError) {
           console.error("Token refresh failed:", refreshError);
-          // Continue with the original 401 response
+          await deleteCookie("accessToken");
+          await deleteCookie("refreshToken");
+          await deleteCookie("userRole");
         }
       }
     }

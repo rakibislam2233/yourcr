@@ -25,7 +25,7 @@ export async function updateMyProfile(data: any) {
   const accessToken = await getCookie("accessToken");
   const refreshToken = await getCookie("refreshToken");
 
-  if (!accessToken && !refreshToken) {
+  if (!accessToken || !refreshToken) {
     throw new Error("User not authenticated");
   }
 

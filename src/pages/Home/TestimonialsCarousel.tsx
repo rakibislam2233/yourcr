@@ -134,6 +134,7 @@ const TestimonialCarousel = () => {
                         src={t.image}
                         alt={t.name}
                         fill
+                        sizes="(max-width: 768px) 128px, 192px"
                         className="object-cover"
                         priority
                       />
