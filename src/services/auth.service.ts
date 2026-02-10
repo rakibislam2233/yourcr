@@ -54,6 +54,15 @@ export async function loginUser(
       webPushToken: formData.get("webPushToken"),
     };
     const res = await api.post("/auth/login", loginPayload);
+    if (!res.success) {
+      return {
+        success: false,
+        message: res.message || "Failed to login",
+        inputs: values,
+        timestamp: Date.now(),
+      };
+    }
+
     const loginData = res.data;
 
     // 1. Handle Email Verification - Set sessionId and return redirect
@@ -172,6 +181,16 @@ export async function registerCr(
 
   try {
     const res = await api.post("/auth/register", parsed.data);
+
+    if (!res.success) {
+      return {
+        success: false,
+        message: res.message || "Registration failed",
+        inputs: values,
+        timestamp: Date.now(),
+      };
+    }
+
     // Set sessionId in cookies
     const sessionId = res?.data?.sessionId;
     if (sessionId) {
@@ -185,7 +204,7 @@ export async function registerCr(
     return {
       success: true,
       message: res?.message,
-      data: res,
+      data: res.data,
       timestamp: Date.now(),
     };
   } catch (error: any) {
@@ -246,12 +265,20 @@ export async function completeCrRegistration(
     }
     const res = await api.post("/cr-registrations", finalFormData);
 
+    if (!res.success) {
+      return {
+        success: false,
+        message: res.message || "Registration completion failed",
+        timestamp: Date.now(),
+      };
+    }
+
     //delete registrationSessionId from cookie
     await deleteCookie("registrationSessionId");
     return {
       success: true,
       message: "Registration completed! Waiting for admin approval.",
-      data: res,
+      data: res.data,
       timestamp: Date.now(),
     };
   } catch (error: any) {
@@ -297,8 +324,8 @@ export async function forgotPassword(
 
     return {
       success: true,
-      message: "Reset link sent!",
-      data: res,
+      message: res.message || "Reset link sent!",
+      data: res.data,
       timestamp: Date.now(),
     };
   } catch (error: any) {
@@ -341,6 +368,15 @@ export async function verifyOtp(
 
   try {
     const res = await api.post("/auth/verify-otp", data);
+    if (!res.success) {
+      return {
+        success: false,
+        message: res.message || "Invalid OTP",
+        inputs: values,
+        timestamp: Date.now(),
+      };
+    }
+
     const verifyData = res?.data;
     // 1.if isRegistrationComplete is false than set registrationSessionId in cookie
     if (verifyData?.isRegistrationComplete === false) {
@@ -437,13 +473,21 @@ export async function resetPassword(
       token: resetToken,
     });
 
+    if (!res.success) {
+      return {
+        success: false,
+        message: res.message || "Password reset failed",
+        timestamp: Date.now(),
+      };
+    }
+
     // Success - clear the token
     await deleteCookie("resetPasswordToken");
 
     return {
       success: true,
       message: "Password reset successful!",
-      data: res,
+      data: res.data,
       timestamp: Date.now(),
     };
   } catch (error: any) {

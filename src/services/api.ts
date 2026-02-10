@@ -9,10 +9,17 @@ type FetchOptions = Omit<RequestInit, "headers"> & {
   headers?: Record<string, string>;
 };
 
+export interface ApiResponse<T = any> {
+  success: boolean;
+  message: string;
+  data: T;
+  status: number;
+}
+
 const serverFetchHelper = async (
   endpoint: string,
   options: FetchOptions,
-): Promise<any> => {
+): Promise<ApiResponse> => {
   const { headers, ...restOptions } = options;
   const accessToken = await getCookie("accessToken");
 
@@ -35,51 +42,63 @@ const serverFetchHelper = async (
   try {
     let response = await fetch(`${BACKEND_API_URL}${endpoint}`, config);
 
+    // Refresh Token Logic
     if (
       response.status === 401 &&
       endpoint !== "/auth/login" &&
       endpoint !== "/auth/refresh-token"
     ) {
-      try {
-        const refreshResult = await getNewAccessToken();
-        if (refreshResult.success) {
-          const newAccessToken = await getCookie("accessToken");
-          (config.headers as Record<string, string>)["Authorization"] =
-            `Bearer ${newAccessToken}`;
-          response = await fetch(`${BACKEND_API_URL}${endpoint}`, config);
-        }
-      } catch (refreshError) {
-        console.error("Token refresh failed", refreshError);
+      const refreshResult = await getNewAccessToken();
+      if (refreshResult.success) {
+        const newAccessToken = await getCookie("accessToken");
+        (config.headers as Record<string, string>)["Authorization"] =
+          `Bearer ${newAccessToken}`;
+        response = await fetch(`${BACKEND_API_URL}${endpoint}`, config);
       }
     }
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(
-        errorData.message || `HTTP error! status: ${response.status}`,
-      );
-    }
+    const data = await response.json().catch(() => ({}));
 
     if (response.status === 204) {
-      return {};
+      return {
+        success: true,
+        message: "Success",
+        data: {} as any,
+        status: 204,
+      };
     }
 
-    return await response.json();
-  } catch (error) {
+    return {
+      success: response.ok,
+      message:
+        data?.message ||
+        (response.ok ? "Success" : `HTTP error! status: ${response.status}`),
+      data: data?.data ?? data,
+      status: response.status,
+    };
+  } catch (error: any) {
     console.error(`API Request Failed: ${endpoint}`, error);
-    throw error;
+    return {
+      success: false,
+      message: error.message || "Something went wrong",
+      data: null as any,
+      status: 500,
+    };
   }
 };
 
 export const api = {
-  get: async (endpoint: string, options: FetchOptions = {}): Promise<any> =>
+  get: async <T = any>(
+    endpoint: string,
+    options: FetchOptions = {},
+  ): Promise<ApiResponse<T>> =>
     serverFetchHelper(endpoint, { ...options, method: "GET" }),
 
-  post: async (
+  post: async <T = any>(
     endpoint: string,
     body: any,
     options: FetchOptions = {},
-  ): Promise<any> => {
+  ): Promise<ApiResponse<T>> => {
     const isFormData = body instanceof FormData;
     return serverFetchHelper(endpoint, {
       ...options,
@@ -88,11 +107,11 @@ export const api = {
     });
   },
 
-  put: async (
+  put: async <T = any>(
     endpoint: string,
     body: any,
     options: FetchOptions = {},
-  ): Promise<any> => {
+  ): Promise<ApiResponse<T>> => {
     const isFormData = body instanceof FormData;
     return serverFetchHelper(endpoint, {
       ...options,
@@ -101,11 +120,11 @@ export const api = {
     });
   },
 
-  patch: async (
+  patch: async <T = any>(
     endpoint: string,
     body: any,
     options: FetchOptions = {},
-  ): Promise<any> => {
+  ): Promise<ApiResponse<T>> => {
     const isFormData = body instanceof FormData;
     return serverFetchHelper(endpoint, {
       ...options,
@@ -114,6 +133,9 @@ export const api = {
     });
   },
 
-  delete: async (endpoint: string, options: FetchOptions = {}): Promise<any> =>
+  delete: async <T = any>(
+    endpoint: string,
+    options: FetchOptions = {},
+  ): Promise<ApiResponse<T>> =>
     serverFetchHelper(endpoint, { ...options, method: "DELETE" }),
 };

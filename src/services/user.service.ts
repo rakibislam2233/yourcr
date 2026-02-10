@@ -10,7 +10,11 @@ export async function getMyProfile() {
   }
   try {
     const res = await api.get("/users/profile/me");
-    return res;
+    if (!res.success) {
+      console.error("Profile fetch failed:", res.message);
+      return null;
+    }
+    return res.data;
   } catch (error: any) {
     console.error("Failed to fetch profile:", error.message);
     return null;
@@ -27,7 +31,10 @@ export async function updateMyProfile(data: any) {
 
   try {
     const res = await api.patch("/users/profile/me", data);
-    return res;
+    if (!res.success) {
+      throw new Error(res.message || "Failed to update profile");
+    }
+    return res.data;
   } catch (error: any) {
     console.error("Failed to update profile:", error.message);
     throw error;

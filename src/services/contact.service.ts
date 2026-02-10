@@ -35,10 +35,17 @@ export async function submitContactForm(
 
   try {
     const res = await api.post("/contact/submit", parsed.data);
+    if (!res.success) {
+      return {
+        success: false,
+        message: res.message || "Failed to send message",
+        inputs: values as ContactActionState["inputs"],
+      };
+    }
     return {
       success: true,
       message: "Your message has been sent successfully!",
-      data: res,
+      data: res.data,
     };
   } catch (error) {
     return {

@@ -35,7 +35,7 @@ const batchInformationSchema = z.object({
 export const institutionStepSchema = z.object({
   institutionName: z.string().min(1, "Institution name is required"),
   institutionType: z.enum(["UNIVERSITY", "COLLEGE", "POLYTECHNIC"]),
-  contactEmail: z.string().email("Invalid email").optional().or(z.literal("")),
+  contactEmail: z.string().email("Contact email is required"),
   contactPhone: z.string().optional(),
   address: z.string().min(1, "Address is required"),
 });

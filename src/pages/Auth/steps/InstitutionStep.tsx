@@ -101,16 +101,16 @@ const InstitutionStep: React.FC<InstitutionStepProps> = ({
                 state?.inputs?.email
               }
               placeholder="institution@example.com"
-              className={`h-12 border-gray-300 ${state?.errors?.contactEmail ? "border-red-500" : ""}`}
+              className={`h-12 border-gray-300 focus:border-primary focus:ring-primary ${state?.errors?.contactEmail ? "border-red-500" : ""}`}
             />
             {state?.errors?.contactEmail && (
-              <p className="text-xs text-red-500">
+              <p className="text-sm text-red-500 font-medium mt-1">
                 {state.errors.contactEmail[0]}
               </p>
             )}
           </div>
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="contactPhone">Contact Phone</Label>
+            <Label htmlFor="contactPhone">Contact Phone (Optional)</Label>
             <Input
               id="contactPhone"
               name="contactPhone"
@@ -120,10 +120,10 @@ const InstitutionStep: React.FC<InstitutionStepProps> = ({
                 state?.inputs?.phoneNumber
               }
               placeholder="e.g. 01XXXXXXXXX"
-              className={`h-12 border-gray-300 ${state?.errors?.contactPhone ? "border-red-500" : ""}`}
+              className={`h-12 border-gray-300 focus:border-primary focus:ring-primary ${state?.errors?.contactPhone ? "border-red-500" : ""}`}
             />
             {state?.errors?.contactPhone && (
-              <p className="text-xs text-red-500">
+              <p className="text-sm text-red-500 font-medium mt-1">
                 {state.errors.contactPhone[0]}
               </p>
             )}

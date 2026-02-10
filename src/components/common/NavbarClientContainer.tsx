@@ -26,7 +26,7 @@ const NavbarClientContainer: React.FC<NavbarClientContainerProps> = ({
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b",
         {
-          "bg-white border-gray-100 shadow-sm": isScrolled,
+          "bg-white border-gray-100": isScrolled,
           "bg-transparent border-transparent": !isScrolled,
         },
       )}
