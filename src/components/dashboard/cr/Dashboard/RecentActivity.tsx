@@ -1,11 +1,4 @@
-import {
-  ArrowRight,
-  Bell,
-  Calendar,
-  Clock,
-  MessageSquare,
-  Users,
-} from "lucide-react";
+import { Bell, Calendar, Clock, MessageSquare, Users } from "lucide-react";
 
 const RecentActivity = async () => {
   //   const recentActivities = await getRecentActivities();

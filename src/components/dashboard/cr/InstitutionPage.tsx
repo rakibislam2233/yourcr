@@ -39,15 +39,8 @@ const InstitutionPage: React.FC<InstitutionPageProps> = ({ user }) => {
     shift: user?.currentBatch?.shift,
     group: user?.currentBatch?.group,
   };
-  if (!user) {
-    return (
-      <div className="p-8 text-center text-gray-500">
-        Syncing institution details...
-      </div>
-    );
-  }
   return (
-    <div className="space-y-6">
+    <section className="w-full space-y-6">
       <PageHeader
         title="My Institution"
         description="View and manage your institution details"
@@ -65,9 +58,8 @@ const InstitutionPage: React.FC<InstitutionPageProps> = ({ user }) => {
           </Link>
         }
       />
-
       {/* Institution Overview Card */}
-      <div className="bg-linear-to-r from-primary to-primary/80 rounded-2xl p-8 text-white">
+      <div className="bg-linear-to-r from-primary to-primary/80 rounded-md p-8 text-white">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-center gap-6">
             <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center">
@@ -108,12 +100,12 @@ const InstitutionPage: React.FC<InstitutionPageProps> = ({ user }) => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Contact Information */}
-        <div className="bg-white rounded-2xl p-6 border border-gray-100">
+        <div className="bg-white rounded-md p-6 border border-gray-200">
           <h3 className="text-lg font-semibold text-gray-900 mb-6">
             Contact Information
           </h3>
           <div className="space-y-4">
-            <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl">
+            <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-md">
               <div className="p-2.5 bg-blue-100 text-blue-600 rounded-lg">
                 <MapPin className="w-5 h-5" />
               </div>
@@ -124,7 +116,7 @@ const InstitutionPage: React.FC<InstitutionPageProps> = ({ user }) => {
                 </p>
               </div>
             </div>
-            <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl">
+            <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-md">
               <div className="p-2.5 bg-green-100 text-green-600 rounded-lg">
                 <Phone className="w-5 h-5" />
               </div>
@@ -135,7 +127,7 @@ const InstitutionPage: React.FC<InstitutionPageProps> = ({ user }) => {
                 </p>
               </div>
             </div>
-            <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl">
+            <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-md">
               <div className="p-2.5 bg-purple-100 text-purple-600 rounded-lg">
                 <Mail className="w-5 h-5" />
               </div>
@@ -146,7 +138,7 @@ const InstitutionPage: React.FC<InstitutionPageProps> = ({ user }) => {
                 </p>
               </div>
             </div>
-            <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl">
+            <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-md">
               <div className="p-2.5 bg-orange-100 text-orange-600 rounded-lg">
                 <Globe className="w-5 h-5" />
               </div>
@@ -161,7 +153,7 @@ const InstitutionPage: React.FC<InstitutionPageProps> = ({ user }) => {
         </div>
 
         {/* Your Class Info */}
-        <div className="bg-white rounded-2xl p-6 border border-gray-100">
+        <div className="bg-white rounded-md p-6 border border-gray-200">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-lg font-semibold text-gray-900">
               Your Class Information
@@ -173,34 +165,34 @@ const InstitutionPage: React.FC<InstitutionPageProps> = ({ user }) => {
             </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="p-4 bg-gray-50 rounded-xl">
+            <div className="p-4 bg-gray-50 rounded-md">
               <p className="text-sm text-gray-500">Department</p>
               <p className="font-semibold text-gray-900 mt-1">
                 {classInfo.department}
               </p>
             </div>
-            <div className="p-4 bg-gray-50 rounded-xl">
+            <div className="p-4 bg-gray-50 rounded-md">
               <p className="text-sm text-gray-500">Academic Year</p>
               <p className="font-semibold text-gray-900 mt-1">
                 {classInfo.academicYear}
               </p>
             </div>
             {classInfo.semester && (
-              <div className="p-4 bg-gray-50 rounded-xl">
+              <div className="p-4 bg-gray-50 rounded-md">
                 <p className="text-sm text-gray-500">Semester</p>
                 <p className="font-semibold text-gray-900 mt-1">
                   {classInfo.semester}
                 </p>
               </div>
             )}
-            <div className="p-4 bg-gray-50 rounded-xl">
+            <div className="p-4 bg-gray-50 rounded-md">
               <p className="text-sm text-gray-500">Session</p>
               <p className="font-semibold text-gray-900 mt-1">
                 {classInfo.session}
               </p>
             </div>
             {classInfo.shift && (
-              <div className="p-4 bg-gray-50 rounded-xl">
+              <div className="p-4 bg-gray-50 rounded-md">
                 <p className="text-sm text-gray-500">Shift</p>
                 <p className="font-semibold text-gray-900 mt-1">
                   {classInfo.shift}
@@ -208,7 +200,7 @@ const InstitutionPage: React.FC<InstitutionPageProps> = ({ user }) => {
               </div>
             )}
             {classInfo.group && (
-              <div className="p-4 bg-gray-50 rounded-xl">
+              <div className="p-4 bg-gray-50 rounded-md">
                 <p className="text-sm text-gray-500">Group / Class</p>
                 <p className="font-semibold text-gray-900 mt-1">
                   {classInfo.group}
@@ -218,7 +210,7 @@ const InstitutionPage: React.FC<InstitutionPageProps> = ({ user }) => {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

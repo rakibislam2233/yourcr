@@ -7,24 +7,125 @@ import {
   UserRole,
 } from "./utils/auth-utils";
 
+const BACKEND_API_URL =
+  process.env.NEXT_PUBLIC_BASE_API_URL || "http://localhost:5000/api/v1";
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // 1. Get authentication and role data from cookies
-  const accessToken = request.cookies.get("accessToken")?.value || null;
-  const userRole = (request.cookies.get("userRole")?.value as UserRole) || null;
+  let accessToken = request.cookies.get("accessToken")?.value || null;
+  const refreshToken = request.cookies.get("refreshToken")?.value || null;
+  let userRole = (request.cookies.get("userRole")?.value as UserRole) || null;
+
+  // 2. Token Refresh Logic - If access token is missing but refresh token exists
+  if (!accessToken && refreshToken && !isAuthRoute(pathname)) {
+    try {
+      const refreshResponse = await fetch(
+        `${BACKEND_API_URL}/auth/refresh-token`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ refreshToken }),
+        },
+      );
+
+      if (refreshResponse.ok) {
+        const refreshData = await refreshResponse.json();
+        const newAccessToken = refreshData.data?.accessToken;
+        const newRefreshToken = refreshData.data?.refreshToken;
+        const role = refreshData.data?.user?.role;
+
+        if (newAccessToken) {
+          // Create response with updated cookies
+          // Create request headers for passing the new token downstream
+          const requestHeaders = new Headers(request.headers);
+          requestHeaders.set("Authorization", `Bearer ${newAccessToken}`);
+
+          // Pass the updated headers to the next response
+          const response = NextResponse.next({
+            request: {
+              headers: requestHeaders,
+            },
+          });
+          const isProduction = process.env.NODE_ENV === "production";
+
+          // Set new access token cookie on the response (for the client)
+          response.cookies.set("accessToken", newAccessToken, {
+            httpOnly: true,
+            secure: isProduction,
+            sameSite: "lax",
+            maxAge: 3600, // 1 hour
+            path: "/",
+          });
+
+          // Set new refresh token if provided
+          if (newRefreshToken) {
+            response.cookies.set("refreshToken", newRefreshToken, {
+              httpOnly: true,
+              secure: isProduction,
+              sameSite: "lax",
+              maxAge: 3600 * 24 * 90, // 90 days
+              path: "/",
+            });
+          }
+
+          // Set role if provided
+          if (role) {
+            response.cookies.set("userRole", role, {
+              httpOnly: true,
+              secure: isProduction,
+              sameSite: "lax",
+              maxAge: 3600 * 24 * 90,
+              path: "/",
+            });
+            userRole = role as UserRole;
+          }
+
+          // Update local variables for subsequent checks
+          accessToken = newAccessToken;
+
+          console.log("✅ Token refreshed successfully in middleware");
+
+          // Continue with the refreshed token
+          return response;
+        }
+      } else {
+        // Refresh token is invalid - clear all cookies
+        const response = NextResponse.redirect(
+          new URL("/auth/login", request.url),
+        );
+        response.cookies.delete("accessToken");
+        response.cookies.delete("refreshToken");
+        response.cookies.delete("userRole");
+        return response;
+      }
+    } catch (error) {
+      console.error("❌ Token refresh failed in middleware:", error);
+      // On error, clear cookies and redirect to login
+      const response = NextResponse.redirect(
+        new URL("/auth/login", request.url),
+      );
+      response.cookies.delete("accessToken");
+      response.cookies.delete("refreshToken");
+      response.cookies.delete("userRole");
+      return response;
+    }
+  }
 
   const routeOwner = getRouteOwner(pathname);
   const isAuth = isAuthRoute(pathname);
 
-  // 2. Redirect unauthenticated users trying to access protected routes
+  // 3. Redirect unauthenticated users trying to access protected routes
   if (!accessToken && routeOwner !== null) {
     const loginUrl = new URL("/auth/login", request.url);
     loginUrl.searchParams.set("redirect", pathname);
     return NextResponse.redirect(loginUrl);
   }
 
-  // 3. Handle authenticated users
+  // 4. Handle authenticated users
   // We only treat them as fully authenticated if they have BOTH the token and the role
   if (accessToken && userRole) {
     // If they are logged in, don't let them go back to login/register pages
@@ -50,7 +151,7 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // 4. Special Case: Token exists but Role is missing (possibly stale session)
+  // 5. Special Case: Token exists but Role is missing (possibly stale session)
   // In this case, we allow them to access the login page to re-authenticate properly
   if (accessToken && !userRole && isAuth) {
     return NextResponse.next();

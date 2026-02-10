@@ -515,32 +515,27 @@ export async function getNewAccessToken() {
     const res = await api.post("/auth/refresh-token", {
       refreshToken: refreshToken,
     });
-
     const isProduction = process.env.NODE_ENV === "production";
-    //set new tokens
-    await setCookie("accessToken", res.data.accessToken, {
-      secure: isProduction,
-      httpOnly: true,
-      maxAge: 3600,
-      path: "/",
-    });
-    await setCookie("refreshToken", res.data.refreshToken, {
-      secure: isProduction,
-      httpOnly: true,
-      maxAge: 3600 * 24 * 90,
-      path: "/",
-    });
-
-    // Refresh role cookie if user data is returned
-    if (res.data?.user?.role) {
-      await setCookie("userRole", res.data.user.role, {
+    if (res.success) {
+      console.log(
+        "Access and Refresh Tokens Set",
+        res.data.accessToken,
+        res.data.refreshToken,
+      );
+      //set new tokens
+      await setCookie("accessToken", res.data.accessToken, {
+        secure: isProduction,
+        httpOnly: true,
+        maxAge: 3600,
+        path: "/",
+      });
+      await setCookie("refreshToken", res.data.refreshToken, {
         secure: isProduction,
         httpOnly: true,
         maxAge: 3600 * 24 * 90,
         path: "/",
       });
     }
-
     return {
       success: true,
       message: "Token refreshed successfully!",
