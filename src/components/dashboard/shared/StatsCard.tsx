@@ -1,13 +1,38 @@
 "use client";
-
-import React from "react";
 import { motion } from "framer-motion";
-import { LucideIcon } from "lucide-react";
+import {
+  Bell,
+  BookOpen,
+  Calendar,
+  ClipboardList,
+  FileText,
+  GraduationCap,
+  LucideIcon,
+  MessageSquare,
+  School,
+  TrendingUp,
+  Users,
+} from "lucide-react";
+import React from "react";
+
+// Icon mapping for string-based icon names
+const iconMap: Record<string, LucideIcon> = {
+  Users,
+  BookOpen,
+  ClipboardList,
+  MessageSquare,
+  TrendingUp,
+  Calendar,
+  Bell,
+  FileText,
+  GraduationCap,
+  School,
+};
 
 interface StatsCardProps {
   title: string;
   value: string | number;
-  icon: LucideIcon;
+  icon: string; // Changed from LucideIcon to string
   trend?: {
     value: number;
     isPositive: boolean;
@@ -47,11 +72,12 @@ const colorClasses = {
 const StatsCard: React.FC<StatsCardProps> = ({
   title,
   value,
-  icon: Icon,
+  icon: iconName,
   trend,
-  color = "blue"
+  color = "blue",
 }) => {
   const colors = colorClasses[color];
+  const Icon = iconMap[iconName] || Users; // Fallback to Users if icon not found
 
   return (
     <motion.div className="bg-white rounded-2xl p-6  border border-gray-100 ">
