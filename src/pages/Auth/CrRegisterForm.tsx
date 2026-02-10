@@ -67,7 +67,9 @@ const CrRegisterForm = () => {
         <input type="hidden" name="webPushToken" value={webPushToken || ""} />
         <div className="space-y-4">
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="fullName">Full Name</Label>
+            <Label htmlFor="fullName">
+              Full Name <span className="text-red-500">*</span>
+            </Label>
             <div className="relative">
               <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <Input
@@ -86,7 +88,9 @@ const CrRegisterForm = () => {
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="email">Email Address</Label>
+            <Label htmlFor="email">
+              Email Address <span className="text-red-500">*</span>
+            </Label>
             <div className="relative">
               <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <Input
@@ -106,7 +110,9 @@ const CrRegisterForm = () => {
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="phoneNumber">Phone Number</Label>
+            <Label htmlFor="phoneNumber">
+              Phone Number <span className="text-red-500">*</span>
+            </Label>
             <div className="relative">
               <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <Input
@@ -127,7 +133,9 @@ const CrRegisterForm = () => {
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">
+              Password <span className="text-red-500">*</span>
+            </Label>
             <div className="relative">
               <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <Input

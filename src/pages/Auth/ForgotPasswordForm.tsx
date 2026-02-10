@@ -31,7 +31,9 @@ const ForgotPasswordForm = () => {
   return (
     <form action={formAction} className="space-y-6">
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="email">Email Address</Label>
+        <Label htmlFor="email">
+          Email Address <span className="text-red-500">*</span>
+        </Label>
         <div className="relative">
           <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
           <Input

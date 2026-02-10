@@ -123,7 +123,7 @@ const LoginForm = () => {
             htmlFor="email"
             className="text-sm font-semibold text-gray-700"
           >
-            Email Address
+            Email Address <span className="text-red-500">*</span>
           </Label>
           <div className="relative">
             <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -153,7 +153,7 @@ const LoginForm = () => {
               title="Password"
               className="text-sm font-semibold text-gray-700"
             >
-              Password
+              Password <span className="text-red-500">*</span>
             </Label>
             <Link
               href="/auth/forgot-password"

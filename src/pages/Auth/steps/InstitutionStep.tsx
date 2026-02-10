@@ -41,7 +41,9 @@ const InstitutionStep: React.FC<InstitutionStepProps> = ({
     <div className="animate-in fade-in slide-in-from-right-4 duration-300 space-y-6">
       <div className="space-y-4">
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="institutionName">Institution Name</Label>
+          <Label htmlFor="institutionName">
+            Institution Name <span className="text-red-500">*</span>
+          </Label>
           <div className="relative">
             <School className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <Input
@@ -62,7 +64,9 @@ const InstitutionStep: React.FC<InstitutionStepProps> = ({
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="institutionType">Institution Type</Label>
+          <Label htmlFor="institutionType">
+            Institution Type <span className="text-red-500">*</span>
+          </Label>
           <input
             type="hidden"
             name="institutionType"
@@ -90,7 +94,9 @@ const InstitutionStep: React.FC<InstitutionStepProps> = ({
 
         <div className="grid grid-cols-2 gap-4">
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="contactEmail">Contact Email</Label>
+            <Label htmlFor="contactEmail">
+              Contact Email <span className="text-red-500">*</span>
+            </Label>
             <Input
               id="contactEmail"
               name="contactEmail"
@@ -131,7 +137,9 @@ const InstitutionStep: React.FC<InstitutionStepProps> = ({
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="address">Institution Address</Label>
+          <Label htmlFor="address">
+            Institution Address <span className="text-red-500">*</span>
+          </Label>
           <div className="relative">
             <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <Input

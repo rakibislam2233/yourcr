@@ -50,6 +50,7 @@ export async function updateMyProfile(data: any) {
     if (!res.success) {
       throw new Error(res.message || "Failed to update profile");
     }
+    revalidateTag("profile", { expire: 0 });
     return res.data;
   } catch (error: any) {
     console.error("Failed to update profile:", error.message);
@@ -92,10 +93,13 @@ export async function updateInstitutionBatch(
       finalFormData.append("logo", file);
     }
     // 3. Call API
-    const res = await api.patch("/users/institution-batch", finalFormData, {});
+    const res = await api.patch(
+      "/users/update-institution-and-batch",
+      finalFormData,
+      {},
+    );
 
     if (!res.success) {
-      revalidateTag("profile", { expire: 0 });
       throw new Error(res.message || "Failed to update institution batch");
     }
     revalidateTag("profile", { expire: 0 });

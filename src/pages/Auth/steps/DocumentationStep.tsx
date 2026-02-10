@@ -44,7 +44,9 @@ const DocumentationStep: React.FC<DocumentationStepProps> = ({
   return (
     <div className="animate-in fade-in slide-in-from-right-4 duration-300 space-y-6">
       <div className="space-y-4">
-        <Label>Student ID Card (Front Image)</Label>
+        <Label>
+          Student ID Card (Front Image) <span className="text-red-500">*</span>
+        </Label>
         {!idCardPreview ? (
           <div
             onDragOver={onDragOver}

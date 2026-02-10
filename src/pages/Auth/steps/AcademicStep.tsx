@@ -40,7 +40,9 @@ const AcademicStep: React.FC<AcademicStepProps> = ({
       <div className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="session">Session</Label>
+            <Label htmlFor="session">
+              Session <span className="text-red-500">*</span>
+            </Label>
             <Input
               id="session"
               name="session"
@@ -53,7 +55,9 @@ const AcademicStep: React.FC<AcademicStepProps> = ({
             )}
           </div>
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="batchType">Batch Type</Label>
+            <Label htmlFor="batchType">
+              Batch Type <span className="text-red-500">*</span>
+            </Label>
             <Select
               name="batchType"
               value={batchType}
@@ -80,7 +84,8 @@ const AcademicStep: React.FC<AcademicStepProps> = ({
                 ? "Year"
                 : isCollege
                   ? "Class Year"
-                  : "Academic Year"}
+                  : "Academic Year"}{" "}
+              <span className="text-red-500">*</span>
             </Label>
             <Input
               id="academicYear"
@@ -116,7 +121,8 @@ const AcademicStep: React.FC<AcademicStepProps> = ({
 
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="department">
-            {isCollege ? "Group / Department" : "Department / Subject"}
+            {isCollege ? "Group / Department" : "Department / Subject"}{" "}
+            <span className="text-red-500">*</span>
           </Label>
           <Input
             id="department"

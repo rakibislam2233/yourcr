@@ -27,7 +27,7 @@ export default async function EditInstitutionPage() {
     shift: user?.currentBatch?.shift || "",
     group: user?.currentBatch?.group || "",
     academicYear: user?.currentBatch?.academicYear || "",
-    batchType: user?.currentBatch?.batchType || "Regular",
+    batchType: user?.currentBatch?.batchType || "SEMESTER",
   };
 
   return (
