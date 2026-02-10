@@ -1,58 +1,17 @@
-"use client";
-
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import UserDropdown from "@/components/common/UserDropdown";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { useUser } from "@/providers/UserProvider";
-import { Bell, ChevronDown, LogOut, Search, User } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
-import React from "react";
-import { toast } from "sonner";
+import { getMyProfile } from "@/services/user.service";
+import { Bell, Search } from "lucide-react";
+import Breadcrumbs from "../shared/Breadcrumbs";
 
-import { motion } from "framer-motion";
-
-const CrHeader: React.FC = () => {
-  const pathname = usePathname();
-  const router = useRouter();
-  const { user, loading, logout } = useUser();
-
-  const handleLogout = async () => {
-    try {
-      await logout();
-      toast.success("Logged out successfully");
-      router.push("/auth/login");
-    } catch {
-      toast.error("Failed to logout");
-    }
-  };
-
-  const generateBreadcrumbs = () => {
-    if (!pathname) return null;
-    const paths = pathname.split("/").filter((p) => p);
-    return paths.slice(0, 3).map((path, index) => {
-      const label =
-        path.charAt(0).toUpperCase() + path.slice(1).replace(/-/g, " ");
-      const isLast = index === paths.length - 1;
-
-      return (
-        <span key={index} className="flex items-center">
-          {index > 0 && <span className="text-gray-300 mx-2">/</span>}
-          <span
-            className={`text-[10px] font-bold tracking-wider uppercase ${isLast ? "text-gray-900" : "text-gray-400"}`}
-          >
-            {label}
-          </span>
-        </span>
-      );
-    });
-  };
+const CrHeader = async () => {
+  let user = null;
+  try {
+    const res = await getMyProfile();
+    user = res?.data || null;
+  } catch (error) {
+    console.error("CrHeader profile fetch failed", error);
+  }
 
   return (
     <header className="sticky top-0 z-40 w-full h-20 shrink-0 bg-white border-b border-gray-100 px-6 flex items-center justify-between gap-4">
@@ -60,9 +19,7 @@ const CrHeader: React.FC = () => {
       <div className="flex items-center gap-4">
         <SidebarTrigger className="h-9 w-9 rounded-md border border-gray-200 transition-all hover:bg-gray-50 active:scale-95" />
         <div className="h-4 w-px bg-gray-200 hidden sm:block" />
-        <nav className="hidden sm:flex items-center">
-          {generateBreadcrumbs()}
-        </nav>
+        <Breadcrumbs />
       </div>
 
       {/* Center: Search - Clean & Minimalist */}
@@ -86,56 +43,7 @@ const CrHeader: React.FC = () => {
 
         <div className="w-px h-6 bg-gray-100 mx-1 hidden sm:block" />
 
-        <DropdownMenu modal={false}>
-          <DropdownMenuTrigger asChild>
-            <div className="flex items-center gap-3 pl-2 pr-1 py-1 rounded-md border border-transparent hover:border-gray-100 hover:bg-gray-50 cursor-pointer transition-all active:scale-98 group">
-              <Avatar className="size-10 rounded-full border border-gray-200 shadow-sm transition-transform group-hover:scale-105">
-                <AvatarImage
-                  src={user?.profileImage || "https://github.com/shadcn.png"}
-                  alt={user?.fullName || "Class Representative"}
-                />
-                <AvatarFallback className="bg-primary text-white text-xs font-bold rounded-full uppercase">
-                  {user?.fullName
-                    ?.split(" ")
-                    .map((n: string) => n[0])
-                    .join("")
-                    .slice(0, 2) || "CR"}
-                </AvatarFallback>
-              </Avatar>
-              <ChevronDown className="w-3.5 h-3.5 text-gray-400 group-hover:text-gray-900 transition-transform duration-200 group-data-[state=open]:rotate-180" />
-            </div>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            align="end"
-            className="w-56 mt-2 p-0 border-none shadow-none bg-transparent overflow-visible"
-          >
-            <motion.div
-              initial={{ opacity: 0, y: 10, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-              className="bg-white rounded-md border border-gray-100 shadow-md  p-1 overflow-hidden"
-            >
-              <DropdownMenuLabel className="px-2 py-1.5 text-xs font-bold text-gray-400 uppercase tracking-widest">
-                My Account
-              </DropdownMenuLabel>
-              <DropdownMenuItem
-                onClick={() => router.push("/dashboard/cr/profile")}
-                className="px-2 py-2.5 text-sm font-semibold text-gray-700 focus:bg-primary focus:text-white rounded-lg cursor-pointer flex items-center gap-2 transition-colors"
-              >
-                <User className="w-4 h-4" />
-                View Profile
-              </DropdownMenuItem>
-              <DropdownMenuSeparator className="bg-gray-50" />
-              <DropdownMenuItem
-                onClick={handleLogout}
-                className="px-2 py-2.5 text-sm font-bold text-red-600 focus:bg-red-50 focus:text-red-600 rounded-lg cursor-pointer flex items-center gap-2 transition-colors"
-              >
-                <LogOut className="w-4 h-4" />
-                Sign Out
-              </DropdownMenuItem>
-            </motion.div>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {user && <UserDropdown user={user} dashboardHref="/dashboard/cr" />}
       </div>
     </header>
   );

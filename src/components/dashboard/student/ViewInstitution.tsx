@@ -1,6 +1,5 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { useUser } from "@/providers/UserProvider";
 import { motion } from "framer-motion";
 import {
   Building2,
@@ -16,17 +15,21 @@ import {
 import React from "react";
 import PageHeader from "../shared/PageHeader";
 
-const ViewInstitution: React.FC = () => {
-  const { user, loading } = useUser();
+import { UserProfile } from "@/interface/user.interface";
 
+interface ViewInstitutionProps {
+  user: UserProfile | null;
+}
+
+const ViewInstitution: React.FC<ViewInstitutionProps> = ({ user }) => {
   const institutionData = {
     name: user?.institution?.name || "N/A",
     shortName: user?.institution?.shortName || "N/A",
     type: user?.institution?.type || "Polytechnic Institute",
     establishedYear: user?.institution?.establishedYear || "N/A",
     address: user?.institution?.address || "N/A",
-    phone: user?.institution?.phoneNumber || "N/A",
-    email: user?.institution?.email || "N/A",
+    phone: user?.institution?.contactPhone || "N/A",
+    email: user?.institution?.contactEmail || "N/A",
     website: user?.institution?.website || "N/A",
     totalStudents: 5000,
     totalDepartments: 12,
@@ -42,10 +45,10 @@ const ViewInstitution: React.FC = () => {
     cr: "Institution Admin", // Placeholder
   };
 
-  if (loading) {
+  if (!user) {
     return (
       <div className="p-8 text-center text-gray-500">
-        Loading institute details...
+        Syncing institute details...
       </div>
     );
   }

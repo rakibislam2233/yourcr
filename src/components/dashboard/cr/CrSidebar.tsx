@@ -1,9 +1,10 @@
 "use client";
-
 import logo from "@/assets/logo/logo.png";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupLabel,
   SidebarHeader,
@@ -13,21 +14,24 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
+import { logoutUser } from "@/services/auth.service";
 import {
   Bell,
   BookOpen,
   Building2,
   Calendar,
   LayoutDashboard,
+  LogOut,
   MessageSquare,
   School,
   User,
   Users,
 } from "lucide-react";
-import Image from "next/image";
+import NextImage from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import * as React from "react";
+import { toast } from "sonner";
 
 const menuGroups = [
   {
@@ -107,10 +111,27 @@ const menuGroups = [
   },
 ];
 
-const CrSidebar: React.FC = () => {
+import { UserProfile } from "@/interface/user.interface";
+
+interface CrSidebarProps {
+  user: UserProfile | null;
+}
+
+const CrSidebar: React.FC<CrSidebarProps> = ({ user }) => {
   const pathname = usePathname();
+  const router = useRouter();
   const { state, isMobile } = useSidebar();
   const isCollapsed = state === "collapsed" && !isMobile;
+
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+      toast.success("Logged out successfully");
+      router.push("/auth/login");
+    } catch {
+      toast.error("Failed to logout");
+    }
+  };
 
   const isActive = (href: string) => {
     if (!href) return false;
@@ -133,7 +154,7 @@ const CrSidebar: React.FC = () => {
                 CR
               </div>
             ) : (
-              <Image
+              <NextImage
                 src={logo}
                 alt="YourCR Logo"
                 width={130}
@@ -192,6 +213,55 @@ const CrSidebar: React.FC = () => {
             </SidebarGroup>
           ))}
         </SidebarContent>
+
+        {/* Footer - User Profile */}
+        <SidebarFooter className="p-4 border-t border-gray-50">
+          <div
+            className={cn(
+              "flex items-center gap-3",
+              isCollapsed ? "justify-center" : "px-2",
+            )}
+          >
+            <Avatar className="h-9 w-9 rounded-md border border-gray-100">
+              <AvatarImage src={user?.profileImage} alt={user?.fullName} />
+              <AvatarFallback className="bg-primary text-white text-xs font-bold rounded-md uppercase">
+                {user?.fullName
+                  ?.split(" ")
+                  .map((n: string) => n[0])
+                  .join("")
+                  .slice(0, 2) || "CR"}
+              </AvatarFallback>
+            </Avatar>
+            {!isCollapsed && (
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-bold text-gray-900 truncate">
+                  {user?.fullName || "CR Portal"}
+                </p>
+                <p className="text-[10px] font-semibold text-primary truncate uppercase tracking-tighter">
+                  {user?.email || "cr.admin@yourcr.com"}
+                </p>
+              </div>
+            )}
+          </div>
+          {!isCollapsed && (
+            <button
+              onClick={handleLogout}
+              className="mt-4 w-full h-10 flex items-center gap-3 px-3 rounded-md text-red-500 font-bold text-sm hover:bg-red-50 transition-colors active:scale-95 group"
+            >
+              <LogOut className="size-5 group-hover:translate-x-0.5 transition-transform" />
+              Sign Out
+            </button>
+          )}
+          {isCollapsed && (
+            <button
+              onClick={handleLogout}
+              className="mt-4 h-10 w-full flex items-center justify-center rounded-md text-red-500 hover:bg-red-50 transition-colors"
+              title="Sign Out"
+            >
+              <LogOut className="size-6" />
+            </button>
+          )}
+        </SidebarFooter>
       </div>
     </Sidebar>
   );

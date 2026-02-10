@@ -1,9 +1,7 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useUser } from "@/providers/UserProvider";
 import { updateMyProfile } from "@/services/user.service";
 import {
   Building2,
@@ -24,8 +22,13 @@ import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import PageHeader from "../shared/PageHeader";
 
-const MyProfile: React.FC = () => {
-  const { user, loading, refreshProfile } = useUser();
+import { UserProfile } from "@/interface/user.interface";
+
+interface MyProfileProps {
+  user: UserProfile | null;
+}
+
+const MyProfile: React.FC<MyProfileProps> = ({ user }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
@@ -53,7 +56,6 @@ const MyProfile: React.FC = () => {
         fullName: formData.fullName,
         phoneNumber: formData.phoneNumber,
       });
-      await refreshProfile();
       toast.success("Identity updated successfully");
     } catch (error) {
       toast.error("Failed to sync identity updates");
@@ -62,12 +64,12 @@ const MyProfile: React.FC = () => {
     }
   };
 
-  if (loading && !user) {
+  if (!user) {
     return (
       <div className="p-16 text-center">
         <div className="inline-block animate-spin size-9 border-[3px] border-emerald-500 border-t-transparent rounded-full mb-6" />
         <p className="text-sm font-bold text-gray-400 uppercase tracking-[0.2em] animate-pulse">
-          Loading Student Profile...
+          Syncing Student Profile...
         </p>
       </div>
     );
@@ -181,7 +183,7 @@ const MyProfile: React.FC = () => {
                   <p className="text-sm font-bold text-gray-800 truncate">
                     {user?.currentBatch?.department || "N/A"}
                     <span className="block text-xs font-semibold text-emerald-600 mt-0.5">
-                      {user?.currentBatch?.name}
+                      {user?.currentBatch?.session}
                     </span>
                   </p>
                 </div>

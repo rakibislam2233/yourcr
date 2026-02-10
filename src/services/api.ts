@@ -34,6 +34,7 @@ const serverFetchHelper = async (
 
   try {
     let response = await fetch(`${BACKEND_API_URL}${endpoint}`, config);
+
     if (
       response.status === 401 &&
       endpoint !== "/auth/login" &&
@@ -54,9 +55,8 @@ const serverFetchHelper = async (
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(
-        errorData.message || `HTTP error! status: ${response.status}`,
-      );
+      console.error(errorData.message);
+      return null;
     }
 
     if (response.status === 204) {

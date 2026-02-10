@@ -1,9 +1,8 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useUser } from "@/providers/UserProvider";
+import { UserProfile } from "@/interface/user.interface";
 import { updateMyProfile } from "@/services/user.service";
 import {
   Building2,
@@ -19,12 +18,18 @@ import {
   Shield,
   User,
 } from "lucide-react";
+import NextImage from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import PageHeader from "../shared/PageHeader";
 
-const ProfileSettings: React.FC = () => {
-  const { user, loading, refreshProfile } = useUser();
+interface ProfileSettingsProps {
+  user: UserProfile | null;
+}
+
+const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
@@ -52,16 +57,16 @@ const ProfileSettings: React.FC = () => {
         fullName: formData.fullName,
         phoneNumber: formData.phoneNumber,
       });
-      await refreshProfile();
+      await router.refresh();
       toast.success("Profile updated successfully");
-    } catch (error) {
+    } catch {
       toast.error("Failed to update profile");
     } finally {
       setIsUpdating(false);
     }
   };
 
-  if (loading && !user) {
+  if (!user) {
     return (
       <div className="p-12 text-center font-bold text-gray-400 animate-pulse uppercase tracking-widest">
         Syncing CR Profile...
@@ -87,17 +92,19 @@ const ProfileSettings: React.FC = () => {
           <div className="bg-white rounded-md border border-gray-100 p-8 shadow-sm">
             <div className="flex flex-col items-center text-center">
               <div className="relative group">
-                <div className="w-28 h-28 bg-gradient-to-br from-primary to-blue-600 rounded-md flex items-center justify-center text-white text-3xl font-bold shadow-lg transition-transform group-hover:scale-105">
+                <div className="w-28 h-28 bg-linear-to-br from-primary to-blue-600 rounded-md flex items-center justify-center text-white text-3xl font-bold shadow-lg transition-transform group-hover:scale-105">
                   {user?.profileImage ? (
-                    <img
+                    <NextImage
                       src={user.profileImage}
                       alt={user.fullName}
+                      width={112}
+                      height={112}
                       className="w-full h-full object-cover rounded-md"
                     />
                   ) : (
                     user?.fullName
                       ?.split(" ")
-                      .map((n: any) => n[0])
+                      .map((n) => n[0])
                       .join("")
                       .slice(0, 2) || "CR"
                   )}
@@ -174,7 +181,7 @@ const ProfileSettings: React.FC = () => {
                   <p className="text-sm font-bold text-gray-900 truncate">
                     {user?.currentBatch?.department || "N/A"}
                     <span className="block text-xs font-medium text-gray-500 mt-0.5">
-                      {user?.currentBatch?.name}
+                      {user?.currentBatch?.session}
                     </span>
                   </p>
                 </div>

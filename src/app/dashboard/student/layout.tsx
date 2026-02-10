@@ -1,18 +1,27 @@
 import StudentHeader from "@/components/dashboard/student/StudentHeader";
 import StudentSidebar from "@/components/dashboard/student/StudentSidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { getMyProfile } from "@/services/user.service";
 
-export default function StudentDashboardLayout({
+export default async function StudentDashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  let user = null;
+  try {
+    const res = await getMyProfile();
+    user = res?.data || null;
+  } catch (error) {
+    console.error("Student layout profile fetch failed", error);
+  }
+
   return (
     <SidebarProvider
       style={{ "--sidebar-width": "19rem" } as React.CSSProperties}
     >
       <div className="flex min-h-screen w-full bg-white">
-        <StudentSidebar />
+        <StudentSidebar user={user} />
         <SidebarInset className="flex flex-col bg-white overflow-hidden">
           <StudentHeader />
           <main className="flex-1 overflow-y-auto pt-6 pb-20 px-6">

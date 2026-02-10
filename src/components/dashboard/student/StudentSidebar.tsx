@@ -1,6 +1,7 @@
 "use client";
 
 import logo from "@/assets/logo/logo.png";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Sidebar,
   SidebarContent,
@@ -13,8 +14,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { UserProfile } from "@/interface/user.interface";
 import { cn } from "@/lib/utils";
-import { useUser } from "@/providers/UserProvider";
 import { logoutUser } from "@/services/auth.service";
 import {
   Bell,
@@ -33,7 +34,6 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import * as React from "react";
 import { toast } from "sonner";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const menuGroups = [
   {
@@ -108,11 +108,14 @@ const menuGroups = [
   },
 ];
 
-const StudentSidebar: React.FC = () => {
+interface StudentSidebarProps {
+  user: UserProfile;
+}
+
+const StudentSidebar: React.FC<StudentSidebarProps> = ({ user }) => {
   const pathname = usePathname();
   const router = useRouter();
   const { state, isMobile } = useSidebar();
-  const { user, loading } = useUser();
   const isCollapsed = state === "collapsed" && !isMobile;
 
   const isActive = (href: string) => {
@@ -126,7 +129,7 @@ const StudentSidebar: React.FC = () => {
       await logoutUser();
       toast.success("Logged out successfully");
       router.push("/auth/login");
-    } catch (error) {
+    } catch {
       toast.error("Failed to logout");
     }
   };
@@ -227,7 +230,7 @@ const StudentSidebar: React.FC = () => {
             {!isCollapsed && (
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-bold text-gray-900 truncate">
-                  {loading ? "Loading..." : user?.fullName || "Student Account"}
+                  {user?.fullName || "Student Account"}
                 </p>
                 <p className="text-[10px] font-semibold text-emerald-500 truncate uppercase tracking-tighter">
                   {user?.email || "student.portal@yourcr.com"}

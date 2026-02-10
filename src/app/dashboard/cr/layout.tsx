@@ -1,18 +1,27 @@
 import CrHeader from "@/components/dashboard/cr/CrHeader";
 import CrSidebar from "@/components/dashboard/cr/CrSidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { getMyProfile } from "@/services/user.service";
 
-export default function CrDashboardLayout({
+export default async function CrDashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  let user = null;
+  try {
+    const res = await getMyProfile();
+    user = res?.data || null;
+  } catch (error) {
+    console.error("CR layout profile fetch failed", error);
+  }
+
   return (
     <SidebarProvider
       style={{ "--sidebar-width": "19rem" } as React.CSSProperties}
     >
       <div className="flex min-h-screen w-full bg-white">
-        <CrSidebar />
+        <CrSidebar user={user} />
         <SidebarInset className="flex flex-col bg-white overflow-hidden">
           <CrHeader />
           <main className="flex-1 overflow-y-auto pt-6 pb-20 px-6">

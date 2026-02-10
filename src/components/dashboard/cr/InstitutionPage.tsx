@@ -1,33 +1,31 @@
-"use client";
 import { Button } from "@/components/ui/button";
-import { useUser } from "@/providers/UserProvider";
+import { UserProfile } from "@/interface/user.interface";
 import {
   Building2,
-  Calendar,
   Edit,
   ExternalLink,
   Globe,
-  GraduationCap,
   Mail,
   MapPin,
   Phone,
-  Users,
 } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import PageHeader from "../shared/PageHeader";
 
-const InstitutionPage: React.FC = () => {
-  const { user, loading } = useUser();
+interface InstitutionPageProps {
+  user: UserProfile | null;
+}
 
+const InstitutionPage: React.FC<InstitutionPageProps> = ({ user }) => {
   const institutionData = {
     name: user?.institution?.name || "N/A",
     shortName: user?.institution?.shortName || "N/A",
     type: user?.institution?.type || "Polytechnic Institute",
     establishedYear: user?.institution?.establishedYear || "N/A",
     address: user?.institution?.address || "N/A",
-    phone: user?.institution?.phoneNumber || "N/A",
-    email: user?.institution?.email || "N/A",
+    phone: user?.institution?.contactPhone || "N/A",
+    email: user?.institution?.contactEmail || "N/A",
     website: user?.institution?.website || "N/A",
     totalStudents: 5000, // Placeholder
     totalDepartments: 12, // Placeholder
@@ -40,24 +38,13 @@ const InstitutionPage: React.FC = () => {
     shift: "1st Shift", // Placeholder
     group: "A", // Placeholder
   };
-
-  const departmentInfo = {
-    name: user?.currentBatch?.department || "N/A",
-    code: "N/A",
-    head: "N/A",
-    totalStudents: 450, // Placeholder
-    totalTeachers: 25, // Placeholder
-    labs: 8, // Placeholder
-  };
-
-  if (loading) {
+  if (!user) {
     return (
       <div className="p-8 text-center text-gray-500">
-        Loading institution details...
+        Syncing institution details...
       </div>
     );
   }
-
   return (
     <div className="space-y-6">
       <PageHeader

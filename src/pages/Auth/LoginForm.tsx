@@ -4,7 +4,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Modal } from "@/components/ui/modal";
-import { useUser } from "@/providers/UserProvider";
 import { loginUser } from "@/services/auth.service";
 import { getDefaultDashboardRoute } from "@/utils/auth-utils";
 import { Clock, Eye, EyeOff, Lock, Mail } from "lucide-react";
@@ -33,7 +32,6 @@ const LoginForm = () => {
     initialState,
   );
 
-  const { refreshProfile } = useUser();
   const [lastActionTimestamp, setLastActionTimestamp] = useState<number>(0);
 
   useEffect(() => {
@@ -47,10 +45,6 @@ const LoginForm = () => {
           setIsPendingModalOpen(true);
           return;
         }
-
-        // Trigger profile refresh in provider
-        refreshProfile();
-
         toast.success(state.message);
         const callbackUrl = searchParams?.get("redirect");
 
@@ -74,7 +68,7 @@ const LoginForm = () => {
         toast.error(state.message);
       }
     }
-  }, [state, router, searchParams, lastActionTimestamp, refreshProfile]);
+  }, [state, router, searchParams, lastActionTimestamp]);
 
   return (
     <>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Syne } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "sonner";
 
 const mukta = Syne({
   variable: "--font-geist-sans",
@@ -70,9 +71,6 @@ export const metadata: Metadata = {
   },
 };
 
-import { UserProvider } from "@/providers/UserProvider";
-import { Toaster } from "sonner";
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -84,10 +82,8 @@ export default function RootLayout({
         <meta name="google-adsense-account" content="ca-pub-1132020137464868" />
       </head>
       <body className={`${mukta.className}`} suppressHydrationWarning>
-        <UserProvider>
-          {children}
-          <Toaster position="top-center" richColors />
-        </UserProvider>
+        {children}
+        <Toaster position="top-center" richColors />
       </body>
     </html>
   );
