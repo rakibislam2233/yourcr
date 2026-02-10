@@ -51,7 +51,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           {icon && (
-            <div className="p-3 rounded-xl bg-primary/10 text-primary">
+            <div className="p-3 rounded-md bg-primary/10 text-primary">
               {React.isValidElement(icon)
                 ? React.cloneElement(icon as React.ReactElement, {
                     className: "w-6 h-6",
