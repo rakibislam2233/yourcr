@@ -1,22 +1,22 @@
 "use client";
 
-import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { ConfirmModal } from "@/components/ui/modal";
 import {
-  UserPlus,
-  Plus,
-  Search,
+  Download,
+  Edit,
   Filter,
   Mail,
   Phone,
-  Download,
-  Upload,
+  Plus,
+  Search,
   Trash2,
-  Edit,
+  Upload,
+  UserPlus,
 } from "lucide-react";
-import PageHeader from "../shared/PageHeader";
-import { Button } from "@/components/ui/button";
-import { ConfirmModal } from "@/components/ui/modal";
 import Link from "next/link";
+import React, { useState } from "react";
+import PageHeader from "../shared/PageHeader";
 
 interface Student {
   id: number;
@@ -30,14 +30,86 @@ interface Student {
 }
 
 const initialStudents: Student[] = [
-  { id: 1, roll: "CT-8001", name: "Sakib Hasan", email: "sakib@example.com", phone: "+880 1711-111111", status: "active", avatar: "SH", color: "bg-blue-500" },
-  { id: 2, roll: "CT-8002", name: "Fahim Rahman", email: "fahim@example.com", phone: "+880 1711-222222", status: "active", avatar: "FR", color: "bg-green-500" },
-  { id: 3, roll: "CT-8003", name: "Nadia Islam", email: "nadia@example.com", phone: "+880 1711-333333", status: "active", avatar: "NI", color: "bg-purple-500" },
-  { id: 4, roll: "CT-8004", name: "Tanvir Ahmed", email: "tanvir@example.com", phone: "+880 1711-444444", status: "active", avatar: "TA", color: "bg-orange-500" },
-  { id: 5, roll: "CT-8005", name: "Mim Akter", email: "mim@example.com", phone: "+880 1711-555555", status: "inactive", avatar: "MA", color: "bg-pink-500" },
-  { id: 6, roll: "CT-8006", name: "Rafiq Uddin", email: "rafiq@example.com", phone: "+880 1711-666666", status: "active", avatar: "RU", color: "bg-cyan-500" },
-  { id: 7, roll: "CT-8007", name: "Sadia Khan", email: "sadia@example.com", phone: "+880 1711-777777", status: "active", avatar: "SK", color: "bg-amber-500" },
-  { id: 8, roll: "CT-8008", name: "Imran Hossain", email: "imran@example.com", phone: "+880 1711-888888", status: "active", avatar: "IH", color: "bg-red-500" },
+  {
+    id: 1,
+    roll: "CT-8001",
+    name: "Sakib Hasan",
+    email: "sakib@example.com",
+    phone: "+880 1711-111111",
+    status: "active",
+    avatar: "SH",
+    color: "bg-blue-500",
+  },
+  {
+    id: 2,
+    roll: "CT-8002",
+    name: "Fahim Rahman",
+    email: "fahim@example.com",
+    phone: "+880 1711-222222",
+    status: "active",
+    avatar: "FR",
+    color: "bg-green-500",
+  },
+  {
+    id: 3,
+    roll: "CT-8003",
+    name: "Nadia Islam",
+    email: "nadia@example.com",
+    phone: "+880 1711-333333",
+    status: "active",
+    avatar: "NI",
+    color: "bg-purple-500",
+  },
+  {
+    id: 4,
+    roll: "CT-8004",
+    name: "Tanvir Ahmed",
+    email: "tanvir@example.com",
+    phone: "+880 1711-444444",
+    status: "active",
+    avatar: "TA",
+    color: "bg-orange-500",
+  },
+  {
+    id: 5,
+    roll: "CT-8005",
+    name: "Mim Akter",
+    email: "mim@example.com",
+    phone: "+880 1711-555555",
+    status: "inactive",
+    avatar: "MA",
+    color: "bg-pink-500",
+  },
+  {
+    id: 6,
+    roll: "CT-8006",
+    name: "Rafiq Uddin",
+    email: "rafiq@example.com",
+    phone: "+880 1711-666666",
+    status: "active",
+    avatar: "RU",
+    color: "bg-cyan-500",
+  },
+  {
+    id: 7,
+    roll: "CT-8007",
+    name: "Sadia Khan",
+    email: "sadia@example.com",
+    phone: "+880 1711-777777",
+    status: "active",
+    avatar: "SK",
+    color: "bg-amber-500",
+  },
+  {
+    id: 8,
+    roll: "CT-8008",
+    name: "Imran Hossain",
+    email: "imran@example.com",
+    phone: "+880 1711-888888",
+    status: "active",
+    avatar: "IH",
+    color: "bg-red-500",
+  },
 ];
 
 const ManageStudents: React.FC = () => {
@@ -51,12 +123,12 @@ const ManageStudents: React.FC = () => {
     (student) =>
       student.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       student.roll.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      student.email.toLowerCase().includes(searchQuery.toLowerCase())
+      student.email.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const toggleSelectStudent = (id: number) => {
     setSelectedStudents((prev) =>
-      prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id],
     );
   };
 
@@ -85,7 +157,7 @@ const ManageStudents: React.FC = () => {
       <PageHeader
         title="Manage Students"
         description="View and manage students in your class"
-        icon={UserPlus}
+        icon={<UserPlus className="w-6 h-6" />}
         breadcrumbs={[
           { label: "Dashboard", href: "/dashboard/cr" },
           { label: "Manage Students" },
@@ -110,7 +182,9 @@ const ManageStudents: React.FC = () => {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Total Students</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">{students.length}</p>
+          <p className="text-2xl font-bold text-gray-900 mt-1">
+            {students.length}
+          </p>
         </div>
         <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Active</p>
@@ -154,7 +228,11 @@ const ManageStudents: React.FC = () => {
               <Download className="w-4 h-4" />
               Export Selected
             </Button>
-            <Button variant="outline" size="sm" className="gap-2 text-red-600 hover:bg-red-50">
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-2 text-red-600 hover:bg-red-50"
+            >
               <Trash2 className="w-4 h-4" />
               Delete
             </Button>
@@ -171,7 +249,10 @@ const ManageStudents: React.FC = () => {
                 <th className="px-6 py-4 text-left">
                   <input
                     type="checkbox"
-                    checked={selectedStudents.length === filteredStudents.length && filteredStudents.length > 0}
+                    checked={
+                      selectedStudents.length === filteredStudents.length &&
+                      filteredStudents.length > 0
+                    }
                     onChange={toggleSelectAll}
                     className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary"
                   />
@@ -195,7 +276,10 @@ const ManageStudents: React.FC = () => {
             </thead>
             <tbody className="divide-y divide-gray-100">
               {filteredStudents.map((student) => (
-                <tr key={student.id} className="hover:bg-gray-50/50 transition-colors">
+                <tr
+                  key={student.id}
+                  className="hover:bg-gray-50/50 transition-colors"
+                >
                   <td className="px-6 py-4">
                     <input
                       type="checkbox"
@@ -212,18 +296,24 @@ const ManageStudents: React.FC = () => {
                         {student.avatar}
                       </div>
                       <div>
-                        <p className="font-medium text-gray-900">{student.name}</p>
+                        <p className="font-medium text-gray-900">
+                          {student.name}
+                        </p>
                         <p className="text-sm text-gray-500">{student.email}</p>
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <span className="font-mono text-sm text-gray-600">{student.roll}</span>
+                    <span className="font-mono text-sm text-gray-600">
+                      {student.roll}
+                    </span>
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
                       <Phone className="w-4 h-4 text-gray-400" />
-                      <span className="text-sm text-gray-600">{student.phone}</span>
+                      <span className="text-sm text-gray-600">
+                        {student.phone}
+                      </span>
                     </div>
                   </td>
                   <td className="px-6 py-4">
@@ -270,7 +360,11 @@ const ManageStudents: React.FC = () => {
             <Button variant="outline" size="sm" disabled>
               Previous
             </Button>
-            <Button variant="outline" size="sm" className="bg-primary text-white">
+            <Button
+              variant="outline"
+              size="sm"
+              className="bg-primary text-white"
+            >
               1
             </Button>
             <Button variant="outline" size="sm">

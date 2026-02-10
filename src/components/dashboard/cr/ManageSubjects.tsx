@@ -1,19 +1,19 @@
 "use client";
 
-import React, { useState } from "react";
-import {
-  BookOpen,
-  Plus,
-  Edit,
-  Trash2,
-  Clock,
-  User,
-  Search,
-} from "lucide-react";
-import PageHeader from "../shared/PageHeader";
 import { Button } from "@/components/ui/button";
 import { ConfirmModal } from "@/components/ui/modal";
+import {
+  BookOpen,
+  Clock,
+  Edit,
+  Plus,
+  Search,
+  Trash2,
+  User,
+} from "lucide-react";
 import Link from "next/link";
+import React, { useState } from "react";
+import PageHeader from "../shared/PageHeader";
 
 interface Subject {
   id: number;
@@ -99,7 +99,7 @@ const ManageSubjects: React.FC = () => {
     (subject) =>
       subject.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       subject.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      subject.teacher.toLowerCase().includes(searchQuery.toLowerCase())
+      subject.teacher.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const handleDelete = (subject: Subject) => {
@@ -119,7 +119,7 @@ const ManageSubjects: React.FC = () => {
       <PageHeader
         title="Manage Subjects"
         description="View and manage all subjects for your class"
-        icon={BookOpen}
+        icon={<BookOpen className="w-6 h-6" />}
         breadcrumbs={[
           { label: "Dashboard", href: "/dashboard/cr" },
           { label: "Manage Subjects" },
@@ -150,7 +150,9 @@ const ManageSubjects: React.FC = () => {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Total Subjects</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">{subjects.length}</p>
+          <p className="text-2xl font-bold text-gray-900 mt-1">
+            {subjects.length}
+          </p>
         </div>
         <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Total Credits</p>
@@ -180,7 +182,9 @@ const ManageSubjects: React.FC = () => {
             className="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-md transition-shadow group"
           >
             <div className="flex items-start justify-between mb-4">
-              <div className={`w-12 h-12 ${subject.color} rounded-xl flex items-center justify-center text-white`}>
+              <div
+                className={`w-12 h-12 ${subject.color} rounded-xl flex items-center justify-center text-white`}
+              >
                 <BookOpen className="w-6 h-6" />
               </div>
               <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
