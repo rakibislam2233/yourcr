@@ -210,52 +210,66 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="space-y-2.5">
-                <Label className="text-sm font-bold text-gray-700">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+              <div className="flex flex-col gap-1.5">
+                <Label className="text-sm font-semibold text-gray-700">
                   Full Name
                 </Label>
-                <Input
-                  value={formData.fullName}
-                  onChange={(e) =>
-                    setFormData({ ...formData, fullName: e.target.value })
-                  }
-                  className="h-11 border-gray-200 focus:border-primary shadow-none rounded-md font-medium"
-                />
+                <div className="relative">
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Input
+                    value={formData.fullName}
+                    onChange={(e) =>
+                      setFormData({ ...formData, fullName: e.target.value })
+                    }
+                    placeholder="Full Name"
+                    className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  />
+                </div>
               </div>
-              <div className="space-y-2.5">
-                <Label className="text-sm font-bold text-gray-700">
+              <div className="flex flex-col gap-1.5">
+                <Label className="text-sm font-semibold text-gray-700">
                   Phone Number
                 </Label>
-                <Input
-                  type="tel"
-                  value={formData.phoneNumber}
-                  onChange={(e) =>
-                    setFormData({ ...formData, phoneNumber: e.target.value })
-                  }
-                  className="h-11 border-gray-200 focus:border-primary shadow-none rounded-md font-medium"
-                />
+                <div className="relative">
+                  <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Input
+                    type="tel"
+                    value={formData.phoneNumber}
+                    onChange={(e) =>
+                      setFormData({ ...formData, phoneNumber: e.target.value })
+                    }
+                    placeholder="Phone Number"
+                    className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  />
+                </div>
               </div>
-              <div className="space-y-2.5">
-                <Label className="text-sm font-bold text-gray-500">
+              <div className="flex flex-col gap-1.5">
+                <Label className="text-sm font-semibold text-gray-400">
                   Email Address (Locked)
                 </Label>
-                <Input
-                  type="email"
-                  value={formData.email}
-                  disabled
-                  className="h-11 border-gray-100 bg-gray-50/50 text-gray-400 rounded-md font-medium italic"
-                />
+                <div className="relative">
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-300" />
+                  <Input
+                    type="email"
+                    value={formData.email}
+                    disabled
+                    className="pl-12 h-12 text-base border-gray-100 bg-gray-50/50 text-gray-400 rounded-md font-medium italic cursor-not-allowed"
+                  />
+                </div>
               </div>
-              <div className="space-y-2.5">
-                <Label className="text-sm font-bold text-gray-500">
+              <div className="flex flex-col gap-1.5">
+                <Label className="text-sm font-semibold text-gray-400">
                   System Role
                 </Label>
-                <Input
-                  value={user?.role || "CR"}
-                  disabled
-                  className="h-11 border-gray-100 bg-gray-50/50 text-gray-400 rounded-md font-bold uppercase"
-                />
+                <div className="relative">
+                  <Shield className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-300" />
+                  <Input
+                    value={user?.role || "CR"}
+                    disabled
+                    className="pl-12 h-12 text-base border-gray-100 bg-gray-50/50 text-gray-400 rounded-md font-bold uppercase tracking-wider cursor-not-allowed"
+                  />
+                </div>
               </div>
             </div>
 
