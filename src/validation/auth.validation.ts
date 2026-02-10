@@ -21,31 +21,33 @@ const institutionInfoSchema = z.object({
 });
 
 const batchInformationSchema = z.object({
-  name: z.string().min(1, "Batch name is required"),
   batchType: z.enum(["SEMESTER", "YEAR"], {
     error: "Batch type must be SEMESTER or YEAR",
   }),
   department: z.string().min(1, "Department is required"),
+  session: z.string().min(1, "Session is required"),
   academicYear: z.string().min(1, "Academic year is required"),
+  semester: z.string().optional(),
+  shift: z.string().optional(),
+  group: z.string().optional(),
 });
 
 export const institutionStepSchema = z.object({
   institutionName: z.string().min(1, "Institution name is required"),
   institutionType: z.enum(["UNIVERSITY", "COLLEGE", "POLYTECHNIC"]),
-  institutionEmail: z
-    .string()
-    .email("Invalid email")
-    .optional()
-    .or(z.literal("")),
-  institutionPhone: z.string().optional(),
+  contactEmail: z.string().email("Invalid email").optional().or(z.literal("")),
+  contactPhone: z.string().optional(),
   address: z.string().min(1, "Address is required"),
 });
 
 export const academicStepSchema = z.object({
-  name: z.string().min(1, "Batch name is required"),
   batchType: z.enum(["SEMESTER", "YEAR"]),
   department: z.string().min(1, "Department is required"),
+  session: z.string().min(1, "Session is required"),
   academicYear: z.string().min(1, "Academic year is required"),
+  semester: z.string().optional(),
+  shift: z.string().optional(),
+  group: z.string().optional(),
 });
 
 const jsonString = <T extends z.ZodTypeAny>(schema: T, fieldName: string) =>

@@ -9,7 +9,6 @@ import {
 import { ArrowLeft, ArrowRight, ShieldCheck } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
-  Suspense,
   useActionState,
   useEffect,
   useRef,
@@ -36,13 +35,14 @@ const initialState: ActionState = {
   inputs: {},
 };
 
-const CompleteProfileFormContent = () => {
+export default function CompleteProfileForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams?.get("email") || "";
   const formRef = useRef<HTMLFormElement>(null);
 
   const [step, setStep] = useState(1);
+  const [institutionType, setInstitutionType] = useState<string>("");
   const [idCardPreview, setIdCardPreview] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isPendingTransitions, startTransition] = useTransition();
@@ -117,8 +117,6 @@ const CompleteProfileFormContent = () => {
   return (
     <div className="w-full space-y-8">
       <StepIndicator currentStep={step + 2} />
-
-      {/* Success Modal */}
       <Modal
         isOpen={isSuccessModalOpen}
         onClose={() => router.push("/auth/login")}
@@ -128,7 +126,6 @@ const CompleteProfileFormContent = () => {
           <div className="size-16 bg-green-50 text-green-600 rounded-md flex items-center justify-center mb-6 border border-green-100">
             <ShieldCheck className="size-8" />
           </div>
-
           <h3 className="text-xl font-bold text-gray-900 mb-3">
             Registration Successful
           </h3>
@@ -142,7 +139,7 @@ const CompleteProfileFormContent = () => {
           <div className="w-full pt-2">
             <Button
               onClick={() => router.push("/auth/login")}
-              className="w-full h-11 bg-gray-900 hover:bg-black text-white font-semibold rounded-md transition-all active:scale-[0.98] cursor-pointer shadow-sm"
+              className="w-full h-12 bg-primary cursor-pointer text-white font-semibold rounded-md transition-all active:scale-[0.98]"
             >
               Back to Login
             </Button>
@@ -154,11 +151,13 @@ const CompleteProfileFormContent = () => {
         <div className={step !== 1 ? "hidden" : ""}>
           <InstitutionStep
             state={{ ...state, errors: { ...state.errors, ...localErrors } }}
+            setInstitutionType={setInstitutionType}
           />
         </div>
         <div className={step !== 2 ? "hidden" : ""}>
           <AcademicStep
             state={{ ...state, errors: { ...state.errors, ...localErrors } }}
+            institutionType={institutionType}
           />
         </div>
         <div className={step !== 3 ? "hidden" : ""}>
@@ -204,19 +203,5 @@ const CompleteProfileFormContent = () => {
         </Button>
       </div>
     </div>
-  );
-};
-
-export default function CompleteProfileForm() {
-  return (
-    <Suspense
-      fallback={
-        <div className="flex items-center justify-center p-12">
-          <div className="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full" />
-        </div>
-      }
-    >
-      <CompleteProfileFormContent />
-    </Suspense>
   );
 }

@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Modal } from "@/components/ui/modal";
 import { loginUser } from "@/services/auth.service";
 import { getDefaultDashboardRoute } from "@/utils/auth-utils";
+import { getWebPushToken } from "@/utils/push-notification";
 import { Clock, Eye, EyeOff, Lock, Mail } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -37,8 +38,6 @@ const LoginForm = () => {
 
   useEffect(() => {
     const fetchToken = async () => {
-      // Import the utility here to ensure it only runs on the client
-      const { getWebPushToken } = await import("@/utils/push-notification");
       const token = await getWebPushToken();
       if (token) {
         setWebPushToken(token);
@@ -107,7 +106,7 @@ const LoginForm = () => {
           <div className="w-full pt-2">
             <Button
               onClick={() => setIsPendingModalOpen(false)}
-              className="w-full h-11 bg-gray-900 hover:bg-black text-white font-semibold rounded-md transition-all active:scale-[0.98]"
+              className="w-full h-12 bg-primary cursor-pointer text-white font-semibold rounded-md transition-all active:scale-[0.98]"
             >
               Continue
             </Button>

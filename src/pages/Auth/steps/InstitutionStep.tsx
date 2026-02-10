@@ -21,12 +21,21 @@ interface ActionState {
 
 interface InstitutionStepProps {
   state?: ActionState;
+  setInstitutionType: (type: string) => void;
 }
 
-const InstitutionStep: React.FC<InstitutionStepProps> = ({ state }) => {
-  const [institutionType, setInstitutionType] = useState(
+const InstitutionStep: React.FC<InstitutionStepProps> = ({
+  state,
+  setInstitutionType,
+}) => {
+  const [localInstitutionType, setLocalInstitutionType] = useState(
     state?.inputs?.institutionType || "",
   );
+
+  const handleTypeChange = (value: string) => {
+    setLocalInstitutionType(value);
+    setInstitutionType(value);
+  };
 
   return (
     <div className="animate-in fade-in slide-in-from-right-4 duration-300 space-y-6">
@@ -54,8 +63,12 @@ const InstitutionStep: React.FC<InstitutionStepProps> = ({ state }) => {
 
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="institutionType">Institution Type</Label>
-          <input type="hidden" name="institutionType" value={institutionType} />
-          <Select value={institutionType} onValueChange={setInstitutionType}>
+          <input
+            type="hidden"
+            name="institutionType"
+            value={localInstitutionType}
+          />
+          <Select value={localInstitutionType} onValueChange={handleTypeChange}>
             <SelectTrigger
               id="institutionType"
               className={`h-12 text-base border-gray-300 ${state?.errors?.institutionType ? "border-red-500" : ""}`}
@@ -77,37 +90,41 @@ const InstitutionStep: React.FC<InstitutionStepProps> = ({ state }) => {
 
         <div className="grid grid-cols-2 gap-4">
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="institutionEmail">Contact Email</Label>
+            <Label htmlFor="contactEmail">Contact Email</Label>
             <Input
-              id="institutionEmail"
-              name="institutionEmail"
+              id="contactEmail"
+              name="contactEmail"
               type="email"
               defaultValue={
-                state?.inputs?.institutionEmail || state?.inputs?.email
+                state?.inputs?.contactEmail ||
+                state?.inputs?.institutionEmail ||
+                state?.inputs?.email
               }
               placeholder="institution@example.com"
-              className={`h-12 border-gray-300 ${state?.errors?.institutionEmail ? "border-red-500" : ""}`}
+              className={`h-12 border-gray-300 ${state?.errors?.contactEmail ? "border-red-500" : ""}`}
             />
-            {state?.errors?.institutionEmail && (
+            {state?.errors?.contactEmail && (
               <p className="text-xs text-red-500">
-                {state.errors.institutionEmail[0]}
+                {state.errors.contactEmail[0]}
               </p>
             )}
           </div>
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="institutionPhone">Contact Phone</Label>
+            <Label htmlFor="contactPhone">Contact Phone</Label>
             <Input
-              id="institutionPhone"
-              name="institutionPhone"
+              id="contactPhone"
+              name="contactPhone"
               defaultValue={
-                state?.inputs?.institutionPhone || state?.inputs?.phoneNumber
+                state?.inputs?.contactPhone ||
+                state?.inputs?.institutionPhone ||
+                state?.inputs?.phoneNumber
               }
               placeholder="e.g. 01XXXXXXXXX"
-              className={`h-12 border-gray-300 ${state?.errors?.institutionPhone ? "border-red-500" : ""}`}
+              className={`h-12 border-gray-300 ${state?.errors?.contactPhone ? "border-red-500" : ""}`}
             />
-            {state?.errors?.institutionPhone && (
+            {state?.errors?.contactPhone && (
               <p className="text-xs text-red-500">
-                {state.errors.institutionPhone[0]}
+                {state.errors.contactPhone[0]}
               </p>
             )}
           </div>

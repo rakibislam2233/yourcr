@@ -219,21 +219,25 @@ export async function completeCrRegistration(
     const institutionInfo = {
       name: values.institutionName,
       type: values.institutionType,
-      contactEmail: values.institutionEmail,
-      contactPhone: values.institutionPhone,
+      contactEmail: values.contactEmail,
+      contactPhone: values.contactPhone,
       address: values.address,
     };
     const batchInformation = {
-      name: values.name, // Matches AcademicStep 'name' field
       batchType: values.batchType,
       department: values.department,
+      session: values.session,
       academicYear: values.academicYear,
+      semester: values.semester || undefined,
+      shift: values.shift || undefined,
+      group: values.group || undefined,
     };
 
     // 2. Prepare final FormData for submission
     const finalFormData = new FormData();
     finalFormData.append("institutionInfo", JSON.stringify(institutionInfo));
     finalFormData.append("batchInformation", JSON.stringify(batchInformation));
+    finalFormData.append("sessionId", registrationSessionId);
 
     // Process file
     const file = formData.get("studentIdCard");
