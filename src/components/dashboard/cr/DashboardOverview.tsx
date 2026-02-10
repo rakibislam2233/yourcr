@@ -209,17 +209,17 @@ const DashboardOverview: React.FC = () => {
             Today&apos;s Classes
           </h2>
           <Link
-            href="/dashboard/cr/routine"
+            href="/dashboard/cr/classes"
             className="text-sm text-primary hover:underline flex items-center gap-1"
           >
-            View routine <ArrowRight className="w-4 h-4" />
+            View All Classes <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {upcomingClasses.map((cls) => (
             <div
               key={cls.subject}
-              className="p-4 rounded-xl bg-gradient-to-br from-primary/5 to-primary/10 border border-primary/10"
+              className="p-4 rounded-xl bg-linear-to-br from-primary/5 to-primary/10 border border-primary/10"
             >
               <h3 className="font-semibold text-gray-900">{cls.subject}</h3>
               <p className="text-sm text-gray-600 mt-1">{cls.teacher}</p>
@@ -232,36 +232,6 @@ const DashboardOverview: React.FC = () => {
               </div>
             </div>
           ))}
-        </div>
-      </div>
-
-      {/* Performance Overview */}
-      <div className="bg-gradient-to-r from-primary to-primary/80 rounded-2xl p-6 text-white">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-lg font-semibold">Class Performance</h2>
-            <p className="text-white/80 mt-1">
-              Your class is performing above average this semester
-            </p>
-          </div>
-          <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-xl">
-            <TrendingUp className="w-5 h-5" />
-            <span className="font-semibold">+12%</span>
-          </div>
-        </div>
-        <div className="grid grid-cols-3 gap-4 mt-6">
-          <div className="bg-white/10 rounded-xl p-4">
-            <p className="text-white/70 text-sm">Attendance Rate</p>
-            <p className="text-2xl font-bold mt-1">92%</p>
-          </div>
-          <div className="bg-white/10 rounded-xl p-4">
-            <p className="text-white/70 text-sm">Avg. Grade</p>
-            <p className="text-2xl font-bold mt-1">B+</p>
-          </div>
-          <div className="bg-white/10 rounded-xl p-4">
-            <p className="text-white/70 text-sm">Issues Resolved</p>
-            <p className="text-2xl font-bold mt-1">15/18</p>
-          </div>
         </div>
       </div>
     </div>

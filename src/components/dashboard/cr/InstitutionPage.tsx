@@ -1,5 +1,4 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import { useUser } from "@/providers/UserProvider";
 import {
@@ -80,7 +79,7 @@ const InstitutionPage: React.FC = () => {
       />
 
       {/* Institution Overview Card */}
-      <div className="bg-gradient-to-r from-primary to-primary/80 rounded-2xl p-8 text-white">
+      <div className="bg-linear-to-r from-primary to-primary/80 rounded-2xl p-8 text-white">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-center gap-6">
             <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center">
@@ -92,9 +91,6 @@ const InstitutionPage: React.FC = () => {
               <div className="flex items-center gap-4 mt-3">
                 <span className="px-3 py-1 bg-white/20 rounded-full text-sm">
                   Est. {institutionData.establishedYear}
-                </span>
-                <span className="px-3 py-1 bg-white/20 rounded-full text-sm">
-                  {institutionData.shortName}
                 </span>
               </div>
             </div>
@@ -205,94 +201,6 @@ const InstitutionPage: React.FC = () => {
               <p className="text-sm text-gray-500">Session</p>
               <p className="font-semibold text-gray-900 mt-1">
                 {classInfo.session}
-              </p>
-            </div>
-            <div className="p-4 bg-gray-50 rounded-xl">
-              <p className="text-sm text-gray-500">Shift</p>
-              <p className="font-semibold text-gray-900 mt-1">
-                {classInfo.shift}
-              </p>
-            </div>
-            <div className="p-4 bg-gray-50 rounded-xl col-span-2">
-              <p className="text-sm text-gray-500">Group</p>
-              <p className="font-semibold text-gray-900 mt-1">
-                Group {classInfo.group}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Department Details */}
-      <div className="bg-white rounded-2xl p-6 border border-gray-100">
-        <h3 className="text-lg font-semibold text-gray-900 mb-6">
-          Department Overview
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="p-5 bg-blue-50 rounded-xl border border-blue-100">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <GraduationCap className="w-5 h-5 text-blue-600" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-gray-900">
-                  {departmentInfo.totalStudents}
-                </p>
-                <p className="text-sm text-gray-500">Total Students</p>
-              </div>
-            </div>
-          </div>
-          <div className="p-5 bg-green-50 rounded-xl border border-green-100">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-green-100 rounded-lg">
-                <Users className="w-5 h-5 text-green-600" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-gray-900">
-                  {departmentInfo.totalTeachers}
-                </p>
-                <p className="text-sm text-gray-500">Teachers</p>
-              </div>
-            </div>
-          </div>
-          <div className="p-5 bg-purple-50 rounded-xl border border-purple-100">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-purple-100 rounded-lg">
-                <Building2 className="w-5 h-5 text-purple-600" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-gray-900">
-                  {departmentInfo.labs}
-                </p>
-                <p className="text-sm text-gray-500">Labs</p>
-              </div>
-            </div>
-          </div>
-          <div className="p-5 bg-orange-50 rounded-xl border border-orange-100">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-orange-100 rounded-lg">
-                <Calendar className="w-5 h-5 text-orange-600" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-gray-900">4</p>
-                <p className="text-sm text-gray-500">Years Program</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-6 p-4 bg-gray-50 rounded-xl">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500">Department Head</p>
-              <p className="font-semibold text-gray-900 mt-1">
-                {departmentInfo.head}
-              </p>
-            </div>
-            <div className="text-right">
-              <p className="text-sm text-gray-500">Department Code</p>
-              <p className="font-semibold text-gray-900 mt-1">
-                {departmentInfo.code}
               </p>
             </div>
           </div>
