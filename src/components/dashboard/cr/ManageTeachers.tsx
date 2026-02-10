@@ -1,20 +1,20 @@
 "use client";
 
-import React, { useState } from "react";
-import {
-  Users,
-  Plus,
-  Mail,
-  Phone,
-  BookOpen,
-  Search,
-  Edit,
-  Trash2,
-} from "lucide-react";
-import PageHeader from "../shared/PageHeader";
 import { Button } from "@/components/ui/button";
 import { ConfirmModal } from "@/components/ui/modal";
+import {
+  BookOpen,
+  Edit,
+  Mail,
+  Phone,
+  Plus,
+  Search,
+  Trash2,
+  Users,
+} from "lucide-react";
 import Link from "next/link";
+import React, { useState } from "react";
+import PageHeader from "../shared/PageHeader";
 
 interface Teacher {
   id: number;
@@ -107,7 +107,9 @@ const ManageTeachers: React.FC = () => {
     (teacher) =>
       teacher.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       teacher.designation.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      teacher.subjects.some((s) => s.toLowerCase().includes(searchQuery.toLowerCase()))
+      teacher.subjects.some((s) =>
+        s.toLowerCase().includes(searchQuery.toLowerCase()),
+      ),
   );
 
   const handleDelete = (teacher: Teacher) => {
@@ -127,7 +129,7 @@ const ManageTeachers: React.FC = () => {
       <PageHeader
         title="Manage Teachers"
         description="View and manage teachers assigned to your class"
-        icon={Users}
+        icon={<Users className="w-6 h-6" />}
         breadcrumbs={[
           { label: "Dashboard", href: "/dashboard/cr" },
           { label: "Manage Teachers" },
@@ -196,7 +198,9 @@ const ManageTeachers: React.FC = () => {
             <div className="mt-5 pt-5 border-t border-gray-100">
               <div className="flex items-center gap-2 mb-2">
                 <BookOpen className="w-4 h-4 text-gray-400" />
-                <span className="text-sm font-medium text-gray-700">Subjects</span>
+                <span className="text-sm font-medium text-gray-700">
+                  Subjects
+                </span>
               </div>
               <div className="flex flex-wrap gap-2">
                 {teacher.subjects.map((subject) => (
@@ -211,7 +215,10 @@ const ManageTeachers: React.FC = () => {
             </div>
 
             <div className="mt-5 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-              <Link href={`/dashboard/cr/teachers/${teacher.id}/edit`} className="flex-1">
+              <Link
+                href={`/dashboard/cr/teachers/${teacher.id}/edit`}
+                className="flex-1"
+              >
                 <Button variant="outline" size="sm" className="w-full gap-1">
                   <Edit className="w-3 h-3" />
                   Edit

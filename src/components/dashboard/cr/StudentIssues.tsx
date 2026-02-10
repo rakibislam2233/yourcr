@@ -1,21 +1,21 @@
 "use client";
 
-import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
+  AlertCircle,
+  CheckCircle,
+  ChevronRight,
+  Clock,
+  Filter,
+  MessageCircle,
   MessageSquare,
   Search,
-  Filter,
-  Clock,
   User,
-  CheckCircle,
-  AlertCircle,
   XCircle,
-  MessageCircle,
-  ChevronRight,
 } from "lucide-react";
-import PageHeader from "../shared/PageHeader";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import React, { useState } from "react";
+import PageHeader from "../shared/PageHeader";
 
 interface Issue {
   id: number;
@@ -35,7 +35,8 @@ const initialIssues: Issue[] = [
   {
     id: 1,
     title: "Exam Hall Allocation Issue",
-    description: "The exam hall assigned for Database exam is too small for our batch. Please consider reallocating to a larger hall.",
+    description:
+      "The exam hall assigned for Database exam is too small for our batch. Please consider reallocating to a larger hall.",
     student: "Sakib Hasan",
     studentId: "CT-8001",
     date: "2 hours ago",
@@ -48,7 +49,8 @@ const initialIssues: Issue[] = [
   {
     id: 2,
     title: "Lab Equipment Not Working",
-    description: "Several computers in Lab 102 are not functioning properly. This is affecting our practical sessions.",
+    description:
+      "Several computers in Lab 102 are not functioning properly. This is affecting our practical sessions.",
     student: "Nadia Islam",
     studentId: "CT-8003",
     date: "5 hours ago",
@@ -61,7 +63,8 @@ const initialIssues: Issue[] = [
   {
     id: 3,
     title: "Request for Extra Class",
-    description: "Can we have an extra class for Computer Networks before the exam? Many students are struggling with the routing concepts.",
+    description:
+      "Can we have an extra class for Computer Networks before the exam? Many students are struggling with the routing concepts.",
     student: "Fahim Rahman",
     studentId: "CT-8002",
     date: "1 day ago",
@@ -74,7 +77,8 @@ const initialIssues: Issue[] = [
   {
     id: 4,
     title: "Project Deadline Extension",
-    description: "Requesting an extension for the Software Engineering project deadline due to overlapping with other exams.",
+    description:
+      "Requesting an extension for the Software Engineering project deadline due to overlapping with other exams.",
     student: "Tanvir Ahmed",
     studentId: "CT-8004",
     date: "2 days ago",
@@ -87,7 +91,8 @@ const initialIssues: Issue[] = [
   {
     id: 5,
     title: "Attendance Record Correction",
-    description: "My attendance for the last week shows absent but I was present in all classes. Please verify and correct.",
+    description:
+      "My attendance for the last week shows absent but I was present in all classes. Please verify and correct.",
     student: "Sadia Khan",
     studentId: "CT-8007",
     date: "3 days ago",
@@ -151,15 +156,19 @@ const StudentIssues: React.FC = () => {
   const [issues] = useState<Issue[]>(initialIssues);
 
   const filteredIssues = issues.filter((issue) => {
-    const matchesFilter = activeFilter === "all" || issue.status === activeFilter;
-    const matchesSearch = issue.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    const matchesFilter =
+      activeFilter === "all" || issue.status === activeFilter;
+    const matchesSearch =
+      issue.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       issue.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
       issue.student.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesFilter && matchesSearch;
   });
 
   const openCount = issues.filter((i) => i.status === "open").length;
-  const inProgressCount = issues.filter((i) => i.status === "in_progress").length;
+  const inProgressCount = issues.filter(
+    (i) => i.status === "in_progress",
+  ).length;
   const resolvedCount = issues.filter((i) => i.status === "resolved").length;
 
   return (
@@ -167,7 +176,7 @@ const StudentIssues: React.FC = () => {
       <PageHeader
         title="Student Issues"
         description="View and manage student issues and requests"
-        icon={MessageSquare}
+        icon={<MessageSquare className="w-6 h-6" />}
         breadcrumbs={[
           { label: "Dashboard", href: "/dashboard/cr" },
           { label: "Student Issues" },
@@ -178,7 +187,9 @@ const StudentIssues: React.FC = () => {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Total Issues</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">{issues.length}</p>
+          <p className="text-2xl font-bold text-gray-900 mt-1">
+            {issues.length}
+          </p>
         </div>
         <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Open</p>
@@ -186,11 +197,15 @@ const StudentIssues: React.FC = () => {
         </div>
         <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">In Progress</p>
-          <p className="text-2xl font-bold text-orange-600 mt-1">{inProgressCount}</p>
+          <p className="text-2xl font-bold text-orange-600 mt-1">
+            {inProgressCount}
+          </p>
         </div>
         <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Resolved</p>
-          <p className="text-2xl font-bold text-green-600 mt-1">{resolvedCount}</p>
+          <p className="text-2xl font-bold text-green-600 mt-1">
+            {resolvedCount}
+          </p>
         </div>
       </div>
 
@@ -210,8 +225,8 @@ const StudentIssues: React.FC = () => {
               {filter === "all"
                 ? "All Issues"
                 : filter === "in_progress"
-                ? "In Progress"
-                : filter.charAt(0).toUpperCase() + filter.slice(1)}
+                  ? "In Progress"
+                  : filter.charAt(0).toUpperCase() + filter.slice(1)}
             </button>
           ))}
         </div>
@@ -261,7 +276,7 @@ const StudentIssues: React.FC = () => {
                           </span>
                           <span
                             className={`px-2 py-0.5 text-xs font-medium rounded-full ${getPriorityColor(
-                              issue.priority
+                              issue.priority,
                             )}`}
                           >
                             {issue.priority.charAt(0).toUpperCase() +
