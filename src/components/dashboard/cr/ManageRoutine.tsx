@@ -1,246 +1,219 @@
 "use client";
 
-import React, { useState } from "react";
-import { Calendar, Plus, Clock, MapPin, User, Edit, Trash2 } from "lucide-react";
-import PageHeader from "../shared/PageHeader";
 import { Button } from "@/components/ui/button";
-import { ConfirmModal } from "@/components/ui/modal";
-import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { AnimatePresence, motion } from "framer-motion";
+import { Calendar, FileText, FileUp, Inbox, PencilLine } from "lucide-react";
+import React, { useCallback, useState } from "react";
+import { toast } from "sonner";
+import PageHeader from "../shared/PageHeader";
 
-const days = ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"];
-const timeSlots = ["8:00 AM", "9:30 AM", "11:00 AM", "12:30 PM", "2:00 PM", "3:30 PM"];
+type RoutineType = "class" | "exam";
 
-interface ClassSlot {
-  subject: string;
-  teacher: string;
-  room: string;
-  type: string;
-  color: string;
+interface RoutineFile {
+  name: string;
+  url: string;
+  type: "pdf" | "image";
+  uploadedAt: string;
 }
 
-const initialRoutineData: Record<string, Record<string, ClassSlot | null>> = {
-  Saturday: {
-    "8:00 AM": null,
-    "9:30 AM": { subject: "Database Management", teacher: "Dr. Kamal Ahmed", room: "Room 301", type: "Theory", color: "bg-blue-500" },
-    "11:00 AM": { subject: "Software Engineering", teacher: "Prof. Rina Begum", room: "Room 205", type: "Theory", color: "bg-green-500" },
-    "12:30 PM": null,
-    "2:00 PM": { subject: "Computer Networks Lab", teacher: "Mr. Jahid Hassan", room: "Lab 102", type: "Lab", color: "bg-purple-500" },
-    "3:30 PM": null,
-  },
-  Sunday: {
-    "8:00 AM": { subject: "Operating Systems", teacher: "Dr. Fatema Khatun", room: "Room 301", type: "Theory", color: "bg-orange-500" },
-    "9:30 AM": null,
-    "11:00 AM": { subject: "AI & ML", teacher: "Mr. Rezaul Karim", room: "Room 205", type: "Theory", color: "bg-pink-500" },
-    "12:30 PM": null,
-    "2:00 PM": null,
-    "3:30 PM": { subject: "Web Development Lab", teacher: "Ms. Nusrat Jahan", room: "Lab 103", type: "Lab", color: "bg-cyan-500" },
-  },
-  Monday: {
-    "8:00 AM": null,
-    "9:30 AM": { subject: "Database Lab", teacher: "Dr. Kamal Ahmed", room: "Lab 101", type: "Lab", color: "bg-blue-500" },
-    "11:00 AM": null,
-    "12:30 PM": { subject: "Software Engineering", teacher: "Prof. Rina Begum", room: "Room 205", type: "Theory", color: "bg-green-500" },
-    "2:00 PM": { subject: "Professional Ethics", teacher: "Dr. Shamsul Alam", room: "Room 401", type: "Theory", color: "bg-amber-500" },
-    "3:30 PM": null,
-  },
-  Tuesday: {
-    "8:00 AM": { subject: "Computer Networks", teacher: "Mr. Jahid Hassan", room: "Room 301", type: "Theory", color: "bg-purple-500" },
-    "9:30 AM": null,
-    "11:00 AM": { subject: "Database Management", teacher: "Dr. Kamal Ahmed", room: "Room 301", type: "Theory", color: "bg-blue-500" },
-    "12:30 PM": null,
-    "2:00 PM": { subject: "OS Lab", teacher: "Dr. Fatema Khatun", room: "Lab 104", type: "Lab", color: "bg-orange-500" },
-    "3:30 PM": null,
-  },
-  Wednesday: {
-    "8:00 AM": null,
-    "9:30 AM": { subject: "Operating Systems", teacher: "Dr. Fatema Khatun", room: "Room 301", type: "Theory", color: "bg-orange-500" },
-    "11:00 AM": { subject: "AI & ML", teacher: "Mr. Rezaul Karim", room: "Room 205", type: "Theory", color: "bg-pink-500" },
-    "12:30 PM": null,
-    "2:00 PM": null,
-    "3:30 PM": { subject: "Project Work", teacher: "Faculty", room: "Lab 105", type: "Project", color: "bg-red-500" },
-  },
-  Thursday: {
-    "8:00 AM": { subject: "Web Development", teacher: "Ms. Nusrat Jahan", room: "Room 202", type: "Theory", color: "bg-cyan-500" },
-    "9:30 AM": null,
-    "11:00 AM": { subject: "Computer Networks", teacher: "Mr. Jahid Hassan", room: "Room 301", type: "Theory", color: "bg-purple-500" },
-    "12:30 PM": null,
-    "2:00 PM": { subject: "Project Work", teacher: "Faculty", room: "Lab 105", type: "Project", color: "bg-red-500" },
-    "3:30 PM": null,
-  },
-};
-
 const ManageRoutine: React.FC = () => {
-  const [selectedDay, setSelectedDay] = useState("Saturday");
-  const [routineData, setRoutineData] = useState(initialRoutineData);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [selectedSlot, setSelectedSlot] = useState<{ day: string; time: string } | null>(null);
+  const [activeTab, setActiveTab] = useState<RoutineType>("class");
+  const [isUploading, setIsUploading] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
-  const handleDeleteClick = (day: string, time: string) => {
-    setSelectedSlot({ day, time });
-    setIsDeleteModalOpen(true);
-  };
+  // Mock data initialization with the image provided in user request for demonstration
+  const [routines, setRoutines] = useState<
+    Record<RoutineType, RoutineFile | null>
+  >({
+    class: {
+      name: "Class Routine Fall 2025",
+      url: "https://i.ibb.co/vzKq5X9/routine-preview.png", // Using a placeholder for the user's specific image
+      type: "image",
+      uploadedAt: "Oct 25, 2025",
+    },
+    exam: null,
+  });
 
-  const handleConfirmDelete = () => {
-    if (selectedSlot) {
-      setRoutineData((prev) => ({
-        ...prev,
-        [selectedSlot.day]: {
-          ...prev[selectedSlot.day],
-          [selectedSlot.time]: null,
-        },
-      }));
-      setSelectedSlot(null);
+  const handleFileUpload = (file: File) => {
+    const isImage = file.type.startsWith("image/");
+    const isPdf = file.type === "application/pdf";
+
+    if (!isImage && !isPdf) {
+      toast.error("Please upload an image or PDF file");
+      return;
     }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const newRoutine: RoutineFile = {
+        name: file.name,
+        url: reader.result as string,
+        type: isPdf ? "pdf" : "image",
+        uploadedAt: new Date().toLocaleDateString(),
+      };
+
+      setRoutines((prev) => ({ ...prev, [activeTab]: newRoutine }));
+      setIsUploading(false);
+      toast.success(
+        `${activeTab === "class" ? "Class" : "Exam"} routine updated!`,
+      );
+    };
+    reader.readAsDataURL(file);
   };
+
+  const onDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      setIsDragging(false);
+      const file = e.dataTransfer.files[0];
+      if (file) handleFileUpload(file);
+    },
+    [activeTab, handleFileUpload],
+  );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 animate-in fade-in duration-700 pb-20">
       <PageHeader
-        title="Manage Routine"
-        description="View and manage your class schedule"
+        title="Institutional Routine"
+        description="Share and manage batch routines"
         icon={Calendar}
         breadcrumbs={[
           { label: "Dashboard", href: "/dashboard/cr" },
           { label: "Manage Routine" },
         ]}
-        action={
-          <Link href="/dashboard/cr/routine/add">
-            <Button className="gap-2">
-              <Plus className="w-4 h-4" />
-              Add Class
-            </Button>
-          </Link>
-        }
       />
 
-      {/* Day Selector */}
-      <div className="flex gap-2 overflow-x-auto pb-2">
-        {days.map((day) => (
+      {/* Primary Tab Switcher - Styled like User's Image */}
+      <div className="flex gap-4">
+        {(["class", "exam"] as const).map((tab) => (
           <button
-            key={day}
-            onClick={() => setSelectedDay(day)}
-            className={`px-6 py-3 rounded-xl font-medium text-sm whitespace-nowrap transition-colors ${
-              selectedDay === day
-                ? "bg-primary text-white shadow-lg shadow-primary/25"
-                : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"
-            }`}
+            key={tab}
+            onClick={() => {
+              setActiveTab(tab);
+              setIsUploading(false);
+            }}
+            className={cn(
+              "px-6 py-2.5 rounded-md text-sm font-bold transition-all duration-200",
+              activeTab === tab
+                ? "bg-blue-600 text-white shadow-md"
+                : "bg-gray-100 text-gray-500 hover:bg-gray-200",
+            )}
           >
-            {day}
+            {tab === "class" ? "Class Routine" : "Exams Routine"}
           </button>
         ))}
       </div>
 
-      {/* Schedule Grid */}
-      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-        <div className="p-4 border-b border-gray-100 bg-gray-50">
-          <h3 className="font-semibold text-gray-900">{selectedDay}&apos;s Schedule</h3>
-        </div>
-        <div className="p-4 space-y-3">
-          {timeSlots.map((time) => {
-            const classData = routineData[selectedDay]?.[time];
-            return (
-              <div
-                key={time}
-                className={`flex items-stretch gap-4 p-4 rounded-xl ${
-                  classData ? "bg-gray-50" : "bg-gray-50/50 border-2 border-dashed border-gray-200"
-                }`}
-              >
-                <div className="w-24 flex-shrink-0">
-                  <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
-                    <Clock className="w-4 h-4" />
-                    {time}
-                  </div>
+      {/* Dynamic Title */}
+      <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+        <span className="text-gray-400">—</span>
+        Current {activeTab === "class" ? "Class" : "Exam"} Routine PDF
+      </h2>
+
+      {/* Routine Display Area / Upload Zone */}
+      <AnimatePresence mode="wait">
+        {isUploading ? (
+          <motion.div
+            key="upload"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className={cn(
+              "bg-white rounded-2xl border-2 border-dashed p-20 flex flex-col items-center justify-center transition-all",
+              isDragging
+                ? "border-blue-600 bg-blue-50/50 scale-[1.01]"
+                : "border-gray-200",
+            )}
+            onDragOver={(e) => {
+              e.preventDefault();
+              setIsDragging(true);
+            }}
+            onDragLeave={() => setIsDragging(false)}
+            onDrop={onDrop}
+          >
+            <input
+              type="file"
+              className="absolute inset-0 opacity-0 cursor-pointer"
+              onChange={(e) =>
+                e.target.files?.[0] && handleFileUpload(e.target.files[0])
+              }
+            />
+            <div className="size-16 bg-blue-50 rounded-full flex items-center justify-center mb-6">
+              <FileUp className="w-8 h-8 text-blue-600" />
+            </div>
+            <p className="text-lg font-bold text-gray-900">
+              Drop the Routine File here
+            </p>
+            <p className="text-sm text-gray-400 mt-1">
+              PDF or image files up to 5MB
+            </p>
+            <Button
+              variant="ghost"
+              className="mt-4 text-red-500 font-bold"
+              onClick={() => setIsUploading(false)}
+            >
+              Cancel Upload
+            </Button>
+          </motion.div>
+        ) : routines[activeTab] ? (
+          <motion.div
+            key="preview"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="bg-white rounded-2xl border border-blue-50 p-6 shadow-sm overflow-hidden min-h-[600px] w-full flex flex-col items-center"
+          >
+            {routines[activeTab]?.type === "image" ? (
+              <img
+                src={routines[activeTab]?.url}
+                alt="Routine"
+                className="max-w-full h-auto rounded-lg shadow-sm"
+              />
+            ) : (
+              <div className="w-full h-[500px] bg-white rounded-xl overflow-hidden border border-gray-100 shadow-lg">
+                <div className="absolute inset-0 flex items-center justify-center bg-gray-50 animate-pulse -z-10">
+                  <FileText className="w-10 h-10 text-gray-200" />
                 </div>
-                {classData ? (
-                  <div className="flex-1 flex items-center gap-4">
-                    <div className={`w-1.5 h-full ${classData.color} rounded-full`} />
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <h4 className="font-semibold text-gray-900">{classData.subject}</h4>
-                        <span
-                          className={`px-2 py-0.5 text-xs font-medium rounded ${
-                            classData.type === "Lab"
-                              ? "bg-purple-100 text-purple-600"
-                              : classData.type === "Project"
-                              ? "bg-red-100 text-red-600"
-                              : "bg-blue-100 text-blue-600"
-                          }`}
-                        >
-                          {classData.type}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
-                        <span className="flex items-center gap-1">
-                          <User className="w-3 h-3" />
-                          {classData.teacher}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <MapPin className="w-3 h-3" />
-                          {classData.room}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="flex gap-1">
-                      <Link href={`/dashboard/cr/routine/edit?day=${selectedDay}&time=${encodeURIComponent(time)}`}>
-                        <Button variant="ghost" size="sm">
-                          <Edit className="w-4 h-4" />
-                        </Button>
-                      </Link>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-red-500 hover:text-red-600 hover:bg-red-50"
-                        onClick={() => handleDeleteClick(selectedDay, time)}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex-1 flex items-center justify-center text-gray-400">
-                    <Link
-                      href={`/dashboard/cr/routine/add?day=${selectedDay}&time=${encodeURIComponent(time)}`}
-                      className="flex items-center gap-2 text-sm hover:text-primary transition-colors"
-                    >
-                      <Plus className="w-4 h-4" />
-                      Add Class
-                    </Link>
-                  </div>
-                )}
+                <iframe
+                  src={`${routines[activeTab]?.url}#view=FitH&toolbar=0&navpanes=0&scrollbar=1`}
+                  className="w-full h-full border-none rounded-xl"
+                  title="PDF Routine Preview"
+                />
               </div>
-            );
-          })}
-        </div>
-      </div>
+            )}
+          </motion.div>
+        ) : (
+          <motion.div
+            key="empty"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="bg-white rounded-2xl border border-blue-50 p-24 flex flex-col items-center justify-center text-center shadow-sm"
+          >
+            <div className="size-20 bg-blue-50 rounded-full flex items-center justify-center mb-6">
+              <Inbox className="w-10 h-10 text-blue-200" />
+            </div>
+            <h4 className="text-lg font-bold text-gray-600">
+              No Routine Available Yet.
+            </h4>
+            <p className="text-sm text-gray-400 mt-2 max-w-[320px]">
+              Upload A Routine PDF To Make It Accessible For All Students.
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {/* Weekly Overview */}
-      <div className="bg-white rounded-2xl border border-gray-100 p-6">
-        <h3 className="font-semibold text-gray-900 mb-4">Weekly Overview</h3>
-        <div className="grid grid-cols-6 gap-2">
-          {days.map((day) => {
-            const classCount = Object.values(routineData[day] || {}).filter(Boolean).length;
-            return (
-              <div key={day} className="text-center p-3 bg-gray-50 rounded-xl">
-                <p className="text-xs text-gray-500 mb-1">{day.slice(0, 3)}</p>
-                <p className="text-lg font-bold text-gray-900">{classCount}</p>
-                <p className="text-xs text-gray-400">classes</p>
-              </div>
-            );
-          })}
+      {/* Action Button - Bottom Left as per Image */}
+      {!isUploading && (
+        <div className="pt-4 flex justify-start">
+          <Button
+            onClick={() => setIsUploading(true)}
+            className="bg-blue-600 hover:bg-blue-700 text-white font-bold h-12 px-8 rounded-lg flex gap-2 shadow-lg shadow-blue-500/20 active:scale-95 transition-all"
+          >
+            <PencilLine className="w-5 h-5" />
+            Update Routine
+          </Button>
         </div>
-      </div>
-
-      {/* Delete Confirmation Modal */}
-      <ConfirmModal
-        isOpen={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
-        onConfirm={handleConfirmDelete}
-        title="Delete Class"
-        description={`Are you sure you want to remove the class on ${selectedSlot?.day} at ${selectedSlot?.time}? This action cannot be undone.`}
-        confirmText="Delete"
-        cancelText="Cancel"
-        variant="danger"
-      />
+      )}
     </div>
   );
 };
