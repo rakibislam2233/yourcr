@@ -55,8 +55,9 @@ const serverFetchHelper = async (
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      console.error(errorData.message);
-      return null;
+      throw new Error(
+        errorData.message || `HTTP error! status: ${response.status}`,
+      );
     }
 
     if (response.status === 204) {

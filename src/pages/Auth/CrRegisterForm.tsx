@@ -34,6 +34,18 @@ const CrRegisterForm = () => {
   );
 
   const [lastActionTimestamp, setLastActionTimestamp] = useState<number>(0);
+  const [webPushToken, setWebPushToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchToken = async () => {
+      const { getWebPushToken } = await import("@/utils/push-notification");
+      const token = await getWebPushToken();
+      if (token) {
+        setWebPushToken(token);
+      }
+    };
+    fetchToken();
+  }, []);
 
   useEffect(() => {
     if (state.timestamp && state.timestamp > lastActionTimestamp) {
@@ -52,6 +64,7 @@ const CrRegisterForm = () => {
     <div className="w-full space-y-8">
       <StepIndicator currentStep={1} />
       <form action={formAction} className="space-y-6">
+        <input type="hidden" name="webPushToken" value={webPushToken || ""} />
         <div className="space-y-4">
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="fullName">Full Name</Label>

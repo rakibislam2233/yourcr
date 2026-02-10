@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 import { api } from "@/services/api";
+import { getDefaultDashboardRoute } from "@/utils/auth-utils";
 import { deleteCookie, getCookie, setCookie } from "@/utils/tokenHandlers";
 import {
   forgotPasswordSchema,
@@ -48,7 +49,11 @@ export async function loginUser(
   }
 
   try {
-    const res = await api.post("/auth/login", parsed.data);
+    const loginPayload = {
+      ...parsed.data,
+      webPushToken: formData.get("webPushToken"),
+    };
+    const res = await api.post("/auth/login", loginPayload);
     const loginData = res.data;
 
     // 1. Handle Email Verification - Set sessionId and return redirect
@@ -69,7 +74,25 @@ export async function loginUser(
       };
     }
 
-    // 2. Save tokens if they exist (important for incomplete profiles that need to redirect)
+    // 2.if isRegistrationComplete is false than set registrationSessionId in cookie
+    if (loginData?.isRegistrationComplete === false) {
+      await deleteCookie("sessionId");
+      // set registrationSessionId in cookie
+      await setCookie("registrationSessionId", loginData.sessionId, {
+        secure: process.env.NODE_ENV === "production",
+        httpOnly: true,
+        maxAge: 3600,
+        path: "/",
+      });
+      return {
+        success: true,
+        message: res.message,
+        data: { redirect: "/auth/cr-register/complete-profile" },
+        timestamp: Date.now(),
+      };
+    }
+
+    // 3. Save tokens if they exist
     if (loginData?.tokens) {
       const isProduction = process.env.NODE_ENV === "production";
       await setCookie("accessToken", loginData.tokens.accessToken, {
@@ -85,46 +108,24 @@ export async function loginUser(
         maxAge: 3600 * 24 * 90,
         path: "/",
       });
-
-      // Save user role for middleware access
-      if (loginData?.user?.role) {
-        await setCookie("userRole", loginData.user.role, {
-          secure: isProduction,
-          httpOnly: true,
-          maxAge: 3600 * 24 * 90,
-          path: "/",
-        });
-      }
+      // set userRole in cookie
+      await setCookie("userRole", loginData.user.role, {
+        secure: isProduction,
+        httpOnly: true,
+        maxAge: 3600,
+        path: "/",
+      });
     }
-
-    // 3. Handle Profile Completion
-    if (loginData?.isRegistrationComplete === false) {
-      return {
-        success: true,
-        message: res.message,
-        data: { redirect: "/auth/cr-register/complete-profile" },
-        timestamp: Date.now(),
-      };
-    }
-
-    // 4. Handle Pending Approval
-    if (loginData?.isCrApproved === false) {
-      return {
-        success: true,
-        message: res.message,
-        data: {
-          redirect: "/auth/cr-register/pending",
-          isCrApproved: false,
-        },
-        timestamp: Date.now(),
-      };
-    }
-
-    // 5. Final Success Case
+    // 5. Final Success Case (Successful Login)
+    await deleteCookie("sessionId");
+    const userRole = loginData?.user?.role;
     return {
       success: true,
-      message: res.message,
-      data: loginData,
+      message: res.message || "Logged in successfully",
+      data: {
+        ...loginData,
+        redirect: userRole ? getDefaultDashboardRoute(userRole) : "/dashboard",
+      },
       timestamp: Date.now(),
     };
   } catch (error: any) {
@@ -205,6 +206,15 @@ export async function completeCrRegistration(
   const values = Object.fromEntries(formData.entries());
 
   try {
+    //get registrationSessionId
+    const registrationSessionId = await getCookie("registrationSessionId");
+    if (!registrationSessionId) {
+      return {
+        success: false,
+        message: "Registration session expired. Please login again.",
+        timestamp: Date.now(),
+      };
+    }
     // 1. Construct the payload structure backend expects
     const institutionInfo = {
       name: values.institutionName,
@@ -213,7 +223,6 @@ export async function completeCrRegistration(
       contactPhone: values.institutionPhone,
       address: values.address,
     };
-
     const batchInformation = {
       name: values.name, // Matches AcademicStep 'name' field
       batchType: values.batchType,
@@ -232,6 +241,9 @@ export async function completeCrRegistration(
       finalFormData.append("documentProof", file);
     }
     const res = await api.post("/cr-registrations", finalFormData);
+
+    //delete registrationSessionId from cookie
+    await deleteCookie("registrationSessionId");
     return {
       success: true,
       message: "Registration completed! Waiting for admin approval.",
@@ -325,34 +337,52 @@ export async function verifyOtp(
 
   try {
     const res = await api.post("/auth/verify-otp", data);
-
-    // If verification is successful, save tokens if they exist in the response
-    if (res?.data?.tokens) {
-      const isProduction = process.env.NODE_ENV === "production";
-      await setCookie("accessToken", res.data.tokens.accessToken, {
-        secure: isProduction,
+    const verifyData = res?.data;
+    // 1.if isRegistrationComplete is false than set registrationSessionId in cookie
+    if (verifyData?.isRegistrationComplete === false) {
+      await deleteCookie("sessionId");
+      // set registrationSessionId in cookie
+      await setCookie("registrationSessionId", verifyData.sessionId, {
+        secure: process.env.NODE_ENV === "production",
         httpOnly: true,
         maxAge: 3600,
         path: "/",
       });
-
-      await setCookie("refreshToken", res.data.tokens.refreshToken, {
+      return {
+        success: true,
+        message: res.message,
+        data: { redirect: "/auth/cr-register/complete-profile" },
+        timestamp: Date.now(),
+      };
+    }
+    // 2. Handle Forgot Password Flow (resetToken)
+    if (verifyData?.resetToken) {
+      const isProduction = process.env.NODE_ENV === "production";
+      await setCookie("resetPasswordToken", verifyData.resetToken, {
         secure: isProduction,
         httpOnly: true,
-        maxAge: 3600 * 24 * 90,
+        maxAge: 3600, // 1 hour
         path: "/",
       });
 
-      // Verification successful, we can remove the sessionId
       await deleteCookie("sessionId");
-    }
 
+      return {
+        success: true,
+        message:
+          res.message || "OTP verified. You can now reset your password.",
+        data: { redirect: "/auth/reset-password" },
+        timestamp: Date.now(),
+      };
+    }
     return {
       success: true,
-      message: res?.message,
+      message: res.message,
       data: {
-        ...res?.data,
-        redirect: res?.data?.redirect ? mapRoute(res.data.redirect) : undefined,
+        ...verifyData,
+        redirect: verifyData?.redirect
+          ? mapRoute(verifyData.redirect)
+          : undefined,
       },
       timestamp: Date.now(),
     };
@@ -388,10 +418,24 @@ export async function resetPassword(
   }
 
   try {
+    const resetToken = await getCookie("resetPasswordToken");
+
+    if (!resetToken) {
+      return {
+        success: false,
+        message: "Reset token expired or missing. Please try again.",
+        timestamp: Date.now(),
+      };
+    }
+
     const res = await api.post("/auth/reset-password", {
       ...parsed.data,
-      token: values.token,
+      token: resetToken,
     });
+
+    // Success - clear the token
+    await deleteCookie("resetPasswordToken");
+
     return {
       success: true,
       message: "Password reset successful!",

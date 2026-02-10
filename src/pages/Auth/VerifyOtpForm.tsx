@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { verifyOtp } from "@/services/auth.service";
 import { useRouter } from "next/navigation";
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
 
 const initialState = {
@@ -24,8 +24,10 @@ const VerifyOtpForm = () => {
 
   useEffect(() => {
     if (state.success) {
-      toast.success(state.message);
-      router.push(state.data?.redirect || "/auth/reset-password");
+      toast.success(state.message || "OTP verified successfully");
+      if (state.data?.redirect) {
+        router.push(state.data.redirect);
+      }
     } else if (state.message && !state.errors) {
       toast.error(state.message);
     }

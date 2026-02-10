@@ -1,5 +1,4 @@
 "use client";
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -52,7 +51,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
-        <div className="flex items-center gap-3 pl-2 pr-1 py-1 rounded-md border border-transparent hover:border-gray-100 hover:bg-gray-50 cursor-pointer transition-all active:scale-98 group">
+        <div className="flex items-center gap-3 pl-2 pr-1 py-1 rounded-md border border-transparent cursor-pointer transition-all group">
           {isEmerald && (
             <div className="hidden sm:flex flex-col text-right">
               <span className="text-xs font-bold text-gray-900 leading-tight">
@@ -102,7 +101,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({
           initial={{ opacity: 0, y: 10, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 10, scale: 0.95 }}
-          transition={{ duration: 0.2, ease: "easeOut" }}
+          transition={{ duration: 0.2, ease: "easeInOut" }}
           className="bg-white rounded-md border border-gray-100 shadow-md p-1 overflow-hidden"
         >
           <DropdownMenuLabel className="px-2 py-1.5 text-xs font-bold text-gray-400 uppercase tracking-widest">

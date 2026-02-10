@@ -33,11 +33,23 @@ const LoginForm = () => {
   );
 
   const [lastActionTimestamp, setLastActionTimestamp] = useState<number>(0);
+  const [webPushToken, setWebPushToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchToken = async () => {
+      // Import the utility here to ensure it only runs on the client
+      const { getWebPushToken } = await import("@/utils/push-notification");
+      const token = await getWebPushToken();
+      if (token) {
+        setWebPushToken(token);
+      }
+    };
+    fetchToken();
+  }, []);
 
   useEffect(() => {
     if (state.timestamp && state.timestamp > lastActionTimestamp) {
       setLastActionTimestamp(state.timestamp);
-
       if (state.success) {
         const loginData = state.data;
 
@@ -104,6 +116,9 @@ const LoginForm = () => {
       </Modal>
 
       <form action={formAction} className="space-y-6">
+        {/* Hidden input for webPushToken */}
+        <input type="hidden" name="webPushToken" value={webPushToken || ""} />
+
         <div className="flex flex-col gap-1.5">
           <Label
             htmlFor="email"
