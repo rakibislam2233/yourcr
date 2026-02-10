@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { UserPlus, ArrowLeft } from "lucide-react";
 import PageHeader from "@/components/dashboard/shared/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ArrowLeft, Hash, Mail, Phone, User, UserPlus } from "lucide-react";
 import Link from "next/link";
-import { useRouter, useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 const colorOptions = [
   { value: "bg-blue-500", label: "Blue" },
@@ -22,8 +22,24 @@ const colorOptions = [
 
 // Mock data
 const mockStudents = [
-  { id: 1, roll: "CT-8001", name: "Sakib Hasan", email: "sakib@example.com", phone: "+880 1711-111111", status: "active", color: "bg-blue-500" },
-  { id: 2, roll: "CT-8002", name: "Fahim Rahman", email: "fahim@example.com", phone: "+880 1711-222222", status: "active", color: "bg-green-500" },
+  {
+    id: 1,
+    roll: "CT-8001",
+    name: "Sakib Hasan",
+    email: "sakib@example.com",
+    phone: "+880 1711-111111",
+    status: "active",
+    color: "bg-blue-500",
+  },
+  {
+    id: 2,
+    roll: "CT-8002",
+    name: "Fahim Rahman",
+    email: "fahim@example.com",
+    phone: "+880 1711-222222",
+    status: "active",
+    color: "bg-green-500",
+  },
 ];
 
 export default function EditStudentPage() {
@@ -83,66 +99,126 @@ export default function EditStudentPage() {
 
       <div className="bg-white rounded-2xl border border-gray-100 p-6">
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <Label htmlFor="roll">Roll Number</Label>
-              <Input
-                id="roll"
-                value={formData.roll}
-                onChange={(e) => setFormData({ ...formData, roll: e.target.value })}
-                required
-              />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+            <div className="flex flex-col gap-1.5">
+              <Label
+                htmlFor="roll"
+                className="text-sm font-semibold text-gray-700"
+              >
+                Roll Number
+              </Label>
+              <div className="relative">
+                <Hash className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Input
+                  id="roll"
+                  value={formData.roll}
+                  onChange={(e) =>
+                    setFormData({ ...formData, roll: e.target.value })
+                  }
+                  required
+                  className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                />
+              </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="name">Full Name</Label>
-              <Input
-                id="name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                required
-              />
+            <div className="flex flex-col gap-1.5">
+              <Label
+                htmlFor="name"
+                className="text-sm font-semibold text-gray-700"
+              >
+                Full Name
+              </Label>
+              <div className="relative">
+                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Input
+                  id="name"
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
+                  required
+                  className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                />
+              </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                required
-              />
+            <div className="flex flex-col gap-1.5">
+              <Label
+                htmlFor="email"
+                className="text-sm font-semibold text-gray-700"
+              >
+                Email
+              </Label>
+              <div className="relative">
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Input
+                  id="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
+                  required
+                  className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                />
+              </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="phone">Phone</Label>
-              <Input
-                id="phone"
-                value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                required
-              />
+            <div className="flex flex-col gap-1.5">
+              <Label
+                htmlFor="phone"
+                className="text-sm font-semibold text-gray-700"
+              >
+                Phone
+              </Label>
+              <div className="relative">
+                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Input
+                  id="phone"
+                  value={formData.phone}
+                  onChange={(e) =>
+                    setFormData({ ...formData, phone: e.target.value })
+                  }
+                  required
+                  className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                />
+              </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="status">Status</Label>
+            <div className="flex flex-col gap-1.5">
+              <Label
+                htmlFor="status"
+                className="text-sm font-semibold text-gray-700"
+              >
+                Status
+              </Label>
               <select
                 id="status"
                 value={formData.status}
-                onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                onChange={(e) =>
+                  setFormData({ ...formData, status: e.target.value })
+                }
+                className="h-12 px-4 text-base border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50/30 transition-all font-medium"
               >
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>
               </select>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="color">Avatar Color</Label>
+            <div className="flex flex-col gap-1.5">
+              <Label
+                htmlFor="color"
+                className="text-sm font-semibold text-gray-700"
+              >
+                Avatar Color
+              </Label>
               <select
                 id="color"
                 value={formData.color}
-                onChange={(e) => setFormData({ ...formData, color: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                onChange={(e) =>
+                  setFormData({ ...formData, color: e.target.value })
+                }
+                className="h-12 px-4 text-base border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50/30 transition-all font-medium"
               >
                 {colorOptions.map((c) => (
-                  <option key={c.value} value={c.value}>{c.label}</option>
+                  <option key={c.value} value={c.value}>
+                    {c.label}
+                  </option>
                 ))}
               </select>
             </div>
