@@ -3,7 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { UserProfile } from "@/interface/user.interface";
-import { ActionState, updateStudent } from "@/services/student.service";
+import {
+  updateStudent,
+  type StudentActionState,
+} from "@/services/student.service";
 import { Hash, Mail, Phone, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -14,7 +17,7 @@ interface EditStudentFormProps {
   student: UserProfile;
 }
 
-const initialState: ActionState = {
+const initialState: StudentActionState = {
   success: false,
   message: "",
   inputs: undefined,

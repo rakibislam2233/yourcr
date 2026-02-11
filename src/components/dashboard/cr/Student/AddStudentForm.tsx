@@ -2,14 +2,17 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ActionState, createStudent } from "@/services/student.service";
+import {
+  createStudent,
+  type StudentActionState,
+} from "@/services/student.service";
 import { Hash, Mail, Phone, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 
-const initialState: ActionState = {
+const initialState: StudentActionState = {
   success: false,
   message: "",
   errors: undefined,
