@@ -8,8 +8,8 @@ export default async function CrStudentsPage({
 }) {
   const params = await searchParams;
   const result = await getAllStudents(params);
-  const students = result.data?.data || [];
-  const meta = result.data?.meta || {
+  const students = result.data || [];
+  const meta = result.meta || {
     page: 1,
     limit: 10,
     total: 0,

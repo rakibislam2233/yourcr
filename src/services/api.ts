@@ -9,6 +9,12 @@ type FetchOptions = Omit<RequestInit, "headers"> & {
 export interface ApiResponse<T = any> {
   success: boolean;
   message: string;
+  meta?: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
   data: T;
 }
 
@@ -42,13 +48,14 @@ const serverFetchHelper = async (
     headers: requestHeaders,
     ...restOptions,
     cache: options.cache || "no-store",
+    // Make sure we carry forward any revalidation strategy
+    next: restOptions.next,
   };
 
   try {
     const response = await fetch(`${BACKEND_API_URL}${endpoint}`, config);
 
-    const data = await response.json().catch(() => ({}));
-
+    // For 204 No Content
     if (response.status === 204) {
       return {
         success: true,
@@ -57,12 +64,15 @@ const serverFetchHelper = async (
       };
     }
 
+    const data = await response.json().catch(() => ({}));
+
     return {
-      success: response.ok,
+      success: data.success ?? response.ok,
       message:
         data?.message ||
         (response.ok ? "Success" : `HTTP error! status: ${response.status}`),
       data: data?.data ?? data,
+      meta: data?.meta,
     };
   } catch (error: any) {
     console.error(`API Request Failed: ${endpoint}`, error);

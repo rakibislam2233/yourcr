@@ -25,6 +25,7 @@ export async function getAllStudents(searchParams?: Record<string, string>) {
       return {
         success: false,
         message: response.message || "Failed to fetch students",
+        meta: response.meta,
         timestamp: Date.now(),
         data: [],
       };

@@ -6,7 +6,7 @@ import Student from "@/interface/student.interface";
 import { deleteStudent } from "@/services/student.service";
 import { Plus, UserPlus } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState, useTransition } from "react";
 import { toast } from "sonner";
 import PageHeader from "../../shared/PageHeader";
@@ -28,6 +28,7 @@ const ManageStudents: React.FC<ManageStudentsProps> = ({
   meta,
 }) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -78,14 +79,28 @@ const ManageStudents: React.FC<ManageStudentsProps> = ({
         }
       />
 
-      <div className="bg-white rounded-2xl border border-gray-100 p-6 space-y-6">
-        <div className="flex flex-col md:flex-row justify-between gap-4">
-          <SearchFilter searchPlaceholder="Search students..." />
-        </div>
+      <div className="bg-white rounded-md border border-gray-100 p-6 space-y-6">
+        {(students.length > 0 || searchParams?.get("searchTerm")) && (
+          <div className="flex flex-col md:flex-row justify-between gap-4">
+            <SearchFilter searchPlaceholder="Search students..." />
+          </div>
+        )}
 
         {students.length === 0 ? (
-          <div className="text-center py-12 text-gray-500">
-            No students found.
+          <div className="text-center py-12">
+            <p className="text-gray-500 mb-4">
+              {searchParams?.get("searchTerm")
+                ? "No students found matching your search."
+                : "No students found. Get Started by adding your first student."}
+            </p>
+            {!searchParams?.get("searchTerm") && (
+              <Link href="/dashboard/cr/students/add">
+                <Button className="gap-2">
+                  <Plus className="w-4 h-4" />
+                  Add Student
+                </Button>
+              </Link>
+            )}
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
