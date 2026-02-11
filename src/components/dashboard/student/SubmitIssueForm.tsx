@@ -1,0 +1,159 @@
+"use client";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { createIssue, type IssueActionState } from "@/services/issue.service";
+import { Send } from "lucide-react";
+import { useActionState, useEffect } from "react";
+import { toast } from "sonner";
+
+const issueCategories = [
+  "Academic Issue",
+  "Attendance Problem",
+  "Lab/Equipment Issue",
+  "Schedule Conflict",
+  "Assessment Related",
+  "General Query",
+  "Other",
+];
+
+const initialState: IssueActionState = {
+  success: false,
+  message: "",
+  errors: undefined,
+  inputs: undefined,
+  timestamp: 0,
+};
+
+const SubmitIssueForm = () => {
+  const [state, formAction, isPending] = useActionState(
+    createIssue,
+    initialState,
+  );
+
+  useEffect(() => {
+    if (state.timestamp && state.timestamp > 0) {
+      if (state.success) {
+        toast.success(state.message);
+        // Maybe redirect or clear form? For now, just toast.
+      } else if (state.message && !state.errors) {
+        toast.error(state.message);
+      }
+    }
+  }, [state]);
+
+  return (
+    <div className="bg-white rounded-2xl border border-gray-100 p-6">
+      <h3 className="text-lg font-semibold text-gray-900 mb-6">New Issue</h3>
+      <form action={formAction} className="space-y-6">
+        <div className="space-y-2">
+          <Label htmlFor="title">Issue Title</Label>
+          <Input
+            id="title"
+            name="title"
+            defaultValue={state.inputs?.title}
+            placeholder="Brief title for your issue"
+            className={state.errors?.title ? "border-red-500" : ""}
+            required
+          />
+          {state.errors?.title && (
+            <p className="text-red-500 text-sm mt-1">{state.errors.title[0]}</p>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="category">Category</Label>
+          <Select name="category" defaultValue={state.inputs?.category}>
+            <SelectTrigger
+              className={state.errors?.category ? "border-red-500" : ""}
+            >
+              <SelectValue placeholder="Select a category" />
+            </SelectTrigger>
+            <SelectContent>
+              {issueCategories.map((cat) => (
+                <SelectItem key={cat} value={cat}>
+                  {cat}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {state.errors?.category && (
+            <p className="text-red-500 text-sm mt-1">
+              {state.errors.category[0]}
+            </p>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <Label>Priority</Label>
+          <div className="flex gap-3">
+            {(["low", "medium", "high"] as const).map((priority) => (
+              <label key={priority} className="flex-1 cursor-pointer">
+                <input
+                  type="radio"
+                  name="priority"
+                  value={priority}
+                  className="peer sr-only"
+                  defaultChecked={
+                    state.inputs?.priority === priority ||
+                    (state.inputs?.priority === undefined &&
+                      priority === "medium")
+                  }
+                />
+                <div
+                  className={`py-3 px-4 rounded-xl text-sm font-medium border-2 text-center transition-all peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary border-gray-200 hover:border-gray-300`}
+                >
+                  {priority.charAt(0).toUpperCase() + priority.slice(1)}
+                </div>
+              </label>
+            ))}
+          </div>
+          {state.errors?.priority && (
+            <p className="text-red-500 text-sm mt-1">
+              {state.errors.priority[0]}
+            </p>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="description">Description</Label>
+          <Textarea
+            id="description"
+            name="description"
+            defaultValue={state.inputs?.description}
+            placeholder="Describe your issue in detail..."
+            rows={5}
+            className={state.errors?.description ? "border-red-500" : ""}
+            required
+          />
+          {state.errors?.description && (
+            <p className="text-red-500 text-sm mt-1">
+              {state.errors.description[0]}
+            </p>
+          )}
+        </div>
+
+        <Button
+          type="submit"
+          className="w-full gap-2"
+          size="lg"
+          disabled={isPending}
+        >
+          <Send className="w-4 h-4" />
+          {isPending ? "Submitting..." : "Submit Issue"}
+        </Button>
+      </form>
+    </div>
+  );
+};
+
+export default SubmitIssueForm;
