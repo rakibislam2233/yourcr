@@ -1,7 +1,7 @@
 import { ChevronRight, FileText } from "lucide-react";
 import Link from "next/link";
 
-const TermsAndConditionsPage = () => {
+const page = () => {
   const sections = [
     {
       title: "Introduction",
@@ -189,4 +189,4 @@ Your access to and use of the Service is conditioned on your acceptance of and c
   );
 };
 
-export default TermsAndConditionsPage;
+export default page;

@@ -1,5 +1,5 @@
 import contactUsImage from "@/assets/contact/contact-us.png";
-import ContactUsForm from "@/pages/ContactUs/ContactUsForm";
+import ContactUsForm from "@/components/contactUs/ContactUsForm";
 import { PhoneCall } from "lucide-react";
 import Image from "next/image";
 import { MdEmail, MdLocationOn } from "react-icons/md";

@@ -1,8 +1,7 @@
-
 import Link from "next/link";
 import { Shield, ChevronRight } from "lucide-react";
 
-const PrivacyPolicy = () => {
+const page = () => {
   const sections = [
     {
       title: "Introduction",
@@ -172,4 +171,4 @@ YourCR does not knowingly collect any Personal Identifiable Information from chi
   );
 };
 
-export default PrivacyPolicy;
+export default page;
