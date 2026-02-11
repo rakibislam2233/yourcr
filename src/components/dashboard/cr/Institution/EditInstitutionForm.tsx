@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/select";
 import {
   updateInstitutionBatch,
-  type ActionState,
+  type UserActionState,
 } from "@/services/user.service";
 import {
   BookOpen,
@@ -32,7 +32,7 @@ import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 import LogoUploadField from "./LogoUploadField";
 
-const initialState: ActionState = {
+const initialState: UserActionState = {
   success: false,
   message: "",
   errors: undefined,
