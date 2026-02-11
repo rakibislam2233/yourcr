@@ -1,9 +1,18 @@
-"use client";
-
 import PageHeader from "@/components/dashboard/shared/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  createAssessment,
+  type AssessmentActionState,
+} from "@/services/assessment.service";
 import {
   ArrowLeft,
   Calendar,
@@ -15,7 +24,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import { useActionState, useEffect } from "react";
+import { toast } from "sonner";
 
 const typeOptions = [
   "Exam",
@@ -25,6 +35,7 @@ const typeOptions = [
   "Presentation",
   "Project",
 ];
+
 const subjectOptions = [
   "Database Management System",
   "Software Engineering",
@@ -34,24 +45,31 @@ const subjectOptions = [
   "Web Development",
 ];
 
+const initialState: AssessmentActionState = {
+  success: false,
+  message: "",
+  errors: undefined,
+  inputs: undefined,
+  timestamp: 0,
+};
+
 export default function AddAssessmentPage() {
   const router = useRouter();
-  const [formData, setFormData] = useState({
-    title: "",
-    subject: "",
-    type: "Assignment",
-    date: "",
-    time: "",
-    totalMarks: "",
-    venue: "",
-    description: "",
-  });
+  const [state, formAction, isPending] = useActionState(
+    createAssessment,
+    initialState,
+  );
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Creating assessment:", formData);
-    router.push("/dashboard/cr/assessments");
-  };
+  useEffect(() => {
+    if (state.timestamp && state.timestamp > 0) {
+      if (state.success) {
+        toast.success(state.message);
+        router.push("/dashboard/cr/assessments");
+      } else if (state.message && !state.errors) {
+        toast.error(state.message);
+      }
+    }
+  }, [state, router]);
 
   return (
     <div className="space-y-6">
@@ -75,7 +93,7 @@ export default function AddAssessmentPage() {
       />
 
       <div className="bg-white rounded-2xl border border-gray-100 p-6">
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form action={formAction} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
             <div className="flex flex-col gap-1.5">
               <Label
@@ -88,15 +106,18 @@ export default function AddAssessmentPage() {
                 <FileText className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="title"
-                  value={formData.title}
-                  onChange={(e) =>
-                    setFormData({ ...formData, title: e.target.value })
-                  }
+                  name="title"
+                  defaultValue={state.inputs?.title}
                   placeholder="e.g., Mid-Term Examination"
                   required
-                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary ${
+                    state.errors?.title ? "border-red-500" : "bg-gray-50/30"
+                  } transition-all font-medium`}
                 />
               </div>
+              {state.errors?.title && (
+                <p className="text-xs text-red-500">{state.errors.title[0]}</p>
+              )}
             </div>
             <div className="flex flex-col gap-1.5">
               <Label
@@ -105,22 +126,25 @@ export default function AddAssessmentPage() {
               >
                 Subject
               </Label>
-              <select
-                id="subject"
-                value={formData.subject}
-                onChange={(e) =>
-                  setFormData({ ...formData, subject: e.target.value })
-                }
-                className="h-12 px-4 text-base border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50/30 transition-all font-medium"
-                required
-              >
-                <option value="">Select a subject</option>
-                {subjectOptions.map((s) => (
-                  <option key={s} value={s}>
-                    {s}
-                  </option>
-                ))}
-              </select>
+              <Select name="subject" defaultValue={state.inputs?.subject}>
+                <SelectTrigger
+                  className={`h-12 border-gray-200 ${state.errors?.subject ? "border-red-500" : "bg-gray-50/30"} font-medium`}
+                >
+                  <SelectValue placeholder="Select a subject" />
+                </SelectTrigger>
+                <SelectContent>
+                  {subjectOptions.map((s) => (
+                    <SelectItem key={s} value={s}>
+                      {s}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {state.errors?.subject && (
+                <p className="text-xs text-red-500">
+                  {state.errors.subject[0]}
+                </p>
+              )}
             </div>
             <div className="flex flex-col gap-1.5">
               <Label
@@ -129,20 +153,26 @@ export default function AddAssessmentPage() {
               >
                 Assessment Type
               </Label>
-              <select
-                id="type"
-                value={formData.type}
-                onChange={(e) =>
-                  setFormData({ ...formData, type: e.target.value })
-                }
-                className="h-12 px-4 text-base border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50/30 transition-all font-medium"
+              <Select
+                name="type"
+                defaultValue={state.inputs?.type ?? "Assignment"}
               >
-                {typeOptions.map((t) => (
-                  <option key={t} value={t}>
-                    {t}
-                  </option>
-                ))}
-              </select>
+                <SelectTrigger
+                  className={`h-12 border-gray-200 ${state.errors?.type ? "border-red-500" : "bg-gray-50/30"} font-medium`}
+                >
+                  <SelectValue placeholder="Select type" />
+                </SelectTrigger>
+                <SelectContent>
+                  {typeOptions.map((t) => (
+                    <SelectItem key={t} value={t}>
+                      {t}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {state.errors?.type && (
+                <p className="text-xs text-red-500">{state.errors.type[0]}</p>
+              )}
             </div>
             <div className="flex flex-col gap-1.5">
               <Label
@@ -155,16 +185,23 @@ export default function AddAssessmentPage() {
                 <Hash className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="totalMarks"
+                  name="totalMarks"
                   type="number"
-                  value={formData.totalMarks}
-                  onChange={(e) =>
-                    setFormData({ ...formData, totalMarks: e.target.value })
-                  }
+                  defaultValue={state.inputs?.totalMarks}
                   placeholder="e.g., 50"
                   required
-                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary ${
+                    state.errors?.totalMarks
+                      ? "border-red-500"
+                      : "bg-gray-50/30"
+                  } transition-all font-medium`}
                 />
               </div>
+              {state.errors?.totalMarks && (
+                <p className="text-xs text-red-500">
+                  {state.errors.totalMarks[0]}
+                </p>
+              )}
             </div>
             <div className="flex flex-col gap-1.5">
               <Label
@@ -177,15 +214,18 @@ export default function AddAssessmentPage() {
                 <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="date"
+                  name="date"
                   type="date"
-                  value={formData.date}
-                  onChange={(e) =>
-                    setFormData({ ...formData, date: e.target.value })
-                  }
+                  defaultValue={state.inputs?.date}
                   required
-                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary ${
+                    state.errors?.date ? "border-red-500" : "bg-gray-50/30"
+                  } transition-all font-medium`}
                 />
               </div>
+              {state.errors?.date && (
+                <p className="text-xs text-red-500">{state.errors.date[0]}</p>
+              )}
             </div>
             <div className="flex flex-col gap-1.5">
               <Label
@@ -198,15 +238,18 @@ export default function AddAssessmentPage() {
                 <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="time"
-                  value={formData.time}
-                  onChange={(e) =>
-                    setFormData({ ...formData, time: e.target.value })
-                  }
+                  name="time"
+                  defaultValue={state.inputs?.time}
                   placeholder="e.g., 10:00 AM - 1:00 PM or 11:59 PM"
                   required
-                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary ${
+                    state.errors?.time ? "border-red-500" : "bg-gray-50/30"
+                  } transition-all font-medium`}
                 />
               </div>
+              {state.errors?.time && (
+                <p className="text-xs text-red-500">{state.errors.time[0]}</p>
+              )}
             </div>
             <div className="flex flex-col gap-1.5 md:col-span-2">
               <Label
@@ -219,14 +262,17 @@ export default function AddAssessmentPage() {
                 <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="venue"
-                  value={formData.venue}
-                  onChange={(e) =>
-                    setFormData({ ...formData, venue: e.target.value })
-                  }
+                  name="venue"
+                  defaultValue={state.inputs?.venue}
                   placeholder="e.g., Exam Hall A"
-                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary ${
+                    state.errors?.venue ? "border-red-500" : "bg-gray-50/30"
+                  } transition-all font-medium`}
                 />
               </div>
+              {state.errors?.venue && (
+                <p className="text-xs text-red-500">{state.errors.venue[0]}</p>
+              )}
             </div>
             <div className="flex flex-col gap-1.5 md:col-span-2">
               <Label
@@ -237,14 +283,19 @@ export default function AddAssessmentPage() {
               </Label>
               <textarea
                 id="description"
-                value={formData.description}
-                onChange={(e) =>
-                  setFormData({ ...formData, description: e.target.value })
-                }
+                name="description"
+                defaultValue={state.inputs?.description}
                 placeholder="Add any additional instructions or details..."
                 rows={4}
-                className="w-full px-4 py-3 border border-gray-200 rounded-md text-base focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50/30 resize-none transition-all font-medium"
+                className={`w-full px-4 py-3 border border-gray-200 rounded-md text-base focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary ${
+                  state.errors?.description ? "border-red-500" : "bg-gray-50/30"
+                } resize-none transition-all font-medium`}
               />
+              {state.errors?.description && (
+                <p className="text-xs text-red-500">
+                  {state.errors.description[0]}
+                </p>
+              )}
             </div>
           </div>
 
@@ -254,8 +305,8 @@ export default function AddAssessmentPage() {
                 Cancel
               </Button>
             </Link>
-            <Button type="submit" className="flex-1">
-              Create Assessment
+            <Button type="submit" className="flex-1" disabled={isPending}>
+              {isPending ? "Creating Assessment..." : "Create Assessment"}
             </Button>
           </div>
         </form>

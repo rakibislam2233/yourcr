@@ -19,7 +19,7 @@ const InstitutionOverview = ({
   batchInfo: Partial<Batch>;
 }) => {
   return (
-    <section className="w-full">
+    <section className="w-full space-y-5">
       {/* Institution Overview Card */}
       <div className="bg-linear-to-r from-primary to-primary/80 rounded-md p-8 text-white">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">

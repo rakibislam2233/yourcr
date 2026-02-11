@@ -1,20 +1,14 @@
-"use client";
-
-import PageHeader from "@/components/dashboard/shared/PageHeader";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  getSubjectById,
+  updateSubject,
+  type Subject,
+  type SubjectActionState,
+} from "@/services/subject.service";
 import { ArrowLeft, BookOpen } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const typeOptions = ["Theory", "Theory + Lab", "Lab", "Project"];
 
@@ -29,77 +23,67 @@ const colorOptions = [
   { value: "bg-red-500", label: "Red" },
 ];
 
-// Mock data - In production, this would come from database
-const mockSubjects = [
-  {
-    id: 1,
-    code: "CSE-401",
-    name: "Database Management System",
-    teacher: "Dr. Kamal Ahmed",
-    credits: 4,
-    type: "Theory + Lab",
-    schedule: "Sun, Tue - 10:00 AM",
-    color: "bg-blue-500",
-  },
-  {
-    id: 2,
-    code: "CSE-402",
-    name: "Software Engineering",
-    teacher: "Prof. Rina Begum",
-    credits: 3,
-    type: "Theory",
-    schedule: "Mon, Wed - 12:00 PM",
-    color: "bg-green-500",
-  },
-  {
-    id: 3,
-    code: "CSE-403",
-    name: "Computer Networks",
-    teacher: "Mr. Jahid Hassan",
-    credits: 4,
-    type: "Theory + Lab",
-    schedule: "Tue, Thu - 2:00 PM",
-    color: "bg-purple-500",
-  },
-];
+const initialState: SubjectActionState = {
+  success: false,
+  message: "",
+  errors: undefined,
+  inputs: undefined,
+  timestamp: 0,
+};
 
 export default function EditSubjectPage() {
   const router = useRouter();
   const params = useParams();
-  const subjectId = parseInt(params?.id as string);
+  const subjectId = params?.id as string;
 
-  const [formData, setFormData] = useState({
-    code: "",
-    name: "",
-    teacher: "",
-    credits: 3,
-    type: "Theory",
-    schedule: "",
-    color: "bg-blue-500",
-  });
+  const [subject, setSubject] = useState<Subject | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const updateSubjectWithId = updateSubject.bind(null, subjectId);
+  const [state, formAction, isPending] = useActionState(
+    updateSubjectWithId,
+    initialState,
+  );
 
   useEffect(() => {
-    // In production, fetch from database
-    const subject = mockSubjects.find((s) => s.id === subjectId);
-    if (subject) {
-      setFormData({
-        code: subject.code,
-        name: subject.name,
-        teacher: subject.teacher,
-        credits: subject.credits,
-        type: subject.type,
-        schedule: subject.schedule,
-        color: subject.color,
-      });
+    async function fetchSubject() {
+      try {
+        const res = await getSubjectById(subjectId);
+        if (res.success && res.data) {
+          setSubject(res.data);
+        } else {
+          toast.error("Failed to load subject");
+          router.push("/dashboard/cr/subjects");
+        }
+      } catch (error) {
+        toast.error("An error occurred");
+      } finally {
+        setLoading(false);
+      }
     }
-  }, [subjectId]);
+    fetchSubject();
+  }, [subjectId, router]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // In production, this would update the database
-    console.log("Updating subject:", { id: subjectId, ...formData });
-    router.push("/dashboard/cr/subjects");
-  };
+  useEffect(() => {
+    if (state.timestamp && state.timestamp > 0) {
+      if (state.success) {
+        toast.success(state.message);
+        router.push("/dashboard/cr/subjects");
+      } else if (state.message && !state.errors) {
+        toast.error(state.message);
+      }
+    }
+  }, [state, router]);
+
+  if (loading) {
+    return (
+      <div className="p-8 text-center text-gray-500">
+        Loading subject details...
+      </div>
+    );
+  }
+
+  if (!subject) return null;
 
   return (
     <div className="space-y-6">
