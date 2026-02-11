@@ -69,7 +69,7 @@ export default function AddClassPage() {
                 Subject
               </Label>
               <div className="relative">
-                <BookOpen className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="subject"
                   value={formData.subject}
@@ -78,7 +78,7 @@ export default function AddClassPage() {
                   }
                   placeholder="e.g., Database Management System"
                   required
-                  className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
                 />
               </div>
             </div>
@@ -90,7 +90,7 @@ export default function AddClassPage() {
                 Teacher
               </Label>
               <div className="relative">
-                <Users className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Users className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="teacher"
                   value={formData.teacher}
@@ -99,7 +99,7 @@ export default function AddClassPage() {
                   }
                   placeholder="e.g., Dr. Kamal Ahmed"
                   required
-                  className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
                 />
               </div>
             </div>
@@ -111,7 +111,7 @@ export default function AddClassPage() {
                 Date
               </Label>
               <div className="relative">
-                <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="date"
                   type="date"
@@ -120,7 +120,7 @@ export default function AddClassPage() {
                     setFormData({ ...formData, date: e.target.value })
                   }
                   required
-                  className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
                 />
               </div>
             </div>
@@ -154,7 +154,7 @@ export default function AddClassPage() {
                 Start Time
               </Label>
               <div className="relative">
-                <Clock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="startTime"
                   type="time"
@@ -163,7 +163,7 @@ export default function AddClassPage() {
                     setFormData({ ...formData, startTime: e.target.value })
                   }
                   required
-                  className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
                 />
               </div>
             </div>
@@ -175,7 +175,7 @@ export default function AddClassPage() {
                 End Time
               </Label>
               <div className="relative">
-                <Clock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="endTime"
                   type="time"
@@ -184,7 +184,7 @@ export default function AddClassPage() {
                     setFormData({ ...formData, endTime: e.target.value })
                   }
                   required
-                  className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
                 />
               </div>
             </div>
@@ -196,7 +196,7 @@ export default function AddClassPage() {
                 Meeting Link
               </Label>
               <div className="relative">
-                <LinkIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="link"
                   value={formData.link}
@@ -205,7 +205,7 @@ export default function AddClassPage() {
                   }
                   placeholder="e.g., https://meet.google.com/xxx-xxxx-xxx"
                   required
-                  className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
                 />
               </div>
             </div>

@@ -231,7 +231,7 @@ const MyProfile: React.FC<MyProfileProps> = ({ user }) => {
                   Full Name
                 </Label>
                 <div className="relative">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <Input
                     value={formData.fullName}
                     onChange={(e) =>
@@ -247,7 +247,7 @@ const MyProfile: React.FC<MyProfileProps> = ({ user }) => {
                   Phone Number
                 </Label>
                 <div className="relative">
-                  <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <Input
                     type="tel"
                     value={formData.phoneNumber}
@@ -330,7 +330,7 @@ const MyProfile: React.FC<MyProfileProps> = ({ user }) => {
                   Current Password
                 </Label>
                 <div className="relative">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <Input
                     type={showPassword ? "text" : "password"}
                     placeholder="Confirm current identity"
@@ -355,7 +355,7 @@ const MyProfile: React.FC<MyProfileProps> = ({ user }) => {
                     New Password
                   </Label>
                   <div className="relative">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <Input
                       type="password"
                       placeholder="New secure password"
@@ -368,7 +368,7 @@ const MyProfile: React.FC<MyProfileProps> = ({ user }) => {
                     Confirm Sync
                   </Label>
                   <div className="relative">
-                    <Shield className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Shield className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <Input
                       type="password"
                       placeholder="Repeat new password"

@@ -1,8 +1,14 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Search, X } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
@@ -31,7 +37,7 @@ export function SearchFilter({
   const searchParams = useSearchParams();
 
   const [searchValue, setSearchValue] = useState(
-    searchParams.get("search") || "",
+    searchParams?.get("search") || "",
   );
 
   // Debounce search
@@ -46,7 +52,7 @@ export function SearchFilter({
 
   const updateSearchParams = useCallback(
     (key: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
+      const params = new URLSearchParams(searchParams?.toString());
 
       if (value) {
         params.set(key, value);
@@ -66,11 +72,13 @@ export function SearchFilter({
 
   const clearFilters = () => {
     setSearchValue("");
-    router.push(pathname, { scroll: false });
+    if (pathname) {
+      router.push(pathname, { scroll: false });
+    }
   };
 
   const hasActiveFilters =
-    searchValue || filters.some((filter) => searchParams.get(filter.name));
+    searchValue || filters.some((filter) => searchParams?.get(filter.name));
 
   return (
     <div className="bg-white rounded-xl border border-gray-100 p-4 space-y-4">
@@ -99,19 +107,24 @@ export function SearchFilter({
             <Label htmlFor={filter.name} className="sr-only">
               {filter.label}
             </Label>
-            <select
-              id={filter.name}
-              value={searchParams.get(filter.name) || filter.defaultValue || ""}
-              onChange={(e) => updateSearchParams(filter.name, e.target.value)}
-              className="w-full h-11 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50/30 transition-all font-medium"
+            <Select
+              value={
+                searchParams?.get(filter.name) || filter.defaultValue || ""
+              }
+              onValueChange={(value) => updateSearchParams(filter.name, value)}
             >
-              <option value="">{filter.label}</option>
-              {filter.options.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
+              <SelectTrigger className="h-11 bg-gray-50/30 border-gray-200 font-medium">
+                <SelectValue placeholder={filter.label} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">{filter.label}</SelectItem>
+                {filter.options.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         ))}
 

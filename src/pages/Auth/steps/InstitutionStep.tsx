@@ -45,7 +45,7 @@ const InstitutionStep: React.FC<InstitutionStepProps> = ({
             Institution Name <span className="text-red-500">*</span>
           </Label>
           <div className="relative">
-            <School className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <School className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <Input
               id="institutionName"
               name="institutionName"
@@ -75,7 +75,7 @@ const InstitutionStep: React.FC<InstitutionStepProps> = ({
           <Select value={localInstitutionType} onValueChange={handleTypeChange}>
             <SelectTrigger
               id="institutionType"
-              className={`h-12 text-base border-gray-300 ${state?.errors?.institutionType ? "border-red-500" : ""}`}
+              className={`text-base border-gray-300 ${state?.errors?.institutionType ? "border-red-500" : ""}`}
             >
               <SelectValue placeholder="Select type" />
             </SelectTrigger>
@@ -141,7 +141,7 @@ const InstitutionStep: React.FC<InstitutionStepProps> = ({
             Institution Address <span className="text-red-500">*</span>
           </Label>
           <div className="relative">
-            <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <Input
               id="address"
               name="address"

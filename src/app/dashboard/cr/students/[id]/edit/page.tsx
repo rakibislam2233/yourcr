@@ -108,7 +108,7 @@ export default function EditStudentPage() {
                 Roll Number
               </Label>
               <div className="relative">
-                <Hash className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Hash className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="roll"
                   value={formData.roll}
@@ -116,7 +116,7 @@ export default function EditStudentPage() {
                     setFormData({ ...formData, roll: e.target.value })
                   }
                   required
-                  className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
                 />
               </div>
             </div>
@@ -128,7 +128,7 @@ export default function EditStudentPage() {
                 Full Name
               </Label>
               <div className="relative">
-                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="name"
                   value={formData.name}
@@ -136,7 +136,7 @@ export default function EditStudentPage() {
                     setFormData({ ...formData, name: e.target.value })
                   }
                   required
-                  className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
                 />
               </div>
             </div>
@@ -148,7 +148,7 @@ export default function EditStudentPage() {
                 Email
               </Label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="email"
                   type="email"
@@ -157,7 +157,7 @@ export default function EditStudentPage() {
                     setFormData({ ...formData, email: e.target.value })
                   }
                   required
-                  className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
                 />
               </div>
             </div>
@@ -169,7 +169,7 @@ export default function EditStudentPage() {
                 Phone
               </Label>
               <div className="relative">
-                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="phone"
                   value={formData.phone}
@@ -177,7 +177,7 @@ export default function EditStudentPage() {
                     setFormData({ ...formData, phone: e.target.value })
                   }
                   required
-                  className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
                 />
               </div>
             </div>

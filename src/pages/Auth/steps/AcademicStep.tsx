@@ -65,7 +65,7 @@ const AcademicStep: React.FC<AcademicStepProps> = ({
             >
               <SelectTrigger
                 id="batchType"
-                className="h-12 text-base border-gray-300"
+                className="text-base border-gray-300"
               >
                 <SelectValue placeholder="Select type" />
               </SelectTrigger>

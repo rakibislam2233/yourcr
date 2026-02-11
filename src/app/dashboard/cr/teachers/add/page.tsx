@@ -3,6 +3,13 @@ import PageHeader from "@/components/dashboard/shared/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { createTeacher } from "@/services/teacher.service";
 import {
   ArrowLeft,
@@ -127,13 +134,13 @@ export default function AddTeacherPage() {
                 Full Name
               </Label>
               <div className="relative">
-                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="name"
                   name="name"
                   placeholder="e.g., Dr. Kamal Ahmed"
                   required
-                  className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
                 />
               </div>
             </div>
@@ -146,18 +153,18 @@ export default function AddTeacherPage() {
               >
                 Designation
               </Label>
-              <select
-                id="designation"
-                name="designation"
-                required
-                className="h-12 px-4 text-base border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50/30 transition-all font-medium"
-              >
-                {designationOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
+              <Select name="designation" required>
+                <SelectTrigger className="h-12 bg-gray-50/30 border-gray-200 font-medium">
+                  <SelectValue placeholder="Select designation" />
+                </SelectTrigger>
+                <SelectContent>
+                  {designationOptions.map((option) => (
+                    <SelectItem key={option} value={option}>
+                      {option}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             {/* Department */}
@@ -169,13 +176,13 @@ export default function AddTeacherPage() {
                 Department
               </Label>
               <div className="relative">
-                <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="department"
                   name="department"
                   placeholder="e.g., Computer Technology"
                   required
-                  className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
                 />
               </div>
             </div>
@@ -189,14 +196,14 @@ export default function AddTeacherPage() {
                 Email Address
               </Label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="email"
                   name="email"
                   type="email"
                   placeholder="e.g., kamal.ahmed@dpi.edu.bd"
                   required
-                  className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
                 />
               </div>
             </div>
@@ -210,14 +217,14 @@ export default function AddTeacherPage() {
                 Phone Number
               </Label>
               <div className="relative">
-                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="phone"
                   name="phone"
                   type="tel"
                   placeholder="e.g., +880 1711-234567"
                   required
-                  className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
                 />
               </div>
             </div>
@@ -230,18 +237,18 @@ export default function AddTeacherPage() {
               >
                 Avatar Color
               </Label>
-              <select
-                id="color"
-                name="color"
-                required
-                className="h-12 px-4 text-base border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50/30 transition-all font-medium"
-              >
-                {colorOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
+              <Select name="color" required>
+                <SelectTrigger className="h-12 bg-gray-50/30 border-gray-200 font-medium">
+                  <SelectValue placeholder="Select color" />
+                </SelectTrigger>
+                <SelectContent>
+                  {colorOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             {/* Photo Upload */}
@@ -281,7 +288,7 @@ export default function AddTeacherPage() {
               </Label>
               <div className="flex gap-2">
                 <div className="relative flex-1">
-                  <BookOpen className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <Input
                     id="subjectInput"
                     value={subjectInput}
@@ -291,7 +298,7 @@ export default function AddTeacherPage() {
                       (e.preventDefault(), handleAddSubject())
                     }
                     placeholder="e.g., Database Management"
-                    className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                    className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
                   />
                 </div>
                 <Button

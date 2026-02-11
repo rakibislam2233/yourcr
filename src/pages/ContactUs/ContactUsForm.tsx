@@ -42,7 +42,7 @@ const ContactUsForm = () => {
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="fullName">Full Name</Label>
         <div className="relative">
-          <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
           <Input
             id="fullName"
             name="fullName"
@@ -65,7 +65,7 @@ const ContactUsForm = () => {
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="email">Email Address</Label>
         <div className="relative">
-          <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
           <Input
             id="email"
             name="email"
@@ -87,7 +87,7 @@ const ContactUsForm = () => {
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="phone">Phone Number</Label>
         <div className="relative">
-          <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
           <Input
             id="phone"
             name="phone"

@@ -1,8 +1,8 @@
 "use client";
-import { UploadCloud } from "lucide-react";
+import { Trash2, UploadCloud } from "lucide-react";
+import Image from "next/image";
 import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
-
 interface LogoUploadFieldProps {
   defaultLogo?: string;
 }
@@ -68,6 +68,18 @@ export default function LogoUploadField({ defaultLogo }: LogoUploadFieldProps) {
     }
   };
 
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setLogoPreview(null);
+    const fileInput = document.querySelector(
+      'input[name="logo"]',
+    ) as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = "";
+    }
+    toast.success("Logo removed successfully");
+  };
+
   return (
     <div
       className={`relative h-48 rounded-2xl border-2 border-dashed transition-all flex flex-col items-center justify-center gap-4 cursor-pointer overflow-hidden ${
@@ -88,16 +100,39 @@ export default function LogoUploadField({ defaultLogo }: LogoUploadFieldProps) {
       />
       {logoPreview ? (
         <div className="relative size-full group">
-          <img
+          <Image
             src={logoPreview}
             alt="Logo Preview"
-            className="size-full object-contain p-4"
+            fill
+            className="object-contain p-4"
           />
-          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-            <span className="text-white text-sm font-bold flex items-center gap-2">
-              <UploadCloud className="w-5 h-5" />
-              Replace Logo
-            </span>
+          <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-3">
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  document
+                    .querySelector<HTMLInputElement>('input[name="logo"]')
+                    ?.click();
+                }}
+                className="px-4 py-2 bg-white text-gray-900 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors flex items-center gap-2"
+              >
+                <UploadCloud className="w-4 h-4" />
+                Change Logo
+              </button>
+              <button
+                type="button"
+                onClick={handleDelete}
+                className="px-4 py-2 bg-red-500 text-white rounded-lg text-sm font-medium hover:bg-red-600 transition-colors flex items-center gap-2"
+              >
+                <Trash2 className="w-4 h-4" />
+                Delete
+              </button>
+            </div>
+            <p className="text-white text-xs">
+              Click to change or drag & drop new image
+            </p>
           </div>
         </div>
       ) : (

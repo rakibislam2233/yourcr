@@ -85,7 +85,7 @@ export default function AddAssessmentPage() {
                 Assessment Title
               </Label>
               <div className="relative">
-                <FileText className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <FileText className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="title"
                   value={formData.title}
@@ -94,7 +94,7 @@ export default function AddAssessmentPage() {
                   }
                   placeholder="e.g., Mid-Term Examination"
                   required
-                  className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
                 />
               </div>
             </div>
@@ -152,7 +152,7 @@ export default function AddAssessmentPage() {
                 Total Marks
               </Label>
               <div className="relative">
-                <Hash className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Hash className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="totalMarks"
                   type="number"
@@ -162,7 +162,7 @@ export default function AddAssessmentPage() {
                   }
                   placeholder="e.g., 50"
                   required
-                  className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
                 />
               </div>
             </div>
@@ -174,7 +174,7 @@ export default function AddAssessmentPage() {
                 Date
               </Label>
               <div className="relative">
-                <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="date"
                   type="date"
@@ -183,7 +183,7 @@ export default function AddAssessmentPage() {
                     setFormData({ ...formData, date: e.target.value })
                   }
                   required
-                  className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
                 />
               </div>
             </div>
@@ -195,7 +195,7 @@ export default function AddAssessmentPage() {
                 Time
               </Label>
               <div className="relative">
-                <Clock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="time"
                   value={formData.time}
@@ -204,7 +204,7 @@ export default function AddAssessmentPage() {
                   }
                   placeholder="e.g., 10:00 AM - 1:00 PM or 11:59 PM"
                   required
-                  className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
                 />
               </div>
             </div>
@@ -216,7 +216,7 @@ export default function AddAssessmentPage() {
                 Venue (Optional)
               </Label>
               <div className="relative">
-                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="venue"
                   value={formData.venue}
@@ -224,7 +224,7 @@ export default function AddAssessmentPage() {
                     setFormData({ ...formData, venue: e.target.value })
                   }
                   placeholder="e.g., Exam Hall A"
-                  className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
                 />
               </div>
             </div>

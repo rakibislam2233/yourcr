@@ -23,7 +23,7 @@ import React from "react";
 import { toast } from "sonner";
 
 interface UserDropdownProps {
-  user: UserProfile;
+  user: UserProfile ;
   dashboardHref: string;
   theme?: "default" | "emerald";
 }

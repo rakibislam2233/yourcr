@@ -12,7 +12,6 @@ import {
 import { updateInstitutionBatch } from "@/services/user.service";
 import {
   BookOpen,
-  Building2,
   CalendarDays,
   Globe,
   Hash,
@@ -83,7 +82,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
   return (
     <form action={formAction} className="space-y-8">
       {/* Logo Upload Section */}
-      <LogoUploadField defaultLogo={defaultData.logo} />
+      <LogoUploadField defaultLogo={defaultData?.logo} />
       {/* Institution Details */}
       <div className="bg-white rounded-md border border-gray-200 p-8">
         <h3 className="text-xl font-bold text-gray-900 mb-8">
@@ -99,7 +98,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
               Institution Name <span className="text-red-500">*</span>
             </Label>
             <div className="relative">
-              <School className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <School className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <Input
                 id="institutionName"
                 name="institutionName"
@@ -107,7 +106,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
                 defaultValue={
                   (state.inputs?.institutionName as string) || defaultData.name
                 }
-                className={`pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all ${
+                className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all ${
                   state.errors?.institutionName
                     ? "border-red-500 focus-visible:ring-red-500"
                     : ""
@@ -129,7 +128,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
               Short Name
             </Label>
             <div className="relative">
-              <Hash className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Hash className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <Input
                 id="shortName"
                 name="shortName"
@@ -137,7 +136,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
                 defaultValue={
                   (state.inputs?.shortName as string) || defaultData.shortName
                 }
-                className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all"
+                className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all"
               />
             </div>
           </div>
@@ -155,13 +154,12 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
               value={institutionType}
             />
             <div className="relative">
-              <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
               <Select
                 value={institutionType}
                 onValueChange={setInstitutionType}
               >
                 <SelectTrigger
-                  className={`pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 w-full transition-all ${state.errors?.institutionType ? "border-red-500 focus:ring-red-500" : ""}`}
+                  className={`h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 w-full transition-all ${state.errors?.institutionType ? "border-red-500 focus:ring-red-500" : ""}`}
                 >
                   <SelectValue placeholder="Select type" />
                 </SelectTrigger>
@@ -187,7 +185,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
               Established Year
             </Label>
             <div className="relative">
-              <CalendarDays className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <CalendarDays className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <Input
                 id="establishedYear"
                 name="establishedYear"
@@ -197,7 +195,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
                   (state.inputs?.establishedYear as string) ||
                   defaultData.establishedYear
                 }
-                className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all"
+                className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all"
               />
             </div>
           </div>
@@ -211,7 +209,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
                 Full Address <span className="text-red-500">*</span>
               </Label>
               <div className="relative">
-                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="address"
                   name="address"
@@ -219,7 +217,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
                   defaultValue={
                     (state.inputs?.address as string) || defaultData.address
                   }
-                  className={`pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all ${
+                  className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all ${
                     state.errors?.address
                       ? "border-red-500 focus-visible:ring-red-500"
                       : ""
@@ -242,7 +240,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
               Contact Phone
             </Label>
             <div className="relative">
-              <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <Input
                 id="contactPhone"
                 name="contactPhone"
@@ -250,7 +248,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
                 defaultValue={
                   (state.inputs?.contactPhone as string) || defaultData.phone
                 }
-                className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all"
+                className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all"
               />
             </div>
           </div>
@@ -263,7 +261,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
               Contact Email <span className="text-red-500">*</span>
             </Label>
             <div className="relative">
-              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <Input
                 id="contactEmail"
                 name="contactEmail"
@@ -272,7 +270,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
                 defaultValue={
                   (state.inputs?.contactEmail as string) || defaultData.email
                 }
-                className={`pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all ${
+                className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all ${
                   state.errors?.contactEmail
                     ? "border-red-500 focus-visible:ring-red-500"
                     : ""
@@ -295,7 +293,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
                 Official Website
               </Label>
               <div className="relative">
-                <Globe className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="website"
                   name="website"
@@ -303,7 +301,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
                   defaultValue={
                     (state.inputs?.website as string) || defaultData.website
                   }
-                  className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all"
+                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all"
                 />
               </div>
             </div>
@@ -326,7 +324,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
               Department / Subject <span className="text-red-500">*</span>
             </Label>
             <div className="relative">
-              <BookOpen className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <Input
                 id="department"
                 name="department"
@@ -334,7 +332,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
                 defaultValue={
                   (state.inputs?.department as string) || defaultData.department
                 }
-                className={`pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all ${
+                className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all ${
                   state.errors?.department
                     ? "border-red-500 focus-visible:ring-red-500"
                     : ""
@@ -357,10 +355,9 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
             </Label>
             <input type="hidden" name="batchType" value={batchType} />
             <div className="relative">
-              <Users className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
               <Select value={batchType} onValueChange={setBatchType}>
                 <SelectTrigger
-                  className={`pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 w-full transition-all ${state.errors?.batchType ? "border-red-500 focus:ring-red-500" : ""}`}
+                  className={`h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 w-full transition-all ${state.errors?.batchType ? "border-red-500 focus:ring-red-500" : ""}`}
                 >
                   <SelectValue placeholder="Select type" />
                 </SelectTrigger>
@@ -385,7 +382,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
               Current Semester / Year
             </Label>
             <div className="relative">
-              <CalendarDays className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <CalendarDays className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <Input
                 id="semester"
                 name="semester"
@@ -393,7 +390,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
                 defaultValue={
                   (state.inputs?.semester as string) || defaultData.semester
                 }
-                className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all"
+                className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all"
               />
             </div>
           </div>
@@ -406,7 +403,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
               Academic Session/Year <span className="text-red-500">*</span>
             </Label>
             <div className="relative">
-              <Users className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Users className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <Input
                 id="academicYear"
                 name="academicYear"
@@ -414,7 +411,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
                 defaultValue={
                   (state.inputs?.academicYear as string) || defaultData.session
                 }
-                className={`pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all ${
+                className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all ${
                   state.errors?.academicYear
                     ? "border-red-500 focus-visible:ring-red-500"
                     : ""
@@ -436,7 +433,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
               Session <span className="text-red-500">*</span>
             </Label>
             <div className="relative">
-              <Users className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Users className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <Input
                 id="session"
                 name="session"
@@ -444,7 +441,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
                 defaultValue={
                   (state.inputs?.session as string) || defaultData.session
                 }
-                className={`pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all ${
+                className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all ${
                   state.errors?.session
                     ? "border-red-500 focus-visible:ring-red-500"
                     : ""
@@ -464,7 +461,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
               Shift (if any)
             </Label>
             <div className="relative">
-              <Timer className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Timer className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <Input
                 id="shift"
                 name="shift"
@@ -472,7 +469,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
                 defaultValue={
                   (state.inputs?.shift as string) || defaultData.shift
                 }
-                className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all"
+                className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all"
               />
             </div>
           </div>
@@ -485,7 +482,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
               Group / Section
             </Label>
             <div className="relative">
-              <Users className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Users className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <Input
                 id="group"
                 name="group"
@@ -493,7 +490,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
                 defaultValue={
                   (state.inputs?.group as string) || defaultData.group
                 }
-                className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all"
+                className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all"
               />
             </div>
           </div>
@@ -501,12 +498,12 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
       </div>
 
       {/* Action Buttons */}
-      <div className="w-full flex justify-end gap-4 pt-4">
+      <div className="w-full flex justify-end gap-4">
         <Link href="/dashboard/cr/institution">
           <Button
             type="button"
             variant="outline"
-            className="px-5 h-12 text-base cursor-pointer"
+            className="px-5 h-12  cursor-pointer"
           >
             Cancel Changes
           </Button>
@@ -514,7 +511,7 @@ const EditInstitutionForm = ({ defaultData }: EditInstitutionFormProps) => {
         <Button
           type="submit"
           disabled={isPending}
-          className="px-5 h-12 text-base cursor-pointer bg-primary"
+          className="px-5 h-12  cursor-pointer bg-primary"
         >
           {isPending ? (
             <span className="flex items-center gap-2">

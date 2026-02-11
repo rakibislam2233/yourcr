@@ -71,7 +71,7 @@ const CrRegisterForm = () => {
               Full Name <span className="text-red-500">*</span>
             </Label>
             <div className="relative">
-              <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <Input
                 id="fullName"
                 name="fullName"
@@ -92,7 +92,7 @@ const CrRegisterForm = () => {
               Email Address <span className="text-red-500">*</span>
             </Label>
             <div className="relative">
-              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <Input
                 id="email"
                 name="email"
@@ -114,7 +114,7 @@ const CrRegisterForm = () => {
               Phone Number <span className="text-red-500">*</span>
             </Label>
             <div className="relative">
-              <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <Input
                 id="phoneNumber"
                 name="phoneNumber"
@@ -137,7 +137,7 @@ const CrRegisterForm = () => {
               Password <span className="text-red-500">*</span>
             </Label>
             <div className="relative">
-              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <Input
                 id="password"
                 name="password"

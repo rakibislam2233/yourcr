@@ -63,7 +63,7 @@ export default function AddNoticePage() {
                 Notice Title
               </Label>
               <div className="relative">
-                <FileText className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <FileText className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="title"
                   value={formData.title}
@@ -72,7 +72,7 @@ export default function AddNoticePage() {
                   }
                   placeholder="e.g., Mid-Term Examination Schedule"
                   required
-                  className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
                 />
               </div>
             </div>

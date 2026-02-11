@@ -1,13 +1,20 @@
 "use client";
 
-import React, { useState } from "react";
-import { BookOpen, ArrowLeft } from "lucide-react";
 import PageHeader from "@/components/dashboard/shared/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { ArrowLeft, BookOpen } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 
 const typeOptions = ["Theory", "Theory + Lab", "Lab", "Project"];
 
@@ -70,7 +77,9 @@ export default function AddSubjectPage() {
               <Input
                 id="code"
                 value={formData.code}
-                onChange={(e) => setFormData({ ...formData, code: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, code: e.target.value })
+                }
                 placeholder="e.g., CSE-401"
                 required
               />
@@ -80,7 +89,9 @@ export default function AddSubjectPage() {
               <Input
                 id="name"
                 value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
                 placeholder="e.g., Database Management System"
                 required
               />
@@ -90,7 +101,9 @@ export default function AddSubjectPage() {
               <Input
                 id="teacher"
                 value={formData.teacher}
-                onChange={(e) => setFormData({ ...formData, teacher: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, teacher: e.target.value })
+                }
                 placeholder="e.g., Dr. Kamal Ahmed"
                 required
               />
@@ -103,42 +116,63 @@ export default function AddSubjectPage() {
                 min={1}
                 max={10}
                 value={formData.credits}
-                onChange={(e) => setFormData({ ...formData, credits: parseInt(e.target.value) || 0 })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    credits: parseInt(e.target.value) || 0,
+                  })
+                }
                 required
               />
             </div>
             <div className="space-y-2">
               <Label htmlFor="type">Type</Label>
-              <select
-                id="type"
+              <Select
                 value={formData.type}
-                onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                onValueChange={(value) =>
+                  setFormData({ ...formData, type: value })
+                }
               >
-                {typeOptions.map((type) => (
-                  <option key={type} value={type}>{type}</option>
-                ))}
-              </select>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select type" />
+                </SelectTrigger>
+                <SelectContent>
+                  {typeOptions.map((type) => (
+                    <SelectItem key={type} value={type}>
+                      {type}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div className="space-y-2">
               <Label htmlFor="color">Color</Label>
-              <select
-                id="color"
+              <Select
                 value={formData.color}
-                onChange={(e) => setFormData({ ...formData, color: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                onValueChange={(value) =>
+                  setFormData({ ...formData, color: value })
+                }
               >
-                {colorOptions.map((color) => (
-                  <option key={color.value} value={color.value}>{color.label}</option>
-                ))}
-              </select>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select color" />
+                </SelectTrigger>
+                <SelectContent>
+                  {colorOptions.map((color) => (
+                    <SelectItem key={color.value} value={color.value}>
+                      {color.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div className="space-y-2 md:col-span-2">
               <Label htmlFor="schedule">Schedule</Label>
               <Input
                 id="schedule"
                 value={formData.schedule}
-                onChange={(e) => setFormData({ ...formData, schedule: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, schedule: e.target.value })
+                }
                 placeholder="e.g., Sun, Tue - 10:00 AM"
                 required
               />

@@ -1,6 +1,4 @@
 "use client";
-
-import { SearchFilter } from "@/components/shared/SearchFilter";
 import { Button } from "@/components/ui/button";
 import { ConfirmModal } from "@/components/ui/modal";
 import { deleteTeacher, Teacher } from "@/services/teacher.service";
@@ -10,6 +8,7 @@ import { useRouter } from "next/navigation";
 import React, { useState, useTransition } from "react";
 import { toast } from "sonner";
 import PageHeader from "../shared/PageHeader";
+import { SearchFilter } from "../shared/SearchFilter";
 
 interface ManageTeachersProps {
   initialTeachers: Teacher[];
@@ -74,7 +73,7 @@ const ManageTeachers: React.FC<ManageTeachersProps> = ({ initialTeachers }) => {
       />
 
       {/* Search and Filters */}
-      <SearchFilter
+      {/* <SearchFilter
         searchPlaceholder="Search teachers by name, designation, or subject..."
         filters={[
           {
@@ -98,7 +97,7 @@ const ManageTeachers: React.FC<ManageTeachersProps> = ({ initialTeachers }) => {
             ],
           },
         ]}
-      />
+      /> */}
 
       {/* Teachers Grid */}
       {initialTeachers.length === 0 ? (
@@ -223,7 +222,6 @@ const ManageTeachers: React.FC<ManageTeachersProps> = ({ initialTeachers }) => {
         confirmText={isPending ? "Deleting..." : "Delete"}
         cancelText="Cancel"
         variant="danger"
-        disabled={isPending}
       />
     </div>
   );

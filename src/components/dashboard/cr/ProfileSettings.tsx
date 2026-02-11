@@ -216,14 +216,14 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
                   Full Name
                 </Label>
                 <div className="relative">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <Input
                     value={formData.fullName}
                     onChange={(e) =>
                       setFormData({ ...formData, fullName: e.target.value })
                     }
                     placeholder="Full Name"
-                    className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                    className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
                   />
                 </div>
               </div>
@@ -232,7 +232,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
                   Phone Number
                 </Label>
                 <div className="relative">
-                  <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <Input
                     type="tel"
                     value={formData.phoneNumber}
@@ -240,7 +240,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
                       setFormData({ ...formData, phoneNumber: e.target.value })
                     }
                     placeholder="Phone Number"
-                    className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                    className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
                   />
                 </div>
               </div>
@@ -311,7 +311,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
                   Current Password
                 </Label>
                 <div className="relative">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <Input
                     type={showPassword ? "text" : "password"}
                     placeholder="Verify current identity"
@@ -336,7 +336,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
                     New Password
                   </Label>
                   <div className="relative">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <Input
                       type="password"
                       placeholder="At least 8 characters"
@@ -349,7 +349,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
                     Confirm Password
                   </Label>
                   <div className="relative">
-                    <Shield className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Shield className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <Input
                       type="password"
                       placeholder="Repeat new password"
