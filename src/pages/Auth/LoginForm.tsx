@@ -157,12 +157,6 @@ const LoginForm = () => {
             >
               Password <span className="text-red-500">*</span>
             </Label>
-            <Link
-              href="/auth/forgot-password"
-              className="text-xs font-bold text-primary hover:text-blue-700 transition-colors"
-            >
-              Forgot Password?
-            </Link>
           </div>
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -198,18 +192,26 @@ const LoginForm = () => {
           )}
         </div>
 
-        <div className="flex items-center space-x-2 py-1">
-          <Checkbox
-            id="remember"
-            name="remember"
-            className="rounded-sm border-gray-300 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
-          />
-          <Label
-            htmlFor="remember"
-            className="text-sm font-medium text-gray-600 cursor-pointer select-none"
+        <div className="flex items-center justify-between py-1">
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="remember"
+              name="remember"
+              className="rounded-sm border-gray-300 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+            />
+            <Label
+              htmlFor="remember"
+              className="text-sm font-medium text-gray-600 cursor-pointer select-none"
+            >
+              Keep me signed in
+            </Label>
+          </div>
+          <Link
+            href="/auth/forgot-password"
+            className="text-xs font-bold text-primary hover:text-blue-700 transition-colors"
           >
-            Keep me signed in
-          </Label>
+            Forgot Password?
+          </Link>
         </div>
 
         <Button

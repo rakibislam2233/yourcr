@@ -86,6 +86,7 @@ interface ConfirmModalProps {
   confirmText?: string;
   cancelText?: string;
   variant?: "danger" | "warning" | "info";
+  isLoading?: boolean;
 }
 
 export const ConfirmModal: React.FC<ConfirmModalProps> = ({
@@ -97,6 +98,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
   confirmText = "Confirm",
   cancelText = "Cancel",
   variant = "danger",
+  isLoading = false,
 }) => {
   const variantClasses = {
     danger: "bg-red-600 hover:bg-red-700",
@@ -112,7 +114,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={onClose}
+            onClick={isLoading ? undefined : onClose}
             className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
           />
 
@@ -132,17 +134,22 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
               <div className="flex gap-3 p-6 pt-0">
                 <button
                   onClick={onClose}
-                  className="flex-1 px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl transition-colors"
+                  disabled={isLoading}
+                  className="flex-1 px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {cancelText}
                 </button>
                 <button
                   onClick={() => {
                     onConfirm();
-                    onClose();
+                    // Don't close immediately if loading, let parent handle it or close after confirm
                   }}
-                  className={`flex-1 px-4 py-3 text-white font-medium rounded-xl transition-colors ${variantClasses[variant]}`}
+                  disabled={isLoading}
+                  className={`flex-1 px-4 py-3 text-white font-medium rounded-xl transition-colors ${variantClasses[variant]} disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2`}
                 >
+                  {isLoading && (
+                    <span className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  )}
                   {confirmText}
                 </button>
               </div>

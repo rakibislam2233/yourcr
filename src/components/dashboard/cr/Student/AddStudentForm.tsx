@@ -164,18 +164,18 @@ const AddStudentForm = () => {
           </div>
         </div>
 
-        <div className="flex gap-3 pt-4 border-t border-gray-100">
-          <Link href="/dashboard/cr/students" className="flex-1">
+        <div className="flex gap-3 pt-4 justify-end">
+          <Link href="/dashboard/cr/students">
             <Button
               type="button"
               variant="outline"
               disabled={isPending}
-              className="w-full"
+              className="w-full h-12"
             >
               Cancel
             </Button>
           </Link>
-          <Button type="submit" disabled={isPending} className="flex-1">
+          <Button type="submit" disabled={isPending} className="h-12">
             {isPending ? (
               <span className="flex items-center gap-2">
                 <span className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
