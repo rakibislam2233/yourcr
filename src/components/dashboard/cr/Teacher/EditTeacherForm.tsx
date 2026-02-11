@@ -11,7 +11,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Teacher } from "@/interface/teacher.interface";
-import { updateTeacher, type ActionState } from "@/services/teacher.service";
+import {
+  updateTeacher,
+  type TeacherActionState,
+} from "@/services/teacher.service";
 import { Plus, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -35,7 +38,7 @@ const colorOptions = [
   { value: "bg-cyan-500", label: "Cyan" },
 ];
 
-const initialState: ActionState = {
+const initialState: TeacherActionState = {
   success: false,
   message: "",
   errors: undefined,

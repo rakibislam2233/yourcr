@@ -10,7 +10,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { createTeacher, type ActionState } from "@/services/teacher.service";
+import {
+  createTeacher,
+  type TeacherActionState,
+} from "@/services/teacher.service";
 import { BookOpen, Building2, Mail, Phone, Plus, User, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -34,7 +37,7 @@ const colorOptions = [
   { value: "bg-cyan-500", label: "Cyan" },
 ];
 
-const initialState: ActionState = {
+const initialState: TeacherActionState = {
   success: false,
   message: "",
   errors: undefined,
