@@ -8,6 +8,7 @@ import { revalidatePath } from "next/cache";
 import { api } from "./api";
 
 import { Routine, RoutineItem } from "@/interface/routine.interface";
+export type { Routine, RoutineItem };
 
 export type RoutineActionState = {
   success: boolean;

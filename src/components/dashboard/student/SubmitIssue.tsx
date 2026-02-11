@@ -1,7 +1,7 @@
+import RecentIssues from "@/components/dashboard/student/RecentIssues";
 import { MessageSquare } from "lucide-react";
 import React from "react";
 import PageHeader from "../shared/PageHeader";
-import RecentIssues from "./RecentIssues";
 import SubmitIssueForm from "./SubmitIssueForm";
 
 const SubmitIssue: React.FC = () => {

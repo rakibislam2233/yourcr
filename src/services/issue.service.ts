@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { api } from "./api";
 
 import { Issue } from "@/interface/issue.interface";
+export type { Issue };
 
 export type IssueActionState = {
   success: boolean;

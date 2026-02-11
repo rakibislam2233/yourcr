@@ -6,8 +6,7 @@ import {
   updateTeacherSchema,
 } from "@/validation/teacher.validation";
 import { revalidatePath } from "next/cache";
-import { api } from "./api";
-
+import { api } from "./api";  
 import { Teacher } from "@/interface/teacher.interface";
 
 export type ActionState = {
