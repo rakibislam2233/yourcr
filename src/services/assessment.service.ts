@@ -6,21 +6,7 @@ import {
 import { revalidatePath } from "next/cache";
 import { api } from "./api";
 
-export interface Assessment {
-  id: string;
-  title: string;
-  subject: string;
-  type: string;
-  date: string;
-  time: string;
-  totalMarks: number;
-  venue?: string;
-  description?: string;
-  files?: string[];
-  institutionId: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import { Assessment } from "@/interface/assessment.interface";
 
 export type AssessmentActionState = {
   success: boolean;

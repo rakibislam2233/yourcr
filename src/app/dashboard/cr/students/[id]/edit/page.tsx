@@ -18,7 +18,7 @@ export default async function EditStudentPage({
     notFound();
   }
 
-  const student = response.data;
+  const student = response?.data;
 
   return (
     <div className="space-y-6">
@@ -40,7 +40,6 @@ export default async function EditStudentPage({
           </Link>
         }
       />
-
       <EditStudentForm student={student} />
     </div>
   );

@@ -4,19 +4,16 @@
 import { revalidatePath } from "next/cache";
 import { api } from "./api";
 
-export interface Issue {
-  id: string;
-  title: string;
-  description: string;
-  status: "pending" | "in-progress" | "resolved" | "closed";
-  priority: "low" | "medium" | "high" | "urgent";
-  category: string;
-  file?: string;
-  studentId: string;
-  institutionId: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import { Issue } from "@/interface/issue.interface";
+
+export type IssueActionState = {
+  success: boolean;
+  message: string;
+  errors?: Record<string, string[]>;
+  inputs?: any;
+  data?: any;
+  timestamp?: number;
+};
 
 // Get all issues with caching
 export async function getAllIssues(searchParams?: Record<string, string>) {
@@ -41,7 +38,10 @@ export async function getIssueById(id: string) {
 }
 
 // Create issue action
-export async function createIssue(prevState: any, formData: FormData) {
+export async function createIssue(
+  prevState: IssueActionState,
+  formData: FormData,
+): Promise<IssueActionState> {
   try {
     const response = await api.post<Issue>("/issues", formData);
 
@@ -74,9 +74,9 @@ export async function createIssue(prevState: any, formData: FormData) {
 // Update issue action
 export async function updateIssue(
   id: string,
-  prevState: any,
+  prevState: IssueActionState,
   formData: FormData,
-) {
+): Promise<IssueActionState> {
   try {
     const response = await api.patch<Issue>(`/issues/${id}`, formData);
 

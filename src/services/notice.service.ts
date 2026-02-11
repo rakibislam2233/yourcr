@@ -4,17 +4,16 @@
 import { revalidatePath } from "next/cache";
 import { api } from "./api";
 
-export interface Notice {
-  id: string;
-  title: string;
-  content: string;
-  type: "important" | "alert" | "info" | "general";
-  pinned: boolean;
-  file?: string;
-  institutionId: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import { Notice } from "@/interface/notice.interface";
+
+export type NoticeActionState = {
+  success: boolean;
+  message: string;
+  errors?: Record<string, string[]>;
+  inputs?: any;
+  data?: any;
+  timestamp?: number;
+};
 
 // Get all notices with caching
 export async function getAllNotices(searchParams?: Record<string, string>) {
@@ -39,7 +38,10 @@ export async function getNoticeById(id: string) {
 }
 
 // Create notice action
-export async function createNotice(prevState: any, formData: FormData) {
+export async function createNotice(
+  prevState: NoticeActionState,
+  formData: FormData,
+): Promise<NoticeActionState> {
   try {
     // FormData will be sent as-is to handle file uploads
     const response = await api.post<Notice>("/notices", formData);
@@ -72,9 +74,9 @@ export async function createNotice(prevState: any, formData: FormData) {
 // Update notice action
 export async function updateNotice(
   id: string,
-  prevState: any,
+  prevState: NoticeActionState,
   formData: FormData,
-) {
+): Promise<NoticeActionState> {
   try {
     const response = await api.patch<Notice>(`/notices/${id}`, formData);
 

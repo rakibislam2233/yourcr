@@ -6,19 +6,7 @@ import {
 import { revalidatePath } from "next/cache";
 import { api } from "./api";
 
-export interface Subject {
-  id: string;
-  code: string;
-  name: string;
-  teacher: string;
-  credits: number;
-  type: string;
-  color: string;
-  schedule: string;
-  institutionId: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import { Subject } from "@/interface/subject.interface";
 
 export type SubjectActionState = {
   success: boolean;

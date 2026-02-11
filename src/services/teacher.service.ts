@@ -8,20 +8,7 @@ import {
 import { revalidatePath } from "next/cache";
 import { api } from "./api";
 
-export interface Teacher {
-  id: string;
-  name: string;
-  designation: string;
-  department: string;
-  email: string;
-  phone: string;
-  photo?: string;
-  subjects?: string[];
-  color: string;
-  institutionId: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import { Teacher } from "@/interface/teacher.interface";
 
 export type ActionState = {
   success: boolean;

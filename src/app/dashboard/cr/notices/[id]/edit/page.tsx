@@ -1,13 +1,28 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { Bell, ArrowLeft } from "lucide-react";
 import PageHeader from "@/components/dashboard/shared/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  getNoticeById,
+  updateNotice,
+  type Notice,
+  type NoticeActionState,
+} from "@/services/notice.service";
+import { ArrowLeft, Bell } from "lucide-react";
 import Link from "next/link";
-import { useRouter, useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { useActionState, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const typeOptions = [
   { value: "important", label: "Important" },
@@ -16,13 +31,12 @@ const typeOptions = [
   { value: "general", label: "General" },
 ];
 
-// Mock data for fetching notice info
-const mockNotices: Record<string, { title: string; content: string; type: string; pinned: boolean }> = {
-  "1": { title: "Mid-Term Examination Schedule", content: "Mid-term examinations will be held from December 15-20, 2024. Please check the detailed schedule attached.", type: "important", pinned: true },
-  "2": { title: "Class Cancelled - Software Engineering", content: "Tomorrow's Software Engineering class has been cancelled due to faculty meeting. Makeup class will be scheduled.", type: "alert", pinned: true },
-  "3": { title: "Project Submission Deadline Extended", content: "The deadline for the Database project has been extended to December 10, 2024.", type: "info", pinned: false },
-  "4": { title: "Industrial Visit Announcement", content: "An industrial visit to Walton Hi-Tech Industries is scheduled for December 25, 2024. Interested students please register.", type: "info", pinned: false },
-  "5": { title: "Lab Equipment Guidelines", content: "New guidelines for using lab equipment have been issued. Please read and follow them strictly.", type: "general", pinned: false },
+const initialState: NoticeActionState = {
+  success: false,
+  message: "",
+  errors: undefined,
+  inputs: undefined,
+  timestamp: 0,
 };
 
 export default function EditNoticePage() {
@@ -30,25 +44,54 @@ export default function EditNoticePage() {
   const params = useParams();
   const noticeId = params?.id as string;
 
-  const [formData, setFormData] = useState({
-    title: "",
-    content: "",
-    type: "general",
-    pinned: false,
-  });
+  const [notice, setNotice] = useState<Notice | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const updateNoticeWithId = updateNotice.bind(null, noticeId);
+  const [state, formAction, isPending] = useActionState(
+    updateNoticeWithId,
+    initialState,
+  );
 
   useEffect(() => {
-    const noticeData = mockNotices[noticeId];
-    if (noticeData) {
-      setFormData(noticeData);
+    async function fetchNotice() {
+      try {
+        const res = await getNoticeById(noticeId);
+        if (res.success && res.data) {
+          setNotice(res.data);
+        } else {
+          toast.error("Failed to load notice details");
+          router.push("/dashboard/cr/notices");
+        }
+      } catch {
+        toast.error("An error occurred while fetching notice");
+      } finally {
+        setLoading(false);
+      }
     }
-  }, [noticeId]);
+    fetchNotice();
+  }, [noticeId, router]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Updating notice:", formData);
-    router.push("/dashboard/cr/notices");
-  };
+  useEffect(() => {
+    if (state.timestamp && state.timestamp > 0) {
+      if (state.success) {
+        toast.success(state.message);
+        router.push("/dashboard/cr/notices");
+      } else if (state.message && !state.errors) {
+        toast.error(state.message);
+      }
+    }
+  }, [state, router]);
+
+  if (loading) {
+    return (
+      <div className="p-8 text-center text-gray-500">
+        Loading notice details...
+      </div>
+    );
+  }
+
+  if (!notice) return null;
 
   return (
     <div className="space-y-6">
@@ -72,61 +115,96 @@ export default function EditNoticePage() {
       />
 
       <div className="bg-white rounded-2xl border border-gray-100 p-6">
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form action={formAction} className="space-y-6">
           <div className="grid grid-cols-1 gap-6">
             <div className="space-y-2">
               <Label htmlFor="title">Notice Title</Label>
               <Input
                 id="title"
-                value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                name="title"
+                defaultValue={state.inputs?.title ?? notice.title}
                 placeholder="e.g., Mid-Term Examination Schedule"
+                className={state.errors?.title ? "border-red-500" : ""}
                 required
               />
+              {state.errors?.title && (
+                <p className="text-red-500 text-xs mt-1">
+                  {state.errors.title[0]}
+                </p>
+              )}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <Label htmlFor="type">Notice Type</Label>
-                <select
-                  id="type"
-                  value={formData.type}
-                  onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                <Select
+                  name="type"
+                  defaultValue={state.inputs?.type ?? notice.type}
                 >
-                  {typeOptions.map((t) => (
-                    <option key={t.value} value={t.value}>{t.label}</option>
-                  ))}
-                </select>
+                  <SelectTrigger
+                    className={state.errors?.type ? "border-red-500" : ""}
+                  >
+                    <SelectValue placeholder="Select type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {typeOptions.map((t) => (
+                      <SelectItem key={t.value} value={t.value}>
+                        {t.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {state.errors?.type && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {state.errors.type[0]}
+                  </p>
+                )}
               </div>
 
               <div className="space-y-2">
-                <Label>Pin Notice</Label>
-                <div className="flex items-center gap-3 h-10">
+                <Label htmlFor="pinned">Pin Notice</Label>
+                <div className="flex items-center gap-3 h-10 border border-transparent">
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
                       type="checkbox"
-                      checked={formData.pinned}
-                      onChange={(e) => setFormData({ ...formData, pinned: e.target.checked })}
+                      id="pinned"
+                      name="pinned"
+                      defaultChecked={state.inputs?.pinned ?? notice.pinned}
                       className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary/20"
                     />
-                    <span className="text-sm text-gray-600">Pin this notice to top</span>
+                    <span className="text-sm text-gray-600">
+                      Pin this notice to top
+                    </span>
                   </label>
                 </div>
+                {state.errors?.pinned && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {state.errors.pinned[0]}
+                  </p>
+                )}
               </div>
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="content">Notice Content</Label>
-              <textarea
+              <Textarea
                 id="content"
-                value={formData.content}
-                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                name="content"
+                defaultValue={state.inputs?.content ?? notice.content}
                 placeholder="Enter the notice content here..."
                 rows={6}
                 required
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary resize-none"
+                className={
+                  state.errors?.content
+                    ? "border-red-500 resize-none"
+                    : "resize-none"
+                }
               />
+              {state.errors?.content && (
+                <p className="text-red-500 text-xs mt-1">
+                  {state.errors.content[0]}
+                </p>
+              )}
             </div>
           </div>
 
@@ -136,8 +214,8 @@ export default function EditNoticePage() {
                 Cancel
               </Button>
             </Link>
-            <Button type="submit" className="flex-1">
-              Save Changes
+            <Button type="submit" className="flex-1" disabled={isPending}>
+              {isPending ? "Saving..." : "Save Changes"}
             </Button>
           </div>
         </form>

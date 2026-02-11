@@ -35,7 +35,6 @@ const EditStudentForm = ({ student }: EditStudentFormProps) => {
     updateStudentWithId,
     initialState,
   );
-
   useEffect(() => {
     if (state.timestamp && state.timestamp > lastActionTimestamp) {
       setLastActionTimestamp(state.timestamp);

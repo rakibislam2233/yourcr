@@ -4,10 +4,23 @@ import PageHeader from "@/components/dashboard/shared/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  createNotice,
+  type NoticeActionState,
+} from "@/services/notice.service";
 import { ArrowLeft, Bell, FileText } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import { useActionState, useEffect } from "react";
+import { toast } from "sonner";
 
 const typeOptions = [
   { value: "important", label: "Important" },
@@ -16,20 +29,31 @@ const typeOptions = [
   { value: "general", label: "General" },
 ];
 
+const initialState: NoticeActionState = {
+  success: false,
+  message: "",
+  errors: undefined,
+  inputs: undefined,
+  timestamp: 0,
+};
+
 export default function AddNoticePage() {
   const router = useRouter();
-  const [formData, setFormData] = useState({
-    title: "",
-    content: "",
-    type: "general",
-    pinned: false,
-  });
+  const [state, formAction, isPending] = useActionState(
+    createNotice,
+    initialState,
+  );
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Creating notice:", formData);
-    router.push("/dashboard/cr/notices");
-  };
+  useEffect(() => {
+    if (state.timestamp && state.timestamp > 0) {
+      if (state.success) {
+        toast.success(state.message);
+        router.push("/dashboard/cr/notices");
+      } else if (state.message && !state.errors) {
+        toast.error(state.message);
+      }
+    }
+  }, [state, router]);
 
   return (
     <div className="space-y-6">
@@ -53,7 +77,7 @@ export default function AddNoticePage() {
       />
 
       <div className="bg-white rounded-2xl border border-gray-100 p-6">
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form action={formAction} className="space-y-6">
           <div className="grid grid-cols-1 gap-x-8 gap-y-6">
             <div className="flex flex-col gap-1.5">
               <Label
@@ -66,15 +90,20 @@ export default function AddNoticePage() {
                 <FileText className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="title"
-                  value={formData.title}
-                  onChange={(e) =>
-                    setFormData({ ...formData, title: e.target.value })
-                  }
+                  name="title"
+                  defaultValue={state.inputs?.title}
                   placeholder="e.g., Mid-Term Examination Schedule"
                   required
-                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium ${
+                    state.errors?.title ? "border-red-500" : ""
+                  }`}
                 />
               </div>
+              {state.errors?.title && (
+                <p className="text-red-500 text-xs mt-1">
+                  {state.errors.title[0]}
+                </p>
+              )}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
@@ -85,34 +114,47 @@ export default function AddNoticePage() {
                 >
                   Notice Type
                 </Label>
-                <select
-                  id="type"
-                  value={formData.type}
-                  onChange={(e) =>
-                    setFormData({ ...formData, type: e.target.value })
-                  }
-                  className="h-12 px-4 text-base border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50/30 transition-all font-medium"
+                <Select
+                  name="type"
+                  defaultValue={state.inputs?.type ?? "general"}
                 >
-                  {typeOptions.map((t) => (
-                    <option key={t.value} value={t.value}>
-                      {t.label}
-                    </option>
-                  ))}
-                </select>
+                  <SelectTrigger
+                    className={`h-12 bg-gray-50/30 border-gray-200 font-medium ${
+                      state.errors?.type ? "border-red-500" : ""
+                    }`}
+                  >
+                    <SelectValue placeholder="Select type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {typeOptions.map((t) => (
+                      <SelectItem key={t.value} value={t.value}>
+                        {t.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {state.errors?.type && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {state.errors.type[0]}
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <Label className="text-sm font-semibold text-gray-700">
+                <Label
+                  htmlFor="pinned"
+                  className="text-sm font-semibold text-gray-700"
+                >
                   Pin Notice
                 </Label>
                 <div className="flex items-center gap-3 h-12">
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
                       type="checkbox"
-                      checked={formData.pinned}
-                      onChange={(e) =>
-                        setFormData({ ...formData, pinned: e.target.checked })
-                      }
+                      id="pinned"
+                      name="pinned"
+                      value="true"
+                      defaultChecked={state.inputs?.pinned === "true"}
                       className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary/20"
                     />
                     <span className="text-sm text-gray-600">
@@ -120,6 +162,11 @@ export default function AddNoticePage() {
                     </span>
                   </label>
                 </div>
+                {state.errors?.pinned && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {state.errors.pinned[0]}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -130,17 +177,22 @@ export default function AddNoticePage() {
               >
                 Notice Content
               </Label>
-              <textarea
+              <Textarea
                 id="content"
-                value={formData.content}
-                onChange={(e) =>
-                  setFormData({ ...formData, content: e.target.value })
-                }
+                name="content"
+                defaultValue={state.inputs?.content}
                 placeholder="Enter the notice content here..."
                 rows={6}
                 required
-                className="w-full px-4 py-3 border border-gray-200 rounded-md text-base focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50/30 resize-none transition-all font-medium"
+                className={`w-full px-4 py-3 border border-gray-200 rounded-md text-base focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50/30 resize-none transition-all font-medium ${
+                  state.errors?.content ? "border-red-500" : ""
+                }`}
               />
+              {state.errors?.content && (
+                <p className="text-red-500 text-xs mt-1">
+                  {state.errors.content[0]}
+                </p>
+              )}
             </div>
           </div>
 
@@ -150,8 +202,8 @@ export default function AddNoticePage() {
                 Cancel
               </Button>
             </Link>
-            <Button type="submit" className="flex-1">
-              Create Notice
+            <Button type="submit" className="flex-1" disabled={isPending}>
+              {isPending ? "Creating..." : "Create Notice"}
             </Button>
           </div>
         </form>
