@@ -107,7 +107,7 @@ const ViewRoutine: React.FC = () => {
               <img
                 src={routines[activeTab]?.url}
                 alt="Routine"
-                className="max-w-full h-auto rounded-lg shadow-sm border border-gray-100"
+                className="max-w-full h-auto rounded-md shadow-sm border border-gray-100"
               />
             ) : (
               <div className="w-full h-[500px] bg-white rounded-xl overflow-hidden border border-gray-100 shadow-lg">

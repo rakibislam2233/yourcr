@@ -96,7 +96,7 @@ export function SearchFilter({
               placeholder={searchPlaceholder}
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
-              className="pl-10 h-11 border-gray-200 rounded-lg focus:border-primary focus:ring-primary bg-gray-50/30"
+              className="pl-10 h-11 border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30"
             />
           </div>
         </div>

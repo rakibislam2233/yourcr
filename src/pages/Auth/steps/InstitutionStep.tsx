@@ -9,15 +9,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ActionState } from "@/interface/action-state.interface";
 import { MapPin, School } from "lucide-react";
 import { useState } from "react";
-
-interface ActionState {
-  success: boolean;
-  message: string;
-  errors?: Record<string, string[]>;
-  inputs?: Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
-}
 
 interface InstitutionStepProps {
   state?: ActionState;

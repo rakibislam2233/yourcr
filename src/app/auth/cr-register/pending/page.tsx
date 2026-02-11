@@ -21,7 +21,7 @@ const PendingApprovalPage = () => {
           </p>
         </div>
 
-        <div className="bg-blue-50 border border-blue-100 p-4 rounded-lg text-blue-800 text-sm max-w-md">
+        <div className="bg-blue-50 border border-blue-100 p-4 rounded-md text-blue-800 text-sm max-w-md">
           Typically, approval takes 24-48 hours. Thank you for your patience.
         </div>
 

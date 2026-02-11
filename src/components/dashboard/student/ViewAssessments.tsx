@@ -1,19 +1,19 @@
 "use client";
 
-import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import {
-  ClipboardList,
-  Calendar,
-  Clock,
-  CheckCircle,
   AlertCircle,
-  Timer,
-  FileText,
+  Calendar,
+  CheckCircle,
+  ClipboardList,
+  Clock,
   ExternalLink,
+  FileText,
+  Timer,
 } from "lucide-react";
+import React, { useState } from "react";
 import PageHeader from "../shared/PageHeader";
-import { Button } from "@/components/ui/button";
 
 const assessments = [
   {
@@ -214,7 +214,7 @@ const ViewAssessments: React.FC = () => {
                 <div className="flex items-start gap-4">
                   <div
                     className={`w-14 h-14 ${getTypeColor(
-                      assessment.type
+                      assessment.type,
                     )} rounded-xl flex items-center justify-center text-white`}
                   >
                     <ClipboardList className="w-7 h-7" />
@@ -246,7 +246,7 @@ const ViewAssessments: React.FC = () => {
                       {assessment.subject}
                     </p>
                     <div className="flex items-center gap-4 mt-3 text-sm text-gray-500 flex-wrap">
-                      <span className="px-2 py-1 bg-gray-100 rounded-lg font-medium">
+                      <span className="px-2 py-1 bg-gray-100 rounded-md font-medium">
                         {assessment.type}
                       </span>
                       <span className="flex items-center gap-1">

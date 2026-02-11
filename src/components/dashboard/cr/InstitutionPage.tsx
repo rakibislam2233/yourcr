@@ -106,7 +106,7 @@ const InstitutionPage: React.FC<InstitutionPageProps> = ({ user }) => {
           </h3>
           <div className="space-y-4">
             <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-md">
-              <div className="p-2.5 bg-blue-100 text-blue-600 rounded-lg">
+              <div className="p-2.5 bg-blue-100 text-blue-600 rounded-md">
                 <MapPin className="w-5 h-5" />
               </div>
               <div>
@@ -117,7 +117,7 @@ const InstitutionPage: React.FC<InstitutionPageProps> = ({ user }) => {
               </div>
             </div>
             <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-md">
-              <div className="p-2.5 bg-green-100 text-green-600 rounded-lg">
+              <div className="p-2.5 bg-green-100 text-green-600 rounded-md">
                 <Phone className="w-5 h-5" />
               </div>
               <div>
@@ -128,7 +128,7 @@ const InstitutionPage: React.FC<InstitutionPageProps> = ({ user }) => {
               </div>
             </div>
             <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-md">
-              <div className="p-2.5 bg-purple-100 text-purple-600 rounded-lg">
+              <div className="p-2.5 bg-purple-100 text-purple-600 rounded-md">
                 <Mail className="w-5 h-5" />
               </div>
               <div>
@@ -139,7 +139,7 @@ const InstitutionPage: React.FC<InstitutionPageProps> = ({ user }) => {
               </div>
             </div>
             <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-md">
-              <div className="p-2.5 bg-orange-100 text-orange-600 rounded-lg">
+              <div className="p-2.5 bg-orange-100 text-orange-600 rounded-md">
                 <Globe className="w-5 h-5" />
               </div>
               <div>

@@ -47,10 +47,10 @@ const WhyChooseAbout = () => {
             {reasons?.map((item, idx) => (
               <div
                 key={idx}
-                className="flex gap-6 p-8 bg-white border border-border rounded-lg items-start"
+                className="flex gap-6 p-8 bg-white border border-border rounded-md items-start"
               >
                 <div
-                  className={`p-4 rounded-lg ${item.color} ${item.textColor} shrink-0`}
+                  className={`p-4 rounded-md ${item.color} ${item.textColor} shrink-0`}
                 >
                   <item.icon className="size-6" />
                 </div>

@@ -10,11 +10,11 @@ export default function DashboardLayoutLoading() {
         </div>
         <div className="flex-1 px-3 space-y-1">
           {Array.from({ length: 8 }).map((_, i) => (
-            <Skeleton key={i} className="h-10 w-full rounded-lg" />
+            <Skeleton key={i} className="h-10 w-full rounded-md" />
           ))}
         </div>
         <div className="p-4 border-t border-gray-200">
-          <Skeleton className="h-12 w-full rounded-lg" />
+          <Skeleton className="h-12 w-full rounded-md" />
         </div>
       </div>
 
@@ -27,7 +27,7 @@ export default function DashboardLayoutLoading() {
             <div className="flex items-center gap-4">
               <Skeleton className="h-10 w-10 rounded-full" />
               <Skeleton className="h-10 w-10 rounded-full" />
-              <Skeleton className="h-10 w-32 rounded-lg" />
+              <Skeleton className="h-10 w-32 rounded-md" />
             </div>
           </div>
         </div>

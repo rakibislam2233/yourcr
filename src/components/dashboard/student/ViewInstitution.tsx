@@ -114,7 +114,7 @@ const ViewInstitution: React.FC<ViewInstitutionProps> = ({ user }) => {
           </h3>
           <div className="space-y-4">
             <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl">
-              <div className="p-2.5 bg-blue-100 text-blue-600 rounded-lg">
+              <div className="p-2.5 bg-blue-100 text-blue-600 rounded-md">
                 <MapPin className="w-5 h-5" />
               </div>
               <div>
@@ -125,7 +125,7 @@ const ViewInstitution: React.FC<ViewInstitutionProps> = ({ user }) => {
               </div>
             </div>
             <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl">
-              <div className="p-2.5 bg-green-100 text-green-600 rounded-lg">
+              <div className="p-2.5 bg-green-100 text-green-600 rounded-md">
                 <Phone className="w-5 h-5" />
               </div>
               <div>
@@ -136,7 +136,7 @@ const ViewInstitution: React.FC<ViewInstitutionProps> = ({ user }) => {
               </div>
             </div>
             <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl">
-              <div className="p-2.5 bg-purple-100 text-purple-600 rounded-lg">
+              <div className="p-2.5 bg-purple-100 text-purple-600 rounded-md">
                 <Mail className="w-5 h-5" />
               </div>
               <div>
@@ -147,7 +147,7 @@ const ViewInstitution: React.FC<ViewInstitutionProps> = ({ user }) => {
               </div>
             </div>
             <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl">
-              <div className="p-2.5 bg-orange-100 text-orange-600 rounded-lg">
+              <div className="p-2.5 bg-orange-100 text-orange-600 rounded-md">
                 <Globe className="w-5 h-5" />
               </div>
               <div>
@@ -219,7 +219,7 @@ const ViewInstitution: React.FC<ViewInstitutionProps> = ({ user }) => {
       >
         <div className="bg-white rounded-xl p-5 border border-gray-100">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-100 rounded-lg">
+            <div className="p-2 bg-blue-100 rounded-md">
               <GraduationCap className="w-5 h-5 text-blue-600" />
             </div>
             <div>
@@ -232,7 +232,7 @@ const ViewInstitution: React.FC<ViewInstitutionProps> = ({ user }) => {
         </div>
         <div className="bg-white rounded-xl p-5 border border-gray-100">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-green-100 rounded-lg">
+            <div className="p-2 bg-green-100 rounded-md">
               <Building2 className="w-5 h-5 text-green-600" />
             </div>
             <div>
@@ -245,7 +245,7 @@ const ViewInstitution: React.FC<ViewInstitutionProps> = ({ user }) => {
         </div>
         <div className="bg-white rounded-xl p-5 border border-gray-100">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-purple-100 rounded-lg">
+            <div className="p-2 bg-purple-100 rounded-md">
               <Users className="w-5 h-5 text-purple-600" />
             </div>
             <div>
@@ -256,7 +256,7 @@ const ViewInstitution: React.FC<ViewInstitutionProps> = ({ user }) => {
         </div>
         <div className="bg-white rounded-xl p-5 border border-gray-100">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-orange-100 rounded-lg">
+            <div className="p-2 bg-orange-100 rounded-md">
               <Calendar className="w-5 h-5 text-orange-600" />
             </div>
             <div>

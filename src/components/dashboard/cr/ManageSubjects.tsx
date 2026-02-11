@@ -189,13 +189,13 @@ const ManageSubjects: React.FC = () => {
               </div>
               <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                 <Link href={`/dashboard/cr/subjects/${subject.id}/edit`}>
-                  <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                  <button className="p-2 hover:bg-gray-100 rounded-md transition-colors">
                     <Edit className="w-4 h-4 text-gray-500" />
                   </button>
                 </Link>
                 <button
                   onClick={() => handleDelete(subject)}
-                  className="p-2 hover:bg-red-50 rounded-lg transition-colors"
+                  className="p-2 hover:bg-red-50 rounded-md transition-colors"
                 >
                   <Trash2 className="w-4 h-4 text-red-500" />
                 </button>

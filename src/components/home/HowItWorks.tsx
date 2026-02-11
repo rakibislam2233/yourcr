@@ -87,17 +87,17 @@ const HowItWorks = () => {
 
         {/* Tab Navigation */}
         <div className="flex justify-center mb-12">
-          <div className="bg-white p-1 rounded-lg border border-gray-100 inline-flex">
+          <div className="bg-white p-1 rounded-md border border-gray-100 inline-flex">
             <button
               onClick={() => setActiveTab("students")}
-              className={`relative px-8 py-3 cursor-pointer rounded-lg text-sm font-semibold transition-all duration-300 ${
+              className={`relative px-8 py-3 cursor-pointer rounded-md text-sm font-semibold transition-all duration-300 ${
                 activeTab === "students" ? "text-white" : "text-gray-600"
               }`}
             >
               {activeTab === "students" && (
                 <motion.div
                   layoutId="activeTab"
-                  className="absolute inset-0 bg-primary rounded-lg"
+                  className="absolute inset-0 bg-primary rounded-md"
                   transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                 />
               )}
@@ -108,14 +108,14 @@ const HowItWorks = () => {
             </button>
             <button
               onClick={() => setActiveTab("reps")}
-              className={`relative px-8 py-3 cursor-pointer rounded-lg text-sm font-semibold transition-all duration-300 ${
+              className={`relative px-8 py-3 cursor-pointer rounded-md text-sm font-semibold transition-all duration-300 ${
                 activeTab === "reps" ? "text-white" : "text-gray-600"
               }`}
             >
               {activeTab === "reps" && (
                 <motion.div
                   layoutId="activeTab"
-                  className="absolute inset-0 bg-primary rounded-lg"
+                  className="absolute inset-0 bg-primary rounded-md"
                   transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                 />
               )}

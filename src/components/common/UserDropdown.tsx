@@ -23,7 +23,7 @@ import React from "react";
 import { toast } from "sonner";
 
 interface UserDropdownProps {
-  user: UserProfile ;
+  user: UserProfile;
   dashboardHref: string;
   theme?: "default" | "emerald";
 }
@@ -110,7 +110,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({
           <DropdownMenuItem
             onClick={() => router.push(dashboardHref)}
             className={cn(
-              "px-2 py-2.5 text-sm font-semibold text-gray-700 rounded-lg cursor-pointer flex items-center gap-2 transition-colors focus:text-white",
+              "px-2 py-2.5 text-sm font-semibold text-gray-700 rounded-md cursor-pointer flex items-center gap-2 transition-colors focus:text-white",
               isEmerald ? "focus:bg-emerald-600" : "focus:bg-primary",
             )}
           >
@@ -120,7 +120,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({
           <DropdownMenuItem
             onClick={() => router.push(`${dashboardHref}/profile`)}
             className={cn(
-              "px-2 py-2.5 text-sm font-semibold text-gray-700 rounded-lg cursor-pointer flex items-center gap-2 transition-colors focus:text-white",
+              "px-2 py-2.5 text-sm font-semibold text-gray-700 rounded-md cursor-pointer flex items-center gap-2 transition-colors focus:text-white",
               isEmerald ? "focus:bg-emerald-600" : "focus:bg-primary",
             )}
           >
@@ -130,7 +130,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({
           <DropdownMenuSeparator className="bg-gray-50" />
           <DropdownMenuItem
             onClick={handleLogout}
-            className="px-2 py-2.5 text-sm font-bold text-red-600 focus:bg-red-50 focus:text-red-600 rounded-lg cursor-pointer flex items-center gap-2 transition-colors"
+            className="px-2 py-2.5 text-sm font-bold text-red-600 focus:bg-red-50 focus:text-red-600 rounded-md cursor-pointer flex items-center gap-2 transition-colors"
           >
             <LogOut className="w-4 h-4" />
             Sign Out

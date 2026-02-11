@@ -7,6 +7,7 @@ import { Calendar, FileText, FileUp, Inbox, PencilLine } from "lucide-react";
 import React, { useCallback, useState } from "react";
 import { toast } from "sonner";
 import PageHeader from "../shared/PageHeader";
+import Image from "next/image";
 
 type RoutineType = "class" | "exam";
 
@@ -164,10 +165,12 @@ const ManageRoutine: React.FC = () => {
             className="bg-white rounded-2xl border border-blue-50 p-6 shadow-sm overflow-hidden min-h-[600px] w-full flex flex-col items-center"
           >
             {routines[activeTab]?.type === "image" ? (
-              <img
+              <Image
                 src={routines[activeTab]?.url}
                 alt="Routine"
-                className="max-w-full h-auto rounded-lg shadow-sm"
+                width={1000}
+                height={1000}
+                className="max-w-full h-auto rounded-md shadow-sm"
               />
             ) : (
               <div className="w-full h-[500px] bg-white rounded-xl overflow-hidden border border-gray-100 shadow-lg">
@@ -207,7 +210,7 @@ const ManageRoutine: React.FC = () => {
         <div className="pt-4 flex justify-start">
           <Button
             onClick={() => setIsUploading(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-bold h-12 px-8 rounded-lg flex gap-2 shadow-lg shadow-blue-500/20 active:scale-95 transition-all"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-bold h-12 px-8 rounded-md flex gap-2 shadow-lg shadow-blue-500/20 active:scale-95 transition-all"
           >
             <PencilLine className="w-5 h-5" />
             Update Routine

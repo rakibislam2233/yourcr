@@ -94,7 +94,7 @@ const StatsSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
-              className="flex-1 min-w-[200px] max-w-[280px] flex flex-col items-center text-center py-6 px-4 border border-gray-100 rounded-lg hover:border-primary transition-all duration-300 cursor-pointer"
+              className="flex-1 min-w-[200px] max-w-[280px] flex flex-col items-center text-center py-6 px-4 border border-gray-100 rounded-md hover:border-primary transition-all duration-300 cursor-pointer"
             >
               <div className="mb-4 p-3 rounded-2xl bg-slate-50 border border-slate-100 text-primary">
                 <stat.icon className="w-6 h-6 sm:w-8 sm:h-8" />

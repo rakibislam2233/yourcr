@@ -329,17 +329,17 @@ const ManageStudents: React.FC = () => {
                   </td>
                   <td className="px-6 py-4 text-right">
                     <div className="flex items-center justify-end gap-1">
-                      <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                      <button className="p-2 hover:bg-gray-100 rounded-md transition-colors">
                         <Mail className="w-4 h-4 text-gray-500" />
                       </button>
                       <Link href={`/dashboard/cr/students/${student.id}/edit`}>
-                        <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                        <button className="p-2 hover:bg-gray-100 rounded-md transition-colors">
                           <Edit className="w-4 h-4 text-gray-500" />
                         </button>
                       </Link>
                       <button
                         onClick={() => handleDelete(student)}
-                        className="p-2 hover:bg-red-50 rounded-lg transition-colors"
+                        className="p-2 hover:bg-red-50 rounded-md transition-colors"
                       >
                         <Trash2 className="w-4 h-4 text-red-500" />
                       </button>

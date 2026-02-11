@@ -15,6 +15,7 @@ import {
   type TeacherActionState,
 } from "@/services/teacher.service";
 import { BookOpen, Building2, Mail, Phone, Plus, User, X } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useActionState, useEffect, useState } from "react";
@@ -282,10 +283,12 @@ const AddTeacherForm = () => {
             />
             {photoPreview && (
               <div className="mt-2">
-                <img
+                <Image
                   src={photoPreview}
                   alt="Preview"
-                  className="w-24 h-24 object-cover rounded-lg border border-gray-200"
+                  width={96}
+                  height={96}
+                  className="object-cover rounded-md border border-gray-200"
                 />
               </div>
             )}
@@ -327,7 +330,7 @@ const AddTeacherForm = () => {
                 {subjects.map((subject) => (
                   <span
                     key={subject}
-                    className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/5 text-primary text-sm font-medium rounded-lg"
+                    className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/5 text-primary text-sm font-medium rounded-md"
                   >
                     {subject}
                     <button

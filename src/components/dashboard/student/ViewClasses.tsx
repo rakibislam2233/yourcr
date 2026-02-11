@@ -1,17 +1,17 @@
 "use client";
 
-import React from "react";
+import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import {
-  Video,
   Calendar,
   Clock,
-  Users,
   ExternalLink,
   Play,
+  Users,
+  Video,
 } from "lucide-react";
+import React from "react";
 import PageHeader from "../shared/PageHeader";
-import { Button } from "@/components/ui/button";
 
 const upcomingClasses = [
   {
@@ -123,8 +123,8 @@ const ViewClasses: React.FC = () => {
                       cls.status === "live"
                         ? "bg-red-100"
                         : cls.status === "upcoming"
-                        ? "bg-green-100"
-                        : "bg-gray-100"
+                          ? "bg-green-100"
+                          : "bg-gray-100"
                     }`}
                   >
                     <Video
@@ -132,8 +132,8 @@ const ViewClasses: React.FC = () => {
                         cls.status === "live"
                           ? "text-red-600"
                           : cls.status === "upcoming"
-                          ? "text-green-600"
-                          : "text-gray-600"
+                            ? "text-green-600"
+                            : "text-gray-600"
                       }`}
                     />
                   </div>
@@ -169,7 +169,7 @@ const ViewClasses: React.FC = () => {
                   </div>
                 </div>
                 <div className="flex items-center gap-2 pl-14 lg:pl-0">
-                  <span className="px-3 py-1.5 bg-gray-100 rounded-lg text-sm text-gray-600">
+                  <span className="px-3 py-1.5 bg-gray-100 rounded-md text-sm text-gray-600">
                     {cls.platform}
                   </span>
                   <Button
@@ -182,8 +182,8 @@ const ViewClasses: React.FC = () => {
                     {cls.status === "live"
                       ? "Join Now"
                       : cls.status === "upcoming"
-                      ? "Join"
-                      : "Scheduled"}
+                        ? "Join"
+                        : "Scheduled"}
                   </Button>
                 </div>
               </div>

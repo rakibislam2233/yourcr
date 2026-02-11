@@ -23,9 +23,9 @@ export function SearchFilterSkeleton() {
   return (
     <div className="bg-white rounded-xl border border-gray-100 p-4">
       <div className="flex flex-col md:flex-row gap-4">
-        <Skeleton className="flex-1 h-11 rounded-lg" />
-        <Skeleton className="min-w-[180px] h-11 rounded-lg" />
-        <Skeleton className="min-w-[180px] h-11 rounded-lg" />
+        <Skeleton className="flex-1 h-11 rounded-md" />
+        <Skeleton className="min-w-[180px] h-11 rounded-md" />
+        <Skeleton className="min-w-[180px] h-11 rounded-md" />
       </div>
     </div>
   );
@@ -48,8 +48,8 @@ export function CardGridSkeleton({ count = 6 }: { count?: number }) {
             </div>
           </div>
           <div className="mt-5 space-y-3">
-            <Skeleton className="h-10 w-full rounded-lg" />
-            <Skeleton className="h-10 w-full rounded-lg" />
+            <Skeleton className="h-10 w-full rounded-md" />
+            <Skeleton className="h-10 w-full rounded-md" />
           </div>
           <div className="mt-5 pt-5 border-t border-gray-100">
             <Skeleton className="h-4 w-20 mb-2" />
@@ -81,8 +81,8 @@ export function TableSkeleton({ rows = 5 }: { rows?: number }) {
               <Skeleton className="h-4 w-48" />
               <Skeleton className="h-3 w-32" />
             </div>
-            <Skeleton className="h-8 w-20 rounded-lg" />
-            <Skeleton className="h-8 w-20 rounded-lg" />
+            <Skeleton className="h-8 w-20 rounded-md" />
+            <Skeleton className="h-8 w-20 rounded-md" />
           </div>
         ))}
       </div>
@@ -142,7 +142,7 @@ export function ListSkeleton({ count = 5 }: { count?: number }) {
             <Skeleton className="h-4 w-64" />
             <Skeleton className="h-3 w-32" />
           </div>
-          <Skeleton className="h-8 w-24 rounded-lg" />
+          <Skeleton className="h-8 w-24 rounded-md" />
         </div>
       ))}
     </div>

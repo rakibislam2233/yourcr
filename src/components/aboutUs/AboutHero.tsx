@@ -29,13 +29,13 @@ const AboutHero = () => {
             </div>
           </div>
           <div className="flex-1 w-full max-w-2xl">
-            <div className="relative p-1 border border-primary/10 rounded-lg bg-white">
+            <div className="relative p-1 border border-primary/10 rounded-md bg-white">
               <Image
                 src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
                 alt="Students collaborating"
                 width={800}
                 height={600}
-                className="rounded-lg object-cover w-full aspect-4/3"
+                className="rounded-md object-cover w-full aspect-4/3"
                 priority
               />
             </div>

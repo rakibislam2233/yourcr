@@ -205,7 +205,7 @@ const ManageClasses: React.FC = () => {
                   </div>
                 </div>
                 <div className="flex items-center gap-2 pl-14 lg:pl-0">
-                  <div className="flex items-center gap-2 px-3 py-2 bg-gray-100 rounded-lg">
+                  <div className="flex items-center gap-2 px-3 py-2 bg-gray-100 rounded-md">
                     <LinkIcon className="w-4 h-4 text-gray-500" />
                     <span className="text-sm text-gray-600">
                       {cls.platform}

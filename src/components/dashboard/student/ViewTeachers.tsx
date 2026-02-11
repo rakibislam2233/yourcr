@@ -1,10 +1,10 @@
 "use client";
 
-import React from "react";
-import { motion } from "framer-motion";
-import { Users, Mail, Phone, BookOpen, Search } from "lucide-react";
-import PageHeader from "../shared/PageHeader";
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+import { BookOpen, Mail, Phone, Search, Users } from "lucide-react";
+import React from "react";
+import PageHeader from "../shared/PageHeader";
 
 const teachers = [
   {
@@ -89,9 +89,7 @@ const ViewTeachers: React.FC = () => {
       />
 
       {/* Search */}
-      <motion.div
-        className="relative max-w-md"
-      >
+      <motion.div className="relative max-w-md">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
         <input
           type="text"
@@ -126,13 +124,13 @@ const ViewTeachers: React.FC = () => {
 
             <div className="mt-5 space-y-3">
               <div className="flex items-center gap-3 text-sm text-gray-600">
-                <div className="p-2 bg-gray-50 rounded-lg">
+                <div className="p-2 bg-gray-50 rounded-md">
                   <Mail className="w-4 h-4 text-gray-400" />
                 </div>
                 <span className="truncate">{teacher.email}</span>
               </div>
               <div className="flex items-center gap-3 text-sm text-gray-600">
-                <div className="p-2 bg-gray-50 rounded-lg">
+                <div className="p-2 bg-gray-50 rounded-md">
                   <Phone className="w-4 h-4 text-gray-400" />
                 </div>
                 <span>{teacher.phone}</span>

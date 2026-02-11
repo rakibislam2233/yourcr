@@ -1,18 +1,18 @@
 "use client";
 
-import React from "react";
 import { motion } from "framer-motion";
 import {
-  Bell,
-  ClipboardList,
-  Video,
-  Clock,
+  AlertCircle,
   ArrowRight,
+  Bell,
   BookOpen,
   CheckCircle,
-  AlertCircle,
+  ClipboardList,
+  Clock,
+  Video,
 } from "lucide-react";
 import Link from "next/link";
+import React from "react";
 import StatsCard from "../shared/StatsCard";
 
 const upcomingItems = [
@@ -138,9 +138,7 @@ const StudentHome: React.FC = () => {
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Today's Schedule */}
-        <motion.div
-          className="lg:col-span-2 bg-white rounded-2xl p-6 border border-gray-100"
-        >
+        <motion.div className="lg:col-span-2 bg-white rounded-2xl p-6 border border-gray-100">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold text-gray-900">
               Today&apos;s Schedule
@@ -177,9 +175,7 @@ const StudentHome: React.FC = () => {
         </motion.div>
 
         {/* Recent Notices */}
-        <motion.div
-          className="bg-white rounded-2xl p-6 border border-gray-100"
-        >
+        <motion.div className="bg-white rounded-2xl p-6 border border-gray-100">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold text-gray-900">
               Recent Notices
@@ -199,12 +195,12 @@ const StudentHome: React.FC = () => {
               >
                 <div className="flex items-start gap-3">
                   <div
-                    className={`p-1.5 rounded-lg ${
+                    className={`p-1.5 rounded-md ${
                       notice.type === "important"
                         ? "bg-red-100"
                         : notice.type === "alert"
-                        ? "bg-orange-100"
-                        : "bg-blue-100"
+                          ? "bg-orange-100"
+                          : "bg-blue-100"
                     }`}
                   >
                     {notice.type === "important" ? (
@@ -229,9 +225,7 @@ const StudentHome: React.FC = () => {
       </div>
 
       {/* Today's Classes Timeline */}
-      <motion.div
-        className="bg-white rounded-2xl p-6 border border-gray-100"
-      >
+      <motion.div className="bg-white rounded-2xl p-6 border border-gray-100">
         <h2 className="text-lg font-semibold text-gray-900 mb-6">
           Class Timeline
         </h2>
@@ -239,10 +233,7 @@ const StudentHome: React.FC = () => {
           <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200" />
           <div className="space-y-6">
             {todayClasses.map((cls, index) => (
-              <motion.div
-                key={index}
-                className="flex items-center gap-4 pl-2"
-              >
+              <motion.div key={index} className="flex items-center gap-4 pl-2">
                 <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center z-10">
                   <div className="w-2 h-2 rounded-full bg-white" />
                 </div>

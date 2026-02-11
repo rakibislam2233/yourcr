@@ -16,10 +16,10 @@ const AboutPurpose = () => {
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
-          <div className="p-10 bg-primary/5 rounded-lg border border-primary/10 relative overflow-hidden group">
+          <div className="p-10 bg-primary/5 rounded-md border border-primary/10 relative overflow-hidden group">
             <div className="absolute top-0 right-0 p-12 bg-primary/5 rounded-full -mr-16 -mt-16" />
             <div className="relative z-10 space-y-6">
-              <div className="p-4 bg-primary text-white rounded-lg w-fit">
+              <div className="p-4 bg-primary text-white rounded-md w-fit">
                 <Target className="size-8" />
               </div>
               <h3 className="text-3xl font-bold text-secondary">Our Mission</h3>
@@ -31,10 +31,10 @@ const AboutPurpose = () => {
             </div>
           </div>
 
-          <div className="p-10 bg-secondary/5 rounded-lg border border-secondary/10 relative overflow-hidden group">
+          <div className="p-10 bg-secondary/5 rounded-md border border-secondary/10 relative overflow-hidden group">
             <div className="absolute top-0 right-0 p-12 bg-secondary/5 rounded-full -mr-16 -mt-16" />
             <div className="relative z-10 space-y-6">
-              <div className="p-4 bg-secondary text-white rounded-lg w-fit">
+              <div className="p-4 bg-secondary text-white rounded-md w-fit">
                 <Eye className="size-8" />
               </div>
               <h3 className="text-3xl font-bold text-secondary">Our Vision</h3>

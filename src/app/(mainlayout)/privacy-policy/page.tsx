@@ -112,7 +112,7 @@ YourCR does not knowingly collect any Personal Identifiable Information from chi
           {sections.map((section, idx) => (
             <div key={idx} id={`section-${idx}`} className="scroll-mt-24">
               <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4 flex items-center gap-3">
-                <span className="w-8 h-8 bg-primary/10 rounded-lg text-sm flex items-center justify-center text-primary font-medium">
+                <span className="w-8 h-8 bg-primary/10 rounded-md text-sm flex items-center justify-center text-primary font-medium">
                   {idx + 1}
                 </span>
                 {section.title}

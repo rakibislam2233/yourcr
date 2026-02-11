@@ -1,19 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
+import { ActionState } from "@/interface/action-state.interface";
 import { api } from "@/services/api";
 import { contactValidationSchema } from "@/validation/contact.validation";
-export type ContactActionState = {
-  success: boolean;
-  message: string;
-  errors?: Record<string, string[]>;
-  inputs?: {
-    fullName?: string;
-    email?: string;
-    phone?: string;
-    description?: string;
-  };
-  data?: unknown;
+
+export type ContactInputs = {
+  fullName?: string;
+  email?: string;
+  phone?: string;
+  description?: string;
 };
+
+export type ContactActionState = ActionState<ContactInputs>;
 
 export async function submitContactForm(
   prevState: ContactActionState,

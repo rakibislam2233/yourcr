@@ -19,7 +19,7 @@ const page = () => {
 
       {/* Main Form Section */}
       <div className="w-full container mx-auto px-4 sm:px-6">
-        <div className="bg-white rounded-lg border border-gray-100 overflow-hidden">
+        <div className="bg-white rounded-md border border-gray-100 overflow-hidden">
           <div className="grid md:grid-cols-2 gap-0">
             <Image
               src={contactUsImage}
@@ -35,7 +35,7 @@ const page = () => {
         {/* Bottom Contact Info Chips */}
         <div className="mt-16 flex flex-col md:flex-row justify-center gap-4 md:gap-8">
           {/* Contact Chips */}
-          <div className="w-full border border-[#DBEAFE] p-5 rounded-lg flex items-center gap-3">
+          <div className="w-full border border-[#DBEAFE] p-5 rounded-md flex items-center gap-3">
             <div className="size-12 flex justify-center items-center rounded-full bg-[#DBEAFE]">
               <MdEmail className="size-5 text-primary" />
             </div>
@@ -49,7 +49,7 @@ const page = () => {
             </div>
           </div>
           {/* Contact Chips */}
-          <div className="w-full border border-[#DBEAFE] p-5 rounded-lg flex items-center gap-3">
+          <div className="w-full border border-[#DBEAFE] p-5 rounded-md flex items-center gap-3">
             <div className="size-12 flex justify-center items-center rounded-full bg-[#DBEAFE]">
               <MdLocationOn className="size-5 text-primary" />
             </div>
@@ -63,7 +63,7 @@ const page = () => {
             </div>
           </div>
           {/* Contact Chips */}
-          <div className="w-full border border-[#DBEAFE] p-5 rounded-lg flex items-center gap-3">
+          <div className="w-full border border-[#DBEAFE] p-5 rounded-md flex items-center gap-3">
             <div className="size-12 flex justify-center items-center rounded-full bg-[#DBEAFE]">
               <PhoneCall className="size-5 text-primary" />
             </div>

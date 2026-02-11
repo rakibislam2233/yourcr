@@ -48,7 +48,7 @@ const NavbarMobileMenu: React.FC<NavbarMobileMenuProps> = ({
     <>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors"
+        className="md:hidden p-2 rounded-md text-gray-700 hover:bg-gray-100 transition-colors"
         aria-label={isOpen ? "Close menu" : "Open menu"}
       >
         {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -67,7 +67,7 @@ const NavbarMobileMenu: React.FC<NavbarMobileMenuProps> = ({
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    "block px-4 py-3 rounded-lg text-sm font-medium transition-colors",
+                    "block px-4 py-3 rounded-md text-sm font-medium transition-colors",
                     {
                       "text-primary bg-primary/10": isActiveLink(link.href),
                       "text-gray-700 hover:bg-gray-100": !isActiveLink(

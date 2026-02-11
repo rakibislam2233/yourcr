@@ -1,12 +1,11 @@
-
 import {
-    Bell,
-    Calendar,
-    FileText,
-    MessageCircle,
-    Network,
-    Sparkles,
-    Users,
+  Bell,
+  Calendar,
+  FileText,
+  MessageCircle,
+  Network,
+  Sparkles,
+  Users,
 } from "lucide-react";
 
 const features = [
@@ -65,7 +64,7 @@ const WhyChooseUs = () => {
 
       <div className="relative z-10 w-full container mx-auto px-4 sm:px-6 lg:px-8 text-center">
         {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 bg-primary/10 border border-primary rounded-lg mx-auto mb-8 sm:mb-10">
+        <div className="inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 bg-primary/10 border border-primary rounded-md mx-auto mb-8 sm:mb-10">
           <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
           <span className="text-primary font-semibold text-xs sm:text-sm">
             Key Features
@@ -94,7 +93,7 @@ const WhyChooseUs = () => {
                 className="group relative bg-white border border-gray-100 rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-8 text-left hover:bg-primary/5 transition-colors duration-300 hover:border-primary "
               >
                 <div
-                  className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 ${feature.bg} rounded-lg sm:rounded-xl flex items-center justify-center mb-4 sm:mb-5 group-hover:scale-105 transition-transform duration-300`}
+                  className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 ${feature.bg} rounded-md sm:rounded-xl flex items-center justify-center mb-4 sm:mb-5 group-hover:scale-105 transition-transform duration-300`}
                 >
                   <Icon
                     className={`w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 ${feature.color}`}

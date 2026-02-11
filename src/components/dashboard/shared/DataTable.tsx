@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
 import { motion } from "framer-motion";
-import { Search, Filter, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Filter, Search } from "lucide-react";
+import React from "react";
 
 interface Column<T> {
   key: keyof T | string;
@@ -105,7 +105,7 @@ function DataTable<T extends Record<string, unknown>>({
             <button
               onClick={() => onPageChange?.(currentPage - 1)}
               disabled={currentPage <= 1}
-              className="p-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="p-2 rounded-md border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
@@ -113,7 +113,7 @@ function DataTable<T extends Record<string, unknown>>({
               <button
                 key={i}
                 onClick={() => onPageChange?.(i + 1)}
-                className={`w-9 h-9 rounded-lg text-sm font-medium transition-colors ${
+                className={`w-9 h-9 rounded-md text-sm font-medium transition-colors ${
                   currentPage === i + 1
                     ? "bg-primary text-white"
                     : "border border-gray-200 text-gray-600 hover:bg-gray-50"
@@ -125,7 +125,7 @@ function DataTable<T extends Record<string, unknown>>({
             <button
               onClick={() => onPageChange?.(currentPage + 1)}
               disabled={currentPage >= totalPages}
-              className="p-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="p-2 rounded-md border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               <ChevronRight className="w-4 h-4" />
             </button>

@@ -116,7 +116,7 @@ export default function LogoUploadField({ defaultLogo }: LogoUploadFieldProps) {
                     .querySelector<HTMLInputElement>('input[name="logo"]')
                     ?.click();
                 }}
-                className="px-4 py-2 bg-white text-gray-900 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors flex items-center gap-2"
+                className="px-4 py-2 bg-white text-gray-900 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors flex items-center gap-2"
               >
                 <UploadCloud className="w-4 h-4" />
                 Change Logo
@@ -124,7 +124,7 @@ export default function LogoUploadField({ defaultLogo }: LogoUploadFieldProps) {
               <button
                 type="button"
                 onClick={handleDelete}
-                className="px-4 py-2 bg-red-500 text-white rounded-lg text-sm font-medium hover:bg-red-600 transition-colors flex items-center gap-2"
+                className="px-4 py-2 bg-red-500 text-white rounded-md text-sm font-medium hover:bg-red-600 transition-colors flex items-center gap-2"
               >
                 <Trash2 className="w-4 h-4" />
                 Delete

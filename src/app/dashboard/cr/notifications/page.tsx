@@ -31,7 +31,8 @@ const mockNotifications: Notification[] = [
   {
     id: 1,
     title: "New student issue",
-    message: "Rahul submitted a new issue about exam schedule. Please review and respond.",
+    message:
+      "Rahul submitted a new issue about exam schedule. Please review and respond.",
     time: "5 min ago",
     date: "Today",
     type: "issue",
@@ -40,7 +41,8 @@ const mockNotifications: Notification[] = [
   {
     id: 2,
     title: "Class reminder",
-    message: "Database class starts in 30 minutes. Room: 301, Teacher: Md. Karim",
+    message:
+      "Database class starts in 30 minutes. Room: 301, Teacher: Md. Karim",
     time: "25 min ago",
     date: "Today",
     type: "reminder",
@@ -49,7 +51,8 @@ const mockNotifications: Notification[] = [
   {
     id: 3,
     title: "Assessment deadline",
-    message: "Mid-term exam schedule has been published. Check the assessments page for details.",
+    message:
+      "Mid-term exam schedule has been published. Check the assessments page for details.",
     time: "1 hour ago",
     date: "Today",
     type: "assessment",
@@ -67,7 +70,8 @@ const mockNotifications: Notification[] = [
   {
     id: 5,
     title: "Important Notice",
-    message: "Holiday announcement: Institute will remain closed on 15th December for Victory Day.",
+    message:
+      "Holiday announcement: Institute will remain closed on 15th December for Victory Day.",
     time: "3 hours ago",
     date: "Today",
     type: "alert",
@@ -76,7 +80,8 @@ const mockNotifications: Notification[] = [
   {
     id: 6,
     title: "Assignment submission",
-    message: "15 students have submitted the Database Assignment. 30 submissions pending.",
+    message:
+      "15 students have submitted the Database Assignment. 30 submissions pending.",
     time: "5 hours ago",
     date: "Today",
     type: "assessment",
@@ -94,7 +99,8 @@ const mockNotifications: Notification[] = [
   {
     id: 8,
     title: "Routine updated",
-    message: "Thursday's routine has been updated. New class added at 11:00 AM.",
+    message:
+      "Thursday's routine has been updated. New class added at 11:00 AM.",
     time: "Yesterday",
     date: "Yesterday",
     type: "reminder",
@@ -103,7 +109,8 @@ const mockNotifications: Notification[] = [
   {
     id: 9,
     title: "Quiz results published",
-    message: "Web Technology quiz results have been published. Average score: 78%",
+    message:
+      "Web Technology quiz results have been published. Average score: 78%",
     time: "2 days ago",
     date: "Dec 1, 2024",
     type: "assessment",
@@ -162,7 +169,8 @@ export default function NotificationsPage() {
     const matchesSearch =
       notification.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       notification.message.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesType = filterType === "all" || notification.type === filterType;
+    const matchesType =
+      filterType === "all" || notification.type === filterType;
     const matchesRead =
       filterRead === "all" ||
       (filterRead === "unread" && notification.unread) ||
@@ -172,7 +180,7 @@ export default function NotificationsPage() {
 
   const markAsRead = (id: number) => {
     setNotifications(
-      notifications.map((n) => (n.id === id ? { ...n, unread: false } : n))
+      notifications.map((n) => (n.id === id ? { ...n, unread: false } : n)),
     );
   };
 
@@ -185,14 +193,17 @@ export default function NotificationsPage() {
   };
 
   // Group notifications by date
-  const groupedNotifications = filteredNotifications.reduce((groups, notification) => {
-    const date = notification.date;
-    if (!groups[date]) {
-      groups[date] = [];
-    }
-    groups[date].push(notification);
-    return groups;
-  }, {} as Record<string, Notification[]>);
+  const groupedNotifications = filteredNotifications.reduce(
+    (groups, notification) => {
+      const date = notification.date;
+      if (!groups[date]) {
+        groups[date] = [];
+      }
+      groups[date].push(notification);
+      return groups;
+    },
+    {} as Record<string, Notification[]>,
+  );
 
   return (
     <div className="space-y-6">
@@ -218,18 +229,20 @@ export default function NotificationsPage() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-white rounded-xl border border-gray-100 p-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-100 rounded-lg">
+            <div className="p-2 bg-blue-100 rounded-md">
               <Bell className="w-5 h-5 text-blue-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">{notifications.length}</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {notifications.length}
+              </p>
               <p className="text-sm text-gray-500">Total Notifications</p>
             </div>
           </div>
         </div>
         <div className="bg-white rounded-xl border border-gray-100 p-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-orange-100 rounded-lg">
+            <div className="p-2 bg-orange-100 rounded-md">
               <AlertCircle className="w-5 h-5 text-orange-600" />
             </div>
             <div>
@@ -240,7 +253,7 @@ export default function NotificationsPage() {
         </div>
         <div className="bg-white rounded-xl border border-gray-100 p-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-green-100 rounded-lg">
+            <div className="p-2 bg-green-100 rounded-md">
               <Check className="w-5 h-5 text-green-600" />
             </div>
             <div>
@@ -269,7 +282,7 @@ export default function NotificationsPage() {
             <select
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}
-              className="px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+              className="px-4 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
             >
               <option value="all">All Types</option>
               <option value="issue">Issues</option>
@@ -281,7 +294,7 @@ export default function NotificationsPage() {
             <select
               value={filterRead}
               onChange={(e) => setFilterRead(e.target.value)}
-              className="px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+              className="px-4 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
             >
               <option value="all">All Status</option>
               <option value="unread">Unread</option>
@@ -316,10 +329,14 @@ export default function NotificationsPage() {
                     <div
                       key={notification.id}
                       className={`p-4 flex items-start gap-4 ${
-                        index !== items.length - 1 ? "border-b border-gray-100" : ""
+                        index !== items.length - 1
+                          ? "border-b border-gray-100"
+                          : ""
                       } ${notification.unread ? "bg-blue-50/50" : ""}`}
                     >
-                      <div className={`p-2.5 rounded-lg ${getTypeColor(notification.type)}`}>
+                      <div
+                        className={`p-2.5 rounded-md ${getTypeColor(notification.type)}`}
+                      >
                         <Icon className="w-5 h-5" />
                       </div>
                       <div className="flex-1 min-w-0">
@@ -344,15 +361,17 @@ export default function NotificationsPage() {
                             {notification.unread && (
                               <button
                                 onClick={() => markAsRead(notification.id)}
-                                className="p-2 text-gray-400 hover:text-primary hover:bg-primary/10 rounded-lg transition-colors"
+                                className="p-2 text-gray-400 hover:text-primary hover:bg-primary/10 rounded-md transition-colors"
                                 title="Mark as read"
                               >
                                 <Check className="w-4 h-4" />
                               </button>
                             )}
                             <button
-                              onClick={() => deleteNotification(notification.id)}
-                              className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                              onClick={() =>
+                                deleteNotification(notification.id)
+                              }
+                              className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
                               title="Delete"
                             >
                               <Trash2 className="w-4 h-4" />

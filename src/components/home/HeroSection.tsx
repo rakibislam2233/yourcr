@@ -38,13 +38,13 @@ const HeroSection: React.FC = () => {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
             <Link href="/auth/cr-register">
-              <Button variant="default" size="lg" className="cursor-pointer">
+              <Button variant="default" className="px-5 h-12">
                 Register as CR
               </Button>
             </Link>
 
             <Link href="#how-it-works">
-              <Button variant="outline" size="lg" className="cursor-pointer">
+              <Button variant="outline" className="px-5 h-12">
                 How It Works
               </Button>
             </Link>

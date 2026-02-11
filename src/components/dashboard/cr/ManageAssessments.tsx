@@ -257,7 +257,7 @@ const ManageAssessments: React.FC = () => {
                       {assessment.subject}
                     </p>
                     <div className="flex items-center gap-4 mt-3 text-sm text-gray-500 flex-wrap">
-                      <span className="px-2 py-1 bg-gray-100 rounded-lg font-medium">
+                      <span className="px-2 py-1 bg-gray-100 rounded-md font-medium">
                         {assessment.type}
                       </span>
                       <span className="flex items-center gap-1">
