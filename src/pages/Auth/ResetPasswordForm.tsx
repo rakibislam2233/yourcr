@@ -2,20 +2,22 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { resetPassword } from "@/services/auth.service";
+import { resetPassword, type ActionState } from "@/services/auth.service";
 import { Eye, EyeOff, Lock } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 
-const initialState = {
+const initialState: ActionState = {
   success: false,
   message: "",
+  errors: undefined,
   inputs: {
     password: "",
     confirmPassword: "",
     token: "",
   },
+  timestamp: 0,
 };
 
 const ResetPasswordForm = () => {

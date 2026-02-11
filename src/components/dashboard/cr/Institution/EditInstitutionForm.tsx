@@ -9,7 +9,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { updateInstitutionBatch } from "@/services/user.service";
+import {
+  updateInstitutionBatch,
+  type ActionState,
+} from "@/services/user.service";
 import {
   BookOpen,
   CalendarDays,
@@ -29,9 +32,11 @@ import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 import LogoUploadField from "./LogoUploadField";
 
-const initialState = {
+const initialState: ActionState = {
   success: false,
   message: "",
+  errors: undefined,
+  inputs: undefined,
   data: null,
   timestamp: Date.now(),
 };

@@ -2,26 +2,20 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { registerCr } from "@/services/auth.service";
+import { registerCr, type ActionState } from "@/services/auth.service";
 import { ArrowRight, Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 import StepIndicator from "./StepIndicator";
-interface ActionState {
-  success: boolean;
-  message: string;
-  errors?: Record<string, string[]>;
-  inputs?: Record<string, string | number | boolean | undefined | null>;
-  timestamp?: number;
-}
 
 const initialState: ActionState = {
   success: false,
   message: "",
   errors: {},
   inputs: {},
+  timestamp: 0,
 };
 
 const CrRegisterForm = () => {

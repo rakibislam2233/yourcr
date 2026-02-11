@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
+import {
+  createTeacherSchema,
+  updateTeacherSchema,
+} from "@/validation/teacher.validation";
 import { revalidatePath } from "next/cache";
 import { api } from "./api";
 
@@ -19,6 +22,15 @@ export interface Teacher {
   createdAt: string;
   updatedAt: string;
 }
+
+export type ActionState = {
+  success: boolean;
+  message: string;
+  errors?: Record<string, string[]>;
+  inputs?: any;
+  data?: any;
+  timestamp?: number;
+};
 
 // Get all teachers with caching
 export async function getAllTeachers(searchParams?: Record<string, string>) {
@@ -43,25 +55,34 @@ export async function getTeacherById(id: string) {
 }
 
 // Create teacher action
-export async function createTeacher(prevState: any, formData: FormData) {
+export async function createTeacher(
+  prevState: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const values = Object.fromEntries(formData.entries());
+  const parsed = createTeacherSchema.safeParse(values);
+
+  if (!parsed.success) {
+    return {
+      success: false,
+      message: "Invalid fields",
+      errors: parsed.error.flatten().fieldErrors,
+      inputs: values,
+      timestamp: Date.now(),
+    };
+  }
+
   try {
-    // Prepare FormData with proper structure
+    // Prepare FormData with proper structure for API which might expect ACTUAL FormData for file upload
     const finalFormData = new FormData();
 
     // Add text fields
-    const name = formData.get("name");
-    const designation = formData.get("designation");
-    const department = formData.get("department");
-    const email = formData.get("email");
-    const phone = formData.get("phone");
-    const subjects = formData.get("subjects");
+    Object.keys(parsed.data).forEach((key) => {
+      finalFormData.append(key, (parsed.data as any)[key]);
+    });
 
-    if (name) finalFormData.append("name", name.toString());
-    if (designation)
-      finalFormData.append("designation", designation.toString());
-    if (department) finalFormData.append("department", department.toString());
-    if (email) finalFormData.append("email", email.toString());
-    if (phone) finalFormData.append("phone", phone.toString());
+    // Add subjects specifically if not in parsed.data but in formData (usually it's a JSON string)
+    const subjects = formData.get("subjects");
     if (subjects) finalFormData.append("subjects", subjects.toString());
 
     // Add photo file if exists
@@ -85,7 +106,6 @@ export async function createTeacher(prevState: any, formData: FormData) {
     return {
       success: false,
       message: response.message || "Failed to create teacher",
-      errors: (response.data as any)?.errors,
       timestamp: Date.now(),
     };
   } catch (error: any) {
@@ -100,10 +120,24 @@ export async function createTeacher(prevState: any, formData: FormData) {
 // Update teacher action
 export async function updateTeacher(
   id: string,
-  prevState: any,
+  prevState: ActionState,
   formData: FormData,
-) {
+): Promise<ActionState> {
+  const values = Object.fromEntries(formData.entries());
+  const parsed = updateTeacherSchema.safeParse(values);
+
+  if (!parsed.success) {
+    return {
+      success: false,
+      message: "Invalid fields",
+      errors: parsed.error.flatten().fieldErrors,
+      inputs: values,
+      timestamp: Date.now(),
+    };
+  }
+
   try {
+    // We send formData as-is because it handles multipart/form-data for files automatically
     const response = await api.patch<Teacher>(`/teachers/${id}`, formData);
 
     if (response.success) {
@@ -120,7 +154,6 @@ export async function updateTeacher(
     return {
       success: false,
       message: response.message || "Failed to update teacher",
-      errors: (response.data as any)?.errors,
       timestamp: Date.now(),
     };
   } catch (error: any) {

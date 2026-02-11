@@ -1,6 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-"use server";
-
+import {
+  createSubjectSchema,
+  updateSubjectSchema,
+} from "@/validation/subject.validation";
 import { revalidatePath } from "next/cache";
 import { api } from "./api";
 
@@ -17,6 +18,15 @@ export interface Subject {
   createdAt: string;
   updatedAt: string;
 }
+
+export type SubjectActionState = {
+  success: boolean;
+  message: string;
+  errors?: Record<string, string[]>;
+  inputs?: any;
+  data?: any;
+  timestamp?: number;
+};
 
 // Get all subjects with caching
 export async function getAllSubjects(searchParams?: Record<string, string>) {
@@ -41,19 +51,25 @@ export async function getSubjectById(id: string) {
 }
 
 // Create subject action
-export async function createSubject(prevState: any, formData: FormData) {
-  try {
-    const data = {
-      code: formData.get("code"),
-      name: formData.get("name"),
-      teacher: formData.get("teacher"),
-      credits: Number(formData.get("credits")),
-      type: formData.get("type"),
-      color: formData.get("color"),
-      schedule: formData.get("schedule"),
-    };
+export async function createSubject(
+  prevState: SubjectActionState,
+  formData: FormData,
+): Promise<SubjectActionState> {
+  const values = Object.fromEntries(formData.entries());
+  const parsed = createSubjectSchema.safeParse(values);
 
-    const response = await api.post<Subject>("/subjects", data);
+  if (!parsed.success) {
+    return {
+      success: false,
+      message: "Invalid fields",
+      errors: parsed.error.flatten().fieldErrors,
+      inputs: values,
+      timestamp: Date.now(),
+    };
+  }
+
+  try {
+    const response = await api.post<Subject>("/subjects", parsed.data);
 
     if (response.success) {
       revalidatePath("/dashboard/cr/subjects");
@@ -68,7 +84,6 @@ export async function createSubject(prevState: any, formData: FormData) {
     return {
       success: false,
       message: response.message || "Failed to create subject",
-      errors: (response.data as any)?.errors,
       timestamp: Date.now(),
     };
   } catch (error: any) {
@@ -83,21 +98,24 @@ export async function createSubject(prevState: any, formData: FormData) {
 // Update subject action
 export async function updateSubject(
   id: string,
-  prevState: any,
+  prevState: SubjectActionState,
   formData: FormData,
-) {
-  try {
-    const data = {
-      code: formData.get("code"),
-      name: formData.get("name"),
-      teacher: formData.get("teacher"),
-      credits: Number(formData.get("credits")),
-      type: formData.get("type"),
-      color: formData.get("color"),
-      schedule: formData.get("schedule"),
-    };
+): Promise<SubjectActionState> {
+  const values = Object.fromEntries(formData.entries());
+  const parsed = updateSubjectSchema.safeParse(values);
 
-    const response = await api.patch<Subject>(`/subjects/${id}`, data);
+  if (!parsed.success) {
+    return {
+      success: false,
+      message: "Invalid fields",
+      errors: parsed.error.flatten().fieldErrors,
+      inputs: values,
+      timestamp: Date.now(),
+    };
+  }
+
+  try {
+    const response = await api.patch<Subject>(`/subjects/${id}`, parsed.data);
 
     if (response.success) {
       revalidatePath("/dashboard/cr/subjects");
@@ -113,7 +131,6 @@ export async function updateSubject(
     return {
       success: false,
       message: response.message || "Failed to update subject",
-      errors: (response.data as any)?.errors,
       timestamp: Date.now(),
     };
   } catch (error: any) {

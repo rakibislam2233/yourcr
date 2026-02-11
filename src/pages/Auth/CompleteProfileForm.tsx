@@ -1,7 +1,10 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
-import { completeCrRegistration } from "@/services/auth.service";
+import {
+  completeCrRegistration,
+  type ActionState,
+} from "@/services/auth.service";
 import {
   academicStepSchema,
   institutionStepSchema,
@@ -21,18 +24,12 @@ import AcademicStep from "./steps/AcademicStep";
 import DocumentationStep from "./steps/DocumentationStep";
 import InstitutionStep from "./steps/InstitutionStep";
 
-interface ActionState {
-  success: boolean;
-  message: string;
-  errors?: Record<string, string[]>;
-  inputs?: Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
-}
-
 const initialState: ActionState = {
   success: false,
   message: "",
   errors: {},
   inputs: {},
+  timestamp: 0,
 };
 
 export default function CompleteProfileForm() {

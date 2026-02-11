@@ -1,17 +1,19 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { verifyOtp } from "@/services/auth.service";
+import { verifyOtp, type ActionState } from "@/services/auth.service";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
 
-const initialState = {
+const initialState: ActionState = {
   success: false,
   message: "",
+  errors: undefined,
   inputs: {
     otp: "",
   },
+  timestamp: 0,
 };
 
 const VerifyOtpForm = () => {

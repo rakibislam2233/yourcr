@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { createTeacher } from "@/services/teacher.service";
+import { createTeacher, type ActionState } from "@/services/teacher.service";
 import {
   ArrowLeft,
   BookOpen,
@@ -44,9 +44,12 @@ const colorOptions = [
   { value: "bg-cyan-500", label: "Cyan" },
 ];
 
-const initialState = {
+const initialState: ActionState = {
   success: false,
   message: "",
+  errors: undefined,
+  inputs: undefined,
+  timestamp: 0,
 };
 
 export default function AddTeacherPage() {

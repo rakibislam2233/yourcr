@@ -1,76 +1,101 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
-
-import { revalidatePath } from "next/cache";
+import {
+  createStudentSchema,
+  updateStudentSchema,
+} from "@/validation/student.validation";
+import { revalidateTag } from "next/cache";
 import { api } from "./api";
 
-export interface Student {
-  id: string;
-  roll: string;
-  name: string;
-  email: string;
-  phone: string;
-  status: "active" | "inactive";
-  color: string;
-  institutionId: string;
-  batchId: string;
-  createdAt: string;
-  updatedAt: string;
-}
+export type StudentActionState = {
+  success: boolean;
+  message: string;
+  errors?: Record<string, string[]>;
+  inputs?: any;
+  timestamp: number;
+  data?: any;
+};
 
 // Get all students with caching
 export async function getAllStudents(searchParams?: Record<string, string>) {
-  const queryString = searchParams
-    ? `?${new URLSearchParams(searchParams).toString()}`
-    : "";
+  try {
+    const queryString = searchParams
+      ? `?${new URLSearchParams(searchParams).toString()}`
+      : "";
 
-  const response = await api.get<Student[]>(
-    `/users/all-students${queryString}`,
-    {
+    const response = await api.get(`/users/all-students${queryString}`, {
       next: { tags: ["students"], revalidate: 60 },
-    },
-  );
+    });
 
-  return response;
+    if (!response.success) {
+      return {
+        success: false,
+        message: response.message || "Failed to fetch students",
+        timestamp: Date.now(),
+      };
+    }
+    return response;
+  } catch (error: any) {
+    return {
+      success: false,
+      message: error.message || "Failed to fetch students",
+      timestamp: Date.now(),
+    };
+  }
 }
 
 // Get student by ID
 export async function getStudentById(id: string) {
-  const response = await api.get<Student>(`/users/${id}`, {
+  const response = await api.get(`/users/${id}`, {
     next: { tags: [`student-${id}`], revalidate: 60 },
   });
+
+  if (!response.success) {
+    return {
+      success: false,
+      message: response.message || "Failed to fetch student",
+      timestamp: Date.now(),
+    };
+  }
 
   return response;
 }
 
 // Create student action
-export async function createStudent(prevState: any, formData: FormData) {
+export async function createStudent(
+  prevState: StudentActionState,
+  formData: FormData,
+): Promise<StudentActionState> {
   try {
-    const data = {
-      roll: formData.get("roll"),
-      name: formData.get("name"),
-      email: formData.get("email"),
-      phone: formData.get("phone"),
-      status: formData.get("status") || "active",
-      color: formData.get("color") || "bg-blue-500",
-    };
+    const values = Object.fromEntries(formData.entries());
 
-    const response = await api.post<Student>("/users/create-student", data);
+    const parsed = createStudentSchema.safeParse(values);
 
-    if (response.success) {
-      revalidatePath("/dashboard/cr/students");
+    if (!parsed.success) {
       return {
-        success: true,
-        message: response.message || "Student created successfully",
-        data: response.data,
+        success: false,
+        message: "Invalid fields",
+        errors: parsed.error.flatten().fieldErrors,
+        inputs: values,
         timestamp: Date.now(),
       };
     }
 
+    const response = await api.post("/users/create-student", parsed.data);
+
+    if (!response.success) {
+      return {
+        success: false,
+        message: response.message || "Failed to create student",
+        timestamp: Date.now(),
+      };
+    }
+    // Revalidate tags
+    revalidateTag("students", { expire: 0 });
     return {
-      success: false,
-      message: response.message || "Failed to create student",
-      errors: (response.data as any)?.errors,
+      success: true,
+      message: response.message || "Student created successfully",
+      data: response.data,
       timestamp: Date.now(),
     };
   } catch (error: any) {
@@ -85,36 +110,39 @@ export async function createStudent(prevState: any, formData: FormData) {
 // Update student action
 export async function updateStudent(
   id: string,
-  prevState: any,
+  prevState: StudentActionState,
   formData: FormData,
-) {
+): Promise<StudentActionState> {
   try {
-    const data = {
-      roll: formData.get("roll"),
-      name: formData.get("name"),
-      email: formData.get("email"),
-      phone: formData.get("phone"),
-      status: formData.get("status"),
-      color: formData.get("color"),
-    };
+    const values = Object.fromEntries(formData.entries());
 
-    const response = await api.patch<Student>(`/users/${id}`, data);
+    const parsed = updateStudentSchema.safeParse(values);
 
-    if (response.success) {
-      revalidatePath("/dashboard/cr/students");
-      revalidatePath(`/dashboard/cr/students/${id}`);
+    if (!parsed.success) {
       return {
-        success: true,
-        message: response.message || "Student updated successfully",
-        data: response.data,
+        success: false,
+        message: "Invalid fields",
+        errors: parsed.error.flatten().fieldErrors,
+        inputs: values,
         timestamp: Date.now(),
       };
     }
+    const response = await api.patch(`/users/${id}`, parsed.data);
 
+    if (!response.success) {
+      return {
+        success: false,
+        message: response.message || "Failed to update student",
+        timestamp: Date.now(),
+      };
+    }
+    // Revalidate tags
+    revalidateTag("students", { expire: 0 });
+    revalidateTag(`student-${id}`, { expire: 0 });
     return {
-      success: false,
-      message: response.message || "Failed to update student",
-      errors: (response.data as any)?.errors,
+      success: true,
+      message: response.message || "Student updated successfully",
+      data: response.data,
       timestamp: Date.now(),
     };
   } catch (error: any) {
@@ -131,17 +159,20 @@ export async function deleteStudent(id: string) {
   try {
     const response = await api.delete(`/users/${id}`);
 
-    if (response.success) {
-      revalidatePath("/dashboard/cr/students");
+    if (!response.success) {
       return {
-        success: true,
-        message: response.message || "Student deleted successfully",
+        success: false,
+        message: response.message || "Failed to delete student",
+        timestamp: Date.now(),
       };
     }
-
+    // Revalidate tags
+    revalidateTag("students", { expire: 0 });
+    revalidateTag(`student-${id}`, { expire: 0 });
     return {
-      success: false,
-      message: response.message || "Failed to delete student",
+      success: true,
+      message: response.message || "Student deleted successfully",
+      timestamp: Date.now(),
     };
   } catch (error: any) {
     return {

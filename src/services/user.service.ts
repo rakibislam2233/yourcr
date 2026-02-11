@@ -62,7 +62,7 @@ export async function updateMyProfile(data: any) {
 export async function updateInstitutionBatch(
   prevState: ActionState,
   formData: FormData,
-) {
+): Promise<ActionState> {
   const values = Object.fromEntries(formData.entries());
   try {
     const institutionInfo = {

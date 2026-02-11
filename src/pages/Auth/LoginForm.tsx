@@ -4,7 +4,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Modal } from "@/components/ui/modal";
-import { loginUser } from "@/services/auth.service";
+import { loginUser, type ActionState } from "@/services/auth.service";
 import { getDefaultDashboardRoute } from "@/utils/auth-utils";
 import { getWebPushToken } from "@/utils/push-notification";
 import { Clock, Eye, EyeOff, Lock, Mail } from "lucide-react";
@@ -13,13 +13,15 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 
-const initialState = {
+const initialState: ActionState = {
   success: false,
   message: "",
+  errors: undefined,
   inputs: {
     email: "",
     password: "",
   },
+  timestamp: 0,
 };
 
 const LoginForm = () => {
