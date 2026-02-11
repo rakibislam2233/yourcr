@@ -49,7 +49,10 @@ const StudentCard = ({ student, onDelete }: StudentCardProps) => {
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="default" className="h-8 w-8 p-0 rounded-md bg-primary text-white">
+            <Button
+              variant="default"
+              className="h-8 w-8 p-0 rounded-md bg-primary text-white"
+            >
               <span className="sr-only">Open menu</span>
               <MoreVertical className="h-4 w-4" />
             </Button>
@@ -93,9 +96,11 @@ const StudentCard = ({ student, onDelete }: StudentCardProps) => {
             <span className="font-medium min-w-[80px]">Status:</span>
             <span
               className={`px-2 py-0.5 rounded-md text-xs font-medium capitalize ${
-                student.status === "active"
+                student.status === "ACTIVE"
                   ? "bg-green-100 text-green-700"
-                  : "bg-red-100 text-red-700"
+                  : student.status === "INACTIVE"
+                    ? "bg-red-100 text-red-700"
+                    : "bg-yellow-100 text-yellow-700"
               }`}
             >
               {student.status}

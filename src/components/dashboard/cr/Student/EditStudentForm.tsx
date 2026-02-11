@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import Student from "@/interface/student.interface";
 import { UserProfile } from "@/interface/user.interface";
 import {
   updateStudent,
@@ -14,7 +15,7 @@ import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 interface EditStudentFormProps {
-  student: UserProfile;
+  student: Student;
 }
 
 const initialState: StudentActionState = {
@@ -148,7 +149,7 @@ const EditStudentForm = ({ student }: EditStudentFormProps) => {
               <Input
                 id="studentId"
                 name="studentId"
-                defaultValue={state.inputs?.studentId || student.studentRoll}
+                defaultValue={state.inputs?.studentId || student.studentId}
                 placeholder="e.g., 800123"
                 className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary ${
                   state.errors?.studentId
@@ -165,18 +166,18 @@ const EditStudentForm = ({ student }: EditStudentFormProps) => {
           </div>
         </div>
 
-        <div className="flex gap-3 pt-4 border-t border-gray-100">
-          <Link href="/dashboard/cr/students" className="flex-1">
+        <div className="flex gap-3 pt-4 justify-end">
+          <Link href="/dashboard/cr/students">
             <Button
               type="button"
               variant="outline"
               disabled={isPending}
-              className="w-full"
+              className="h-12"
             >
               Cancel
             </Button>
           </Link>
-          <Button type="submit" disabled={isPending} className="flex-1">
+          <Button type="submit" disabled={isPending} className="h-12">
             {isPending ? (
               <span className="flex items-center gap-2">
                 <span className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />

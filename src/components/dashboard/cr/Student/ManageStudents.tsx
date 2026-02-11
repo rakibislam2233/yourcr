@@ -1,7 +1,6 @@
 "use client";
 import Pagination from "@/components/shared/Pagination";
 import { Button } from "@/components/ui/button";
-import { ConfirmModal } from "@/components/ui/modal";
 import Student from "@/interface/student.interface";
 import { deleteStudent } from "@/services/student.service";
 import { Plus, UserPlus } from "lucide-react";
@@ -12,6 +11,16 @@ import { toast } from "sonner";
 import PageHeader from "../../shared/PageHeader";
 import { SearchFilter } from "../../shared/SearchFilter";
 import StudentCard from "./StudentCard";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface ManageStudentsProps {
   students: Student[];
@@ -118,17 +127,30 @@ const ManageStudents: React.FC<ManageStudentsProps> = ({
         )}
       </div>
 
-      <ConfirmModal
-        isOpen={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
-        onConfirm={handleConfirmDelete}
-        title="Delete Student"
-        description={`Are you sure you want to remove "${selectedStudent?.fullName}"? This action cannot be undone.`}
-        confirmText={isPending ? "Deleting..." : "Delete"}
-        cancelText="Cancel"
-        variant="danger"
-        isLoading={isPending}
-      />
+      <AlertDialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Student</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to remove {selectedStudent?.fullName}? This
+              action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
+                e.preventDefault();
+                handleConfirmDelete();
+              }}
+              disabled={isPending}
+              className="bg-red-600 hover:bg-red-700 focus:ring-red-600 text-white"
+            >
+              {isPending ? "Deleting..." : "Delete"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

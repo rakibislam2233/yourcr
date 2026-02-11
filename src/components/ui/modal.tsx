@@ -89,6 +89,18 @@ interface ConfirmModalProps {
   isLoading?: boolean;
 }
 
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
 export const ConfirmModal: React.FC<ConfirmModalProps> = ({
   isOpen,
   onClose,
@@ -100,63 +112,43 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
   variant = "danger",
   isLoading = false,
 }) => {
-  const variantClasses = {
-    danger: "bg-red-600 hover:bg-red-700",
-    warning: "bg-orange-600 hover:bg-orange-700",
-    info: "bg-blue-600 hover:bg-blue-700",
+  const handleConfirm = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!isLoading) {
+      onConfirm();
+    }
   };
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={isLoading ? undefined : onClose}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
-          />
-
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ duration: 0.2 }}
-              className="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden"
-            >
-              <div className="p-6">
-                <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
-                <p className="text-gray-600 mt-2">{description}</p>
-              </div>
-
-              <div className="flex gap-3 p-6 pt-0">
-                <button
-                  onClick={onClose}
-                  disabled={isLoading}
-                  className="flex-1 px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {cancelText}
-                </button>
-                <button
-                  onClick={() => {
-                    onConfirm();
-                    // Don't close immediately if loading, let parent handle it or close after confirm
-                  }}
-                  disabled={isLoading}
-                  className={`flex-1 px-4 py-3 text-white font-medium rounded-xl transition-colors ${variantClasses[variant]} disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2`}
-                >
-                  {isLoading && (
-                    <span className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  )}
-                  {confirmText}
-                </button>
-              </div>
-            </motion.div>
-          </div>
-        </>
-      )}
-    </AnimatePresence>
+    <AlertDialog
+      open={isOpen}
+      onOpenChange={(open) => !open && !isLoading && onClose()}
+    >
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogDescription>{description}</AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel disabled={isLoading} onClick={onClose}>
+            {cancelText}
+          </AlertDialogCancel>
+          <button
+            onClick={handleConfirm}
+            disabled={isLoading}
+            className={cn(
+              buttonVariants({
+                variant: variant === "danger" ? "destructive" : "default",
+              }),
+            )}
+          >
+            {isLoading && (
+              <span className="mr-2 h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            )}
+            {confirmText}
+          </button>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };
