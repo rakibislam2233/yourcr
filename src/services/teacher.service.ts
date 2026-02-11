@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
-
 import {
   createTeacherSchema,
   updateTeacherSchema,
@@ -47,7 +46,6 @@ export async function createTeacher(
 ): Promise<ActionState> {
   const values = Object.fromEntries(formData.entries());
   const parsed = createTeacherSchema.safeParse(values);
-
   if (!parsed.success) {
     return {
       success: false,
@@ -57,28 +55,22 @@ export async function createTeacher(
       timestamp: Date.now(),
     };
   }
-
   try {
     // Prepare FormData with proper structure for API which might expect ACTUAL FormData for file upload
     const finalFormData = new FormData();
-
     // Add text fields
     Object.keys(parsed.data).forEach((key) => {
       finalFormData.append(key, (parsed.data as any)[key]);
     });
-
     // Add subjects specifically if not in parsed.data but in formData (usually it's a JSON string)
     const subjects = formData.get("subjects");
     if (subjects) finalFormData.append("subjects", subjects.toString());
-
     // Add photo file if exists
     const photo = formData.get("photo");
     if (photo && photo instanceof File && photo.size > 0) {
       finalFormData.append("photo", photo);
     }
-
     const response = await api.post<Teacher>("/teachers", finalFormData);
-
     if (response.success) {
       revalidatePath("/dashboard/cr/teachers");
       return {
@@ -88,7 +80,6 @@ export async function createTeacher(
         timestamp: Date.now(),
       };
     }
-
     return {
       success: false,
       message: response.message || "Failed to create teacher",
