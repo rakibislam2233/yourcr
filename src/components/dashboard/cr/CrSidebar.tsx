@@ -1,10 +1,8 @@
 "use client";
 import logo from "@/assets/logo/logo.png";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupLabel,
   SidebarHeader,
@@ -14,7 +12,6 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import { logoutUser } from "@/services/auth.service";
 import {
   Bell,
   BookOpen,
@@ -29,10 +26,8 @@ import {
 } from "lucide-react";
 import NextImage from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import * as React from "react";
-import { toast } from "sonner";
-import { UserProfile } from "@/interface/user.interface";
 const menuGroups = [
   {
     label: "Main Menu",
@@ -111,11 +106,7 @@ const menuGroups = [
   },
 ];
 
-interface CrSidebarProps {
-  user: UserProfile | null;
-}
-
-const CrSidebar: React.FC<CrSidebarProps> = ({ user }) => {
+const CrSidebar: React.FC = () => {
   const pathname = usePathname();
   const { state, isMobile } = useSidebar();
   const isCollapsed = state === "collapsed" && !isMobile;

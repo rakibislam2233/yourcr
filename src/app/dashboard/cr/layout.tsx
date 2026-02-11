@@ -1,21 +1,18 @@
 import CrHeader from "@/components/dashboard/cr/CrHeader";
 import CrSidebar from "@/components/dashboard/cr/CrSidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { getMyProfile } from "@/services/user.service";
 
 export default async function CrDashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const user = await getMyProfile();
-
   return (
     <SidebarProvider
       style={{ "--sidebar-width": "19rem" } as React.CSSProperties}
     >
       <div className="flex min-h-screen w-full bg-white">
-        <CrSidebar user={user} />
+        <CrSidebar />
         <SidebarInset className="flex flex-col bg-white overflow-hidden">
           <CrHeader />
           <main className="flex-1 overflow-y-auto pt-6 pb-20 px-6">
@@ -23,7 +20,7 @@ export default async function CrDashboardLayout({
           </main>
           <footer className="h-12 flex items-center justify-center border-t border-gray-100 bg-white">
             <p className="text-sm font-bold text-gray-400">
-              © {new Date().getFullYear()} YourCR Management Systems
+              © {new Date().getFullYear()} All rights reserved by YourCR
             </p>
           </footer>
         </SidebarInset>

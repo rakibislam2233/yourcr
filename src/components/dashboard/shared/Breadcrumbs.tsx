@@ -1,10 +1,7 @@
 "use client";
-
 import { usePathname } from "next/navigation";
-
 const Breadcrumbs = () => {
   const pathname = usePathname();
-
   const generateBreadcrumbs = () => {
     if (!pathname) return null;
     const paths = pathname.split("/").filter((p) => p);
