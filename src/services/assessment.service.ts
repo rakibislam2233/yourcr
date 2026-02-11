@@ -9,14 +9,9 @@ import { api } from "./api";
 import { Assessment } from "@/interface/assessment.interface";
 export type { Assessment };
 
-export type AssessmentActionState = {
-  success: boolean;
-  message: string;
-  errors?: Record<string, string[]>;
-  inputs?: any;
-  data?: any;
-  timestamp?: number;
-};
+import { ActionState } from "@/interface/action-state.interface";
+
+export type AssessmentActionState = ActionState;
 
 // Get all assessments with caching
 export async function getAllAssessments(searchParams?: Record<string, string>) {

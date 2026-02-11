@@ -7,14 +7,9 @@ import { api } from "./api";
 import { Notice } from "@/interface/notice.interface";
 export type { Notice };
 
-export type NoticeActionState = {
-  success: boolean;
-  message: string;
-  errors?: Record<string, string[]>;
-  inputs?: any;
-  data?: any;
-  timestamp?: number;
-};
+import { ActionState } from "@/interface/action-state.interface";
+
+export type NoticeActionState = ActionState;
 
 // Get all notices with caching
 export async function getAllNotices(searchParams?: Record<string, string>) {

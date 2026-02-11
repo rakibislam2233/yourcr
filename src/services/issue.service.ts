@@ -7,14 +7,9 @@ import { api } from "./api";
 import { Issue } from "@/interface/issue.interface";
 export type { Issue };
 
-export type IssueActionState = {
-  success: boolean;
-  message: string;
-  errors?: Record<string, string[]>;
-  inputs?: any;
-  data?: any;
-  timestamp?: number;
-};
+import { ActionState } from "@/interface/action-state.interface";
+
+export type IssueActionState = ActionState;
 
 // Get all issues with caching
 export async function getAllIssues(searchParams?: Record<string, string>) {

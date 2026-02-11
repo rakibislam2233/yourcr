@@ -1,20 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Class } from "@/interface/class.interface";
 import {
   createClassSchema,
   updateClassSchema,
 } from "@/validation/class.validation";
 import { revalidatePath } from "next/cache";
 import { api } from "./api";
-import { Class } from "@/interface/class.interface";
 
-export type ClassActionState = {
-  success: boolean;
-  message: string;
-  errors?: Record<string, string[]>;
-  inputs?: any;
-  data?: any;
-  timestamp?: number;
-};
+import { ActionState } from "@/interface/action-state.interface";
+
+export type ClassActionState = ActionState;
 
 // Get all classes with caching
 export async function getAllClasses(searchParams?: Record<string, string>) {

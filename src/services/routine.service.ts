@@ -10,21 +10,10 @@ import { api } from "./api";
 import { Routine, RoutineItem } from "@/interface/routine.interface";
 export type { Routine, RoutineItem };
 
-export type RoutineActionState = {
-  success: boolean;
-  message: string;
-  errors?: Record<string, string[]>;
-  inputs?: any;
-  data?: any;
-  timestamp?: number;
-};
+import { ActionState } from "@/interface/action-state.interface";
 
-// Routine Actions...
-// (keeping existing routine actions)
+export type RoutineActionState = ActionState;
 
-// Routine Item Actions...
-
-// Get routine item by ID
 export async function getRoutineItemById(id: string) {
   const response = await api.get<RoutineItem>(`/routine-items/${id}`, {
     next: { tags: [`routine-item-${id}`], revalidate: 120 },

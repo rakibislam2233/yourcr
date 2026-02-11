@@ -3,9 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { UserProfile } from "@/interface/user.interface";
-import {
-  updateStudent,
-} from "@/services/student.service";
+import { ActionState, updateStudent } from "@/services/student.service";
 import { Hash, Mail, Phone, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";

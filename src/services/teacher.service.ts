@@ -1,21 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
+import { Teacher } from "@/interface/teacher.interface";
 import {
   createTeacherSchema,
   updateTeacherSchema,
 } from "@/validation/teacher.validation";
 import { revalidatePath } from "next/cache";
-import { api } from "./api";  
-import { Teacher } from "@/interface/teacher.interface";
+import { api } from "./api";
+import { ActionState } from "@/interface/action-state.interface";
 
-export type ActionState = {
-  success: boolean;
-  message: string;
-  errors?: Record<string, string[]>;
-  inputs?: any;
-  data?: any;
-  timestamp?: number;
-};
+export type TeacherActionState = ActionState;
 
 // Get all teachers with caching
 export async function getAllTeachers(searchParams?: Record<string, string>) {
@@ -41,9 +35,9 @@ export async function getTeacherById(id: string) {
 
 // Create teacher action
 export async function createTeacher(
-  prevState: ActionState,
+  prevState: TeacherActionState,
   formData: FormData,
-): Promise<ActionState> {
+): Promise<TeacherActionState> {
   const values = Object.fromEntries(formData.entries());
   const parsed = createTeacherSchema.safeParse(values);
   if (!parsed.success) {
@@ -97,9 +91,9 @@ export async function createTeacher(
 // Update teacher action
 export async function updateTeacher(
   id: string,
-  prevState: ActionState,
+  prevState: TeacherActionState,
   formData: FormData,
-): Promise<ActionState> {
+): Promise<TeacherActionState> {
   const values = Object.fromEntries(formData.entries());
   const parsed = updateTeacherSchema.safeParse(values);
 

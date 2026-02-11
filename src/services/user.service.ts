@@ -1,18 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getCookie } from "@/utils/tokenHandlers";
 import { revalidateTag } from "next/cache";
 import { api } from "./api";
 
-export type ActionState = {
-  success: boolean;
-  message: string;
-  errors?: Record<string, string[]>;
-  inputs?: any;
-  data?: any;
-  timestamp?: number;
-};
+import { ActionState } from "@/interface/action-state.interface";
+
+export type UserActionState = ActionState;
 
 export async function getMyProfile() {
   const accessToken = await getCookie("accessToken");

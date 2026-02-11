@@ -7,14 +7,8 @@ import {
 import { revalidateTag } from "next/cache";
 import { api } from "./api";
 
-export type ActionState = {
-  success: boolean;
-  message: string;
-  errors?: Record<string, string[]>;
-  inputs?: any;
-  data?: any;
-  timestamp?: number;
-};
+import { ActionState } from "@/interface/action-state.interface";
+export type StudentActionState = ActionState;
 
 // Get all students with caching
 export async function getAllStudents(searchParams?: Record<string, string>) {
@@ -66,9 +60,9 @@ export async function getStudentById(id: string) {
 
 // Create student action
 export async function createStudent(
-  prevState: ActionState,
+  prevState: StudentActionState,
   formData: FormData,
-): Promise<ActionState> {
+): Promise<StudentActionState> {
   try {
     const values = Object.fromEntries(formData.entries());
 
@@ -113,9 +107,9 @@ export async function createStudent(
 // Update student action
 export async function updateStudent(
   id: string,
-  prevState: ActionState,
+  prevState: StudentActionState,
   formData: FormData,
-): Promise<ActionState> {
+): Promise<StudentActionState> {
   try {
     const values = Object.fromEntries(formData.entries());
 

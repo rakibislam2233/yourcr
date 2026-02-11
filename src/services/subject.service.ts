@@ -9,14 +9,9 @@ import { api } from "./api";
 import { Subject } from "@/interface/subject.interface";
 export type { Subject };
 
-export type SubjectActionState = {
-  success: boolean;
-  message: string;
-  errors?: Record<string, string[]>;
-  inputs?: any;
-  data?: any;
-  timestamp?: number;
-};
+import { ActionState } from "@/interface/action-state.interface";
+
+export type SubjectActionState = ActionState;
 
 // Get all subjects with caching
 export async function getAllSubjects(searchParams?: Record<string, string>) {
