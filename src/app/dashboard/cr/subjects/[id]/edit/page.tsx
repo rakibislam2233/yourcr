@@ -1,3 +1,15 @@
+"use client";
+import PageHeader from "@/components/dashboard/shared/PageHeader";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   getSubjectById,
   updateSubject,
@@ -55,7 +67,7 @@ export default function EditSubjectPage() {
           toast.error("Failed to load subject");
           router.push("/dashboard/cr/subjects");
         }
-      } catch (error) {
+      } catch {
         toast.error("An error occurred");
       } finally {
         setLoading(false);
@@ -107,70 +119,79 @@ export default function EditSubjectPage() {
       />
 
       <div className="bg-white rounded-2xl border border-gray-100 p-6">
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form action={formAction} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label htmlFor="code">Subject Code</Label>
               <Input
                 id="code"
-                value={formData.code}
-                onChange={(e) =>
-                  setFormData({ ...formData, code: e.target.value })
-                }
+                name="code"
+                defaultValue={state.inputs?.code ?? subject.code}
                 placeholder="e.g., CSE-401"
                 required
+                className={state.errors?.code ? "border-red-500" : ""}
               />
+              {state.errors?.code && (
+                <p className="text-xs text-red-500">{state.errors.code[0]}</p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="name">Subject Name</Label>
               <Input
                 id="name"
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
+                name="name"
+                defaultValue={state.inputs?.name ?? subject.name}
                 placeholder="e.g., Database Management System"
                 required
+                className={state.errors?.name ? "border-red-500" : ""}
               />
+              {state.errors?.name && (
+                <p className="text-xs text-red-500">{state.errors.name[0]}</p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="teacher">Teacher</Label>
               <Input
                 id="teacher"
-                value={formData.teacher}
-                onChange={(e) =>
-                  setFormData({ ...formData, teacher: e.target.value })
-                }
+                name="teacher"
+                defaultValue={state.inputs?.teacher ?? subject.teacher}
                 placeholder="e.g., Dr. Kamal Ahmed"
                 required
+                className={state.errors?.teacher ? "border-red-500" : ""}
               />
+              {state.errors?.teacher && (
+                <p className="text-xs text-red-500">
+                  {state.errors.teacher[0]}
+                </p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="credits">Credits</Label>
               <Input
                 id="credits"
+                name="credits"
                 type="number"
-                min={1}
+                min={0}
                 max={10}
-                value={formData.credits}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    credits: parseInt(e.target.value) || 0,
-                  })
-                }
+                defaultValue={state.inputs?.credits ?? subject.credits}
                 required
+                className={state.errors?.credits ? "border-red-500" : ""}
               />
+              {state.errors?.credits && (
+                <p className="text-xs text-red-500">
+                  {state.errors.credits[0]}
+                </p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="type">Type</Label>
               <Select
-                value={formData.type}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, type: value })
-                }
+                name="type"
+                defaultValue={state.inputs?.type ?? subject.type}
               >
-                <SelectTrigger>
+                <SelectTrigger
+                  className={state.errors?.type ? "border-red-500" : ""}
+                >
                   <SelectValue placeholder="Select type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -181,16 +202,19 @@ export default function EditSubjectPage() {
                   ))}
                 </SelectContent>
               </Select>
+              {state.errors?.type && (
+                <p className="text-xs text-red-500">{state.errors.type[0]}</p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="color">Color</Label>
               <Select
-                value={formData.color}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, color: value })
-                }
+                name="color"
+                defaultValue={state.inputs?.color ?? subject.color}
               >
-                <SelectTrigger>
+                <SelectTrigger
+                  className={state.errors?.color ? "border-red-500" : ""}
+                >
                   <SelectValue placeholder="Select color" />
                 </SelectTrigger>
                 <SelectContent>
@@ -201,18 +225,24 @@ export default function EditSubjectPage() {
                   ))}
                 </SelectContent>
               </Select>
+              {state.errors?.color && (
+                <p className="text-xs text-red-500">{state.errors.color[0]}</p>
+              )}
             </div>
             <div className="space-y-2 md:col-span-2">
               <Label htmlFor="schedule">Schedule</Label>
               <Input
                 id="schedule"
-                value={formData.schedule}
-                onChange={(e) =>
-                  setFormData({ ...formData, schedule: e.target.value })
-                }
+                name="schedule"
+                defaultValue={state.inputs?.schedule ?? subject.schedule}
                 placeholder="e.g., Sun, Tue - 10:00 AM"
-                required
+                className={state.errors?.schedule ? "border-red-500" : ""}
               />
+              {state.errors?.schedule && (
+                <p className="text-xs text-red-500">
+                  {state.errors.schedule[0]}
+                </p>
+              )}
             </div>
           </div>
 
@@ -222,8 +252,8 @@ export default function EditSubjectPage() {
                 Cancel
               </Button>
             </Link>
-            <Button type="submit" className="flex-1">
-              Save Changes
+            <Button type="submit" className="flex-1" disabled={isPending}>
+              {isPending ? "Saving..." : "Save Changes"}
             </Button>
           </div>
         </form>

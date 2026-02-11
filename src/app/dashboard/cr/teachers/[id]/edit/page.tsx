@@ -1,7 +1,5 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { Users, ArrowLeft, Plus, X } from "lucide-react";
 import PageHeader from "@/components/dashboard/shared/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,24 +11,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  getTeacherById,
+  updateTeacher,
+  type ActionState,
+  type Teacher,
+} from "@/services/teacher.service";
+import { ArrowLeft, Plus, Users, X } from "lucide-react";
 import Link from "next/link";
-import { useRouter, useParams } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { useParams, useRouter } from "next/navigation";
+import { useActionState, useEffect, useState } from "react";
+import { toast } from "sonner";
 
-const teacherSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  designation: z.string().min(1, "Designation is required"),
-  department: z.string().min(2, "Department is required"),
-  email: z.string().email("Please enter a valid email address"),
-  phone: z.string().min(10, "Phone number must be at least 10 digits"),
-  color: z.string().min(1, "Color is required"),
-});
-
-type TeacherFormData = z.infer<typeof teacherSchema>;
-
-const designationOptions = ["Professor", "Associate Professor", "Assistant Professor", "Lecturer", "Instructor"];
+const designationOptions = [
+  "Professor",
+  "Associate Professor",
+  "Assistant Professor",
+  "Lecturer",
+  "Instructor",
+];
 
 const colorOptions = [
   { value: "bg-blue-500", label: "Blue" },
@@ -41,49 +40,60 @@ const colorOptions = [
   { value: "bg-cyan-500", label: "Cyan" },
 ];
 
-// Mock data
-const mockTeachers = [
-  { id: 1, name: "Dr. Kamal Ahmed", designation: "Professor", department: "Computer Technology", email: "kamal.ahmed@dpi.edu.bd", phone: "+880 1711-234567", subjects: ["Database Management", "Data Structures"], color: "bg-blue-500" },
-  { id: 2, name: "Prof. Rina Begum", designation: "Associate Professor", department: "Computer Technology", email: "rina.begum@dpi.edu.bd", phone: "+880 1812-345678", subjects: ["Software Engineering", "OOP"], color: "bg-green-500" },
-];
+const initialState: ActionState = {
+  success: false,
+  message: "",
+  errors: undefined,
+  inputs: undefined,
+  timestamp: 0,
+};
 
 export default function EditTeacherPage() {
   const router = useRouter();
   const params = useParams();
-  const teacherId = parseInt(params?.id as string);
+  const teacherId = params?.id as string;
+
+  const [teacher, setTeacher] = useState<Teacher | null>(null);
+  const [loading, setLoading] = useState(true);
   const [subjectInput, setSubjectInput] = useState("");
   const [subjects, setSubjects] = useState<string[]>([]);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    watch,
-    setValue,
-  } = useForm<TeacherFormData>({
-    resolver: zodResolver(teacherSchema),
-    defaultValues: {
-      name: "",
-      designation: "Lecturer",
-      department: "Computer Technology",
-      email: "",
-      phone: "",
-      color: "bg-blue-500",
-    },
-  });
+  const updateTeacherWithId = updateTeacher.bind(null, teacherId);
+  const [state, formAction, isPending] = useActionState(
+    updateTeacherWithId,
+    initialState,
+  );
 
   useEffect(() => {
-    const teacher = mockTeachers.find((t) => t.id === teacherId);
-    if (teacher) {
-      setValue("name", teacher.name);
-      setValue("designation", teacher.designation);
-      setValue("department", teacher.department);
-      setValue("email", teacher.email);
-      setValue("phone", teacher.phone);
-      setValue("color", teacher.color);
-      setSubjects(teacher.subjects);
+    async function fetchTeacher() {
+      try {
+        const res = await getTeacherById(teacherId);
+        if (res.success && res.data) {
+          setTeacher(res.data);
+          setSubjects(res.data.subjects || []);
+        } else {
+          toast.error("Failed to load teacher");
+          router.push("/dashboard/cr/teachers");
+        }
+      } catch {
+        toast.error("An error occurred while fetching teacher");
+      } finally {
+        setLoading(false);
+      }
     }
-  }, [teacherId, setValue]);
+    fetchTeacher();
+  }, [teacherId, router]);
+
+  useEffect(() => {
+    if (state.timestamp && state.timestamp > 0) {
+      if (state.success) {
+        toast.success(state.message);
+        router.push("/dashboard/cr/teachers");
+      } else if (state.message && !state.errors) {
+        toast.error(state.message);
+      }
+    }
+  }, [state, router]);
 
   const handleAddSubject = () => {
     if (subjectInput.trim() && !subjects.includes(subjectInput.trim())) {
@@ -96,16 +106,15 @@ export default function EditTeacherPage() {
     setSubjects(subjects.filter((s) => s !== subject));
   };
 
-  const onSubmit = (data: TeacherFormData) => {
-    // Add subjects to the form data
-    const teacherData = {
-      ...data,
-      subjects: subjects,
-      id: teacherId,
-    };
-    console.log("Updating teacher:", teacherData);
-    router.push("/dashboard/cr/teachers");
-  };
+  if (loading) {
+    return (
+      <div className="p-8 text-center text-gray-500">
+        Loading teacher details...
+      </div>
+    );
+  }
+
+  if (!teacher) return null;
 
   return (
     <div className="space-y-6">
@@ -129,89 +138,124 @@ export default function EditTeacherPage() {
       />
 
       <div className="bg-white rounded-2xl border border-gray-100 p-6">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form action={formAction} className="space-y-6">
+          {/* Hidden input for subjects array */}
+          <input
+            type="hidden"
+            name="subjects"
+            value={JSON.stringify(subjects)}
+          />
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label htmlFor="name">Full Name</Label>
               <Input
                 id="name"
-                className={errors.name ? "border-red-500" : ""}
-                {...register("name")}
+                name="name"
+                defaultValue={state.inputs?.name ?? teacher.name}
+                className={state.errors?.name ? "border-red-500" : ""}
+                required
               />
-              {errors.name && (
-                <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+              {state.errors?.name && (
+                <p className="text-red-500 text-xs mt-1">
+                  {state.errors.name[0]}
+                </p>
               )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="designation">Designation</Label>
               <Select
-                value={watch("designation")}
-                onValueChange={(value) => setValue("designation", value)}
+                name="designation"
+                defaultValue={state.inputs?.designation ?? teacher.designation}
               >
-                <SelectTrigger className={errors.designation ? "border-red-500" : ""}>
-                  <SelectValue />
+                <SelectTrigger
+                  className={state.errors?.designation ? "border-red-500" : ""}
+                >
+                  <SelectValue placeholder="Select designation" />
                 </SelectTrigger>
                 <SelectContent>
                   {designationOptions.map((d) => (
-                    <SelectItem key={d} value={d}>{d}</SelectItem>
+                    <SelectItem key={d} value={d}>
+                      {d}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
-              {errors.designation && (
-                <p className="text-red-500 text-sm mt-1">{errors.designation.message}</p>
+              {state.errors?.designation && (
+                <p className="text-red-500 text-xs mt-1">
+                  {state.errors.designation[0]}
+                </p>
               )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="department">Department</Label>
               <Input
                 id="department"
-                className={errors.department ? "border-red-500" : ""}
-                {...register("department")}
+                name="department"
+                defaultValue={state.inputs?.department ?? teacher.department}
+                className={state.errors?.department ? "border-red-500" : ""}
+                required
               />
-              {errors.department && (
-                <p className="text-red-500 text-sm mt-1">{errors.department.message}</p>
+              {state.errors?.department && (
+                <p className="text-red-500 text-xs mt-1">
+                  {state.errors.department[0]}
+                </p>
               )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="color">Avatar Color</Label>
               <Select
-                value={watch("color")}
-                onValueChange={(value) => setValue("color", value)}
+                name="color"
+                defaultValue={state.inputs?.color ?? teacher.color}
               >
-                <SelectTrigger className={errors.color ? "border-red-500" : ""}>
-                  <SelectValue />
+                <SelectTrigger
+                  className={state.errors?.color ? "border-red-500" : ""}
+                >
+                  <SelectValue placeholder="Select color" />
                 </SelectTrigger>
                 <SelectContent>
                   {colorOptions.map((c) => (
-                    <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>
+                    <SelectItem key={c.value} value={c.value}>
+                      {c.label}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
-              {errors.color && (
-                <p className="text-red-500 text-sm mt-1">{errors.color.message}</p>
+              {state.errors?.color && (
+                <p className="text-red-500 text-xs mt-1">
+                  {state.errors.color[0]}
+                </p>
               )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
+                name="email"
                 type="email"
-                className={errors.email ? "border-red-500" : ""}
-                {...register("email")}
+                defaultValue={state.inputs?.email ?? teacher.email}
+                className={state.errors?.email ? "border-red-500" : ""}
+                required
               />
-              {errors.email && (
-                <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+              {state.errors?.email && (
+                <p className="text-red-500 text-sm mt-1">
+                  {state.errors.email[0]}
+                </p>
               )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="phone">Phone</Label>
               <Input
                 id="phone"
-                className={errors.phone ? "border-red-500" : ""}
-                {...register("phone")}
+                name="phone"
+                defaultValue={state.inputs?.phone ?? teacher.phone}
+                className={state.errors?.phone ? "border-red-500" : ""}
+                required
               />
-              {errors.phone && (
-                <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+              {state.errors?.phone && (
+                <p className="text-red-500 text-xs mt-1">
+                  {state.errors.phone[0]}
+                </p>
               )}
             </div>
             <div className="space-y-2 md:col-span-2">
@@ -221,12 +265,19 @@ export default function EditTeacherPage() {
                   value={subjectInput}
                   onChange={(e) => setSubjectInput(e.target.value)}
                   placeholder="Enter subject name and press Add"
-                  onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), handleAddSubject())}
+                  onKeyPress={(e) =>
+                    e.key === "Enter" &&
+                    (e.preventDefault(), handleAddSubject())
+                  }
                 />
-                <Button type="button" onClick={handleAddSubject} className="gap-1">
+                <button
+                  type="button"
+                  onClick={handleAddSubject}
+                  className="bg-primary text-white px-4 rounded-md flex items-center gap-1 hover:bg-primary/90 transition-colors"
+                >
                   <Plus className="w-4 h-4" />
                   Add
-                </Button>
+                </button>
               </div>
               {subjects.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-3">
@@ -256,8 +307,8 @@ export default function EditTeacherPage() {
                 Cancel
               </Button>
             </Link>
-            <Button type="submit" className="flex-1">
-              Save Changes
+            <Button type="submit" className="flex-1" disabled={isPending}>
+              {isPending ? "Updating..." : "Save Changes"}
             </Button>
           </div>
         </form>

@@ -1,13 +1,29 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { ClipboardList, ArrowLeft } from "lucide-react";
 import PageHeader from "@/components/dashboard/shared/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  getAssessmentById,
+  updateAssessment,
+  type Assessment,
+  type AssessmentActionState,
+} from "@/services/assessment.service";
+import { getAllSubjects, type Subject } from "@/services/subject.service";
+import { ArrowLeft, ClipboardList } from "lucide-react";
 import Link from "next/link";
-import { useRouter, useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { useActionState, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const typeOptions = [
   "Exam",
@@ -17,79 +33,13 @@ const typeOptions = [
   "Presentation",
   "Project",
 ];
-const subjectOptions = [
-  "Database Management System",
-  "Software Engineering",
-  "Computer Networks",
-  "Operating Systems",
-  "AI & Machine Learning",
-  "Web Development",
-];
 
-// Mock data for fetching assessment info
-const mockAssessments: Record<
-  string,
-  {
-    title: string;
-    subject: string;
-    type: string;
-    date: string;
-    time: string;
-    totalMarks: string;
-    venue: string;
-    description: string;
-  }
-> = {
-  "1": {
-    title: "Mid-Term Examination",
-    subject: "Database Management System",
-    type: "Exam",
-    date: "2024-12-15",
-    time: "10:00 AM - 1:00 PM",
-    totalMarks: "50",
-    venue: "Exam Hall A",
-    description: "",
-  },
-  "2": {
-    title: "Assignment 3",
-    subject: "Software Engineering",
-    type: "Assignment",
-    date: "2024-12-10",
-    time: "11:59 PM",
-    totalMarks: "20",
-    venue: "",
-    description: "Complete the UML diagrams for the project",
-  },
-  "3": {
-    title: "Lab Report",
-    subject: "Computer Networks",
-    type: "Lab",
-    date: "2024-12-08",
-    time: "5:00 PM",
-    totalMarks: "15",
-    venue: "",
-    description: "",
-  },
-  "4": {
-    title: "Quiz 2",
-    subject: "Operating Systems",
-    type: "Quiz",
-    date: "2024-12-05",
-    time: "9:00 AM",
-    totalMarks: "10",
-    venue: "Room 301",
-    description: "",
-  },
-  "5": {
-    title: "Presentation",
-    subject: "AI & Machine Learning",
-    type: "Presentation",
-    date: "2024-12-03",
-    time: "2:00 PM",
-    totalMarks: "25",
-    venue: "Seminar Hall",
-    description: "",
-  },
+const initialState: AssessmentActionState = {
+  success: false,
+  message: "",
+  errors: undefined,
+  inputs: undefined,
+  timestamp: 0,
 };
 
 export default function EditAssessmentPage() {
@@ -97,29 +47,63 @@ export default function EditAssessmentPage() {
   const params = useParams();
   const assessmentId = params?.id as string;
 
-  const [formData, setFormData] = useState({
-    title: "",
-    subject: "",
-    type: "Assignment",
-    date: "",
-    time: "",
-    totalMarks: "",
-    venue: "",
-    description: "",
-  });
+  const [assessment, setAssessment] = useState<Assessment | null>(null);
+  const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const updateAssessmentWithId = updateAssessment.bind(null, assessmentId);
+  const [state, formAction, isPending] = useActionState(
+    updateAssessmentWithId,
+    initialState,
+  );
 
   useEffect(() => {
-    const assessmentData = mockAssessments[assessmentId];
-    if (assessmentData) {
-      setFormData(assessmentData);
-    }
-  }, [assessmentId]);
+    async function fetchData() {
+      try {
+        const [assessmentRes, subjectsRes] = await Promise.all([
+          getAssessmentById(assessmentId),
+          getAllSubjects(),
+        ]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Updating assessment:", formData);
-    router.push("/dashboard/cr/assessments");
-  };
+        if (assessmentRes.success && assessmentRes.data) {
+          setAssessment(assessmentRes.data);
+        } else {
+          toast.error("Failed to load assessment details");
+          router.push("/dashboard/cr/assessments");
+        }
+
+        if (subjectsRes.success) {
+          setSubjects(subjectsRes.data);
+        }
+      } catch {
+        toast.error("An error occurred while fetching data");
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, [assessmentId, router]);
+
+  useEffect(() => {
+    if (state.timestamp && state.timestamp > 0) {
+      if (state.success) {
+        toast.success(state.message);
+        router.push("/dashboard/cr/assessments");
+      } else if (state.message && !state.errors) {
+        toast.error(state.message);
+      }
+    }
+  }, [state, router]);
+
+  if (loading) {
+    return (
+      <div className="p-8 text-center text-gray-500">
+        Loading assessment details...
+      </div>
+    );
+  }
+
+  if (!assessment) return null;
 
   return (
     <div className="space-y-6">
@@ -143,116 +127,163 @@ export default function EditAssessmentPage() {
       />
 
       <div className="bg-white rounded-2xl border border-gray-100 p-6">
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form action={formAction} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label htmlFor="title">Assessment Title</Label>
               <Input
                 id="title"
-                value={formData.title}
-                onChange={(e) =>
-                  setFormData({ ...formData, title: e.target.value })
-                }
+                name="title"
+                defaultValue={state.inputs?.title ?? assessment.title}
                 placeholder="e.g., Mid-Term Examination"
+                className={state.errors?.title ? "border-red-500" : ""}
                 required
               />
+              {state.errors?.title && (
+                <p className="text-red-500 text-xs mt-1">
+                  {state.errors.title[0]}
+                </p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="subject">Subject</Label>
-              <select
-                id="subject"
-                value={formData.subject}
-                onChange={(e) =>
-                  setFormData({ ...formData, subject: e.target.value })
-                }
-                className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                required
+              <Select
+                name="subject"
+                defaultValue={state.inputs?.subject ?? assessment.subject}
               >
-                <option value="">Select a subject</option>
-                {subjectOptions.map((s) => (
-                  <option key={s} value={s}>
-                    {s}
-                  </option>
-                ))}
-              </select>
+                <SelectTrigger
+                  className={state.errors?.subject ? "border-red-500" : ""}
+                >
+                  <SelectValue placeholder="Select a subject" />
+                </SelectTrigger>
+                <SelectContent>
+                  {subjects.length > 0 ? (
+                    subjects.map((s) => (
+                      <SelectItem key={s.id} value={s.name}>
+                        {s.name} ({s.code})
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem value={assessment.subject} disabled>
+                      {assessment.subject}
+                    </SelectItem>
+                  )}
+                </SelectContent>
+              </Select>
+              {state.errors?.subject && (
+                <p className="text-red-500 text-xs mt-1">
+                  {state.errors.subject[0]}
+                </p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="type">Assessment Type</Label>
-              <select
-                id="type"
-                value={formData.type}
-                onChange={(e) =>
-                  setFormData({ ...formData, type: e.target.value })
-                }
-                className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              <Select
+                name="type"
+                defaultValue={state.inputs?.type ?? assessment.type}
               >
-                {typeOptions.map((t) => (
-                  <option key={t} value={t}>
-                    {t}
-                  </option>
-                ))}
-              </select>
+                <SelectTrigger
+                  className={state.errors?.type ? "border-red-500" : ""}
+                >
+                  <SelectValue placeholder="Select type" />
+                </SelectTrigger>
+                <SelectContent>
+                  {typeOptions.map((t) => (
+                    <SelectItem key={t} value={t}>
+                      {t}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {state.errors?.type && (
+                <p className="text-red-500 text-xs mt-1">
+                  {state.errors.type[0]}
+                </p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="totalMarks">Total Marks</Label>
               <Input
                 id="totalMarks"
+                name="totalMarks"
                 type="number"
-                value={formData.totalMarks}
-                onChange={(e) =>
-                  setFormData({ ...formData, totalMarks: e.target.value })
-                }
+                defaultValue={state.inputs?.totalMarks ?? assessment.totalMarks}
                 placeholder="e.g., 50"
+                className={state.errors?.totalMarks ? "border-red-500" : ""}
                 required
               />
+              {state.errors?.totalMarks && (
+                <p className="text-red-500 text-xs mt-1">
+                  {state.errors.totalMarks[0]}
+                </p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="date">Date</Label>
               <Input
                 id="date"
+                name="date"
                 type="date"
-                value={formData.date}
-                onChange={(e) =>
-                  setFormData({ ...formData, date: e.target.value })
-                }
+                defaultValue={state.inputs?.date ?? assessment.date}
+                className={state.errors?.date ? "border-red-500" : ""}
                 required
               />
+              {state.errors?.date && (
+                <p className="text-red-500 text-xs mt-1">
+                  {state.errors.date[0]}
+                </p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="time">Time</Label>
               <Input
                 id="time"
-                value={formData.time}
-                onChange={(e) =>
-                  setFormData({ ...formData, time: e.target.value })
-                }
+                name="time"
+                defaultValue={state.inputs?.time ?? assessment.time}
                 placeholder="e.g., 10:00 AM - 1:00 PM or 11:59 PM"
+                className={state.errors?.time ? "border-red-500" : ""}
                 required
               />
+              {state.errors?.time && (
+                <p className="text-red-500 text-xs mt-1">
+                  {state.errors.time[0]}
+                </p>
+              )}
             </div>
             <div className="space-y-2 md:col-span-2">
               <Label htmlFor="venue">Venue (Optional)</Label>
               <Input
                 id="venue"
-                value={formData.venue}
-                onChange={(e) =>
-                  setFormData({ ...formData, venue: e.target.value })
-                }
+                name="venue"
+                defaultValue={state.inputs?.venue ?? assessment.venue}
                 placeholder="e.g., Exam Hall A"
+                className={state.errors?.venue ? "border-red-500" : ""}
               />
+              {state.errors?.venue && (
+                <p className="text-red-500 text-xs mt-1">
+                  {state.errors.venue[0]}
+                </p>
+              )}
             </div>
             <div className="space-y-2 md:col-span-2">
               <Label htmlFor="description">Description (Optional)</Label>
-              <textarea
+              <Textarea
                 id="description"
-                value={formData.description}
-                onChange={(e) =>
-                  setFormData({ ...formData, description: e.target.value })
+                name="description"
+                defaultValue={
+                  state.inputs?.description ?? assessment.description
                 }
                 placeholder="Add any additional instructions or details..."
                 rows={4}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary resize-none"
+                className={
+                  state.errors?.description ? "border-red-500" : "resize-none"
+                }
               />
+              {state.errors?.description && (
+                <p className="text-red-500 text-xs mt-1">
+                  {state.errors.description[0]}
+                </p>
+              )}
             </div>
           </div>
 
@@ -262,8 +293,8 @@ export default function EditAssessmentPage() {
                 Cancel
               </Button>
             </Link>
-            <Button type="submit" className="flex-1">
-              Save Changes
+            <Button type="submit" className="flex-1" disabled={isPending}>
+              {isPending ? "Saving..." : "Save Changes"}
             </Button>
           </div>
         </form>

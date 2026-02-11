@@ -1,16 +1,42 @@
 "use client";
 
-import React, { useState, Suspense } from "react";
-import { Calendar, ArrowLeft } from "lucide-react";
 import PageHeader from "@/components/dashboard/shared/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  createRoutineItem,
+  type RoutineActionState,
+} from "@/services/routine.service";
+import { ArrowLeft, Calendar } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useActionState, useEffect } from "react";
+import { toast } from "sonner";
 
-const days = ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"];
-const timeSlots = ["8:00 AM", "9:30 AM", "11:00 AM", "12:30 PM", "2:00 PM", "3:30 PM"];
+const days = [
+  "Saturday",
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+];
+const timeSlots = [
+  "8:00 AM",
+  "9:30 AM",
+  "11:00 AM",
+  "12:30 PM",
+  "2:00 PM",
+  "3:30 PM",
+];
 const typeOptions = ["Theory", "Lab", "Project"];
 const colorOptions = [
   { value: "bg-blue-500", label: "Blue" },
@@ -23,27 +49,35 @@ const colorOptions = [
   { value: "bg-red-500", label: "Red" },
 ];
 
+const initialState: RoutineActionState = {
+  success: false,
+  message: "",
+  errors: undefined,
+  inputs: undefined,
+  timestamp: 0,
+};
+
 function AddRoutineContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const defaultDay = searchParams?.get("day") || "Saturday";
   const defaultTime = searchParams?.get("time") || "8:00 AM";
 
-  const [formData, setFormData] = useState({
-    day: defaultDay,
-    time: defaultTime,
-    subject: "",
-    teacher: "",
-    room: "",
-    type: "Theory",
-    color: "bg-blue-500",
-  });
+  const [state, formAction, isPending] = useActionState(
+    createRoutineItem,
+    initialState,
+  );
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Adding class:", formData);
-    router.push("/dashboard/cr/routine");
-  };
+  useEffect(() => {
+    if (state.timestamp && state.timestamp > 0) {
+      if (state.success) {
+        toast.success(state.message);
+        router.push("/dashboard/cr/routine");
+      } else if (state.message && !state.errors) {
+        toast.error(state.message);
+      }
+    }
+  }, [state, router]);
 
   return (
     <div className="space-y-6">
@@ -67,89 +101,139 @@ function AddRoutineContent() {
       />
 
       <div className="bg-white rounded-2xl border border-gray-100 p-6">
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form action={formAction} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label htmlFor="day">Day</Label>
-              <select
-                id="day"
-                value={formData.day}
-                onChange={(e) => setFormData({ ...formData, day: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-              >
-                {days.map((day) => (
-                  <option key={day} value={day}>{day}</option>
-                ))}
-              </select>
+              <Select name="day" defaultValue={state.inputs?.day ?? defaultDay}>
+                <SelectTrigger
+                  className={state.errors?.day ? "border-red-500" : ""}
+                >
+                  <SelectValue placeholder="Select day" />
+                </SelectTrigger>
+                <SelectContent>
+                  {days.map((day) => (
+                    <SelectItem key={day} value={day}>
+                      {day}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {state.errors?.day && (
+                <p className="text-red-500 text-xs">{state.errors.day[0]}</p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="time">Time Slot</Label>
-              <select
-                id="time"
-                value={formData.time}
-                onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              <Select
+                name="time"
+                defaultValue={state.inputs?.time ?? defaultTime}
               >
-                {timeSlots.map((time) => (
-                  <option key={time} value={time}>{time}</option>
-                ))}
-              </select>
+                <SelectTrigger
+                  className={state.errors?.time ? "border-red-500" : ""}
+                >
+                  <SelectValue placeholder="Select time slot" />
+                </SelectTrigger>
+                <SelectContent>
+                  {timeSlots.map((time) => (
+                    <SelectItem key={time} value={time}>
+                      {time}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {state.errors?.time && (
+                <p className="text-red-500 text-xs">{state.errors.time[0]}</p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="subject">Subject</Label>
               <Input
                 id="subject"
-                value={formData.subject}
-                onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                name="subject"
+                defaultValue={state.inputs?.subject}
                 placeholder="e.g., Database Management"
                 required
+                className={state.errors?.subject ? "border-red-500" : ""}
               />
+              {state.errors?.subject && (
+                <p className="text-red-500 text-xs">
+                  {state.errors.subject[0]}
+                </p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="teacher">Teacher</Label>
               <Input
                 id="teacher"
-                value={formData.teacher}
-                onChange={(e) => setFormData({ ...formData, teacher: e.target.value })}
+                name="teacher"
+                defaultValue={state.inputs?.teacher}
                 placeholder="e.g., Dr. Kamal Ahmed"
                 required
+                className={state.errors?.teacher ? "border-red-500" : ""}
               />
+              {state.errors?.teacher && (
+                <p className="text-red-500 text-xs">
+                  {state.errors.teacher[0]}
+                </p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="room">Room</Label>
               <Input
                 id="room"
-                value={formData.room}
-                onChange={(e) => setFormData({ ...formData, room: e.target.value })}
+                name="room"
+                defaultValue={state.inputs?.room}
                 placeholder="e.g., Room 301 or Lab 102"
                 required
+                className={state.errors?.room ? "border-red-500" : ""}
               />
+              {state.errors?.room && (
+                <p className="text-red-500 text-xs">{state.errors.room[0]}</p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="type">Class Type</Label>
-              <select
-                id="type"
-                value={formData.type}
-                onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-              >
-                {typeOptions.map((type) => (
-                  <option key={type} value={type}>{type}</option>
-                ))}
-              </select>
+              <Select name="type" defaultValue={state.inputs?.type ?? "Theory"}>
+                <SelectTrigger
+                  className={state.errors?.type ? "border-red-500" : ""}
+                >
+                  <SelectValue placeholder="Select class type" />
+                </SelectTrigger>
+                <SelectContent>
+                  {typeOptions.map((type) => (
+                    <SelectItem key={type} value={type}>
+                      {type}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {state.errors?.type && (
+                <p className="text-red-500 text-xs">{state.errors.type[0]}</p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="color">Color</Label>
-              <select
-                id="color"
-                value={formData.color}
-                onChange={(e) => setFormData({ ...formData, color: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              <Select
+                name="color"
+                defaultValue={state.inputs?.color ?? "bg-blue-500"}
               >
-                {colorOptions.map((c) => (
-                  <option key={c.value} value={c.value}>{c.label}</option>
-                ))}
-              </select>
+                <SelectTrigger
+                  className={state.errors?.color ? "border-red-500" : ""}
+                >
+                  <SelectValue placeholder="Select color" />
+                </SelectTrigger>
+                <SelectContent>
+                  {colorOptions.map((c) => (
+                    <SelectItem key={c.value} value={c.value}>
+                      {c.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {state.errors?.color && (
+                <p className="text-red-500 text-xs">{state.errors.color[0]}</p>
+              )}
             </div>
           </div>
 
@@ -159,8 +243,8 @@ function AddRoutineContent() {
                 Cancel
               </Button>
             </Link>
-            <Button type="submit" className="flex-1">
-              Add Class
+            <Button type="submit" className="flex-1" disabled={isPending}>
+              {isPending ? "Adding..." : "Add Class"}
             </Button>
           </div>
         </form>
@@ -171,7 +255,11 @@ function AddRoutineContent() {
 
 export default function AddRoutinePage() {
   return (
-    <Suspense fallback={<div className="p-6">Loading...</div>}>
+    <Suspense
+      fallback={
+        <div className="p-6 text-center text-gray-500">Loading form...</div>
+      }
+    >
       <AddRoutineContent />
     </Suspense>
   );

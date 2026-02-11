@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   createRoutineSchema,
+  routineItemSchema,
   updateRoutineSchema,
 } from "@/validation/routine.validation";
 import { revalidatePath } from "next/cache";
@@ -19,6 +20,20 @@ export interface Routine {
   updatedAt: string;
 }
 
+export interface RoutineItem {
+  id: string;
+  day: string;
+  time: string;
+  subject: string;
+  teacher: string;
+  room: string;
+  type: string;
+  color: string;
+  institutionId: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export type RoutineActionState = {
   success: boolean;
   message: string;
@@ -27,6 +42,120 @@ export type RoutineActionState = {
   data?: any;
   timestamp?: number;
 };
+
+// Routine Actions...
+// (keeping existing routine actions)
+
+// Routine Item Actions...
+
+// Get routine item by ID
+export async function getRoutineItemById(id: string) {
+  const response = await api.get<RoutineItem>(`/routine-items/${id}`, {
+    next: { tags: [`routine-item-${id}`], revalidate: 120 },
+  });
+
+  return response;
+}
+
+// Create routine item action
+export async function createRoutineItem(
+  prevState: RoutineActionState,
+  formData: FormData,
+): Promise<RoutineActionState> {
+  const values = Object.fromEntries(formData.entries());
+  const parsed = routineItemSchema.safeParse(values);
+
+  if (!parsed.success) {
+    return {
+      success: false,
+      message: "Invalid fields",
+      errors: parsed.error.flatten().fieldErrors,
+      inputs: values,
+      timestamp: Date.now(),
+    };
+  }
+
+  try {
+    const response = await api.post<RoutineItem>("/routine-items", parsed.data);
+
+    if (response.success) {
+      revalidatePath("/dashboard/cr/routine");
+      return {
+        success: true,
+        message: response.message || "Routine item created successfully",
+        data: response.data,
+        timestamp: Date.now(),
+      };
+    }
+
+    return {
+      success: false,
+      message: response.message || "Failed to create routine item",
+      timestamp: Date.now(),
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      message: error.message || "Something went wrong",
+      timestamp: Date.now(),
+    };
+  }
+}
+
+// Update routine item action
+export async function updateRoutineItem(
+  id: string,
+  prevState: RoutineActionState,
+  formData: FormData,
+): Promise<RoutineActionState> {
+  const values = Object.fromEntries(formData.entries());
+  const parsed = routineItemSchema.safeParse(values);
+
+  if (!parsed.success) {
+    return {
+      success: false,
+      message: "Invalid fields",
+      errors: parsed.error.flatten().fieldErrors,
+      inputs: values,
+      timestamp: Date.now(),
+    };
+  }
+
+  try {
+    const response = await api.patch<RoutineItem>(
+      `/routine-items/${id}`,
+      parsed.data,
+    );
+
+    if (response.success) {
+      revalidatePath("/dashboard/cr/routine");
+      return {
+        success: true,
+        message: response.message || "Routine item updated successfully",
+        data: response.data,
+        timestamp: Date.now(),
+      };
+    }
+
+    return {
+      success: false,
+      message: response.message || "Failed to update routine item",
+      timestamp: Date.now(),
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      message: error.message || "Something went wrong",
+      timestamp: Date.now(),
+    };
+  }
+}
+
+// Get all routine items (not cached for simpler implementation here)
+export async function getAllRoutineItems() {
+  const response = await api.get<RoutineItem[]>("/routine-items");
+  return response;
+}
 
 // Get all routines with caching
 export async function getAllRoutines(searchParams?: Record<string, string>) {
