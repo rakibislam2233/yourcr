@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
 import {
   completeCrRegistration,
-  type ActionState,
+  type AuthActionState,
 } from "@/services/auth.service";
 import {
   academicStepSchema,
@@ -24,7 +24,7 @@ import AcademicStep from "./steps/AcademicStep";
 import DocumentationStep from "./steps/DocumentationStep";
 import InstitutionStep from "./steps/InstitutionStep";
 
-const initialState: ActionState = {
+const initialState: AuthActionState = {
   success: false,
   message: "",
   errors: {},

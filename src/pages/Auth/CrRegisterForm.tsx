@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { registerCr, type ActionState } from "@/services/auth.service";
+import { registerCr, type AuthActionState } from "@/services/auth.service";
 import { ArrowRight, Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -10,7 +10,7 @@ import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 import StepIndicator from "./StepIndicator";
 
-const initialState: ActionState = {
+const initialState: AuthActionState = {
   success: false,
   message: "",
   errors: {},

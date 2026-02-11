@@ -11,15 +11,9 @@ import {
   verifyOtpSchema,
 } from "@/validation/auth.validation";
 import { cookies } from "next/headers";
+import { ActionState } from "@/interface/action-state.interface";
 
-export type ActionState = {
-  success: boolean;
-  message: string;
-  errors?: Record<string, string[]>;
-  inputs?: any;
-  data?: any;
-  timestamp?: number;
-};
+export type AuthActionState = ActionState;
 
 // Helper to map backend paths to frontend routes
 const mapRoute = (backendPath: string) => {
@@ -32,9 +26,9 @@ const mapRoute = (backendPath: string) => {
 };
 
 export async function loginUser(
-  prevState: ActionState,
+  prevState: AuthActionState,
   formData: FormData,
-): Promise<ActionState> {
+): Promise<AuthActionState> {
   const values = Object.fromEntries(formData.entries());
 
   const parsed = loginSchema.safeParse(values);
@@ -149,9 +143,9 @@ export async function loginUser(
 
 // Register CR
 export async function registerCr(
-  prevState: ActionState,
+  prevState: AuthActionState,
   payload: any,
-): Promise<ActionState> {
+): Promise<AuthActionState> {
   const values = Object.fromEntries(payload.entries());
 
   const registrationData = {
@@ -219,9 +213,9 @@ export async function registerCr(
 
 // Complete CR Registration
 export async function completeCrRegistration(
-  prevState: ActionState,
+  prevState: AuthActionState,
   formData: FormData,
-): Promise<ActionState> {
+): Promise<AuthActionState> {
   const values = Object.fromEntries(formData.entries());
 
   try {
@@ -293,9 +287,9 @@ export async function completeCrRegistration(
 }
 
 export async function forgotPassword(
-  prevState: ActionState,
+  prevState: AuthActionState,
   payload: any,
-): Promise<ActionState> {
+): Promise<AuthActionState> {
   const values = Object.fromEntries(payload.entries());
   const parsed = forgotPasswordSchema.safeParse(values);
 
@@ -339,9 +333,9 @@ export async function forgotPassword(
 }
 
 export async function verifyOtp(
-  prevState: ActionState,
+  prevState: AuthActionState,
   payload: any,
-): Promise<ActionState> {
+): Promise<AuthActionState> {
   const values = Object.fromEntries(payload.entries());
   const cookieStore = await cookies();
   const sessionId = cookieStore.get("sessionId")?.value;
@@ -437,9 +431,9 @@ export async function verifyOtp(
 }
 
 export async function resetPassword(
-  prevState: ActionState,
+  prevState: AuthActionState,
   payload: any,
-): Promise<ActionState> {
+): Promise<AuthActionState> {
   const values = Object.fromEntries(payload.entries());
 
   const parsed = resetPasswordSchema.safeParse({

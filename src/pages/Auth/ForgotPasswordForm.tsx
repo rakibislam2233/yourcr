@@ -2,12 +2,12 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { forgotPassword, type ActionState } from "@/services/auth.service";
+import { forgotPassword, type AuthActionState } from "@/services/auth.service";
 import { ArrowLeft, Mail } from "lucide-react";
 import Link from "next/link";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
-const initialState: ActionState = {
+const initialState: AuthActionState = {
   success: false,
   message: "",
   errors: undefined,
