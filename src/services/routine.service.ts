@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-"use server";
-
+import {
+  createRoutineSchema,
+  updateRoutineSchema,
+} from "@/validation/routine.validation";
 import { revalidatePath } from "next/cache";
 import { api } from "./api";
 
@@ -17,6 +19,15 @@ export interface Routine {
   updatedAt: string;
 }
 
+export type RoutineActionState = {
+  success: boolean;
+  message: string;
+  errors?: Record<string, string[]>;
+  inputs?: any;
+  data?: any;
+  timestamp?: number;
+};
+
 // Get all routines with caching
 export async function getAllRoutines(searchParams?: Record<string, string>) {
   const queryString = searchParams
@@ -24,7 +35,7 @@ export async function getAllRoutines(searchParams?: Record<string, string>) {
     : "";
 
   const response = await api.get<Routine[]>(`/routines${queryString}`, {
-    next: { tags: ["routines"], revalidate: 120 }, // Longer cache for routines
+    next: { tags: ["routines"], revalidate: 120 },
   });
 
   return response;
@@ -40,7 +51,23 @@ export async function getRoutineById(id: string) {
 }
 
 // Create routine action
-export async function createRoutine(prevState: any, formData: FormData) {
+export async function createRoutine(
+  prevState: RoutineActionState,
+  formData: FormData,
+): Promise<RoutineActionState> {
+  const values = Object.fromEntries(formData.entries());
+  const parsed = createRoutineSchema.safeParse(values);
+
+  if (!parsed.success) {
+    return {
+      success: false,
+      message: "Invalid fields",
+      errors: parsed.error.flatten().fieldErrors,
+      inputs: values,
+      timestamp: Date.now(),
+    };
+  }
+
   try {
     const response = await api.post<Routine>("/routines", formData);
 
@@ -58,7 +85,6 @@ export async function createRoutine(prevState: any, formData: FormData) {
     return {
       success: false,
       message: response.message || "Failed to create routine",
-      errors: (response.data as any)?.errors,
       timestamp: Date.now(),
     };
   } catch (error: any) {
@@ -73,9 +99,22 @@ export async function createRoutine(prevState: any, formData: FormData) {
 // Update routine action
 export async function updateRoutine(
   id: string,
-  prevState: any,
+  prevState: RoutineActionState,
   formData: FormData,
-) {
+): Promise<RoutineActionState> {
+  const values = Object.fromEntries(formData.entries());
+  const parsed = updateRoutineSchema.safeParse(values);
+
+  if (!parsed.success) {
+    return {
+      success: false,
+      message: "Invalid fields",
+      errors: parsed.error.flatten().fieldErrors,
+      inputs: values,
+      timestamp: Date.now(),
+    };
+  }
+
   try {
     const response = await api.patch<Routine>(`/routines/${id}`, formData);
 
@@ -94,7 +133,6 @@ export async function updateRoutine(
     return {
       success: false,
       message: response.message || "Failed to update routine",
-      errors: (response.data as any)?.errors,
       timestamp: Date.now(),
     };
   } catch (error: any) {

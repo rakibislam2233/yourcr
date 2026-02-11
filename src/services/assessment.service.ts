@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-"use server";
-
+import {
+  createAssessmentSchema,
+  updateAssessmentSchema,
+} from "@/validation/assessment.validation";
 import { revalidatePath } from "next/cache";
 import { api } from "./api";
 
@@ -19,6 +21,15 @@ export interface Assessment {
   createdAt: string;
   updatedAt: string;
 }
+
+export type AssessmentActionState = {
+  success: boolean;
+  message: string;
+  errors?: Record<string, string[]>;
+  inputs?: any;
+  data?: any;
+  timestamp?: number;
+};
 
 // Get all assessments with caching
 export async function getAllAssessments(searchParams?: Record<string, string>) {
@@ -43,7 +54,23 @@ export async function getAssessmentById(id: string) {
 }
 
 // Create assessment action
-export async function createAssessment(prevState: any, formData: FormData) {
+export async function createAssessment(
+  prevState: AssessmentActionState,
+  formData: FormData,
+): Promise<AssessmentActionState> {
+  const values = Object.fromEntries(formData.entries());
+  const parsed = createAssessmentSchema.safeParse(values);
+
+  if (!parsed.success) {
+    return {
+      success: false,
+      message: "Invalid fields",
+      errors: parsed.error.flatten().fieldErrors,
+      inputs: values,
+      timestamp: Date.now(),
+    };
+  }
+
   try {
     // FormData will be sent as-is to handle file uploads
     const response = await api.post<Assessment>("/assessments", formData);
@@ -61,7 +88,6 @@ export async function createAssessment(prevState: any, formData: FormData) {
     return {
       success: false,
       message: response.message || "Failed to create assessment",
-      errors: (response.data as any)?.errors,
       timestamp: Date.now(),
     };
   } catch (error: any) {
@@ -76,9 +102,22 @@ export async function createAssessment(prevState: any, formData: FormData) {
 // Update assessment action
 export async function updateAssessment(
   id: string,
-  prevState: any,
+  prevState: AssessmentActionState,
   formData: FormData,
-) {
+): Promise<AssessmentActionState> {
+  const values = Object.fromEntries(formData.entries());
+  const parsed = updateAssessmentSchema.safeParse(values);
+
+  if (!parsed.success) {
+    return {
+      success: false,
+      message: "Invalid fields",
+      errors: parsed.error.flatten().fieldErrors,
+      inputs: values,
+      timestamp: Date.now(),
+    };
+  }
+
   try {
     const response = await api.patch<Assessment>(
       `/assessments/${id}`,
@@ -99,7 +138,6 @@ export async function updateAssessment(
     return {
       success: false,
       message: response.message || "Failed to update assessment",
-      errors: (response.data as any)?.errors,
       timestamp: Date.now(),
     };
   } catch (error: any) {

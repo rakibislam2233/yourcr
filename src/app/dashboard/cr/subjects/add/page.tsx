@@ -1,5 +1,3 @@
-"use client";
-
 import PageHeader from "@/components/dashboard/shared/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,10 +9,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  createSubject,
+  type SubjectActionState,
+} from "@/services/subject.service";
 import { ArrowLeft, BookOpen } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import { useActionState, useEffect } from "react";
+import { toast } from "sonner";
 
 const typeOptions = ["Theory", "Theory + Lab", "Lab", "Project"];
 
@@ -29,24 +32,31 @@ const colorOptions = [
   { value: "bg-red-500", label: "Red" },
 ];
 
+const initialState: SubjectActionState = {
+  success: false,
+  message: "",
+  errors: undefined,
+  inputs: undefined,
+  timestamp: 0,
+};
+
 export default function AddSubjectPage() {
   const router = useRouter();
-  const [formData, setFormData] = useState({
-    code: "",
-    name: "",
-    teacher: "",
-    credits: 3,
-    type: "Theory",
-    schedule: "",
-    color: "bg-blue-500",
-  });
+  const [state, formAction, isPending] = useActionState(
+    createSubject,
+    initialState,
+  );
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // In production, this would save to database
-    console.log("Adding subject:", formData);
-    router.push("/dashboard/cr/subjects");
-  };
+  useEffect(() => {
+    if (state.timestamp && state.timestamp > 0) {
+      if (state.success) {
+        toast.success(state.message);
+        router.push("/dashboard/cr/subjects");
+      } else if (state.message && !state.errors) {
+        toast.error(state.message);
+      }
+    }
+  }, [state, router]);
 
   return (
     <div className="space-y-6">
@@ -70,70 +80,76 @@ export default function AddSubjectPage() {
       />
 
       <div className="bg-white rounded-2xl border border-gray-100 p-6">
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form action={formAction} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label htmlFor="code">Subject Code</Label>
               <Input
                 id="code"
-                value={formData.code}
-                onChange={(e) =>
-                  setFormData({ ...formData, code: e.target.value })
-                }
+                name="code"
+                defaultValue={state.inputs?.code}
                 placeholder="e.g., CSE-401"
                 required
+                className={state.errors?.code ? "border-red-500" : ""}
               />
+              {state.errors?.code && (
+                <p className="text-xs text-red-500">{state.errors.code[0]}</p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="name">Subject Name</Label>
               <Input
                 id="name"
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
+                name="name"
+                defaultValue={state.inputs?.name}
                 placeholder="e.g., Database Management System"
                 required
+                className={state.errors?.name ? "border-red-500" : ""}
               />
+              {state.errors?.name && (
+                <p className="text-xs text-red-500">{state.errors.name[0]}</p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="teacher">Teacher</Label>
               <Input
                 id="teacher"
-                value={formData.teacher}
-                onChange={(e) =>
-                  setFormData({ ...formData, teacher: e.target.value })
-                }
+                name="teacher"
+                defaultValue={state.inputs?.teacher}
                 placeholder="e.g., Dr. Kamal Ahmed"
                 required
+                className={state.errors?.teacher ? "border-red-500" : ""}
               />
+              {state.errors?.teacher && (
+                <p className="text-xs text-red-500">
+                  {state.errors.teacher[0]}
+                </p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="credits">Credits</Label>
               <Input
                 id="credits"
+                name="credits"
                 type="number"
-                min={1}
+                min={0}
                 max={10}
-                value={formData.credits}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    credits: parseInt(e.target.value) || 0,
-                  })
-                }
+                defaultValue={state.inputs?.credits ?? 3}
                 required
+                className={state.errors?.credits ? "border-red-500" : ""}
               />
+              {state.errors?.credits && (
+                <p className="text-xs text-red-500">
+                  {state.errors.credits[0]}
+                </p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="type">Type</Label>
-              <Select
-                value={formData.type}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, type: value })
-                }
-              >
-                <SelectTrigger>
+              <Select name="type" defaultValue={state.inputs?.type ?? "Theory"}>
+                <SelectTrigger
+                  className={state.errors?.type ? "border-red-500" : ""}
+                >
                   <SelectValue placeholder="Select type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -144,16 +160,19 @@ export default function AddSubjectPage() {
                   ))}
                 </SelectContent>
               </Select>
+              {state.errors?.type && (
+                <p className="text-xs text-red-500">{state.errors.type[0]}</p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="color">Color</Label>
               <Select
-                value={formData.color}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, color: value })
-                }
+                name="color"
+                defaultValue={state.inputs?.color ?? "bg-blue-500"}
               >
-                <SelectTrigger>
+                <SelectTrigger
+                  className={state.errors?.color ? "border-red-500" : ""}
+                >
                   <SelectValue placeholder="Select color" />
                 </SelectTrigger>
                 <SelectContent>
@@ -164,18 +183,25 @@ export default function AddSubjectPage() {
                   ))}
                 </SelectContent>
               </Select>
+              {state.errors?.color && (
+                <p className="text-xs text-red-500">{state.errors.color[0]}</p>
+              )}
             </div>
             <div className="space-y-2 md:col-span-2">
               <Label htmlFor="schedule">Schedule</Label>
               <Input
                 id="schedule"
-                value={formData.schedule}
-                onChange={(e) =>
-                  setFormData({ ...formData, schedule: e.target.value })
-                }
+                name="schedule"
+                defaultValue={state.inputs?.schedule}
                 placeholder="e.g., Sun, Tue - 10:00 AM"
                 required
+                className={state.errors?.schedule ? "border-red-500" : ""}
               />
+              {state.errors?.schedule && (
+                <p className="text-xs text-red-500">
+                  {state.errors.schedule[0]}
+                </p>
+              )}
             </div>
           </div>
 
@@ -185,8 +211,8 @@ export default function AddSubjectPage() {
                 Cancel
               </Button>
             </Link>
-            <Button type="submit" className="flex-1">
-              Add Subject
+            <Button type="submit" className="flex-1" disabled={isPending}>
+              {isPending ? "Adding Subject..." : "Add Subject"}
             </Button>
           </div>
         </form>

@@ -1,9 +1,15 @@
-"use client";
-
 import PageHeader from "@/components/dashboard/shared/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { createClass, type ClassActionState } from "@/services/class.service";
 import {
   ArrowLeft,
   BookOpen,
@@ -15,27 +21,36 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import { useActionState, useEffect } from "react";
+import { toast } from "sonner";
 
 const platformOptions = ["Google Meet", "Zoom", "Microsoft Teams", "Other"];
 
+const initialState: ClassActionState = {
+  success: false,
+  message: "",
+  errors: undefined,
+  inputs: undefined,
+  timestamp: 0,
+};
+
 export default function AddClassPage() {
   const router = useRouter();
-  const [formData, setFormData] = useState({
-    subject: "",
-    teacher: "",
-    date: "",
-    startTime: "",
-    endTime: "",
-    platform: "Google Meet",
-    link: "",
-  });
+  const [state, formAction, isPending] = useActionState(
+    createClass,
+    initialState,
+  );
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Scheduling class:", formData);
-    router.push("/dashboard/cr/classes");
-  };
+  useEffect(() => {
+    if (state.timestamp && state.timestamp > 0) {
+      if (state.success) {
+        toast.success(state.message);
+        router.push("/dashboard/cr/classes");
+      } else if (state.message && !state.errors) {
+        toast.error(state.message);
+      }
+    }
+  }, [state, router]);
 
   return (
     <div className="space-y-6">
@@ -59,7 +74,7 @@ export default function AddClassPage() {
       />
 
       <div className="bg-white rounded-2xl border border-gray-100 p-6">
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form action={formAction} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
             <div className="flex flex-col gap-1.5">
               <Label
@@ -72,15 +87,20 @@ export default function AddClassPage() {
                 <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="subject"
-                  value={formData.subject}
-                  onChange={(e) =>
-                    setFormData({ ...formData, subject: e.target.value })
-                  }
+                  name="subject"
+                  defaultValue={state.inputs?.subject}
                   placeholder="e.g., Database Management System"
                   required
-                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary ${
+                    state.errors?.subject ? "border-red-500" : "bg-gray-50/30"
+                  } transition-all font-medium`}
                 />
               </div>
+              {state.errors?.subject && (
+                <p className="text-xs text-red-500">
+                  {state.errors.subject[0]}
+                </p>
+              )}
             </div>
             <div className="flex flex-col gap-1.5">
               <Label
@@ -93,15 +113,20 @@ export default function AddClassPage() {
                 <Users className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="teacher"
-                  value={formData.teacher}
-                  onChange={(e) =>
-                    setFormData({ ...formData, teacher: e.target.value })
-                  }
+                  name="teacher"
+                  defaultValue={state.inputs?.teacher}
                   placeholder="e.g., Dr. Kamal Ahmed"
                   required
-                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary ${
+                    state.errors?.teacher ? "border-red-500" : "bg-gray-50/30"
+                  } transition-all font-medium`}
                 />
               </div>
+              {state.errors?.teacher && (
+                <p className="text-xs text-red-500">
+                  {state.errors.teacher[0]}
+                </p>
+              )}
             </div>
             <div className="flex flex-col gap-1.5">
               <Label
@@ -114,15 +139,18 @@ export default function AddClassPage() {
                 <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="date"
+                  name="date"
                   type="date"
-                  value={formData.date}
-                  onChange={(e) =>
-                    setFormData({ ...formData, date: e.target.value })
-                  }
+                  defaultValue={state.inputs?.date}
                   required
-                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary ${
+                    state.errors?.date ? "border-red-500" : "bg-gray-50/30"
+                  } transition-all font-medium`}
                 />
               </div>
+              {state.errors?.date && (
+                <p className="text-xs text-red-500">{state.errors.date[0]}</p>
+              )}
             </div>
             <div className="flex flex-col gap-1.5">
               <Label
@@ -131,20 +159,28 @@ export default function AddClassPage() {
               >
                 Platform
               </Label>
-              <select
-                id="platform"
-                value={formData.platform}
-                onChange={(e) =>
-                  setFormData({ ...formData, platform: e.target.value })
-                }
-                className="h-12 px-4 text-base border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50/30 transition-all font-medium"
+              <Select
+                name="platform"
+                defaultValue={state.inputs?.platform ?? "Google Meet"}
               >
-                {platformOptions.map((p) => (
-                  <option key={p} value={p}>
-                    {p}
-                  </option>
-                ))}
-              </select>
+                <SelectTrigger
+                  className={`h-12 border-gray-200 ${state.errors?.platform ? "border-red-500" : "bg-gray-50/30"} font-medium`}
+                >
+                  <SelectValue placeholder="Select platform" />
+                </SelectTrigger>
+                <SelectContent>
+                  {platformOptions.map((p) => (
+                    <SelectItem key={p} value={p}>
+                      {p}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {state.errors?.platform && (
+                <p className="text-xs text-red-500">
+                  {state.errors.platform[0]}
+                </p>
+              )}
             </div>
             <div className="flex flex-col gap-1.5">
               <Label
@@ -157,15 +193,20 @@ export default function AddClassPage() {
                 <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="startTime"
+                  name="startTime"
                   type="time"
-                  value={formData.startTime}
-                  onChange={(e) =>
-                    setFormData({ ...formData, startTime: e.target.value })
-                  }
+                  defaultValue={state.inputs?.startTime}
                   required
-                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary ${
+                    state.errors?.startTime ? "border-red-500" : "bg-gray-50/30"
+                  } transition-all font-medium`}
                 />
               </div>
+              {state.errors?.startTime && (
+                <p className="text-xs text-red-500">
+                  {state.errors.startTime[0]}
+                </p>
+              )}
             </div>
             <div className="flex flex-col gap-1.5">
               <Label
@@ -178,15 +219,20 @@ export default function AddClassPage() {
                 <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="endTime"
+                  name="endTime"
                   type="time"
-                  value={formData.endTime}
-                  onChange={(e) =>
-                    setFormData({ ...formData, endTime: e.target.value })
-                  }
+                  defaultValue={state.inputs?.endTime}
                   required
-                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary ${
+                    state.errors?.endTime ? "border-red-500" : "bg-gray-50/30"
+                  } transition-all font-medium`}
                 />
               </div>
+              {state.errors?.endTime && (
+                <p className="text-xs text-red-500">
+                  {state.errors.endTime[0]}
+                </p>
+              )}
             </div>
             <div className="flex flex-col gap-1.5 md:col-span-2">
               <Label
@@ -199,15 +245,18 @@ export default function AddClassPage() {
                 <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   id="link"
-                  value={formData.link}
-                  onChange={(e) =>
-                    setFormData({ ...formData, link: e.target.value })
-                  }
+                  name="link"
+                  defaultValue={state.inputs?.link}
                   placeholder="e.g., https://meet.google.com/xxx-xxxx-xxx"
                   required
-                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
+                  className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary ${
+                    state.errors?.link ? "border-red-500" : "bg-gray-50/30"
+                  } transition-all font-medium`}
                 />
               </div>
+              {state.errors?.link && (
+                <p className="text-xs text-red-500">{state.errors.link[0]}</p>
+              )}
             </div>
           </div>
 
@@ -217,8 +266,8 @@ export default function AddClassPage() {
                 Cancel
               </Button>
             </Link>
-            <Button type="submit" className="flex-1">
-              Schedule Class
+            <Button type="submit" className="flex-1" disabled={isPending}>
+              {isPending ? "Scheduling Class..." : "Schedule Class"}
             </Button>
           </div>
         </form>
