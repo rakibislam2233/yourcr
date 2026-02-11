@@ -5,7 +5,6 @@ import { Label } from "@/components/ui/label";
 import { UserProfile } from "@/interface/user.interface";
 import {
   updateStudent,
-  type StudentActionState,
 } from "@/services/student.service";
 import { Hash, Mail, Phone, User } from "lucide-react";
 import Link from "next/link";
@@ -17,7 +16,7 @@ interface EditStudentFormProps {
   student: UserProfile;
 }
 
-const initialState: StudentActionState = {
+const initialState: ActionState = {
   success: false,
   message: "",
   inputs: undefined,

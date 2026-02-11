@@ -6,19 +6,19 @@ import { ArrowLeft, UserPlus } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-export default async function EditStudentPage({
-  params,
-}: {
+interface PageProps {
   params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
-  const response = await getStudentById(id);
+}
 
-  if (!response.success || !response.data) {
-    notFound();
+export default async function EditStudentPage({ params }: PageProps) {
+  const { id } = await params;
+  const res = await getStudentById(id);
+
+  if (!res.success || !res.data) {
+    return notFound();
   }
 
-  const student = response?.data;
+  const student = res.data;
 
   return (
     <div className="space-y-6">

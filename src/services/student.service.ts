@@ -7,13 +7,13 @@ import {
 import { revalidateTag } from "next/cache";
 import { api } from "./api";
 
-export type StudentActionState = {
+export type ActionState = {
   success: boolean;
   message: string;
   errors?: Record<string, string[]>;
   inputs?: any;
-  timestamp: number;
   data?: any;
+  timestamp?: number;
 };
 
 // Get all students with caching
@@ -32,6 +32,7 @@ export async function getAllStudents(searchParams?: Record<string, string>) {
         success: false,
         message: response.message || "Failed to fetch students",
         timestamp: Date.now(),
+        data: [],
       };
     }
     return response;
@@ -40,6 +41,7 @@ export async function getAllStudents(searchParams?: Record<string, string>) {
       success: false,
       message: error.message || "Failed to fetch students",
       timestamp: Date.now(),
+      data: [],
     };
   }
 }
@@ -55,6 +57,7 @@ export async function getStudentById(id: string) {
       success: false,
       message: response.message || "Failed to fetch student",
       timestamp: Date.now(),
+      data: null,
     };
   }
 
@@ -63,9 +66,9 @@ export async function getStudentById(id: string) {
 
 // Create student action
 export async function createStudent(
-  prevState: StudentActionState,
+  prevState: ActionState,
   formData: FormData,
-): Promise<StudentActionState> {
+): Promise<ActionState> {
   try {
     const values = Object.fromEntries(formData.entries());
 
@@ -110,9 +113,9 @@ export async function createStudent(
 // Update student action
 export async function updateStudent(
   id: string,
-  prevState: StudentActionState,
+  prevState: ActionState,
   formData: FormData,
-): Promise<StudentActionState> {
+): Promise<ActionState> {
   try {
     const values = Object.fromEntries(formData.entries());
 
