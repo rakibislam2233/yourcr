@@ -1,8 +1,6 @@
 "use client";
 
-import { format } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
-
+import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -10,7 +8,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { ChevronDownIcon } from "lucide-react";
 
 interface DatePickerProps {
   value?: Date;
@@ -29,38 +28,26 @@ export function DatePicker({
   disabled,
   error,
 }: DatePickerProps) {
+  const [date, setDate] = React.useState<Date>();
+
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <div className="relative">
-          <CalendarIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none z-10" />
-          <Button
-            type="button"
-            variant={"outline"}
-            className={cn(
-              "w-full justify-start text-left font-medium h-12 pl-10 border-gray-200 bg-gray-50/30 transition-all",
-              "hover:bg-gray-50 hover:border-gray-300",
-              !value && "text-gray-400",
-              value && "text-gray-900",
-              error && "border-red-500",
-              className,
-            )}
-            disabled={disabled}
-          >
-            {value ? (
-              format(value, "MMMM dd, yyyy")
-            ) : (
-              <span>{placeholder}</span>
-            )}
-          </Button>
-        </div>
+        <Button
+          variant="outline"
+          data-empty={!date}
+          className="data-[empty=true]:text-muted-foreground w-[212px] justify-between text-left font-normal"
+        >
+          {date ? format(date, "PPP") : <span>Pick a date</span>}
+          <ChevronDownIcon />
+        </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
         <Calendar
           mode="single"
-          selected={value}
-          onSelect={onChange}
-          initialFocus
+          selected={date}
+          onSelect={setDate}
+          defaultMonth={date}
         />
       </PopoverContent>
     </Popover>
