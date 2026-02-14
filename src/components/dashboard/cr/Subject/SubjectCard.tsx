@@ -3,19 +3,21 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Subject } from "@/interface/subject.interface";
 import {
-    BookOpen,
-    Building2,
-    Edit,
-    MoreVertical,
-    Trash2,
-    User,
+  BookOpen,
+  BookOpenText,
+  Building2,
+  CreditCard,
+  Edit,
+  MoreVertical,
+  Trash2,
+  User,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -43,16 +45,13 @@ const SubjectCard = ({ subject, onDelete }: SubjectCardProps) => {
           </Avatar>
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-gray-900 truncate">
-              {subject.name}
+              {subject?.name}
             </h3>
-            <p className="text-sm text-primary font-medium truncate">
-              {subject.code}
-            </p>
             <div className="flex items-center gap-2 mt-1">
               <span className="px-2 py-0.5 bg-primary/10 text-primary text-xs font-medium rounded-md">
-                {subject.credit} Credits
+                {subject?.credit} Credits
               </span>
-              {subject.isDepartmental && (
+              {subject?.isDepartmental && (
                 <span className="px-2 py-0.5 bg-green-100 text-green-600 text-xs font-medium rounded-md">
                   Departmental
                 </span>
@@ -92,33 +91,41 @@ const SubjectCard = ({ subject, onDelete }: SubjectCardProps) => {
       </CardHeader>
 
       <CardContent className="space-y-4 pt-4 relative z-10">
-        <div className="space-y-2">
-          <div className="flex items-center gap-3 text-sm text-gray-600">
-            <div className="p-1.5 bg-gray-100 rounded-md shrink-0">
-              <User className="w-3.5 h-3.5 text-gray-500" />
-            </div>
+        <div className="flex flex-col gap-2">
+          {/* Teacher Name */}
+          <div className="flex items-center gap-3  text-gray-600">
+            <span className="font-medium">Teacher Name:</span>
             <span className="truncate">
               {subject?.teacher?.name || "Assigned Teacher"}
             </span>
           </div>
-          <div className="flex items-center gap-3 text-sm text-gray-600">
-            <div className="p-1.5 bg-gray-100 rounded-md shrink-0">
-              <Building2 className="w-3.5 h-3.5 text-gray-500" />
-            </div>
-            <span className="truncate">{subject.roomNumber}</span>
+          {/* Subject Code */}
+          <div className="flex items-center gap-3  text-gray-600">
+            <span className="font-medium">Subject Code:</span>
+            <span className="truncate">{subject?.code}</span>
+          </div>
+          {/* Credit */}
+          <div className="flex items-center gap-3  text-gray-600">
+            <span className="font-medium">Credit:</span>
+            <span className="truncate">{subject?.credit}</span>
+          </div>
+          {/* Room Number */}
+          <div className="flex items-center gap-3  text-gray-600">
+            <span className="font-medium">Room Number:</span>
+            <span className="truncate">{subject?.roomNumber || "N/A"}</span>
           </div>
         </div>
 
-        {subject.description && (
-          <div className="pt-4 border-t border-gray-100">
+        {subject?.description && (
+          <div className="border-t border-gray-100 pt-3">
             <div className="flex items-center gap-2 mb-2">
-              <BookOpen className="w-3.5 h-3.5 text-gray-400" />
+              <BookOpen className="size-4 text-primary" />
               <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Description
               </span>
             </div>
-            <p className="text-sm text-gray-600 line-clamp-3">
-              {subject.description}
+            <p className=" text-gray-600 line-clamp-3">
+              {subject?.description}
             </p>
           </div>
         )}

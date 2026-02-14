@@ -5,7 +5,7 @@ export const createSubjectSchema = z.object({
   name: z.string().min(2, { message: "Subject name must be at least 2 characters" }),
   teacherId: z.string().min(1, { message: "Teacher is required" }),
   credit: z.coerce.number().min(0, { message: "Credits must be at least 0" }),
-  description: z.string().min(1, { message: "Description is required" }),
+  description: z.string().optional(),
   roomNumber: z.string().optional(),
   isDepartmental: z.preprocess((val) => {
     if (typeof val === "string") {

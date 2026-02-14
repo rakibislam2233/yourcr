@@ -59,25 +59,25 @@ const ManageSubjects: React.FC<ManageSubjectsProps> = ({ subjects, meta }) => {
         <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Total Subjects</p>
           <p className="text-2xl font-bold text-gray-900 mt-1">
-            {subjects.length}
+            {subjects?.length}
           </p>
         </div>
         <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Total Credits</p>
           <p className="text-2xl font-bold text-gray-900 mt-1">
-            {subjects.reduce((sum, s) => sum + s.credit, 0)}
+            {subjects?.reduce((sum, s) => sum + s.credit, 0)}
           </p>
         </div>
         <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Departmental</p>
           <p className="text-2xl font-bold text-gray-900 mt-1">
-            {subjects.filter((s) => s.isDepartmental).length}
+            {subjects?.filter((s) => s.isDepartmental).length}
           </p>
         </div>
         <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Non-Departmental</p>
           <p className="text-2xl font-bold text-gray-900 mt-1">
-            {subjects.filter((s) => !s.isDepartmental).length}
+            {subjects?.filter((s) => !s.isDepartmental).length}
           </p>
         </div>
       </div>
