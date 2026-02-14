@@ -2,6 +2,8 @@ import EditClassForm from "@/components/dashboard/cr/Class/EditClassForm";
 import PageHeader from "@/components/dashboard/shared/PageHeader";
 import { Button } from "@/components/ui/button";
 import { getClassById } from "@/services/class.service";
+import { getAllSubjects } from "@/services/subject.service";
+import { getAllTeachers } from "@/services/teacher.service";
 import { ArrowLeft, Video } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -12,13 +14,25 @@ interface PageProps {
 
 export default async function EditClassPage({ params }: PageProps) {
   const { id } = await params;
-  const res = await getClassById(id);
 
-  if (!res.success || !res.data) {
+  // Fetch class data, subjects, and teachers
+  const [classResponse, subjectsResponse, teachersResponse] = await Promise.all(
+    [getClassById(id), getAllSubjects(), getAllTeachers()],
+  );
+
+  if (!classResponse.success || !classResponse.data) {
     return notFound();
   }
 
-  const classData = res.data;
+  const classData = classResponse.data;
+
+  const subjects = subjectsResponse.success
+    ? (subjectsResponse.data || []).map((s) => ({ id: s.id, name: s.name }))
+    : [];
+
+  const teachers = teachersResponse.success
+    ? (teachersResponse.data || []).map((t) => ({ id: t.id, name: t.name }))
+    : [];
 
   return (
     <div className="space-y-6">
@@ -41,7 +55,11 @@ export default async function EditClassPage({ params }: PageProps) {
         }
       />
 
-      <EditClassForm classData={classData} />
+      <EditClassForm
+        classData={classData}
+        subjects={subjects}
+        teachers={teachers}
+      />
     </div>
   );
 }

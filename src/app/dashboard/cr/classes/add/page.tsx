@@ -1,15 +1,30 @@
 import AddClassForm from "@/components/dashboard/cr/Class/AddClassForm";
 import PageHeader from "@/components/dashboard/shared/PageHeader";
 import { Button } from "@/components/ui/button";
+import { getAllSubjects } from "@/services/subject.service";
+import { getAllTeachers } from "@/services/teacher.service";
 import { ArrowLeft, Video } from "lucide-react";
 import Link from "next/link";
 
-export default function AddClassPage() {
+export default async function AddClassPage() {
+  const [subjectsResponse, teachersResponse] = await Promise.all([
+    getAllSubjects(),
+    getAllTeachers(),
+  ]);
+
+  const subjects = subjectsResponse.success
+    ? (subjectsResponse.data || []).map((s) => ({ id: s.id, name: s.name }))
+    : [];
+
+  const teachers = teachersResponse.success
+    ? (teachersResponse.data || []).map((t) => ({ id: t.id, name: t.name }))
+    : [];
+
   return (
     <div className="space-y-6">
       <PageHeader
         title="Schedule New Class"
-        description="Schedule an online class"
+        description="Schedule a new class (online or offline)"
         icon={<Video />}
         breadcrumbs={[
           { label: "Dashboard", href: "/dashboard/cr" },
@@ -25,7 +40,7 @@ export default function AddClassPage() {
           </Link>
         }
       />
-      <AddClassForm />
+      <AddClassForm subjects={subjects} teachers={teachers} />
     </div>
   );
 }
