@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { DatePicker } from "@/components/ui/date-picker";
+import { CustomDatePicker } from "@/components/ui/custom-date-picker";
+import { CustomTimePicker } from "@/components/ui/custom-time-picker";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -10,10 +11,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { TimePicker } from "@/components/ui/time-picker";
 import { createClass, type ClassActionState } from "@/services/class.service";
 import { format } from "date-fns";
-import { BookOpen, Link as LinkIcon, MapPin, Users, Video } from "lucide-react";
+import { Link as LinkIcon, MapPin } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
@@ -42,9 +42,9 @@ interface AddClassFormProps {
 const AddClassForm = ({ subjects = [], teachers = [] }: AddClassFormProps) => {
   const router = useRouter();
   const [classType, setClassType] = useState<"ONLINE" | "OFFLINE">("ONLINE");
-  const [classDate, setClassDate] = useState<Date>();
-  const [startTime, setStartTime] = useState<string>("10:00 AM");
-  const [endTime, setEndTime] = useState<string>("11:00 AM");
+  const [classDate, setClassDate] = useState<Date | null>(null);
+  const [startTime, setStartTime] = useState<Date | null>(null);
+  const [endTime, setEndTime] = useState<Date | null>(null);
 
   const [state, formAction, isPending] = useActionState(
     createClass,
@@ -71,8 +71,12 @@ const AddClassForm = ({ subjects = [], teachers = [] }: AddClassFormProps) => {
     if (classDate) {
       formData.set("classDate", format(classDate, "yyyy-MM-dd"));
     }
-    formData.set("startTime", startTime);
-    formData.set("endTime", endTime);
+    if (startTime) {
+      formData.set("startTime", format(startTime, "h:mm aa"));
+    }
+    if (endTime) {
+      formData.set("endTime", format(endTime, "h:mm aa"));
+    }
 
     // Call the form action
     formAction(formData);
@@ -90,28 +94,26 @@ const AddClassForm = ({ subjects = [], teachers = [] }: AddClassFormProps) => {
             >
               Subject
             </Label>
-            <div className="relative">
-              <Select
-                name="subjectId"
-                defaultValue={state.inputs?.subjectId}
-                required
+            <Select
+              name="subjectId"
+              defaultValue={state.inputs?.subjectId}
+              required
+            >
+              <SelectTrigger
+                className={`h-12 border-gray-200 ${
+                  state.errors?.subjectId ? "border-red-500" : "bg-gray-50/30"
+                } font-medium`}
               >
-                <SelectTrigger
-                  className={`h-12 border-gray-200 ${
-                    state.errors?.subjectId ? "border-red-500" : "bg-gray-50/30"
-                  } font-medium`}
-                >
-                  <SelectValue placeholder="Select a subject" />
-                </SelectTrigger>
-                <SelectContent>
-                  {subjects.map((subject) => (
-                    <SelectItem key={subject.id} value={subject.id}>
-                      {subject.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+                <SelectValue placeholder="Select a subject" />
+              </SelectTrigger>
+              <SelectContent>
+                {subjects.map((subject) => (
+                  <SelectItem key={subject.id} value={subject.id}>
+                    {subject.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             {state.errors?.subjectId && (
               <p className="text-xs text-red-500">
                 {state.errors.subjectId[0]}
@@ -127,28 +129,26 @@ const AddClassForm = ({ subjects = [], teachers = [] }: AddClassFormProps) => {
             >
               Teacher
             </Label>
-            <div className="relative">
-              <Select
-                name="teacherId"
-                defaultValue={state.inputs?.teacherId}
-                required
+            <Select
+              name="teacherId"
+              defaultValue={state.inputs?.teacherId}
+              required
+            >
+              <SelectTrigger
+                className={`h-12 border-gray-200 ${
+                  state.errors?.teacherId ? "border-red-500" : "bg-gray-50/30"
+                } font-medium`}
               >
-                <SelectTrigger
-                  className={`h-12 border-gray-200 ${
-                    state.errors?.teacherId ? "border-red-500" : "bg-gray-50/30"
-                  } font-medium`}
-                >
-                  <SelectValue placeholder="Select a teacher" />
-                </SelectTrigger>
-                <SelectContent>
-                  {teachers.map((teacher) => (
-                    <SelectItem key={teacher.id} value={teacher.id}>
-                      {teacher.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+                <SelectValue placeholder="Select a teacher" />
+              </SelectTrigger>
+              <SelectContent>
+                {teachers.map((teacher) => (
+                  <SelectItem key={teacher.id} value={teacher.id}>
+                    {teacher.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             {state.errors?.teacherId && (
               <p className="text-xs text-red-500">
                 {state.errors.teacherId[0]}
@@ -164,11 +164,11 @@ const AddClassForm = ({ subjects = [], teachers = [] }: AddClassFormProps) => {
             >
               Date
             </Label>
-            <DatePicker
+            <CustomDatePicker
               value={classDate}
               onChange={setClassDate}
               placeholder="Select class date"
-              className={state.errors?.classDate ? "border-red-500" : ""}
+              error={!!state.errors?.classDate}
             />
             {state.errors?.classDate && (
               <p className="text-xs text-red-500">
@@ -185,28 +185,26 @@ const AddClassForm = ({ subjects = [], teachers = [] }: AddClassFormProps) => {
             >
               Class Type
             </Label>
-            <div className="relative">
-              <Select
-                name="classType"
-                defaultValue={state.inputs?.classType ?? "ONLINE"}
-                onValueChange={(value) =>
-                  setClassType(value as "ONLINE" | "OFFLINE")
-                }
-                required
+            <Select
+              name="classType"
+              defaultValue={state.inputs?.classType ?? "ONLINE"}
+              onValueChange={(value) =>
+                setClassType(value as "ONLINE" | "OFFLINE")
+              }
+              required
+            >
+              <SelectTrigger
+                className={`h-12 border-gray-200 ${
+                  state.errors?.classType ? "border-red-500" : "bg-gray-50/30"
+                } font-medium`}
               >
-                <SelectTrigger
-                  className={`h-12 border-gray-200 ${
-                    state.errors?.classType ? "border-red-500" : "bg-gray-50/30"
-                  } font-medium`}
-                >
-                  <SelectValue placeholder="Select class type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="ONLINE">Online</SelectItem>
-                  <SelectItem value="OFFLINE">Offline</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+                <SelectValue placeholder="Select class type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ONLINE">Online</SelectItem>
+                <SelectItem value="OFFLINE">Offline</SelectItem>
+              </SelectContent>
+            </Select>
             {state.errors?.classType && (
               <p className="text-xs text-red-500">
                 {state.errors.classType[0]}
@@ -222,9 +220,10 @@ const AddClassForm = ({ subjects = [], teachers = [] }: AddClassFormProps) => {
             >
               Start Time
             </Label>
-            <TimePicker
+            <CustomTimePicker
               value={startTime}
               onChange={setStartTime}
+              placeholder="Select start time"
               error={!!state.errors?.startTime}
             />
             {state.errors?.startTime && (
@@ -242,9 +241,10 @@ const AddClassForm = ({ subjects = [], teachers = [] }: AddClassFormProps) => {
             >
               End Time
             </Label>
-            <TimePicker
+            <CustomTimePicker
               value={endTime}
               onChange={setEndTime}
+              placeholder="Select end time"
               error={!!state.errors?.endTime}
             />
             {state.errors?.endTime && (
