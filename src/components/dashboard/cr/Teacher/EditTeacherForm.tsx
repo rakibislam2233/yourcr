@@ -15,7 +15,7 @@ import {
   updateTeacher,
   type TeacherActionState,
 } from "@/services/teacher.service";
-import { Camera, Plus, User, X } from "lucide-react";
+import { Building2, Camera, Mail, Phone, Plus, User, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -136,121 +136,147 @@ const EditTeacherForm: React.FC<EditTeacherFormProps> = ({ teacher }) => {
       <form action={formAction} className="space-y-6">
         <input type="hidden" name="subjects" value={JSON.stringify(subjects)} />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <Label htmlFor="name">Full Name</Label>
-            <Input
-              id="name"
-              name="name"
-              defaultValue={state.inputs?.name ?? teacher.name}
-              className={state.errors?.name ? "border-red-500" : ""}
-              required
-            />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+          <div className="flex flex-col gap-1.5">
+            <Label
+              htmlFor="name"
+              className="text-sm font-semibold text-gray-700"
+            >
+              Full Name
+            </Label>
+            <div className="relative">
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Input
+                id="name"
+                name="name"
+                defaultValue={state.inputs?.name ?? teacher.name}
+                placeholder="e.g., Dr. Kamal Ahmed"
+                required
+                className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary ${
+                  state.errors?.name ? "border-red-500" : "bg-gray-50/30"
+                } transition-all font-medium`}
+              />
+            </div>
             {state.errors?.name && (
-              <p className="text-red-500 text-xs mt-1">
-                {state.errors.name[0]}
-              </p>
+              <p className="text-xs text-red-500">{state.errors.name[0]}</p>
             )}
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="designation">Designation</Label>
+
+          <div className="flex flex-col gap-1.5">
+            <Label
+              htmlFor="designation"
+              className="text-sm font-semibold text-gray-700"
+            >
+              Designation
+            </Label>
             <Select
               name="designation"
+              required
               defaultValue={state.inputs?.designation ?? teacher.designation}
             >
               <SelectTrigger
-                className={state.errors?.designation ? "border-red-500" : ""}
+                className={`h-12 border-gray-200 ${
+                  state.errors?.designation ? "border-red-500" : "bg-gray-50/30"
+                } font-medium`}
               >
                 <SelectValue placeholder="Select designation" />
               </SelectTrigger>
               <SelectContent>
-                {designationOptions.map((d) => (
-                  <SelectItem key={d} value={d}>
-                    {d}
+                {designationOptions.map((option) => (
+                  <SelectItem key={option} value={option}>
+                    {option}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
             {state.errors?.designation && (
-              <p className="text-red-500 text-xs mt-1">
+              <p className="text-xs text-red-500">
                 {state.errors.designation[0]}
               </p>
             )}
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="department">Department</Label>
-            <Input
-              id="department"
-              name="department"
-              defaultValue={state.inputs?.department ?? teacher.department}
-              className={state.errors?.department ? "border-red-500" : ""}
-              required
-            />
+
+          <div className="flex flex-col gap-1.5">
+            <Label
+              htmlFor="department"
+              className="text-sm font-semibold text-gray-700"
+            >
+              Department
+            </Label>
+            <div className="relative">
+              <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Input
+                id="department"
+                name="department"
+                defaultValue={state.inputs?.department ?? teacher.department}
+                placeholder="e.g., Computer Technology"
+                required
+                className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary ${
+                  state.errors?.department ? "border-red-500" : "bg-gray-50/30"
+                } transition-all font-medium`}
+              />
+            </div>
             {state.errors?.department && (
-              <p className="text-red-500 text-xs mt-1">
+              <p className="text-xs text-red-500">
                 {state.errors.department[0]}
               </p>
             )}
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="color">Avatar Color</Label>
-            <Select
-              name="color"
-              defaultValue={state.inputs?.color ?? teacher.color}
+
+          <div className="flex flex-col gap-1.5">
+            <Label
+              htmlFor="email"
+              className="text-sm font-semibold text-gray-700"
             >
-              <SelectTrigger
-                className={state.errors?.color ? "border-red-500" : ""}
-              >
-                <SelectValue placeholder="Select color" />
-              </SelectTrigger>
-              <SelectContent>
-                {colorOptions.map((c) => (
-                  <SelectItem key={c.value} value={c.value}>
-                    {c.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {state.errors?.color && (
-              <p className="text-red-500 text-xs mt-1">
-                {state.errors.color[0]}
-              </p>
-            )}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              defaultValue={state.inputs?.email ?? teacher.email}
-              className={state.errors?.email ? "border-red-500" : ""}
-              required
-            />
+              Email Address
+            </Label>
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                defaultValue={state.inputs?.email ?? teacher.email}
+                placeholder="e.g., kamal.ahmed@dpi.edu.bd"
+                required
+                className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary ${
+                  state.errors?.email ? "border-red-500" : "bg-gray-50/30"
+                } transition-all font-medium`}
+              />
+            </div>
             {state.errors?.email && (
-              <p className="text-red-500 text-sm mt-1">
-                {state.errors.email[0]}
-              </p>
+              <p className="text-xs text-red-500">{state.errors.email[0]}</p>
             )}
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="phone">Phone</Label>
-            <Input
-              id="phone"
-              name="phone"
-              defaultValue={state.inputs?.phone ?? teacher.phone}
-              className={state.errors?.phone ? "border-red-500" : ""}
-              required
-            />
+
+          <div className="flex flex-col gap-1.5">
+            <Label
+              htmlFor="phone"
+              className="text-sm font-semibold text-gray-700"
+            >
+              Phone Number
+            </Label>
+            <div className="relative">
+              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Input
+                id="phone"
+                name="phone"
+                type="tel"
+                defaultValue={state.inputs?.phone ?? teacher.phone}
+                placeholder="e.g., +880 1711-234567"
+                required
+                className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary ${
+                  state.errors?.phone ? "border-red-500" : "bg-gray-50/30"
+                } transition-all font-medium`}
+              />
+            </div>
             {state.errors?.phone && (
-              <p className="text-red-500 text-xs mt-1">
-                {state.errors.phone[0]}
-              </p>
+              <p className="text-xs text-red-500">{state.errors.phone[0]}</p>
             )}
           </div>
-          <div className="space-y-2 md:col-span-2">
+          <div className="flex flex-col gap-1.5 md:col-span-2">
             <Label>Profile Photo</Label>
-            <div className="flex items-start gap-6">
+            <div className="flex flex-col md:flex-row items-start gap-6">
               {/* Photo Upload Area */}
               <div className="flex-1">
                 <div
@@ -285,10 +311,10 @@ const EditTeacherForm: React.FC<EditTeacherFormProps> = ({ teacher }) => {
               </div>
 
               {/* Photo Preview */}
-              <div className="flex-shrink-0">
+              <div className="flex items-center justify-center">
                 {photoPreview ? (
                   <div className="relative group">
-                    <div className="w-32 h-32 rounded-lg overflow-hidden border-2 border-gray-200">
+                    <div className="w-32 h-32 mx-auto rounded-lg overflow-hidden border-2 border-gray-200">
                       <Image
                         src={photoPreview}
                         alt="Profile preview"
@@ -361,14 +387,14 @@ const EditTeacherForm: React.FC<EditTeacherFormProps> = ({ teacher }) => {
           </div>
         </div>
 
-        <div className="flex gap-3 pt-4 border-t border-gray-100">
-          <Link href="/dashboard/cr/teachers" className="flex-1">
-            <Button type="button" variant="outline" className="w-full">
+        <div className="flex gap-3 justify-end pt-4">
+          <Link href="/dashboard/cr/teachers">
+            <Button type="button" variant="outline" className="h-12">
               Cancel
             </Button>
           </Link>
-          <Button type="submit" className="flex-1" disabled={isPending}>
-            {isPending ? "Updating..." : "Save Changes"}
+          <Button type="submit" className="h-12" disabled={isPending}>
+            {isPending ? "Updating Teacher..." : "Save Changes"}
           </Button>
         </div>
       </form>

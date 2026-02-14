@@ -59,7 +59,6 @@ const ManageTeachers: React.FC<ManageTeachersProps> = ({
     });
   };
 
-  console.log(teachers);
   return (
     <section className="space-y-6">
       <PageHeader
