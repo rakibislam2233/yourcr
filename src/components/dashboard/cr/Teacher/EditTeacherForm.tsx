@@ -53,8 +53,6 @@ interface EditTeacherFormProps {
 
 const EditTeacherForm: React.FC<EditTeacherFormProps> = ({ teacher }) => {
   const router = useRouter();
-  const [subjectInput, setSubjectInput] = useState("");
-  const [subjects, setSubjects] = useState<string[]>(teacher.subjects || []);
   const [photoPreview, setPhotoPreview] = useState<string | null>(
     teacher.photoUrl || null,
   );
@@ -76,17 +74,6 @@ const EditTeacherForm: React.FC<EditTeacherFormProps> = ({ teacher }) => {
       }
     }
   }, [state, router]);
-
-  const handleAddSubject = () => {
-    if (subjectInput.trim() && !subjects.includes(subjectInput.trim())) {
-      setSubjects([...subjects, subjectInput.trim()]);
-      setSubjectInput("");
-    }
-  };
-
-  const handleRemoveSubject = (subject: string) => {
-    setSubjects(subjects.filter((s) => s !== subject));
-  };
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -134,8 +121,6 @@ const EditTeacherForm: React.FC<EditTeacherFormProps> = ({ teacher }) => {
   return (
     <div className="bg-white rounded-2xl border border-gray-100 p-6">
       <form action={formAction} className="space-y-6">
-        <input type="hidden" name="subjects" value={JSON.stringify(subjects)} />
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
           <div className="flex flex-col gap-1.5">
             <Label
@@ -342,47 +327,6 @@ const EditTeacherForm: React.FC<EditTeacherFormProps> = ({ teacher }) => {
               <p className="text-xs text-red-500 mt-2">
                 {state.errors.photo[0]}
               </p>
-            )}
-          </div>
-
-          <div className="space-y-2 md:col-span-2">
-            <Label>Subjects</Label>
-            <div className="flex gap-2">
-              <Input
-                value={subjectInput}
-                onChange={(e) => setSubjectInput(e.target.value)}
-                placeholder="Enter subject name and press Add"
-                onKeyPress={(e) =>
-                  e.key === "Enter" && (e.preventDefault(), handleAddSubject())
-                }
-              />
-              <button
-                type="button"
-                onClick={handleAddSubject}
-                className="bg-primary text-white px-4 rounded-md flex items-center gap-1 hover:bg-primary/90 transition-colors"
-              >
-                <Plus className="w-4 h-4" />
-                Add
-              </button>
-            </div>
-            {subjects.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-3">
-                {subjects.map((subject) => (
-                  <span
-                    key={subject}
-                    className="px-3 py-1.5 bg-primary/10 text-primary text-sm rounded-full flex items-center gap-2"
-                  >
-                    {subject}
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveSubject(subject)}
-                      className="hover:text-red-500"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
-                  </span>
-                ))}
-              </div>
             )}
           </div>
         </div>

@@ -1,11 +1,11 @@
 import ManageTeachers from "@/components/dashboard/cr/Teacher/ManageTeachers";
 import { getAllTeachers } from "@/services/teacher.service";
 
-interface PageProps {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}
-
-export default async function CrTeachersPage({ searchParams }: PageProps) {
+export default async function CrTeachersPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string>>;
+}) {
   const params = await searchParams;
   const queryParams: Record<string, string> = {};
   Object.entries(params).forEach(([key, value]) => {
@@ -15,15 +15,12 @@ export default async function CrTeachersPage({ searchParams }: PageProps) {
       queryParams[key] = value[0];
     }
   });
-  const response = await getAllTeachers(queryParams);
-
-  const teachers =
-    (response.data as any)?.data ||
-    (Array.isArray(response.data) ? response.data : []);
-  const meta = (response.data as any)?.meta || {
+  const result = await getAllTeachers(queryParams);
+  const teachers = result?.data || [];
+  const meta = result?.meta || {
     page: 1,
     limit: 10,
-    total: teachers.length,
+    total: 0,
     totalPages: 1,
   };
 

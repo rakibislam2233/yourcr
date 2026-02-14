@@ -113,12 +113,14 @@ const AddTeacherForm = () => {
       <form action={formAction} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
           <div className="flex flex-col gap-1.5">
-            <Label
-              htmlFor="name"
-              className="text-sm font-semibold text-gray-700"
-            >
-              Full Name
-            </Label>
+            <div className="flex items-center justify-between">
+              <Label
+                htmlFor="name"
+                className="text-sm font-semibold text-gray-700"
+              >
+                Full Name <span className="text-red-500">*</span>
+              </Label>
+            </div>
             <div className="relative">
               <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <Input
@@ -126,32 +128,39 @@ const AddTeacherForm = () => {
                 name="name"
                 defaultValue={state.inputs?.name}
                 placeholder="e.g., Dr. Kamal Ahmed"
-                required
                 className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary ${
-                  state.errors?.name ? "border-red-500" : "bg-gray-50/30"
+                  state.errors?.name
+                    ? "border-red-500 bg-red-50/10"
+                    : "bg-gray-50/30"
                 } transition-all font-medium`}
               />
             </div>
             {state.errors?.name && (
-              <p className="text-xs text-red-500">{state.errors.name[0]}</p>
+              <p className="text-xs font-medium text-red-500 mt-1">
+                <span className="text-red-500">*</span>
+                {state.errors.name[0]}
+              </p>
             )}
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <Label
-              htmlFor="designation"
-              className="text-sm font-semibold text-gray-700"
-            >
-              Designation
-            </Label>
+            <div className="flex items-center justify-between">
+              <Label
+                htmlFor="designation"
+                className="text-sm font-semibold text-gray-700"
+              >
+                Designation <span className="text-red-500">*</span>
+              </Label>
+            </div>
             <Select
               name="designation"
-              required
               defaultValue={state.inputs?.designation}
             >
               <SelectTrigger
                 className={`h-12 border-gray-200 ${
-                  state.errors?.designation ? "border-red-500" : "bg-gray-50/30"
+                  state.errors?.designation
+                    ? "border-red-500 bg-red-50/10"
+                    : "bg-gray-50/30"
                 } font-medium`}
               >
                 <SelectValue placeholder="Select designation" />
@@ -165,19 +174,22 @@ const AddTeacherForm = () => {
               </SelectContent>
             </Select>
             {state.errors?.designation && (
-              <p className="text-xs text-red-500">
+              <p className="text-xs font-medium text-red-500 mt-1">
+                <span className="text-red-500">*</span>
                 {state.errors.designation[0]}
               </p>
             )}
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <Label
-              htmlFor="department"
-              className="text-sm font-semibold text-gray-700"
-            >
-              Department
-            </Label>
+            <div className="flex items-center justify-between">
+              <Label
+                htmlFor="department"
+                className="text-sm font-semibold text-gray-700"
+              >
+                Department <span className="text-red-500">*</span>
+              </Label>
+            </div>
             <div className="relative">
               <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <Input
@@ -185,26 +197,30 @@ const AddTeacherForm = () => {
                 name="department"
                 defaultValue={state.inputs?.department}
                 placeholder="e.g., Computer Technology"
-                required
                 className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary ${
-                  state.errors?.department ? "border-red-500" : "bg-gray-50/30"
+                  state.errors?.department
+                    ? "border-red-500 bg-red-50/10"
+                    : "bg-gray-50/30"
                 } transition-all font-medium`}
               />
             </div>
             {state.errors?.department && (
-              <p className="text-xs text-red-500">
+              <p className="text-xs font-medium text-red-500 mt-1">
+                <span className="text-red-500">*</span>
                 {state.errors.department[0]}
               </p>
             )}
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <Label
-              htmlFor="email"
-              className="text-sm font-semibold text-gray-700"
-            >
-              Email Address
-            </Label>
+            <div className="flex items-center justify-between">
+              <Label
+                htmlFor="email"
+                className="text-sm font-semibold text-gray-700"
+              >
+                Email Address <span className="text-red-500">*</span>
+              </Label>
+            </div>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <Input
@@ -213,24 +229,30 @@ const AddTeacherForm = () => {
                 type="email"
                 defaultValue={state.inputs?.email}
                 placeholder="e.g., kamal.ahmed@dpi.edu.bd"
-                required
                 className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary ${
-                  state.errors?.email ? "border-red-500" : "bg-gray-50/30"
+                  state.errors?.email
+                    ? "border-red-500 bg-red-50/10"
+                    : "bg-gray-50/30"
                 } transition-all font-medium`}
               />
             </div>
             {state.errors?.email && (
-              <p className="text-xs text-red-500">{state.errors.email[0]}</p>
+              <p className="text-xs font-medium text-red-500 mt-1">
+                <span className="text-red-500">*</span>
+                {state.errors.email[0]}
+              </p>
             )}
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <Label
-              htmlFor="phone"
-              className="text-sm font-semibold text-gray-700"
-            >
-              Phone Number
-            </Label>
+            <div className="flex items-center justify-between">
+              <Label
+                htmlFor="phone"
+                className="text-sm font-semibold text-gray-700"
+              >
+                Phone Number <span className="text-red-500">*</span>
+              </Label>
+            </div>
             <div className="relative">
               <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <Input
@@ -239,24 +261,30 @@ const AddTeacherForm = () => {
                 type="tel"
                 defaultValue={state.inputs?.phone}
                 placeholder="e.g., +880 1711-234567"
-                required
                 className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary ${
-                  state.errors?.phone ? "border-red-500" : "bg-gray-50/30"
+                  state.errors?.phone
+                    ? "border-red-500 bg-red-50/10"
+                    : "bg-gray-50/30"
                 } transition-all font-medium`}
               />
             </div>
             {state.errors?.phone && (
-              <p className="text-xs text-red-500">{state.errors.phone[0]}</p>
+              <p className="text-xs font-medium text-red-500 mt-1">
+                <span className="text-red-500">*</span>
+                {state.errors.phone[0]}
+              </p>
             )}
           </div>
 
           <div className="flex flex-col gap-1.5 md:col-span-2">
-            <Label
-              htmlFor="photo"
-              className="text-sm font-semibold text-gray-700"
-            >
-              Profile Photo
-            </Label>
+            <div className="flex items-center justify-between">
+              <Label
+                htmlFor="photo"
+                className="text-sm font-semibold text-gray-700"
+              >
+                Profile Photo
+              </Label>
+            </div>
             <div className="flex flex-col md:flex-row items-start gap-6">
               {/* Photo Upload Area */}
               <div className="flex-1">
@@ -320,21 +348,34 @@ const AddTeacherForm = () => {
               </div>
             </div>
             {state.errors?.photo && (
-              <p className="text-xs text-red-500 mt-2">
+              <p className="text-xs font-medium text-red-500 mt-1">
+                <span className="text-red-500">*</span>
                 {state.errors.photo[0]}
               </p>
             )}
           </div>
         </div>
 
-        <div className="flex gap-3 justify-end pt-4">
+        <div className="flex gap-3 pt-4 justify-end">
           <Link href="/dashboard/cr/teachers">
-            <Button type="button" variant="outline" className="h-12">
+            <Button
+              type="button"
+              variant="outline"
+              disabled={isPending}
+              className="w-full h-12"
+            >
               Cancel
             </Button>
           </Link>
-          <Button type="submit" className="h-12" disabled={isPending}>
-            {isPending ? "Adding Teacher..." : "Add Teacher"}
+          <Button type="submit" disabled={isPending} className="h-12">
+            {isPending ? (
+              <span className="flex items-center gap-2">
+                <span className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                Adding Teacher...
+              </span>
+            ) : (
+              "Add Teacher"
+            )}
           </Button>
         </div>
       </form>

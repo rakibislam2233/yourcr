@@ -55,7 +55,7 @@ const AddStudentForm = () => {
               htmlFor="fullName"
               className="text-sm font-semibold text-gray-700"
             >
-              Full Name
+              Full Name <span className="text-red-500">*</span>
             </Label>
             <div className="relative">
               <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -83,7 +83,7 @@ const AddStudentForm = () => {
               htmlFor="email"
               className="text-sm font-semibold text-gray-700"
             >
-              Email
+              Email <span className="text-red-500">*</span>
             </Label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -112,7 +112,7 @@ const AddStudentForm = () => {
               htmlFor="phoneNumber"
               className="text-sm font-semibold text-gray-700"
             >
-              Phone Number
+              Phone Number<span className="text-red-500">*</span>
             </Label>
             <div className="relative">
               <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -140,7 +140,7 @@ const AddStudentForm = () => {
               htmlFor="studentId"
               className="text-sm font-semibold text-gray-700"
             >
-              Student ID
+              Student ID <span className="text-red-500">*</span>
             </Label>
             <div className="relative">
               <Hash className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />

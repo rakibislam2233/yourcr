@@ -50,16 +50,11 @@ export async function createTeacher(
     };
   }
   try {
-    // Prepare FormData with proper structure for API which might expect ACTUAL FormData for file upload
     const finalFormData = new FormData();
-    // Add text fields
+
     Object.keys(parsed.data).forEach((key) => {
       finalFormData.append(key, (parsed.data as any)[key]);
     });
-    // Add subjects specifically if not in parsed.data but in formData (usually it's a JSON string)
-    const subjects = formData.get("subjects");
-    if (subjects) finalFormData.append("subjects", subjects.toString());
-    // Add photo file if exists
     const photo = formData.get("photo");
     if (photo && photo instanceof File && photo.size > 0) {
       finalFormData.append("photo", photo);
@@ -108,7 +103,6 @@ export async function updateTeacher(
   }
 
   try {
-    // We send formData as-is because it handles multipart/form-data for files automatically
     const response = await api.patch<Teacher>(`/teachers/${id}`, formData);
 
     if (response.success) {

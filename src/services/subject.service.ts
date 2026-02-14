@@ -1,15 +1,13 @@
+"use server";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   createSubjectSchema,
   updateSubjectSchema,
 } from "@/validation/subject.validation";
-import { revalidatePath } from "next/cache";
 import { api } from "./api";
-
-import { Subject } from "@/interface/subject.interface";
-export type { Subject };
-
 import { ActionState } from "@/interface/action-state.interface";
+import { revalidateTag } from "next/cache";
+import { Subject } from "@/interface/subject.interface";
 
 export type SubjectActionState = ActionState;
 
@@ -57,7 +55,7 @@ export async function createSubject(
     const response = await api.post<Subject>("/subjects", parsed.data);
 
     if (response.success) {
-      revalidatePath("/dashboard/cr/subjects");
+      revalidateTag("subjects", { expire: 60 });
       return {
         success: true,
         message: response.message || "Subject created successfully",
@@ -103,8 +101,8 @@ export async function updateSubject(
     const response = await api.patch<Subject>(`/subjects/${id}`, parsed.data);
 
     if (response.success) {
-      revalidatePath("/dashboard/cr/subjects");
-      revalidatePath(`/dashboard/cr/subjects/${id}`);
+      revalidateTag("subjects", { expire: 60 });
+      revalidateTag(`subject-${id}`, { expire: 60 });
       return {
         success: true,
         message: response.message || "Subject updated successfully",
@@ -133,7 +131,8 @@ export async function deleteSubject(id: string) {
     const response = await api.delete(`/subjects/${id}`);
 
     if (response.success) {
-      revalidatePath("/dashboard/cr/subjects");
+      revalidateTag("subjects", { expire: 60 });
+      revalidateTag(`subject-${id}`, { expire: 60 });
       return {
         success: true,
         message: response.message || "Subject deleted successfully",
