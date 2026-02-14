@@ -91,14 +91,13 @@ const AddClassForm = ({ subjects = [], teachers = [] }: AddClassFormProps) => {
               Subject
             </Label>
             <div className="relative">
-              <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none z-10" />
               <Select
                 name="subjectId"
                 defaultValue={state.inputs?.subjectId}
                 required
               >
                 <SelectTrigger
-                  className={`pl-10 h-12 border-gray-200 ${
+                  className={`h-12 border-gray-200 ${
                     state.errors?.subjectId ? "border-red-500" : "bg-gray-50/30"
                   } font-medium`}
                 >
@@ -129,14 +128,13 @@ const AddClassForm = ({ subjects = [], teachers = [] }: AddClassFormProps) => {
               Teacher
             </Label>
             <div className="relative">
-              <Users className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none z-10" />
               <Select
                 name="teacherId"
                 defaultValue={state.inputs?.teacherId}
                 required
               >
                 <SelectTrigger
-                  className={`pl-10 h-12 border-gray-200 ${
+                  className={`h-12 border-gray-200 ${
                     state.errors?.teacherId ? "border-red-500" : "bg-gray-50/30"
                   } font-medium`}
                 >
@@ -188,7 +186,6 @@ const AddClassForm = ({ subjects = [], teachers = [] }: AddClassFormProps) => {
               Class Type
             </Label>
             <div className="relative">
-              <Video className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none z-10" />
               <Select
                 name="classType"
                 defaultValue={state.inputs?.classType ?? "ONLINE"}
@@ -198,7 +195,7 @@ const AddClassForm = ({ subjects = [], teachers = [] }: AddClassFormProps) => {
                 required
               >
                 <SelectTrigger
-                  className={`pl-10 h-12 border-gray-200 ${
+                  className={`h-12 border-gray-200 ${
                     state.errors?.classType ? "border-red-500" : "bg-gray-50/30"
                   } font-medium`}
                 >
