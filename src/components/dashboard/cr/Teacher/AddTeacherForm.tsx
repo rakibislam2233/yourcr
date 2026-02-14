@@ -13,7 +13,7 @@ import {
   createTeacher,
   type TeacherActionState,
 } from "@/services/teacher.service";
-import { BookOpen, Building2, Mail, Phone, Plus, User, X } from "lucide-react";
+import { Building2, Camera, Mail, Phone, User, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -51,9 +51,8 @@ const AddTeacherForm = () => {
     createTeacher,
     initialState,
   );
-  const [subjectInput, setSubjectInput] = useState("");
-  const [subjects, setSubjects] = useState<string[]>([]);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     if (state.timestamp && state.timestamp > 0) {
@@ -66,17 +65,6 @@ const AddTeacherForm = () => {
     }
   }, [state, router]);
 
-  const handleAddSubject = () => {
-    if (subjectInput.trim() && !subjects.includes(subjectInput.trim())) {
-      setSubjects([...subjects, subjectInput.trim()]);
-      setSubjectInput("");
-    }
-  };
-
-  const handleRemoveSubject = (subject: string) => {
-    setSubjects(subjects.filter((s) => s !== subject));
-  };
-
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -88,16 +76,41 @@ const AddTeacherForm = () => {
     }
   };
 
-  const handleFormSubmit = (formData: FormData) => {
-    if (subjects.length > 0) {
-      formData.append("subjects", JSON.stringify(subjects));
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+
+    const file = e.dataTransfer.files?.[0];
+    if (file && file.type.startsWith("image/")) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPhotoPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
-    formAction(formData);
+  };
+
+  const removePhoto = () => {
+    setPhotoPreview(null);
+    const fileInput = document.getElementById("photo") as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = "";
+    }
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 p-6">
-      <form action={handleFormSubmit} className="space-y-6">
+    <section className="bg-white rounded-2xl border border-gray-100 p-6">
+      <form action={formAction} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
           <div className="flex flex-col gap-1.5">
             <Label
@@ -237,127 +250,95 @@ const AddTeacherForm = () => {
             )}
           </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label
-              htmlFor="color"
-              className="text-sm font-semibold text-gray-700"
-            >
-              Avatar Color
-            </Label>
-            <Select name="color" required defaultValue={state.inputs?.color}>
-              <SelectTrigger
-                className={`h-12 border-gray-200 ${
-                  state.errors?.color ? "border-red-500" : "bg-gray-50/30"
-                } font-medium`}
-              >
-                <SelectValue placeholder="Select color" />
-              </SelectTrigger>
-              <SelectContent>
-                {colorOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {state.errors?.color && (
-              <p className="text-xs text-red-500">{state.errors.color[0]}</p>
-            )}
-          </div>
-
           <div className="flex flex-col gap-1.5 md:col-span-2">
             <Label
               htmlFor="photo"
               className="text-sm font-semibold text-gray-700"
             >
-              Photo (Optional)
+              Profile Photo
             </Label>
-            <Input
-              id="photo"
-              name="photo"
-              type="file"
-              accept="image/*"
-              onChange={handlePhotoChange}
-              className="h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
-            />
-            {photoPreview && (
-              <div className="mt-2">
-                <Image
-                  src={photoPreview}
-                  alt="Preview"
-                  width={96}
-                  height={96}
-                  className="object-cover rounded-md border border-gray-200"
-                />
+            <div className="flex flex-col md:flex-row items-start gap-6">
+              {/* Photo Upload Area */}
+              <div className="flex-1">
+                <div
+                  className={`relative border-2 border-dashed rounded-lg p-8 text-center transition-all cursor-pointer ${
+                    isDragging
+                      ? "border-primary bg-primary/5"
+                      : "border-gray-300 hover:border-gray-400 bg-gray-50/30"
+                  }`}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                  onClick={() => document.getElementById("photo")?.click()}
+                >
+                  <input
+                    id="photo"
+                    name="photo"
+                    type="file"
+                    accept="image/*"
+                    onChange={handlePhotoChange}
+                    className="hidden"
+                  />
+                  <Camera className="w-12 h-12 mx-auto text-gray-400 mb-3" />
+                  <p className="text-sm font-medium text-gray-700 mb-1">
+                    {isDragging
+                      ? "Drop photo here"
+                      : "Click to upload or drag and drop"}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    PNG, JPG, GIF up to 10MB
+                  </p>
+                </div>
               </div>
-            )}
-          </div>
 
-          <div className="flex flex-col gap-1.5 md:col-span-2">
-            <Label
-              htmlFor="subjectInput"
-              className="text-sm font-semibold text-gray-700"
-            >
-              Subjects (Optional)
-            </Label>
-            <div className="flex gap-2">
-              <div className="relative flex-1">
-                <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <Input
-                  id="subjectInput"
-                  value={subjectInput}
-                  onChange={(e) => setSubjectInput(e.target.value)}
-                  onKeyPress={(e) =>
-                    e.key === "Enter" &&
-                    (e.preventDefault(), handleAddSubject())
-                  }
-                  placeholder="e.g., Database Management"
-                  className="pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium"
-                />
-              </div>
-              <Button
-                type="button"
-                onClick={handleAddSubject}
-                className="h-12 px-6 gap-2"
-              >
-                <Plus className="w-4 h-4" />
-                Add
-              </Button>
-            </div>
-            {subjects.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-3">
-                {subjects.map((subject) => (
-                  <span
-                    key={subject}
-                    className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/5 text-primary text-sm font-medium rounded-md"
-                  >
-                    {subject}
+              {/* Photo Preview */}
+              <div className="flex items-center justify-center">
+                {photoPreview ? (
+                  <div className="relative group">
+                    <div className="w-32 h-32 mx-auto rounded-lg overflow-hidden border-2 border-gray-200">
+                      <Image
+                        src={photoPreview}
+                        alt="Profile preview"
+                        width={128}
+                        height={128}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
                     <button
                       type="button"
-                      onClick={() => handleRemoveSubject(subject)}
-                      className="hover:bg-primary/10 rounded-full p-0.5 transition-colors"
+                      onClick={removePhoto}
+                      className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                     >
-                      <X className="w-3 h-3" />
+                      <X className="w-4 h-4" />
                     </button>
-                  </span>
-                ))}
+                  </div>
+                ) : (
+                  <div className="w-32 h-32 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50">
+                    <User className="w-8 h-8 text-gray-400" />
+                  </div>
+                )}
               </div>
+            </div>
+            {state.errors?.photo && (
+              <p className="text-xs text-red-500 mt-2">
+                {state.errors.photo[0]}
+              </p>
             )}
           </div>
         </div>
 
-        <div className="flex gap-3 pt-4 border-t border-gray-100">
-          <Link href="/dashboard/cr/teachers" className="flex-1">
-            <Button type="button" variant="outline" className="w-full h-12">
+        <div className="flex gap-3 justify-end pt-4">
+          <Link href="/dashboard/cr/teachers">
+            <Button type="button" variant="outline" className="h-12">
               Cancel
             </Button>
           </Link>
-          <Button type="submit" className="flex-1 h-12" disabled={isPending}>
+          <Button type="submit" className="h-12" disabled={isPending}>
             {isPending ? "Adding Teacher..." : "Add Teacher"}
           </Button>
         </div>
       </form>
-    </div>
+    </section>
   );
 };
 

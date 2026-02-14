@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ConfirmModal } from "@/components/ui/modal";
 import { Teacher } from "@/interface/teacher.interface";
 import { deleteTeacher } from "@/services/teacher.service";
-import { Plus, Users } from "lucide-react";
+import { CloudCog, Plus, Users } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState, useTransition } from "react";
@@ -59,6 +59,7 @@ const ManageTeachers: React.FC<ManageTeachersProps> = ({
     });
   };
 
+  console.log(teachers);
   return (
     <section className="space-y-6">
       <PageHeader

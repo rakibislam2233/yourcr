@@ -18,6 +18,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import studentCard from "@/assets/students/student-card.png";
+import Image from "next/image";
 
 interface TeacherCardProps {
   teacher: Teacher;
@@ -35,28 +37,22 @@ const TeacherCard: React.FC<TeacherCardProps> = ({ teacher, onDelete }) => {
   };
 
   return (
-    <Card className="hover:shadow-md transition-shadow relative overflow-hidden rounded-md border-gray-100 group">
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 z-0 opacity-10 pointer-events-none"
-        style={{
-          backgroundImage: "url('/card_bg.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      />
+    <Card className="shadow-none relative overflow-hidden rounded-md border-gray-100 group">
+      {/* Background Image - Card er upore */}
+      <div className="absolute inset-0 z-0">
+        <Image src={studentCard} alt="Student card background" fill />
+        <div className="absolute inset-0 bg-white/50" />
+      </div>
 
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative z-10">
         <div className="flex items-center space-x-4">
           <Avatar className="h-12 w-12 rounded-md border-2 border-white shadow-sm">
             <AvatarImage
-              src={teacher.photo}
+              src={teacher?.photoUrl}
               alt={teacher.name}
               className="object-cover"
             />
-            <AvatarFallback
-              className={`text-white font-bold rounded-md ${teacher.color}`}
-            >
+            <AvatarFallback className="bg-primary/10 text-primary font-bold rounded-md">
               {getInitials(teacher.name)}
             </AvatarFallback>
           </Avatar>
@@ -74,7 +70,10 @@ const TeacherCard: React.FC<TeacherCardProps> = ({ teacher, onDelete }) => {
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0 rounded-md">
+            <Button
+              variant="default"
+              className="h-8 w-8 p-0 rounded-md bg-primary text-white"
+            >
               <span className="sr-only">Open menu</span>
               <MoreVertical className="h-4 w-4" />
             </Button>

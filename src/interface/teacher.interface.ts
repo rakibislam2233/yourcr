@@ -5,7 +5,7 @@ export interface Teacher {
   department: string;
   email: string;
   phone: string;
-  photo?: string;
+  photoUrl?: string;
   subjects?: string[];
   color: string;
   institutionId: string;

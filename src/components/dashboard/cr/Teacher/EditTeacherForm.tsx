@@ -15,7 +15,8 @@ import {
   updateTeacher,
   type TeacherActionState,
 } from "@/services/teacher.service";
-import { Plus, X } from "lucide-react";
+import { Camera, Plus, User, X } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useActionState, useEffect, useState } from "react";
@@ -54,6 +55,10 @@ const EditTeacherForm: React.FC<EditTeacherFormProps> = ({ teacher }) => {
   const router = useRouter();
   const [subjectInput, setSubjectInput] = useState("");
   const [subjects, setSubjects] = useState<string[]>(teacher.subjects || []);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(
+    teacher.photoUrl || null,
+  );
+  const [isDragging, setIsDragging] = useState(false);
 
   const updateTeacherWithId = updateTeacher.bind(null, teacher.id);
   const [state, formAction, isPending] = useActionState(
@@ -81,6 +86,49 @@ const EditTeacherForm: React.FC<EditTeacherFormProps> = ({ teacher }) => {
 
   const handleRemoveSubject = (subject: string) => {
     setSubjects(subjects.filter((s) => s !== subject));
+  };
+
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPhotoPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+
+    const file = e.dataTransfer.files?.[0];
+    if (file && file.type.startsWith("image/")) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPhotoPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removePhoto = () => {
+    setPhotoPreview(null);
+    const fileInput = document.getElementById("photo") as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = "";
+    }
   };
 
   return (
@@ -200,6 +248,77 @@ const EditTeacherForm: React.FC<EditTeacherFormProps> = ({ teacher }) => {
               </p>
             )}
           </div>
+          <div className="space-y-2 md:col-span-2">
+            <Label>Profile Photo</Label>
+            <div className="flex items-start gap-6">
+              {/* Photo Upload Area */}
+              <div className="flex-1">
+                <div
+                  className={`relative border-2 border-dashed rounded-lg p-8 text-center transition-all cursor-pointer ${
+                    isDragging
+                      ? "border-primary bg-primary/5"
+                      : "border-gray-300 hover:border-gray-400 bg-gray-50/30"
+                  }`}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                  onClick={() => document.getElementById("photo")?.click()}
+                >
+                  <input
+                    id="photo"
+                    name="photo"
+                    type="file"
+                    accept="image/*"
+                    onChange={handlePhotoChange}
+                    className="hidden"
+                  />
+                  <Camera className="w-12 h-12 mx-auto text-gray-400 mb-3" />
+                  <p className="text-sm font-medium text-gray-700 mb-1">
+                    {isDragging
+                      ? "Drop photo here"
+                      : "Click to upload or drag and drop"}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    PNG, JPG, GIF up to 10MB
+                  </p>
+                </div>
+              </div>
+
+              {/* Photo Preview */}
+              <div className="flex-shrink-0">
+                {photoPreview ? (
+                  <div className="relative group">
+                    <div className="w-32 h-32 rounded-lg overflow-hidden border-2 border-gray-200">
+                      <Image
+                        src={photoPreview}
+                        alt="Profile preview"
+                        width={128}
+                        height={128}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={removePhoto}
+                      className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="w-32 h-32 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50">
+                    <User className="w-8 h-8 text-gray-400" />
+                  </div>
+                )}
+              </div>
+            </div>
+            {state.errors?.photo && (
+              <p className="text-xs text-red-500 mt-2">
+                {state.errors.photo[0]}
+              </p>
+            )}
+          </div>
+
           <div className="space-y-2 md:col-span-2">
             <Label>Subjects</Label>
             <div className="flex gap-2">
