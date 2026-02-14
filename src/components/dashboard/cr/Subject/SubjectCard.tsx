@@ -91,7 +91,7 @@ const SubjectCard = ({ subject, onDelete }: SubjectCardProps) => {
       </CardHeader>
 
       <CardContent className="space-y-4 pt-4 relative z-10">
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1.5">
           {/* Teacher Name */}
           <div className="flex items-center gap-3  text-gray-600">
             <span className="font-medium">Teacher Name:</span>
@@ -116,7 +116,7 @@ const SubjectCard = ({ subject, onDelete }: SubjectCardProps) => {
           </div>
         </div>
 
-        {subject?.description && (
+        {/* {subject?.description && (
           <div className="border-t border-gray-100 pt-3">
             <div className="flex items-center gap-2 mb-2">
               <BookOpen className="size-4 text-primary" />
@@ -124,11 +124,11 @@ const SubjectCard = ({ subject, onDelete }: SubjectCardProps) => {
                 Description
               </span>
             </div>
-            <p className=" text-gray-600 line-clamp-3">
+            <p className="text-gray-600 line-clamp-3">
               {subject?.description}
             </p>
           </div>
-        )}
+        )} */}
       </CardContent>
     </Card>
   );

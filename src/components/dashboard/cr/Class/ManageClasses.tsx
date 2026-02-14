@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
-import PageHeader from "../shared/PageHeader";
+import PageHeader from "../../shared/PageHeader";
 
 interface OnlineClass {
   id: number;
@@ -88,7 +88,7 @@ const ManageClasses: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <section className="w-full space-y-6">
       <PageHeader
         title="Manage Classes"
         description="Manage online class schedules and meeting links"
@@ -258,7 +258,7 @@ const ManageClasses: React.FC = () => {
         cancelText="Cancel"
         variant="danger"
       />
-    </div>
+    </section>
   );
 };
 

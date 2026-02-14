@@ -1,4 +1,4 @@
-import ManageClasses from "@/components/dashboard/cr/ManageClasses";
+import ManageClasses from "@/components/dashboard/cr/Class/ManageClasses";
 
 export default function CrClassesPage() {
   return <ManageClasses />;
