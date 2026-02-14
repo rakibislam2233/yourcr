@@ -47,10 +47,14 @@ const serverFetchHelper = async (
   const config: RequestInit = {
     headers: requestHeaders,
     ...restOptions,
-    cache: options.cache || "no-store",
-    // Make sure we carry forward any revalidation strategy
     next: restOptions.next,
   };
+
+  if (!config.cache) {
+    if (!restOptions.next?.revalidate) {
+      config.cache = "no-store";
+    }
+  }
 
   try {
     const response = await fetch(`${BACKEND_API_URL}${endpoint}`, config);

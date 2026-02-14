@@ -1,4 +1,4 @@
-import ManageTeachers from "@/components/dashboard/cr/ManageTeachers";
+import ManageTeachers from "@/components/dashboard/cr/Teacher/ManageTeachers";
 import { getAllTeachers } from "@/services/teacher.service";
 
 interface PageProps {
@@ -7,8 +7,6 @@ interface PageProps {
 
 export default async function CrTeachersPage({ searchParams }: PageProps) {
   const params = await searchParams;
-
-  // Convert searchParams to Record<string, string>
   const queryParams: Record<string, string> = {};
   Object.entries(params).forEach(([key, value]) => {
     if (typeof value === "string") {
@@ -17,26 +15,17 @@ export default async function CrTeachersPage({ searchParams }: PageProps) {
       queryParams[key] = value[0];
     }
   });
-
-  // Fetch teachers with SSR
   const response = await getAllTeachers(queryParams);
-  const teachers = response.success ? response.data : [];
 
-  // Assuming response.data is { data: Teacher[], meta: Meta } if pagination is supported
-  // But teacher.service.ts types it as Teacher[], so let's verify if we need to cast or if I should assume no pagination for now
-  // However, I added meta prop to ManageTeachers.
-  // Let's assume for now response.data IS the array, and I construct a dummy meta or update service later.
-  // Actually, standard pattern is response.data has data and meta.
-  // Let's safe cast for now to avoid TS errors if types mismatch.
-  const data =
+  const teachers =
     (response.data as any)?.data ||
     (Array.isArray(response.data) ? response.data : []);
   const meta = (response.data as any)?.meta || {
     page: 1,
     limit: 10,
-    total: data.length,
+    total: teachers.length,
     totalPages: 1,
   };
 
-  return <ManageTeachers initialTeachers={data} meta={meta} />;
+  return <ManageTeachers teachers={teachers} meta={meta} />;
 }

@@ -108,28 +108,28 @@ const StudentHome: React.FC = () => {
         <StatsCard
           title="Today's Classes"
           value={3}
-          icon={Video}
+          icon="Video"
           color="blue"
           delay={0}
         />
         <StatsCard
           title="Pending Assignments"
           value={2}
-          icon={ClipboardList}
+          icon="ClipboardList"
           color="orange"
           delay={0.1}
         />
         <StatsCard
           title="Unread Notices"
           value={4}
-          icon={Bell}
+          icon="Bell"
           color="purple"
           delay={0.2}
         />
         <StatsCard
           title="Active Subjects"
           value={8}
-          icon={BookOpen}
+          icon="BookOpen"
           color="green"
           delay={0.3}
         />

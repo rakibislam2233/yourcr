@@ -17,7 +17,6 @@ interface FilterOption {
   label: string;
   value: string;
 }
-
 interface SearchFilterProps {
   searchPlaceholder?: string;
   filters?: {
@@ -81,7 +80,7 @@ export function SearchFilter({
     searchValue || filters.some((filter) => searchParams?.get(filter.name));
 
   return (
-    <div className="bg-white rounded-xl border border-gray-100 p-4 space-y-4">
+    <div className="w-full space-y-4">
       <div className="flex flex-col md:flex-row gap-4">
         {/* Search Input */}
         <div className="flex-1">
@@ -102,7 +101,7 @@ export function SearchFilter({
         </div>
 
         {/* Filter Dropdowns */}
-        {filters.map((filter) => (
+        {filters?.map((filter) => (
           <div key={filter.name} className="min-w-[180px]">
             <Label htmlFor={filter.name} className="sr-only">
               {filter.label}

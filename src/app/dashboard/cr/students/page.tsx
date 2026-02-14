@@ -7,9 +7,17 @@ export default async function CrStudentsPage({
   searchParams: Promise<Record<string, string>>;
 }) {
   const params = await searchParams;
-  const result = await getAllStudents(params);
-  const students = result.data || [];
-  const meta = result.meta || {
+  const queryParams: Record<string, string> = {};
+  Object.entries(params).forEach(([key, value]) => {
+    if (typeof value === "string") {
+      queryParams[key] = value;
+    } else if (Array.isArray(value)) {
+      queryParams[key] = value[0];
+    }
+  });
+  const result = await getAllStudents(queryParams);
+  const students = result?.data || [];
+  const meta = result?.meta || {
     page: 1,
     limit: 10,
     total: 0,
