@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -9,17 +10,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { TimePicker } from "@/components/ui/time-picker";
 import { createClass, type ClassActionState } from "@/services/class.service";
-import { convertTo12Hour } from "@/utils/time";
-import {
-  BookOpen,
-  Calendar,
-  Clock,
-  Link as LinkIcon,
-  MapPin,
-  Users,
-  Video,
-} from "lucide-react";
+import { format } from "date-fns";
+import { BookOpen, Link as LinkIcon, MapPin, Users, Video } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
@@ -48,6 +42,10 @@ interface AddClassFormProps {
 const AddClassForm = ({ subjects = [], teachers = [] }: AddClassFormProps) => {
   const router = useRouter();
   const [classType, setClassType] = useState<"ONLINE" | "OFFLINE">("ONLINE");
+  const [classDate, setClassDate] = useState<Date>();
+  const [startTime, setStartTime] = useState<string>("10:00 AM");
+  const [endTime, setEndTime] = useState<string>("11:00 AM");
+
   const [state, formAction, isPending] = useActionState(
     createClass,
     initialState,
@@ -64,26 +62,25 @@ const AddClassForm = ({ subjects = [], teachers = [] }: AddClassFormProps) => {
     }
   }, [state, router]);
 
-  // Convert time input to AM/PM format before submission
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const form = e.currentTarget;
     const formData = new FormData(form);
 
-    // Convert 24-hour time to AM/PM format
-    const startTime = formData.get("startTime") as string;
-    const endTime = formData.get("endTime") as string;
+    // Add the date and time values
+    if (classDate) {
+      formData.set("classDate", format(classDate, "yyyy-MM-dd"));
+    }
+    formData.set("startTime", startTime);
+    formData.set("endTime", endTime);
 
-    if (startTime) {
-      formData.set("startTime", convertTo12Hour(startTime));
-    }
-    if (endTime) {
-      formData.set("endTime", convertTo12Hour(endTime));
-    }
+    // Call the form action
+    formAction(formData);
   };
 
   return (
     <div className="bg-white rounded-2xl border border-gray-100 p-6">
-      <form action={formAction} onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
           {/* Subject */}
           <div className="flex flex-col gap-1.5">
@@ -169,19 +166,12 @@ const AddClassForm = ({ subjects = [], teachers = [] }: AddClassFormProps) => {
             >
               Date
             </Label>
-            <div className="relative">
-              <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <Input
-                id="classDate"
-                name="classDate"
-                type="date"
-                defaultValue={state.inputs?.classDate}
-                required
-                className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary ${
-                  state.errors?.classDate ? "border-red-500" : "bg-gray-50/30"
-                } transition-all font-medium`}
-              />
-            </div>
+            <DatePicker
+              value={classDate}
+              onChange={setClassDate}
+              placeholder="Select class date"
+              className={state.errors?.classDate ? "border-red-500" : ""}
+            />
             {state.errors?.classDate && (
               <p className="text-xs text-red-500">
                 {state.errors.classDate[0]}
@@ -235,19 +225,11 @@ const AddClassForm = ({ subjects = [], teachers = [] }: AddClassFormProps) => {
             >
               Start Time
             </Label>
-            <div className="relative">
-              <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <Input
-                id="startTime"
-                name="startTime"
-                type="time"
-                defaultValue={state.inputs?.startTime}
-                required
-                className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary ${
-                  state.errors?.startTime ? "border-red-500" : "bg-gray-50/30"
-                } transition-all font-medium`}
-              />
-            </div>
+            <TimePicker
+              value={startTime}
+              onChange={setStartTime}
+              error={!!state.errors?.startTime}
+            />
             {state.errors?.startTime && (
               <p className="text-xs text-red-500">
                 {state.errors.startTime[0]}
@@ -263,19 +245,11 @@ const AddClassForm = ({ subjects = [], teachers = [] }: AddClassFormProps) => {
             >
               End Time
             </Label>
-            <div className="relative">
-              <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <Input
-                id="endTime"
-                name="endTime"
-                type="time"
-                defaultValue={state.inputs?.endTime}
-                required
-                className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary ${
-                  state.errors?.endTime ? "border-red-500" : "bg-gray-50/30"
-                } transition-all font-medium`}
-              />
-            </div>
+            <TimePicker
+              value={endTime}
+              onChange={setEndTime}
+              error={!!state.errors?.endTime}
+            />
             {state.errors?.endTime && (
               <p className="text-xs text-red-500">{state.errors.endTime[0]}</p>
             )}

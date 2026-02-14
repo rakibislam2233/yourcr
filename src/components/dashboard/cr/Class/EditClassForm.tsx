@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -10,18 +11,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { TimePicker } from "@/components/ui/time-picker";
 import { Class } from "@/interface/class.interface";
 import { updateClass, type ClassActionState } from "@/services/class.service";
-import { convertTo12Hour, convertTo24Hour } from "@/utils/time";
-import {
-  BookOpen,
-  Calendar,
-  Clock,
-  Link as LinkIcon,
-  MapPin,
-  Users,
-  Video,
-} from "lucide-react";
+import { format, parse } from "date-fns";
+import { BookOpen, Link as LinkIcon, MapPin, Users, Video } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useActionState, useEffect, useState } from "react";
@@ -55,9 +49,23 @@ const EditClassForm: React.FC<EditClassFormProps> = ({
 }) => {
   const router = useRouter();
   const updateClassWithId = updateClass.bind(null, classData.id);
+
+  // Parse initial date
+  const initialDate = classData.classDate
+    ? parse(classData.classDate, "yyyy-MM-dd", new Date())
+    : undefined;
+
   const [classType, setClassType] = useState<"ONLINE" | "OFFLINE">(
     classData.classType,
   );
+  const [classDate, setClassDate] = useState<Date | undefined>(initialDate);
+  const [startTime, setStartTime] = useState<string>(
+    classData.startTime || "10:00 AM",
+  );
+  const [endTime, setEndTime] = useState<string>(
+    classData.endTime || "11:00 AM",
+  );
+
   const [state, formAction, isPending] = useActionState(
     updateClassWithId,
     initialState,
@@ -74,30 +82,25 @@ const EditClassForm: React.FC<EditClassFormProps> = ({
     }
   }, [state, router]);
 
-  // Convert time input to AM/PM format before submission
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const form = e.currentTarget;
     const formData = new FormData(form);
 
-    // Convert 24-hour time to AM/PM format
-    const startTime = formData.get("startTime") as string;
-    const endTime = formData.get("endTime") as string;
+    // Add the date and time values
+    if (classDate) {
+      formData.set("classDate", format(classDate, "yyyy-MM-dd"));
+    }
+    formData.set("startTime", startTime);
+    formData.set("endTime", endTime);
 
-    if (startTime) {
-      formData.set("startTime", convertTo12Hour(startTime));
-    }
-    if (endTime) {
-      formData.set("endTime", convertTo12Hour(endTime));
-    }
+    // Call the form action
+    formAction(formData);
   };
-
-  // Convert AM/PM time to 24-hour for input default value
-  const startTime24 = convertTo24Hour(classData.startTime);
-  const endTime24 = convertTo24Hour(classData.endTime);
 
   return (
     <div className="bg-white rounded-2xl border border-gray-100 p-6">
-      <form action={formAction} onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Subject */}
           <div className="space-y-2">
@@ -164,17 +167,12 @@ const EditClassForm: React.FC<EditClassFormProps> = ({
           {/* Date */}
           <div className="space-y-2">
             <Label htmlFor="classDate">Date</Label>
-            <div className="relative">
-              <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <Input
-                id="classDate"
-                name="classDate"
-                type="date"
-                defaultValue={state.inputs?.classDate ?? classData.classDate}
-                className={`pl-10 ${state.errors?.classDate ? "border-red-500" : ""}`}
-                required
-              />
-            </div>
+            <DatePicker
+              value={classDate}
+              onChange={setClassDate}
+              placeholder="Select class date"
+              className={state.errors?.classDate ? "border-red-500" : ""}
+            />
             {state.errors?.classDate && (
               <p className="text-red-500 text-xs mt-1">
                 {state.errors.classDate[0]}
@@ -216,17 +214,11 @@ const EditClassForm: React.FC<EditClassFormProps> = ({
           {/* Start Time */}
           <div className="space-y-2">
             <Label htmlFor="startTime">Start Time</Label>
-            <div className="relative">
-              <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <Input
-                id="startTime"
-                name="startTime"
-                type="time"
-                defaultValue={state.inputs?.startTime ?? startTime24}
-                className={`pl-10 ${state.errors?.startTime ? "border-red-500" : ""}`}
-                required
-              />
-            </div>
+            <TimePicker
+              value={startTime}
+              onChange={setStartTime}
+              error={!!state.errors?.startTime}
+            />
             {state.errors?.startTime && (
               <p className="text-red-500 text-xs mt-1">
                 {state.errors.startTime[0]}
@@ -237,17 +229,11 @@ const EditClassForm: React.FC<EditClassFormProps> = ({
           {/* End Time */}
           <div className="space-y-2">
             <Label htmlFor="endTime">End Time</Label>
-            <div className="relative">
-              <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <Input
-                id="endTime"
-                name="endTime"
-                type="time"
-                defaultValue={state.inputs?.endTime ?? endTime24}
-                className={`pl-10 ${state.errors?.endTime ? "border-red-500" : ""}`}
-                required
-              />
-            </div>
+            <TimePicker
+              value={endTime}
+              onChange={setEndTime}
+              error={!!state.errors?.endTime}
+            />
             {state.errors?.endTime && (
               <p className="text-red-500 text-xs mt-1">
                 {state.errors.endTime[0]}
