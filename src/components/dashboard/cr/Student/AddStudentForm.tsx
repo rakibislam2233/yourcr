@@ -73,6 +73,7 @@ const AddStudentForm = () => {
             </div>
             {state.errors?.fullName && (
               <p className="text-xs font-medium text-red-500 mt-1">
+                <span className="text-red-500">*</span>
                 {state.errors.fullName[0]}
               </p>
             )}
@@ -102,6 +103,7 @@ const AddStudentForm = () => {
             </div>
             {state.errors?.email && (
               <p className="text-xs font-medium text-red-500 mt-1">
+                <span className="text-red-500">*</span>
                 {state.errors.email[0]}
               </p>
             )}
@@ -130,6 +132,7 @@ const AddStudentForm = () => {
             </div>
             {state.errors?.phoneNumber && (
               <p className="text-xs font-medium text-red-500 mt-1">
+                <span className="text-red-500">*</span>
                 {state.errors.phoneNumber[0]}
               </p>
             )}
@@ -158,6 +161,7 @@ const AddStudentForm = () => {
             </div>
             {state.errors?.studentId && (
               <p className="text-xs font-medium text-red-500 mt-1">
+                <span className="text-red-500">*</span>
                 {state.errors.studentId[0]}
               </p>
             )}

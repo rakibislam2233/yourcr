@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { Teacher } from "@/interface/teacher.interface";
 import {
   createSubject,
@@ -45,10 +46,10 @@ const AddSubjectForm = () => {
           setTeachers(result.data);
         }
       } catch (error) {
-        console.error('Failed to fetch teachers:', error);
+        console.error("Failed to fetch teachers:", error);
       }
     };
-    
+
     fetchTeachers();
   }, []);
 
@@ -73,9 +74,8 @@ const AddSubjectForm = () => {
                 htmlFor="code"
                 className="text-sm font-semibold text-gray-700"
               >
-                Subject Code
+                Subject Code  <span className="text-red-500">*</span>
               </Label>
-              <span className="text-red-500">*</span>
             </div>
             <div className="relative">
               <Input
@@ -103,9 +103,8 @@ const AddSubjectForm = () => {
                 htmlFor="name"
                 className="text-sm font-semibold text-gray-700"
               >
-                Subject Name
+                Subject Name  <span className="text-red-500">*</span>
               </Label>
-              <span className="text-red-500">*</span>
             </div>
             <div className="relative">
               <Input
@@ -133,9 +132,8 @@ const AddSubjectForm = () => {
                 htmlFor="teacherId"
                 className="text-sm font-semibold text-gray-700"
               >
-                Teacher
+                Teacher  <span className="text-red-500">*</span>
               </Label>
-              <span className="text-red-500">*</span>
             </div>
             <Select name="teacherId" defaultValue={state.inputs?.teacherId}>
               <SelectTrigger
@@ -168,9 +166,8 @@ const AddSubjectForm = () => {
                 htmlFor="credit"
                 className="text-sm font-semibold text-gray-700"
               >
-                Credits
+                Credits  <span className="text-red-500">*</span>
               </Label>
-              <span className="text-red-500">*</span>
             </div>
             <div className="relative">
               <Input
@@ -229,12 +226,17 @@ const AddSubjectForm = () => {
               htmlFor="isDepartmental"
               className="text-sm font-semibold text-gray-700"
             >
-              Departmental Subject
+              Departmental Subject  <span className="text-red-500">*</span>
             </Label>
-            <Select name="isDepartmental" defaultValue={state.inputs?.isDepartmental?.toString() ?? "true"}>
+            <Select
+              name="isDepartmental"
+              defaultValue={state.inputs?.isDepartmental?.toString() ?? "true"}
+            >
               <SelectTrigger
                 className={`h-12 border-gray-200 ${
-                  state.errors?.isDepartmental ? "border-red-500" : "bg-gray-50/30"
+                  state.errors?.isDepartmental
+                    ? "border-red-500"
+                    : "bg-gray-50/30"
                 } font-medium`}
               >
                 <SelectValue placeholder="Select type" />
@@ -259,15 +261,14 @@ const AddSubjectForm = () => {
               >
                 Description
               </Label>
-              <span className="text-red-500">*</span>
             </div>
-            <textarea
+            <Textarea
               id="description"
               name="description"
               defaultValue={state.inputs?.description}
               placeholder="e.g., Concepts of OOP using Java - classes, inheritance, polymorphism, interfaces, exception handling"
               rows={4}
-              className={`w-full h-24 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary ${
+              className={`h-24 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary ${
                 state.errors?.description
                   ? "border-red-500 bg-red-50/10"
                   : "bg-gray-50/30"
