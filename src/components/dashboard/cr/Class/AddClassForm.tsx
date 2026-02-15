@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 const platformOptions = [
@@ -51,14 +51,20 @@ const AddClassForm = ({ subjects = [], teachers = [] }: AddClassFormProps) => {
     initialState,
   );
 
+  const lastToastTimestamp = useRef(state.timestamp);
+
   useEffect(() => {
-    if (state.timestamp && state.timestamp > 0) {
+    if (
+      state.timestamp &&
+      state.timestamp > (lastToastTimestamp.current || 0)
+    ) {
       if (state.success) {
         toast.success(state.message);
         router.push("/dashboard/cr/classes");
       } else if (state.message && !state.errors) {
         toast.error(state.message);
       }
+      lastToastTimestamp.current = state.timestamp;
     }
   }, [state, router]);
 

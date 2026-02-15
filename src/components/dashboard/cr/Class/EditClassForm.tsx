@@ -89,14 +89,20 @@ const EditClassForm: React.FC<EditClassFormProps> = ({
       "",
   );
 
+  const lastToastTimestamp = React.useRef(state.timestamp);
+
   useEffect(() => {
-    if (state.timestamp && state.timestamp > 0) {
+    if (
+      state.timestamp &&
+      state.timestamp > (lastToastTimestamp.current || 0)
+    ) {
       if (state.success) {
         toast.success(state.message);
         router.push("/dashboard/cr/classes");
       } else if (state.message && !state.errors) {
         toast.error(state.message);
       }
+      lastToastTimestamp.current = state.timestamp;
     }
   }, [state, router]);
 
