@@ -82,6 +82,46 @@ const ManageClasses: React.FC<ManageClassesProps> = ({ initialClasses }) => {
     );
   };
 
+  const formatTime = (timeStr: string) => {
+    if (!timeStr) return "";
+
+    // Check if it's already in 12h format
+    if (timeStr.match(/^\d{1,2}:\d{2}\s?(AM|PM)$/i)) return timeStr;
+
+    // Check if it's 24h format (HH:MM)
+    if (timeStr.match(/^\d{1,2}:\d{2}$/)) {
+      const [hours, minutes] = timeStr.split(":").map(Number);
+      const period = hours >= 12 ? "PM" : "AM";
+      const hours12 = hours % 12 || 12;
+      return `${hours12}:${minutes.toString().padStart(2, "0")} ${period}`;
+    }
+
+    // Try parsing as ISO date
+    const date = new Date(timeStr);
+    if (!isNaN(date.getTime())) {
+      return date.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+      });
+    }
+
+    return timeStr;
+  };
+
+  const formatDate = (dateStr: string) => {
+    if (!dateStr) return "";
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) return dateStr;
+
+    return date.toLocaleDateString("en-GB", {
+      weekday: "short",
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+  };
+
   return (
     <section className="w-full space-y-6">
       <PageHeader
@@ -186,23 +226,24 @@ const ManageClasses: React.FC<ManageClassesProps> = ({ initialClasses }) => {
                         {cls.teacher?.name || "Unknown Teacher"}
                       </p>
                       <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
-                        <span className="flex items-center gap-1">
-                          <Calendar className="w-4 h-4" />
-                          {cls.classDate}
+                        <span className="flex items-center gap-1.5 text-gray-600 bg-gray-50 px-2.5 py-1 rounded-md">
+                          <Calendar className="w-4 h-4 text-primary" />
+                          {formatDate(cls.classDate.toString())}
                         </span>
-                        <span className="flex items-center gap-1">
-                          <Clock className="w-4 h-4" />
-                          {cls.startTime} - {cls.endTime}
+                        <span className="flex items-center gap-1.5 text-gray-600 bg-gray-50 px-2.5 py-1 rounded-md">
+                          <Clock className="w-4 h-4 text-primary" />
+                          {formatTime(cls.startTime)} -{" "}
+                          {formatTime(cls.endTime)}
                         </span>
                         {cls.classType === "ONLINE" && cls.platform && (
-                          <span className="flex items-center gap-1">
-                            <Video className="w-4 h-4" />
+                          <span className="flex items-center gap-1.5 text-gray-600 bg-gray-50 px-2.5 py-1 rounded-md">
+                            <Video className="w-4 h-4 text-primary" />
                             {cls.platform}
                           </span>
                         )}
                         {cls.classType === "OFFLINE" && cls.roomNumber && (
-                          <span className="flex items-center gap-1">
-                            <MapPin className="w-4 h-4" />
+                          <span className="flex items-center gap-1.5 text-gray-600 bg-gray-50 px-2.5 py-1 rounded-md">
+                            <MapPin className="w-4 h-4 text-primary" />
                             {cls.roomNumber}
                           </span>
                         )}
