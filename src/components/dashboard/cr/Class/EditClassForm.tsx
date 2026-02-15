@@ -58,19 +58,35 @@ const EditClassForm: React.FC<EditClassFormProps> = ({
     (state.inputs?.classType as "ONLINE" | "OFFLINE") || classData.classType,
   );
 
-  // Use state to track picker values
-  // Initialize date from string or Date object
   const initialDate = state.inputs?.classDate || classData.classDate;
   const [classDate, setClassDate] = useState<Date | undefined>(
     initialDate ? new Date(initialDate) : undefined,
   );
 
-  // Initialize time directly, expecting TimePicker handles parsing formats
+  const formatTimeValue = (value: string | undefined | null) => {
+    if (!value) return "";
+    if (value.match(/^\d{1,2}:\d{2}\s?(AM|PM)?$/i)) return value;
+
+    const date = new Date(value);
+    if (!isNaN(date.getTime())) {
+      return date.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+      });
+    }
+    return value;
+  };
+
   const [startTime, setStartTime] = useState<string>(
-    (state.inputs?.startTime as string) || classData.startTime || "",
+    (state.inputs?.startTime as string) ||
+      formatTimeValue(classData.startTime) ||
+      "",
   );
   const [endTime, setEndTime] = useState<string>(
-    (state.inputs?.endTime as string) || classData.endTime || "",
+    (state.inputs?.endTime as string) ||
+      formatTimeValue(classData.endTime) ||
+      "",
   );
 
   useEffect(() => {
@@ -89,7 +105,6 @@ const EditClassForm: React.FC<EditClassFormProps> = ({
     const form = e.currentTarget;
     const formData = new FormData(form);
 
-    // Pass time directly as TimePicker handles the format
     if (startTime) {
       formData.set("startTime", startTime);
     }
@@ -172,6 +187,7 @@ const EditClassForm: React.FC<EditClassFormProps> = ({
             onChange={setStartTime}
             label="Start Time"
             placeholder="Select start time"
+            format="12"
             error={state.errors?.startTime}
             required
           />
@@ -183,6 +199,7 @@ const EditClassForm: React.FC<EditClassFormProps> = ({
             value={endTime}
             onChange={setEndTime}
             label="End Time"
+            format="12"
             placeholder="Select end time"
             error={state.errors?.endTime}
             required
