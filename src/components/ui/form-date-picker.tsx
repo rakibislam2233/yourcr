@@ -41,7 +41,7 @@ const FormDatePicker: React.FC<FormDatePickerProps> = ({
           name={name}
           className={cn(
             "h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary transition-all font-medium",
-            "pl-10", // Always pad since we always have an icon (default or custom)
+            "pl-10",
             error ? "border-red-500 bg-red-50/10" : "bg-gray-50/30",
             className,
           )}
