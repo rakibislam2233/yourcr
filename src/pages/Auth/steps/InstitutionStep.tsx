@@ -1,16 +1,9 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { FormInput } from "@/components/ui/form-input";
+import { FormSelect } from "@/components/ui/form-select";
 import { ActionState } from "@/interface/action-state.interface";
-import { MapPin, School } from "lucide-react";
+import { Mail, MapPin, Phone, School } from "lucide-react";
 import { useState } from "react";
 
 interface InstitutionStepProps {
@@ -34,120 +27,85 @@ const InstitutionStep: React.FC<InstitutionStepProps> = ({
   return (
     <div className="animate-in fade-in slide-in-from-right-4 duration-300 space-y-6">
       <div className="space-y-4">
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="institutionName">
-            Institution Name <span className="text-red-500">*</span>
-          </Label>
-          <div className="relative">
-            <School className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <Input
-              id="institutionName"
-              name="institutionName"
-              defaultValue={state?.inputs?.institutionName}
-              placeholder="e.g. Dhaka University"
-              className={`pl-12 h-12 text-base border-gray-300 focus:border-primary focus:ring-primary ${
-                state?.errors?.institutionName ? "border-red-500" : ""
-              }`}
-            />
-          </div>
-          {state?.errors?.institutionName && (
-            <p className="text-sm text-red-500">
-              {state.errors.institutionName[0]}
-            </p>
-          )}
-        </div>
+        <FormInput
+          id="institutionName"
+          name="institutionName"
+          label="Institution Name"
+          icon={School}
+          defaultValue={state?.inputs?.institutionName}
+          placeholder="e.g. Dhaka University"
+          error={state?.errors?.institutionName}
+          className="border-gray-300 focus:border-primary focus:ring-primary"
+          required
+        />
 
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="institutionType">
-            Institution Type <span className="text-red-500">*</span>
-          </Label>
           <input
             type="hidden"
             name="institutionType"
             value={localInstitutionType}
           />
-          <Select value={localInstitutionType} onValueChange={handleTypeChange}>
-            <SelectTrigger
-              id="institutionType"
-              className={`text-base border-gray-300 ${state?.errors?.institutionType ? "border-red-500" : ""}`}
-            >
-              <SelectValue placeholder="Select type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="UNIVERSITY">University</SelectItem>
-              <SelectItem value="COLLEGE">College</SelectItem>
-              <SelectItem value="POLYTECHNIC">Polytechnic</SelectItem>
-            </SelectContent>
-          </Select>
-          {state?.errors?.institutionType && (
-            <p className="text-sm text-red-500">
-              {state.errors.institutionType[0]}
-            </p>
-          )}
+          <FormSelect
+            name="institutionType"
+            label="Institution Type"
+            value={localInstitutionType}
+            onValueChange={handleTypeChange}
+            placeholder="Select type"
+            error={state?.errors?.institutionType}
+            options={[
+              { value: "UNIVERSITY", label: "University" },
+              { value: "COLLEGE", label: "College" },
+              { value: "POLYTECHNIC", label: "Polytechnic" },
+            ]}
+          />
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="contactEmail">
-              Contact Email <span className="text-red-500">*</span>
-            </Label>
-            <Input
-              id="contactEmail"
-              name="contactEmail"
-              type="email"
-              defaultValue={
-                state?.inputs?.contactEmail ||
-                state?.inputs?.institutionEmail ||
-                state?.inputs?.email
-              }
-              placeholder="institution@example.com"
-              className={`h-12 border-gray-300 focus:border-primary focus:ring-primary ${state?.errors?.contactEmail ? "border-red-500" : ""}`}
-            />
-            {state?.errors?.contactEmail && (
-              <p className="text-sm text-red-500 font-medium mt-1">
-                {state.errors.contactEmail[0]}
-              </p>
-            )}
-          </div>
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="contactPhone">Contact Phone (Optional)</Label>
-            <Input
-              id="contactPhone"
-              name="contactPhone"
-              defaultValue={
-                state?.inputs?.contactPhone ||
-                state?.inputs?.institutionPhone ||
-                state?.inputs?.phoneNumber
-              }
-              placeholder="e.g. 01XXXXXXXXX"
-              className={`h-12 border-gray-300 focus:border-primary focus:ring-primary ${state?.errors?.contactPhone ? "border-red-500" : ""}`}
-            />
-            {state?.errors?.contactPhone && (
-              <p className="text-sm text-red-500 font-medium mt-1">
-                {state.errors.contactPhone[0]}
-              </p>
-            )}
-          </div>
+          <FormInput
+            id="contactEmail"
+            name="contactEmail"
+            type="email"
+            label="Contact Email"
+            icon={Mail}
+            defaultValue={
+              state?.inputs?.contactEmail ||
+              state?.inputs?.institutionEmail ||
+              state?.inputs?.email
+            }
+            placeholder="institution@example.com"
+            error={state?.errors?.contactEmail}
+            className="border-gray-300 focus:border-primary focus:ring-primary"
+            required
+          />
+
+          <FormInput
+            id="contactPhone"
+            name="contactPhone"
+            label="Contact Phone"
+            icon={Phone}
+            defaultValue={
+              state?.inputs?.contactPhone ||
+              state?.inputs?.institutionPhone ||
+              state?.inputs?.phoneNumber
+            }
+            placeholder="e.g. 01XXXXXXXXX"
+            error={state?.errors?.contactPhone}
+            className="border-gray-300 focus:border-primary focus:ring-primary"
+            // Optional field, no required prop
+          />
         </div>
 
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="address">
-            Institution Address <span className="text-red-500">*</span>
-          </Label>
-          <div className="relative">
-            <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <Input
-              id="address"
-              name="address"
-              defaultValue={state?.inputs?.address}
-              placeholder="Full address (e.g. 123 Street, Dhaka)"
-              className={`pl-12 h-12 border-gray-300 ${state?.errors?.address ? "border-red-500" : ""}`}
-            />
-          </div>
-          {state?.errors?.address && (
-            <p className="text-sm text-red-500">{state.errors.address[0]}</p>
-          )}
-        </div>
+        <FormInput
+          id="address"
+          name="address"
+          label="Institution Address"
+          icon={MapPin}
+          defaultValue={state?.inputs?.address}
+          placeholder="Full address (e.g. 123 Street, Dhaka)"
+          error={state?.errors?.address}
+          className="border-gray-300 focus:border-primary focus:ring-primary"
+          required
+        />
       </div>
     </div>
   );

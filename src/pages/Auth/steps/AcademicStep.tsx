@@ -1,15 +1,16 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { FormInput } from "@/components/ui/form-input";
+import { FormSelect } from "@/components/ui/form-select";
 import { ActionState } from "@/interface/action-state.interface";
+import {
+  BookOpen,
+  Calendar,
+  Clock,
+  GraduationCap,
+  Hash,
+  Users,
+} from "lucide-react";
 import { useState } from "react";
 
 interface AcademicStepProps {
@@ -33,130 +34,106 @@ const AcademicStep: React.FC<AcademicStepProps> = ({
     <div className="animate-in fade-in slide-in-from-right-4 duration-300 space-y-6">
       <div className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="session">
-              Session <span className="text-red-500">*</span>
-            </Label>
-            <Input
-              id="session"
-              name="session"
-              defaultValue={state?.inputs?.session || state?.inputs?.name}
-              placeholder="e.g. 2021-2022"
-              className={`h-12 border-gray-300 ${state?.errors?.session ? "border-red-500" : ""}`}
-            />
-            {state?.errors?.session && (
-              <p className="text-xs text-red-500">{state.errors.session[0]}</p>
-            )}
-          </div>
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="batchType">
-              Batch Type <span className="text-red-500">*</span>
-            </Label>
-            <Select
-              name="batchType"
-              value={batchType}
-              onValueChange={setBatchType}
-            >
-              <SelectTrigger
-                id="batchType"
-                className="text-base border-gray-300"
-              >
-                <SelectValue placeholder="Select type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="SEMESTER">Semester</SelectItem>
-                <SelectItem value="YEAR">Year</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          <FormInput
+            id="session"
+            name="session"
+            label="Session"
+            icon={Calendar}
+            defaultValue={state?.inputs?.session || state?.inputs?.name}
+            placeholder="e.g. 2021-2022"
+            error={state?.errors?.session}
+            className="border-gray-300 focus:border-primary focus:ring-primary"
+            required
+          />
+
+          <FormSelect
+            name="batchType"
+            label="Batch Type"
+            value={batchType}
+            onValueChange={setBatchType}
+            placeholder="Select type"
+            // No error prop for batchType in original code, but safe to add if needed, or skip
+            options={[
+              { value: "SEMESTER", label: "Semester" },
+              { value: "YEAR", label: "Year" },
+            ]}
+          />
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="academicYear">
-              {isPolytechnic
+          <FormInput
+            id="academicYear"
+            name="academicYear"
+            label={
+              isPolytechnic
                 ? "Year"
                 : isCollege
                   ? "Class Year"
-                  : "Academic Year"}{" "}
-              <span className="text-red-500">*</span>
-            </Label>
-            <Input
-              id="academicYear"
-              name="academicYear"
-              defaultValue={state?.inputs?.academicYear}
-              placeholder={isPolytechnic ? "e.g. 1st / 2nd" : "e.g. 1st Year"}
-              className={`h-12 border-gray-300 ${state?.errors?.academicYear ? "border-red-500" : ""}`}
-            />
-            {state?.errors?.academicYear && (
-              <p className="text-xs text-red-500">
-                {state.errors.academicYear[0]}
-              </p>
-            )}
-          </div>
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="semester">
-              {batchType === "SEMESTER"
+                  : "Academic Year"
+            }
+            icon={GraduationCap}
+            defaultValue={state?.inputs?.academicYear}
+            placeholder={isPolytechnic ? "e.g. 1st / 2nd" : "e.g. 1st Year"}
+            error={state?.errors?.academicYear}
+            className="border-gray-300 focus:border-primary focus:ring-primary"
+            required
+          />
+
+          <FormInput
+            id="semester"
+            name="semester"
+            label={
+              batchType === "SEMESTER"
                 ? isPolytechnic
                   ? "Current Semester"
                   : "Current Semester"
-                : "Current Year"}
-              {" (Optional)"}
-            </Label>
-            <Input
-              id="semester"
-              name="semester"
-              defaultValue={state?.inputs?.semester}
-              placeholder={batchType === "SEMESTER" ? "e.g. 5th" : "e.g. 2nd"}
-              className={`h-12 border-gray-300 ${state?.errors?.semester ? "border-red-500" : ""}`}
-            />
-          </div>
+                : "Current Year"
+            }
+            icon={Hash}
+            defaultValue={state?.inputs?.semester}
+            placeholder={batchType === "SEMESTER" ? "e.g. 5th" : "e.g. 2nd"}
+            error={state?.errors?.semester}
+            className="border-gray-300 focus:border-primary focus:ring-primary"
+            // Optional field
+          />
         </div>
 
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="department">
-            {isCollege ? "Group / Department" : "Department / Subject"}{" "}
-            <span className="text-red-500">*</span>
-          </Label>
-          <Input
-            id="department"
-            name="department"
-            defaultValue={state?.inputs?.department}
-            placeholder={
-              isCollege ? "e.g. Science / Commerce" : "e.g. Computer Science"
-            }
-            className={`h-12 border-gray-300 ${state?.errors?.department ? "border-red-500" : ""}`}
-          />
-          {state?.errors?.department && (
-            <p className="text-xs text-red-500">{state.errors.department[0]}</p>
-          )}
-        </div>
+        <FormInput
+          id="department"
+          name="department"
+          label={isCollege ? "Group / Department" : "Department / Subject"}
+          icon={BookOpen}
+          defaultValue={state?.inputs?.department}
+          placeholder={
+            isCollege ? "e.g. Science / Commerce" : "e.g. Computer Science"
+          }
+          error={state?.errors?.department}
+          className="border-gray-300 focus:border-primary focus:ring-primary"
+          required
+        />
 
         <div className="grid grid-cols-2 gap-4">
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="shift">
-              Shift {(isUniversity || isPolytechnic) && "(Optional)"}
-            </Label>
-            <Input
-              id="shift"
-              name="shift"
-              defaultValue={state?.inputs?.shift}
-              placeholder="e.g. Day / Evening"
-              className="h-12 border-gray-300"
-            />
-          </div>
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="group">
-              Group / Section {isCollege ? "" : "(Optional)"}
-            </Label>
-            <Input
-              id="group"
-              name="group"
-              defaultValue={state?.inputs?.group}
-              placeholder="e.g. A / B / Science"
-              className="h-12 border-gray-300"
-            />
-          </div>
+          <FormInput
+            id="shift"
+            name="shift"
+            label={`Shift ${isUniversity || isPolytechnic ? "(Optional)" : ""}`}
+            icon={Clock}
+            defaultValue={state?.inputs?.shift}
+            placeholder="e.g. Day / Evening"
+            // error={state?.errors?.shift} // Assuming optional, but good to have if validation exists
+            className="border-gray-300 focus:border-primary focus:ring-primary"
+          />
+
+          <FormInput
+            id="group"
+            name="group"
+            label={`Group / Section ${isCollege ? "" : "(Optional)"}`}
+            icon={Users}
+            defaultValue={state?.inputs?.group}
+            placeholder="e.g. A / B / Science"
+            // error={state?.errors?.group}
+            className="border-gray-300 focus:border-primary focus:ring-primary"
+          />
         </div>
       </div>
     </div>
