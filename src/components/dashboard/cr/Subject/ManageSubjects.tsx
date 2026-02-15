@@ -2,9 +2,12 @@
 import { Button } from "@/components/ui/button";
 import { ConfirmModal } from "@/components/ui/modal";
 import { Subject } from "@/interface/subject.interface";
+import { deleteSubject } from "@/services/subject.service";
 import { BookOpen, Plus } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { toast } from "sonner";
 import PageHeader from "../../shared/PageHeader";
 import SubjectCard from "./SubjectCard";
 
@@ -18,19 +21,35 @@ interface ManageSubjectsProps {
   };
 }
 
-const ManageSubjects: React.FC<ManageSubjectsProps> = ({ subjects, meta }) => {
+const ManageSubjects: React.FC<ManageSubjectsProps> = ({ subjects }) => {
+  const router = useRouter();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
   const handleDelete = (subject: Subject) => {
     setSelectedSubject(subject);
     setIsDeleteModalOpen(true);
   };
 
-  const handleConfirmDelete = () => {
-    if (selectedSubject) {
-      setSelectedSubject(null);
-      setIsDeleteModalOpen(false);
+  const handleConfirmDelete = async () => {
+    if (!selectedSubject) return;
+
+    setIsDeleting(true);
+    try {
+      const result = await deleteSubject(selectedSubject.id);
+      if (result.success) {
+        toast.success(result.message);
+        router.refresh();
+        setIsDeleteModalOpen(false);
+        setSelectedSubject(null);
+      } else {
+        toast.error(result.message);
+      }
+    } catch {
+      toast.error("Failed to delete subject");
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -103,6 +122,7 @@ const ManageSubjects: React.FC<ManageSubjectsProps> = ({ subjects, meta }) => {
         confirmText="Delete"
         cancelText="Cancel"
         variant="danger"
+        isLoading={isDeleting}
       />
     </section>
   );
