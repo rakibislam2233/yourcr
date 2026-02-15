@@ -28,8 +28,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
   id,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const triggerRef = useRef<HTMLButtonElement>(null);
-  const pickerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Normalize value to Date object
   const dateValue = value
@@ -117,10 +116,8 @@ const DatePicker: React.FC<DatePickerProps> = ({
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
-        pickerRef.current &&
-        !pickerRef.current.contains(event.target as Node) &&
-        triggerRef.current &&
-        !triggerRef.current.contains(event.target as Node)
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
       ) {
         setIsOpen(false);
       }
@@ -158,7 +155,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
           onClick={() => handleDateClick(day)}
           disabled={isDisabled}
           className={cn(
-            "w-full aspect-square flex items-center justify-center text-sm rounded-md transition-all",
+            "w-full aspect-square flex items-center cursor-pointer justify-center text-sm rounded-md transition-all",
             isSelected
               ? "bg-primary text-white font-bold shadow-md transform scale-105"
               : isToday
@@ -177,7 +174,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
   };
 
   return (
-    <div className={`relative w-full`}>
+    <div ref={containerRef} className={`relative w-full`}>
       {/* Hidden input to ensure value is submitted in forms */}
       {name && (
         <input
@@ -206,16 +203,13 @@ const DatePicker: React.FC<DatePickerProps> = ({
       </button>
 
       {isOpen && (
-        <div
-          ref={pickerRef}
-          className="absolute z-50 mt-2 left-0 w-full sm:w-[320px] bg-white border border-gray-200 rounded-md shadow-xl p-4 animate-in fade-in-0 zoom-in-95 duration-200 origin-top-left"
-        >
+        <div className="absolute z-50 mt-2 left-0 w-full sm:w-[320px] bg-white border border-gray-200 rounded-md shadow-xl p-4 animate-in fade-in-0 zoom-in-95 duration-200 origin-top-left">
           {/* Header */}
           <div className="flex items-center justify-between mb-4 pb-2 border-b border-gray-100">
             <button
               type="button"
               onClick={handlePrevMonth}
-              className="p-1.5 hover:bg-gray-100 rounded-md text-gray-500 hover:text-gray-900 transition-colors"
+              className="p-1.5 hover:bg-gray-100 cursor-pointer rounded-md text-gray-500 hover:text-gray-900 transition-colors"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
@@ -227,7 +221,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
             <button
               type="button"
               onClick={handleNextMonth}
-              className="p-1.5 hover:bg-gray-100 rounded-md text-gray-500 hover:text-gray-900 transition-colors"
+              className="p-1.5 hover:bg-gray-100 cursor-pointer rounded-md text-gray-500 hover:text-gray-900 transition-colors"
             >
               <ChevronRight className="w-5 h-5" />
             </button>
