@@ -1,33 +1,71 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import {
+  RoutineType as ApiRoutineType,
+  Routine,
+} from "@/interface/routine.interface";
 import { cn } from "@/lib/utils";
+import { createRoutine, updateRoutine } from "@/services/routine.service";
 import { AnimatePresence, motion } from "framer-motion";
 import { Calendar, FileText, FileUp, Inbox, PencilLine } from "lucide-react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 import { toast } from "sonner";
 import PageHeader from "../shared/PageHeader";
-import Image from "next/image";
 
-type RoutineType = "class" | "exam";
+type RoutineTab = "class" | "exam";
 
-interface RoutineFile {
+interface RoutineDisplay {
+  id?: string;
   name: string;
   url: string;
   type: "pdf" | "image";
   uploadedAt: string;
 }
 
-const ManageRoutine: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<RoutineType>("class");
+interface ManageRoutineProps {
+  initialRoutines: Routine[];
+}
+
+const ManageRoutine: React.FC<ManageRoutineProps> = ({ initialRoutines }) => {
+  const router = useRouter();
+  const [activeTab, setActiveTab] = useState<RoutineTab>("class");
   const [isUploading, setIsUploading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [isPending, setIsPending] = useState(false);
 
-  // Mock data initialization with the image provided in user request for demonstration
+  // Initialize state from props
+  const getInitialState = () => {
+    const state: Record<RoutineTab, RoutineDisplay | null> = {
+      class: null,
+      exam: null,
+    };
+
+    initialRoutines.forEach((routine) => {
+      const isPdf = routine.fileUrl.endsWith(".pdf");
+      const displayData: RoutineDisplay = {
+        id: routine.id,
+        name: routine.name,
+        url: routine.fileUrl,
+        type: isPdf ? "pdf" : "image",
+        uploadedAt: new Date().toLocaleDateString(), // You might want to use routine.updatedAt
+      };
+
+      if (routine.type === ApiRoutineType.CLASS) {
+        state.class = displayData;
+      } else if (routine.type === ApiRoutineType.EXAM) {
+        state.exam = displayData;
+      }
+    });
+    return state;
+  };
+
   const [routines, setRoutines] =
-    useState<Record<RoutineType, RoutineFile | null>>(null);
+    useState<Record<RoutineTab, RoutineDisplay | null>>(getInitialState());
 
-  const handleFileUpload = (file: File) => {
+  const handleFileUpload = async (file: File) => {
     const isImage = file.type.startsWith("image/");
     const isPdf = file.type === "application/pdf";
 
@@ -36,22 +74,52 @@ const ManageRoutine: React.FC = () => {
       return;
     }
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const newRoutine: RoutineFile = {
-        name: file.name,
-        url: reader.result as string,
-        type: isPdf ? "pdf" : "image",
-        uploadedAt: new Date().toLocaleDateString(),
-      };
+    setIsPending(true);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append(
+      "name",
+      activeTab === "class" ? "Class Routine" : "Exam Routine",
+    );
+    formData.append(
+      "type",
+      activeTab === "class" ? ApiRoutineType.CLASS : ApiRoutineType.EXAM,
+    );
 
-      setRoutines((prev) => ({ ...prev, [activeTab]: newRoutine }));
-      setIsUploading(false);
-      toast.success(
-        `${activeTab === "class" ? "Class" : "Exam"} routine updated!`,
-      );
-    };
-    reader.readAsDataURL(file);
+    try {
+      let result;
+      const currentRoutine = routines[activeTab];
+
+      if (currentRoutine?.id) {
+        // Update existing routine
+        result = await updateRoutine(currentRoutine.id, {} as any, formData);
+      } else {
+        // Create new routine
+        result = await createRoutine({} as any, formData);
+      }
+
+      if (result.success && result.data) {
+        const newRoutine = result.data as Routine;
+        const displayData: RoutineDisplay = {
+          id: newRoutine.id,
+          name: newRoutine.name,
+          url: newRoutine.fileUrl,
+          type: newRoutine.fileUrl.endsWith(".pdf") ? "pdf" : "image",
+          uploadedAt: new Date().toLocaleDateString(),
+        };
+
+        setRoutines((prev) => ({ ...prev, [activeTab]: displayData }));
+        setIsUploading(false);
+        toast.success(result.message);
+        router.refresh();
+      } else {
+        toast.error(result.message || "Failed to upload routine");
+      }
+    } catch (error) {
+      toast.error("An error occurred during upload");
+    } finally {
+      setIsPending(false);
+    }
   };
 
   const onDrop = useCallback(
@@ -61,7 +129,7 @@ const ManageRoutine: React.FC = () => {
       const file = e.dataTransfer.files[0];
       if (file) handleFileUpload(file);
     },
-    [activeTab, handleFileUpload],
+    [activeTab, routines], // meaningful dependency for closure
   );
 
   return (
