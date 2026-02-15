@@ -24,17 +24,8 @@ const ManageRoutine: React.FC = () => {
   const [isDragging, setIsDragging] = useState(false);
 
   // Mock data initialization with the image provided in user request for demonstration
-  const [routines, setRoutines] = useState<
-    Record<RoutineType, RoutineFile | null>
-  >({
-    class: {
-      name: "Class Routine Fall 2025",
-      url: "https://i.ibb.co/vzKq5X9/routine-preview.png", // Using a placeholder for the user's specific image
-      type: "image",
-      uploadedAt: "Oct 25, 2025",
-    },
-    exam: null,
-  });
+  const [routines, setRoutines] =
+    useState<Record<RoutineType, RoutineFile | null>>(null);
 
   const handleFileUpload = (file: File) => {
     const isImage = file.type.startsWith("image/");
@@ -95,9 +86,9 @@ const ManageRoutine: React.FC = () => {
               setIsUploading(false);
             }}
             className={cn(
-              "px-6 py-2.5 rounded-md text-sm font-bold transition-all duration-200",
+              "px-6 py-2.5 rounded-md text-sm font-bold transition-all duration-200 cursor-pointer",
               activeTab === tab
-                ? "bg-blue-600 text-white shadow-md"
+                ? "bg-primary text-white"
                 : "bg-gray-100 text-gray-500 hover:bg-gray-200",
             )}
           >
@@ -123,7 +114,7 @@ const ManageRoutine: React.FC = () => {
             className={cn(
               "bg-white rounded-2xl border-2 border-dashed p-20 flex flex-col items-center justify-center transition-all",
               isDragging
-                ? "border-blue-600 bg-blue-50/50 scale-[1.01]"
+                ? "border-primary bg-blue-50/50 scale-[1.01]"
                 : "border-gray-200",
             )}
             onDragOver={(e) => {
@@ -141,7 +132,7 @@ const ManageRoutine: React.FC = () => {
               }
             />
             <div className="size-16 bg-blue-50 rounded-full flex items-center justify-center mb-6">
-              <FileUp className="w-8 h-8 text-blue-600" />
+              <FileUp className="w-8 h-8 text-primary" />
             </div>
             <p className="text-lg font-bold text-gray-900">
               Drop the Routine File here
@@ -210,7 +201,7 @@ const ManageRoutine: React.FC = () => {
         <div className="pt-4 flex justify-start">
           <Button
             onClick={() => setIsUploading(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-bold h-12 px-8 rounded-md flex gap-2 shadow-lg shadow-blue-500/20 active:scale-95 transition-all"
+            className="bg-primary hover:bg-blue-700 text-white font-bold h-12 px-8 rounded-md flex gap-2 shadow-lg shadow-blue-500/20 active:scale-95 transition-all"
           >
             <PencilLine className="w-5 h-5" />
             Update Routine

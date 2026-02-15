@@ -243,8 +243,7 @@ const ManageClasses: React.FC<ManageClassesProps> = ({ initialClasses }) => {
                         )}
                         {cls.classType === "OFFLINE" && cls.roomNumber && (
                           <span className="flex items-center gap-1.5 text-gray-600 bg-gray-50 px-2.5 py-1 rounded-md">
-                            <MapPin className="w-4 h-4 text-primary" />
-                            {cls.roomNumber}
+                            <MapPin className="w-4 h-4 text-primary" /> Room Number: {cls.roomNumber}
                           </span>
                         )}
                       </div>
