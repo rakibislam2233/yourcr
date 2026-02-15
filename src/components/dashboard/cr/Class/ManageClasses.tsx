@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { ConfirmModal } from "@/components/ui/modal";
 import { Class } from "@/interface/class.interface";
 import { deleteClass } from "@/services/class.service";
-import { formatPlatformName } from "@/utils/time";
 import {
   Calendar,
   Clock,
@@ -198,7 +197,7 @@ const ManageClasses: React.FC<ManageClassesProps> = ({ initialClasses }) => {
                         {cls.classType === "ONLINE" && cls.platform && (
                           <span className="flex items-center gap-1">
                             <Video className="w-4 h-4" />
-                            {formatPlatformName(cls.platform)}
+                            {cls.platform}
                           </span>
                         )}
                         {cls.classType === "OFFLINE" && cls.roomNumber && (

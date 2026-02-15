@@ -1,13 +1,13 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
+import { FormInput } from "@/components/ui/form-input";
 import { Label } from "@/components/ui/label";
 import { Modal } from "@/components/ui/modal";
 import { loginUser, type AuthActionState } from "@/services/auth.service";
 import { getDefaultDashboardRoute } from "@/utils/auth-utils";
 import { getWebPushToken } from "@/utils/push-notification";
-import { Clock, Eye, EyeOff, Lock, Mail } from "lucide-react";
+import { Clock, Lock, Mail } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
@@ -25,7 +25,6 @@ const initialState: AuthActionState = {
 };
 
 const LoginForm = () => {
-  const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isPendingModalOpen, setIsPendingModalOpen] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -120,76 +119,31 @@ const LoginForm = () => {
         {/* Hidden input for webPushToken */}
         <input type="hidden" name="webPushToken" value={webPushToken || ""} />
 
-        <div className="flex flex-col gap-1.5">
-          <Label
-            htmlFor="email"
-            className="text-sm font-semibold text-gray-700"
-          >
-            Email Address <span className="text-red-500">*</span>
-          </Label>
-          <div className="relative">
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <Input
-              id="email"
-              name="email"
-              placeholder="e.g. rahim@example.com"
-              defaultValue={state.inputs?.email}
-              className={`pl-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary ${
-                state.errors?.email
-                  ? "border-red-500 bg-red-50/10"
-                  : "bg-gray-50/30"
-              }`}
-            />
-          </div>
-          {state.errors?.email && (
-            <p className="text-xs font-medium text-red-500 mt-1">
-              {state.errors.email[0]}
-            </p>
-          )}
-        </div>
+        <div className="flex flex-col gap-4">
+          <FormInput
+            id="email"
+            name="email"
+            label="Email Address"
+            icon={Mail}
+            placeholder="e.g. rahim@example.com"
+            defaultValue={state.inputs?.email}
+            error={state.errors?.email}
+            required
+            className="bg-gray-50/30 border-gray-200 focus:border-primary focus:ring-primary"
+          />
 
-        <div className="flex flex-col gap-1.5">
-          <div className="flex items-center justify-between">
-            <Label
-              htmlFor="password"
-              title="Password"
-              className="text-sm font-semibold text-gray-700"
-            >
-              Password <span className="text-red-500">*</span>
-            </Label>
-          </div>
-          <div className="relative">
-            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <Input
-              id="password"
-              name="password"
-              type={showPassword ? "text" : "password"}
-              placeholder="••••••••"
-              defaultValue={state.inputs?.password}
-              className={`pl-12 pr-12 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary ${
-                state.errors?.password
-                  ? "border-red-500 bg-red-50/10"
-                  : "bg-gray-50/30"
-              }`}
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute cursor-pointer right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-              aria-label={showPassword ? "Hide password" : "Show password"}
-            >
-              {showPassword ? (
-                <EyeOff className="w-5 h-5" />
-              ) : (
-                <Eye className="w-5 h-5" />
-              )}
-            </button>
-          </div>
-          {state.errors?.password && (
-            <p className="text-xs font-medium text-red-500 mt-1">
-              {state.errors.password[0]}
-            </p>
-          )}
+          <FormInput
+            id="password"
+            name="password"
+            type="password"
+            label="Password"
+            icon={Lock}
+            placeholder="••••••••"
+            defaultValue={state.inputs?.password}
+            error={state.errors?.password}
+            required
+            className="bg-gray-50/30 border-gray-200 focus:border-primary focus:ring-primary"
+          />
         </div>
 
         <div className="flex items-center justify-between py-1">

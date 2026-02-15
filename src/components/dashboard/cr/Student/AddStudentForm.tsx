@@ -1,7 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { FormInput } from "@/components/ui/form-input";
 import {
   createStudent,
   type StudentActionState,
@@ -50,122 +49,50 @@ const AddStudentForm = () => {
     <div className="bg-white rounded-2xl border border-gray-100 p-6">
       <form action={formAction} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-          <div className="flex flex-col gap-1.5">
-            <Label
-              htmlFor="fullName"
-              className="text-sm font-semibold text-gray-700"
-            >
-              Full Name <span className="text-red-500">*</span>
-            </Label>
-            <div className="relative">
-              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <Input
-                id="fullName"
-                name="fullName"
-                defaultValue={state.inputs?.fullName}
-                placeholder="e.g., Sakib Hasan"
-                className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary ${
-                  state.errors?.fullName
-                    ? "border-red-500 bg-red-50/10"
-                    : "bg-gray-50/30"
-                } transition-all font-medium`}
-              />
-            </div>
-            {state.errors?.fullName && (
-              <p className="text-xs font-medium text-red-500 mt-1">
-                <span className="text-red-500">*</span>
-                {state.errors.fullName[0]}
-              </p>
-            )}
-          </div>
+          <FormInput
+            id="fullName"
+            name="fullName"
+            label="Full Name"
+            icon={User}
+            defaultValue={state.inputs?.fullName}
+            placeholder="e.g., Sakib Hasan"
+            error={state.errors?.fullName}
+            required
+          />
 
-          <div className="flex flex-col gap-1.5">
-            <Label
-              htmlFor="email"
-              className="text-sm font-semibold text-gray-700"
-            >
-              Email <span className="text-red-500">*</span>
-            </Label>
-            <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <Input
-                id="email"
-                type="email"
-                name="email"
-                defaultValue={state.inputs?.email}
-                placeholder="e.g., student@example.com"
-                className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary ${
-                  state.errors?.email
-                    ? "border-red-500 bg-red-50/10"
-                    : "bg-gray-50/30"
-                } transition-all font-medium`}
-              />
-            </div>
-            {state.errors?.email && (
-              <p className="text-xs font-medium text-red-500 mt-1">
-                <span className="text-red-500">*</span>
-                {state.errors.email[0]}
-              </p>
-            )}
-          </div>
+          <FormInput
+            id="email"
+            type="email"
+            name="email"
+            label="Email"
+            icon={Mail}
+            defaultValue={state.inputs?.email}
+            placeholder="e.g., student@example.com"
+            error={state.errors?.email}
+            required
+          />
 
-          <div className="flex flex-col gap-1.5">
-            <Label
-              htmlFor="phoneNumber"
-              className="text-sm font-semibold text-gray-700"
-            >
-              Phone Number<span className="text-red-500">*</span>
-            </Label>
-            <div className="relative">
-              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <Input
-                id="phoneNumber"
-                name="phoneNumber"
-                defaultValue={state.inputs?.phoneNumber}
-                placeholder="e.g., +880 1711-111111"
-                className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary ${
-                  state.errors?.phoneNumber
-                    ? "border-red-500 bg-red-50/10"
-                    : "bg-gray-50/30"
-                } transition-all font-medium`}
-              />
-            </div>
-            {state.errors?.phoneNumber && (
-              <p className="text-xs font-medium text-red-500 mt-1">
-                <span className="text-red-500">*</span>
-                {state.errors.phoneNumber[0]}
-              </p>
-            )}
-          </div>
+          <FormInput
+            id="phoneNumber"
+            name="phoneNumber"
+            label="Phone Number"
+            icon={Phone}
+            defaultValue={state.inputs?.phoneNumber}
+            placeholder="e.g., +880 1711-111111"
+            error={state.errors?.phoneNumber}
+            required
+          />
 
-          <div className="flex flex-col gap-1.5">
-            <Label
-              htmlFor="studentId"
-              className="text-sm font-semibold text-gray-700"
-            >
-              Student ID <span className="text-red-500">*</span>
-            </Label>
-            <div className="relative">
-              <Hash className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <Input
-                id="studentId"
-                name="studentId"
-                defaultValue={state.inputs?.studentId}
-                placeholder="e.g., 800123"
-                className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary ${
-                  state.errors?.studentId
-                    ? "border-red-500 bg-red-50/10"
-                    : "bg-gray-50/30"
-                } transition-all font-medium`}
-              />
-            </div>
-            {state.errors?.studentId && (
-              <p className="text-xs font-medium text-red-500 mt-1">
-                <span className="text-red-500">*</span>
-                {state.errors.studentId[0]}
-              </p>
-            )}
-          </div>
+          <FormInput
+            id="studentId"
+            name="studentId"
+            label="Student ID"
+            icon={Hash}
+            defaultValue={state.inputs?.studentId}
+            placeholder="e.g., 800123"
+            error={state.errors?.studentId}
+            required
+          />
         </div>
 
         <div className="flex gap-3 pt-4 justify-end">

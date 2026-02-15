@@ -137,7 +137,6 @@ const AddTeacherForm = () => {
             </div>
             {state.errors?.name && (
               <p className="text-xs font-medium text-red-500 mt-1">
-                <span className="text-red-500">*</span>
                 {state.errors.name[0]}
               </p>
             )}
@@ -152,10 +151,7 @@ const AddTeacherForm = () => {
                 Designation <span className="text-red-500">*</span>
               </Label>
             </div>
-            <Select
-              name="designation"
-              defaultValue={state.inputs?.designation}
-            >
+            <Select name="designation" defaultValue={state.inputs?.designation}>
               <SelectTrigger
                 className={`h-12 border-gray-200 ${
                   state.errors?.designation
@@ -175,7 +171,6 @@ const AddTeacherForm = () => {
             </Select>
             {state.errors?.designation && (
               <p className="text-xs font-medium text-red-500 mt-1">
-                <span className="text-red-500">*</span>
                 {state.errors.designation[0]}
               </p>
             )}
@@ -206,7 +201,6 @@ const AddTeacherForm = () => {
             </div>
             {state.errors?.department && (
               <p className="text-xs font-medium text-red-500 mt-1">
-                <span className="text-red-500">*</span>
                 {state.errors.department[0]}
               </p>
             )}
@@ -238,7 +232,6 @@ const AddTeacherForm = () => {
             </div>
             {state.errors?.email && (
               <p className="text-xs font-medium text-red-500 mt-1">
-                <span className="text-red-500">*</span>
                 {state.errors.email[0]}
               </p>
             )}
@@ -270,7 +263,6 @@ const AddTeacherForm = () => {
             </div>
             {state.errors?.phone && (
               <p className="text-xs font-medium text-red-500 mt-1">
-                <span className="text-red-500">*</span>
                 {state.errors.phone[0]}
               </p>
             )}
@@ -349,7 +341,6 @@ const AddTeacherForm = () => {
             </div>
             {state.errors?.photo && (
               <p className="text-xs font-medium text-red-500 mt-1">
-                <span className="text-red-500">*</span>
                 {state.errors.photo[0]}
               </p>
             )}

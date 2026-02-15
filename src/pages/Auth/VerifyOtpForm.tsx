@@ -1,7 +1,8 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { FormInput } from "@/components/ui/form-input";
 import { verifyOtp, type AuthActionState } from "@/services/auth.service";
+import { KeyRound } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
@@ -39,25 +40,20 @@ const VerifyOtpForm = () => {
     <form action={formAction} className="space-y-6">
       <div className="flex flex-col gap-4">
         <div className="space-y-2 text-center mb-4">
-          <Input
+          <FormInput
             id="otp"
             name="otp"
+            icon={KeyRound}
             placeholder="0 0 0 0 0 0"
             maxLength={6}
             defaultValue={state.inputs?.otp}
-            className={`h-16 text-center text-2xl font-bold tracking-[0.2em]  ${
-              state.errors?.otp
-                ? "border-red-500 focus-visible:ring-red-500"
-                : ""
-            }`}
-            onChange={(e) => {
+            error={state.errors?.otp}
+            className="h-16 text-center text-2xl font-bold tracking-[0.2em] border-gray-200 focus:border-primary focus:ring-primary"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               const val = e.target.value.replace(/\D/g, "");
               e.target.value = val;
             }}
           />
-          {state.errors?.otp && (
-            <p className="text-sm text-red-500">{state.errors.otp[0]}</p>
-          )}
         </div>
       </div>
 

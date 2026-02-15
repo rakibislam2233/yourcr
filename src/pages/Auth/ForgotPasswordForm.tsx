@@ -1,7 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { FormInput } from "@/components/ui/form-input";
 import { forgotPassword, type AuthActionState } from "@/services/auth.service";
 import { ArrowLeft, Mail } from "lucide-react";
 import Link from "next/link";
@@ -33,26 +32,17 @@ const ForgotPasswordForm = () => {
   return (
     <form action={formAction} className="space-y-6">
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="email">
-          Email Address <span className="text-red-500">*</span>
-        </Label>
-        <div className="relative">
-          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-          <Input
-            id="email"
-            name="email"
-            placeholder="name@example.com"
-            defaultValue={state.inputs?.email}
-            className={`pl-12 h-12 text-base border-gray-300 focus:border-primary focus:ring-primary ${
-              state.errors?.email
-                ? "border-red-500 focus-visible:ring-red-500"
-                : ""
-            }`}
-          />
-        </div>
-        {state.errors?.email && (
-          <p className="text-sm text-red-500">{state.errors.email[0]}</p>
-        )}
+        <FormInput
+          id="email"
+          name="email"
+          label="Email Address"
+          icon={Mail}
+          placeholder="name@example.com"
+          defaultValue={state.inputs?.email}
+          error={state.errors?.email}
+          required
+          className="h-12 text-base border-gray-300 focus:border-primary focus:ring-primary"
+        />
       </div>
 
       <Button
