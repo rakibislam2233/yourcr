@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { FormInput } from "@/components/ui/form-input";
 import { FormSelect } from "@/components/ui/form-select";
+import { Label } from "@/components/ui/label";
 import {
   createTeacher,
   type TeacherActionState,
@@ -19,15 +20,6 @@ const designationOptions = [
   "Assistant Professor",
   "Lecturer",
   "Instructor",
-];
-
-const colorOptions = [
-  { value: "bg-blue-500", label: "Blue" },
-  { value: "bg-green-500", label: "Green" },
-  { value: "bg-purple-500", label: "Purple" },
-  { value: "bg-orange-500", label: "Orange" },
-  { value: "bg-pink-500", label: "Pink" },
-  { value: "bg-cyan-500", label: "Cyan" },
 ];
 
 const initialState: TeacherActionState = {
@@ -127,7 +119,6 @@ const AddTeacherForm = () => {
             }))}
             placeholder="Select designation"
             error={state.errors?.designation}
-            className="bg-gray-50/30 font-medium"
             required
           />
 

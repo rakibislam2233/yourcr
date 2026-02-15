@@ -1,12 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
-
 import { revalidatePath } from "next/cache";
 import { api } from "./api";
-
 import { Issue } from "@/interface/issue.interface";
-export type { Issue };
-
 import { ActionState } from "@/interface/action-state.interface";
 
 export type IssueActionState = ActionState;

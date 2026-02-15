@@ -1,11 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
-
 import { revalidatePath } from "next/cache";
 import { api } from "./api";
-
 import { Notice } from "@/interface/notice.interface";
-export type { Notice };
 
 import { ActionState } from "@/interface/action-state.interface";
 

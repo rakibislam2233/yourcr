@@ -1,15 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { RoutineItem } from "@/interface/routine.interface";
 import {
   updateRoutineItem,
@@ -83,137 +74,77 @@ const EditRoutineForm: React.FC<EditRoutineFormProps> = ({ routineItem }) => {
     <div className="bg-white rounded-2xl border border-gray-100 p-6">
       <form action={formAction} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <Label htmlFor="day">Day</Label>
-            <Select
-              name="day"
-              defaultValue={state.inputs?.day ?? routineItem.day}
-            >
-              <SelectTrigger
-                className={state.errors?.day ? "border-red-500" : ""}
-              >
-                <SelectValue placeholder="Select day" />
-              </SelectTrigger>
-              <SelectContent>
-                {days.map((d) => (
-                  <SelectItem key={d} value={d}>
-                    {d}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {state.errors?.day && (
-              <p className="text-red-500 text-xs">{state.errors.day[0]}</p>
-            )}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="time">Time Slot</Label>
-            <Select
-              name="time"
-              defaultValue={state.inputs?.time ?? routineItem.time}
-            >
-              <SelectTrigger
-                className={state.errors?.time ? "border-red-500" : ""}
-              >
-                <SelectValue placeholder="Select time slot" />
-              </SelectTrigger>
-              <SelectContent>
-                {timeSlots.map((t) => (
-                  <SelectItem key={t} value={t}>
-                    {t}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {state.errors?.time && (
-              <p className="text-red-500 text-xs">{state.errors.time[0]}</p>
-            )}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="subject">Subject</Label>
-            <Input
-              id="subject"
-              name="subject"
-              defaultValue={state.inputs?.subject ?? routineItem.subject}
-              className={state.errors?.subject ? "border-red-500" : ""}
-              required
-            />
-            {state.errors?.subject && (
-              <p className="text-red-500 text-xs">{state.errors.subject[0]}</p>
-            )}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="teacher">Teacher</Label>
-            <Input
-              id="teacher"
-              name="teacher"
-              defaultValue={state.inputs?.teacher ?? routineItem.teacher}
-              className={state.errors?.teacher ? "border-red-500" : ""}
-              required
-            />
-            {state.errors?.teacher && (
-              <p className="text-red-500 text-xs">{state.errors.teacher[0]}</p>
-            )}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="room">Room</Label>
-            <Input
-              id="room"
-              name="room"
-              defaultValue={state.inputs?.room ?? routineItem.room}
-              className={state.errors?.room ? "border-red-500" : ""}
-              required
-            />
-            {state.errors?.room && (
-              <p className="text-red-500 text-xs">{state.errors.room[0]}</p>
-            )}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="type">Class Type</Label>
-            <Select
-              name="type"
-              defaultValue={state.inputs?.type ?? routineItem.type}
-            >
-              <SelectTrigger
-                className={state.errors?.type ? "border-red-500" : ""}
-              >
-                <SelectValue placeholder="Select class type" />
-              </SelectTrigger>
-              <SelectContent>
-                {typeOptions.map((type) => (
-                  <SelectItem key={type} value={type}>
-                    {type}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {state.errors?.type && (
-              <p className="text-red-500 text-xs">{state.errors.type[0]}</p>
-            )}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="color">Color</Label>
-            <Select
-              name="color"
-              defaultValue={state.inputs?.color ?? routineItem.color}
-            >
-              <SelectTrigger
-                className={state.errors?.color ? "border-red-500" : ""}
-              >
-                <SelectValue placeholder="Select color" />
-              </SelectTrigger>
-              <SelectContent>
-                {colorOptions.map((c) => (
-                  <SelectItem key={c.value} value={c.value}>
-                    {c.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {state.errors?.color && (
-              <p className="text-red-500 text-xs">{state.errors.color[0]}</p>
-            )}
-          </div>
+          <FormSelect
+            name="day"
+            label="Day"
+            defaultValue={state.inputs?.day ?? routineItem.day}
+            options={days.map((d) => ({ value: d, label: d }))}
+            placeholder="Select day"
+            error={state.errors?.day}
+            required
+          />
+
+          <FormSelect
+            name="time"
+            label="Time Slot"
+            defaultValue={state.inputs?.time ?? routineItem.time}
+            options={timeSlots.map((t) => ({ value: t, label: t }))}
+            placeholder="Select time slot"
+            error={state.errors?.time}
+            required
+          />
+
+          <FormInput
+            id="subject"
+            name="subject"
+            label="Subject"
+            icon={BookOpen}
+            defaultValue={state.inputs?.subject ?? routineItem.subject}
+            placeholder="e.g., Database Management"
+            error={state.errors?.subject}
+            required
+          />
+
+          <FormInput
+            id="teacher"
+            name="teacher"
+            label="Teacher"
+            icon={User}
+            defaultValue={state.inputs?.teacher ?? routineItem.teacher}
+            placeholder="e.g., Dr. Kamal Ahmed"
+            error={state.errors?.teacher}
+            required
+          />
+
+          <FormInput
+            id="room"
+            name="room"
+            label="Room"
+            icon={MapPin}
+            defaultValue={state.inputs?.room ?? routineItem.room}
+            placeholder="e.g., Room 301 or Lab 102"
+            error={state.errors?.room}
+            required
+          />
+
+          <FormSelect
+            name="type"
+            label="Class Type"
+            defaultValue={state.inputs?.type ?? routineItem.type}
+            options={typeOptions.map((type) => ({ value: type, label: type }))}
+            placeholder="Select class type"
+            error={state.errors?.type}
+            required
+          />
+
+          <FormSelect
+            name="color"
+            label="Color"
+            defaultValue={state.inputs?.color ?? routineItem.color}
+            options={colorOptions}
+            placeholder="Select color"
+            error={state.errors?.color}
+          />
         </div>
 
         <div className="flex gap-3 pt-4 border-t border-gray-100">

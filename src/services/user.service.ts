@@ -3,7 +3,6 @@
 import { getCookie } from "@/utils/tokenHandlers";
 import { revalidateTag } from "next/cache";
 import { api } from "./api";
-
 import { ActionState } from "@/interface/action-state.interface";
 
 export type UserActionState = ActionState;

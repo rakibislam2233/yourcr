@@ -8,7 +8,6 @@ import { api } from "./api";
 import { ActionState } from "@/interface/action-state.interface";
 import { revalidateTag } from "next/cache";
 import { Subject } from "@/interface/subject.interface";
-
 export type SubjectActionState = ActionState;
 
 // Get all subjects with caching

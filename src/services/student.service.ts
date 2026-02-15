@@ -6,7 +6,6 @@ import {
 } from "@/validation/student.validation";
 import { revalidateTag } from "next/cache";
 import { api } from "./api";
-
 import { ActionState } from "@/interface/action-state.interface";
 export type StudentActionState = ActionState;
 

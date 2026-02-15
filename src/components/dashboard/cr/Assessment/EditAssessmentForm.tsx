@@ -1,22 +1,16 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
+import { FormInput } from "@/components/ui/form-input";
+import { FormSelect } from "@/components/ui/form-select";
+import { FormTextarea } from "@/components/ui/form-textarea";
 import { Assessment } from "@/interface/assessment.interface";
 import { Subject } from "@/interface/subject.interface";
 import {
   updateAssessment,
   type AssessmentActionState,
 } from "@/services/assessment.service";
+import { Calendar, Clock, FileText, Hash, MapPin } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useActionState, useEffect } from "react";
@@ -70,151 +64,92 @@ const EditAssessmentForm: React.FC<EditAssessmentFormProps> = ({
     <div className="bg-white rounded-2xl border border-gray-100 p-6">
       <form action={formAction} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <Label htmlFor="title">Assessment Title</Label>
-            <Input
-              id="title"
-              name="title"
-              defaultValue={state.inputs?.title ?? assessment.title}
-              placeholder="e.g., Mid-Term Examination"
-              className={state.errors?.title ? "border-red-500" : ""}
-              required
-            />
-            {state.errors?.title && (
-              <p className="text-red-500 text-xs mt-1">
-                {state.errors.title[0]}
-              </p>
-            )}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="subject">Subject</Label>
-            <Select
-              name="subject"
-              defaultValue={state.inputs?.subject ?? assessment.subject}
-            >
-              <SelectTrigger
-                className={state.errors?.subject ? "border-red-500" : ""}
-              >
-                <SelectValue placeholder="Select subject" />
-              </SelectTrigger>
-              <SelectContent>
-                {subjects.map((s) => (
-                  <SelectItem key={s.id} value={s.name}>
-                    {s.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {state.errors?.subject && (
-              <p className="text-red-500 text-xs mt-1">
-                {state.errors.subject[0]}
-              </p>
-            )}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="type">Assessment Type</Label>
-            <Select
-              name="type"
-              defaultValue={state.inputs?.type ?? assessment.type}
-            >
-              <SelectTrigger
-                className={state.errors?.type ? "border-red-500" : ""}
-              >
-                <SelectValue placeholder="Select type" />
-              </SelectTrigger>
-              <SelectContent>
-                {typeOptions.map((t) => (
-                  <SelectItem key={t} value={t}>
-                    {t}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {state.errors?.type && (
-              <p className="text-red-500 text-xs mt-1">
-                {state.errors.type[0]}
-              </p>
-            )}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="totalMarks">Total Marks</Label>
-            <Input
-              id="totalMarks"
-              name="totalMarks"
-              type="number"
-              defaultValue={state.inputs?.totalMarks ?? assessment.totalMarks}
-              placeholder="e.g., 50"
-              className={state.errors?.totalMarks ? "border-red-500" : ""}
-              required
-            />
-            {state.errors?.totalMarks && (
-              <p className="text-red-500 text-xs mt-1">
-                {state.errors.totalMarks[0]}
-              </p>
-            )}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="date">Date</Label>
-            <Input
-              id="date"
-              name="date"
-              type="date"
-              defaultValue={state.inputs?.date ?? assessment.date}
-              className={state.errors?.date ? "border-red-500" : ""}
-              required
-            />
-            {state.errors?.date && (
-              <p className="text-red-500 text-xs mt-1">
-                {state.errors.date[0]}
-              </p>
-            )}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="time">Time</Label>
-            <Input
-              id="time"
-              name="time"
-              defaultValue={state.inputs?.time ?? assessment.time}
-              placeholder="e.g., 10:00 AM - 1:00 PM"
-              className={state.errors?.time ? "border-red-500" : ""}
-              required
-            />
-            {state.errors?.time && (
-              <p className="text-red-500 text-xs mt-1">
-                {state.errors.time[0]}
-              </p>
-            )}
-          </div>
-          <div className="space-y-2 md:col-span-2">
-            <Label htmlFor="venue">Venue (Optional)</Label>
-            <Input
+          <FormInput
+            id="title"
+            name="title"
+            label="Assessment Title"
+            icon={FileText}
+            defaultValue={state.inputs?.title ?? assessment.title}
+            placeholder="e.g., Mid-Term Examination"
+            error={state.errors?.title}
+            required
+          />
+
+          <FormSelect
+            name="subject"
+            label="Subject"
+            defaultValue={state.inputs?.subject ?? assessment.subject}
+            options={subjects.map((s) => ({ value: s.name, label: s.name }))}
+            placeholder="Select subject"
+            error={state.errors?.subject}
+          />
+
+          <FormSelect
+            name="type"
+            label="Assessment Type"
+            defaultValue={state.inputs?.type ?? assessment.type}
+            options={typeOptions.map((t) => ({ value: t, label: t }))}
+            placeholder="Select type"
+            error={state.errors?.type}
+          />
+
+          <FormInput
+            id="totalMarks"
+            name="totalMarks"
+            type="number"
+            label="Total Marks"
+            icon={Hash}
+            defaultValue={state.inputs?.totalMarks ?? assessment.totalMarks}
+            placeholder="e.g., 50"
+            error={state.errors?.totalMarks}
+            required
+          />
+
+          <FormInput
+            id="date"
+            name="date"
+            type="date"
+            label="Date"
+            icon={Calendar}
+            defaultValue={state.inputs?.date ?? assessment.date}
+            error={state.errors?.date}
+            required
+          />
+
+          <FormInput
+            id="time"
+            name="time"
+            label="Time"
+            icon={Clock}
+            defaultValue={state.inputs?.time ?? assessment.time}
+            placeholder="e.g., 10:00 AM - 1:00 PM"
+            error={state.errors?.time}
+            required
+          />
+
+          <div className="md:col-span-2">
+            <FormInput
               id="venue"
               name="venue"
+              label="Venue (Optional)"
+              icon={MapPin}
               defaultValue={state.inputs?.venue ?? assessment.venue}
               placeholder="e.g., Exam Hall A"
-              className={state.errors?.venue ? "border-red-500" : ""}
+              error={state.errors?.venue}
             />
-            {state.errors?.venue && (
-              <p className="text-red-500 text-xs mt-1">
-                {state.errors.venue[0]}
-              </p>
-            )}
           </div>
-          <div className="space-y-2 md:col-span-2">
-            <Label htmlFor="description">Description (Optional)</Label>
-            <Textarea
+
+          <div className="md:col-span-2">
+            <FormTextarea
               id="description"
               name="description"
+              label="Description (Optional)"
               defaultValue={state.inputs?.description ?? assessment.description}
               placeholder="Add any additional instructions..."
               rows={4}
-              className={state.errors?.description ? "border-red-500" : ""}
+              error={state.errors?.description}
+              className="resize-none"
             />
-            {state.errors?.description && (
-              <p className="text-red-500 text-xs mt-1">
-                {state.errors.description[0]}
-              </p>
-            )}
           </div>
         </div>
 

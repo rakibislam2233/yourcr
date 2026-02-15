@@ -1,16 +1,10 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { FormInput } from "@/components/ui/form-input";
+import { FormSelect } from "@/components/ui/form-select";
+import { FormTextarea } from "@/components/ui/form-textarea";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import {
   createNotice,
   type NoticeActionState,
@@ -58,66 +52,28 @@ const AddNoticeForm = () => {
     <div className="bg-white rounded-2xl border border-gray-100 p-6">
       <form action={formAction} className="space-y-6">
         <div className="grid grid-cols-1 gap-x-8 gap-y-6">
-          <div className="flex flex-col gap-1.5">
-            <Label
-              htmlFor="title"
-              className="text-sm font-semibold text-gray-700"
-            >
-              Notice Title
-            </Label>
-            <div className="relative">
-              <FileText className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <Input
-                id="title"
-                name="title"
-                defaultValue={state.inputs?.title}
-                placeholder="e.g., Mid-Term Examination Schedule"
-                required
-                className={`pl-10 h-12 text-base border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30 transition-all font-medium ${
-                  state.errors?.title ? "border-red-500" : ""
-                }`}
-              />
-            </div>
-            {state.errors?.title && (
-              <p className="text-red-500 text-xs mt-1">
-                {state.errors.title[0]}
-              </p>
-            )}
-          </div>
+          <FormInput
+            id="title"
+            name="title"
+            label="Notice Title"
+            icon={FileText}
+            defaultValue={state.inputs?.title}
+            placeholder="e.g., Mid-Term Examination Schedule"
+            error={state.errors?.title}
+            className="bg-gray-50/30 font-medium"
+            required
+          />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-            <div className="flex flex-col gap-1.5">
-              <Label
-                htmlFor="type"
-                className="text-sm font-semibold text-gray-700"
-              >
-                Notice Type
-              </Label>
-              <Select
-                name="type"
-                defaultValue={state.inputs?.type ?? "general"}
-              >
-                <SelectTrigger
-                  className={`h-12 bg-gray-50/30 border-gray-200 font-medium ${
-                    state.errors?.type ? "border-red-500" : ""
-                  }`}
-                >
-                  <SelectValue placeholder="Select type" />
-                </SelectTrigger>
-                <SelectContent>
-                  {typeOptions.map((t) => (
-                    <SelectItem key={t.value} value={t.value}>
-                      {t.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {state.errors?.type && (
-                <p className="text-red-500 text-xs mt-1">
-                  {state.errors.type[0]}
-                </p>
-              )}
-            </div>
+            <FormSelect
+              name="type"
+              label="Notice Type"
+              defaultValue={state.inputs?.type ?? "general"}
+              options={typeOptions}
+              placeholder="Select type"
+              error={state.errors?.type}
+              required
+            />
 
             <div className="flex flex-col gap-1.5">
               <Label
@@ -149,30 +105,17 @@ const AddNoticeForm = () => {
             </div>
           </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label
-              htmlFor="content"
-              className="text-sm font-semibold text-gray-700"
-            >
-              Notice Content
-            </Label>
-            <Textarea
-              id="content"
-              name="content"
-              defaultValue={state.inputs?.content}
-              placeholder="Enter the notice content here..."
-              rows={6}
-              required
-              className={`bg-gray-50/30 resize-none transition-all font-medium ${
-                state.errors?.content ? "border-red-500" : ""
-              }`}
-            />
-            {state.errors?.content && (
-              <p className="text-red-500 text-xs mt-1">
-                {state.errors.content[0]}
-              </p>
-            )}
-          </div>
+          <FormTextarea
+            id="content"
+            name="content"
+            label="Notice Content"
+            defaultValue={state.inputs?.content}
+            placeholder="Enter the notice content here..."
+            rows={6}
+            error={state.errors?.content}
+            className="bg-gray-50/30 resize-none font-medium"
+            required
+          />
         </div>
 
         <div className="flex gap-3 pt-4 border-t border-gray-100">

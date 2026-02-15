@@ -1,3 +1,4 @@
+"use server";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   createAssessmentSchema,
@@ -5,11 +6,8 @@ import {
 } from "@/validation/assessment.validation";
 import { revalidatePath } from "next/cache";
 import { api } from "./api";
-
-import { Assessment } from "@/interface/assessment.interface";
-export type { Assessment };
-
 import { ActionState } from "@/interface/action-state.interface";
+import { Assessment } from "@/interface/assessment.interface";
 
 export type AssessmentActionState = ActionState;
 

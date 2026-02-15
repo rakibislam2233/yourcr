@@ -7,7 +7,6 @@ import {
 } from "@/validation/class.validation";
 import { revalidatePath } from "next/cache";
 import { api } from "./api";
-
 import { ActionState } from "@/interface/action-state.interface";
 
 export type ClassActionState = ActionState;

@@ -1,21 +1,16 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { FormInput } from "@/components/ui/form-input";
+import { FormSelect } from "@/components/ui/form-select";
+import { FormTextarea } from "@/components/ui/form-textarea";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { Notice } from "@/interface/notice.interface";
 import {
   updateNotice,
   type NoticeActionState,
 } from "@/services/notice.service";
+import { FileText } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useActionState, useEffect } from "react";
@@ -63,52 +58,34 @@ const EditNoticeForm: React.FC<EditNoticeFormProps> = ({ notice }) => {
     <div className="bg-white rounded-2xl border border-gray-100 p-6">
       <form action={formAction} className="space-y-6">
         <div className="grid grid-cols-1 gap-6">
-          <div className="space-y-2">
-            <Label htmlFor="title">Notice Title</Label>
-            <Input
-              id="title"
-              name="title"
-              defaultValue={state.inputs?.title ?? notice.title}
-              placeholder="e.g., Mid-Term Examination Schedule"
-              className={state.errors?.title ? "border-red-500" : ""}
-              required
-            />
-            {state.errors?.title && (
-              <p className="text-red-500 text-xs mt-1">
-                {state.errors.title[0]}
-              </p>
-            )}
-          </div>
+          <FormInput
+            id="title"
+            name="title"
+            label="Notice Title"
+            icon={FileText} // Added icon import required
+            defaultValue={state.inputs?.title ?? notice.title}
+            placeholder="e.g., Mid-Term Examination Schedule"
+            error={state.errors?.title}
+            required
+          />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <Label htmlFor="type">Notice Type</Label>
-              <Select
-                name="type"
-                defaultValue={state.inputs?.type ?? notice.type}
-              >
-                <SelectTrigger
-                  className={state.errors?.type ? "border-red-500" : ""}
-                >
-                  <SelectValue placeholder="Select type" />
-                </SelectTrigger>
-                <SelectContent>
-                  {typeOptions.map((t) => (
-                    <SelectItem key={t.value} value={t.value}>
-                      {t.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {state.errors?.type && (
-                <p className="text-red-500 text-xs mt-1">
-                  {state.errors.type[0]}
-                </p>
-              )}
-            </div>
+            <FormSelect
+              name="type"
+              label="Notice Type"
+              defaultValue={state.inputs?.type ?? notice.type}
+              options={typeOptions}
+              placeholder="Select type"
+              error={state.errors?.type}
+            />
 
             <div className="space-y-2">
-              <Label htmlFor="pinned">Pin Notice</Label>
+              <Label
+                htmlFor="pinned"
+                className="text-sm font-semibold text-gray-700"
+              >
+                Pin Notice
+              </Label>
               <div className="flex items-center gap-3 h-10 border border-transparent">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
@@ -135,27 +112,17 @@ const EditNoticeForm: React.FC<EditNoticeFormProps> = ({ notice }) => {
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="content">Notice Content</Label>
-            <Textarea
-              id="content"
-              name="content"
-              defaultValue={state.inputs?.content ?? notice.content}
-              placeholder="Enter the notice content here..."
-              rows={6}
-              required
-              className={
-                state.errors?.content
-                  ? "border-red-500 resize-none"
-                  : "resize-none"
-              }
-            />
-            {state.errors?.content && (
-              <p className="text-red-500 text-xs mt-1">
-                {state.errors.content[0]}
-              </p>
-            )}
-          </div>
+          <FormTextarea
+            id="content"
+            name="content"
+            label="Notice Content"
+            defaultValue={state.inputs?.content ?? notice.content}
+            placeholder="Enter the notice content here..."
+            rows={6}
+            error={state.errors?.content}
+            className="resize-none"
+            required
+          />
         </div>
 
         <div className="flex gap-3 pt-4 border-t border-gray-100">
