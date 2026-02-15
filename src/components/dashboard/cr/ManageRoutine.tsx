@@ -65,62 +65,68 @@ const ManageRoutine: React.FC<ManageRoutineProps> = ({ initialRoutines }) => {
   const [routines, setRoutines] =
     useState<Record<RoutineTab, RoutineDisplay | null>>(getInitialState());
 
-  const handleFileUpload = async (file: File) => {
-    const isImage = file.type.startsWith("image/");
-    const isPdf = file.type === "application/pdf";
+  const handleFileUpload = useCallback(
+    async (file: File) => {
+      const isImage = file.type.startsWith("image/");
+      const isPdf = file.type === "application/pdf";
 
-    if (!isImage && !isPdf) {
-      toast.error("Please upload an image or PDF file");
-      return;
-    }
-
-    setIsPending(true);
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append(
-      "name",
-      activeTab === "class" ? "Class Routine" : "Exam Routine",
-    );
-    formData.append(
-      "type",
-      activeTab === "class" ? ApiRoutineType.CLASS : ApiRoutineType.EXAM,
-    );
-
-    try {
-      let result;
-      const currentRoutine = routines[activeTab];
-
-      if (currentRoutine?.id) {
-        // Update existing routine
-        result = await updateRoutine(currentRoutine.id, {} as any, formData);
-      } else {
-        // Create new routine
-        result = await createRoutine({} as any, formData);
+      if (!isImage && !isPdf) {
+        toast.error("Please upload an image or PDF file");
+        return;
       }
 
-      if (result.success && result.data) {
-        const newRoutine = result.data as Routine;
-        const displayData: RoutineDisplay = {
-          id: newRoutine.id,
-          name: newRoutine.name,
-          url: newRoutine.fileUrl,
-          type: newRoutine.fileUrl.endsWith(".pdf") ? "pdf" : "image",
-          uploadedAt: new Date().toLocaleDateString(),
-        };
+      setIsPending(true);
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append(
+        "name",
+        activeTab === "class" ? "Class Routine" : "Exam Routine",
+      );
+      formData.append(
+        "type",
+        activeTab === "class" ? ApiRoutineType.CLASS : ApiRoutineType.EXAM,
+      );
 
-        setRoutines((prev) => ({ ...prev, [activeTab]: displayData }));
-        setIsUploading(false);
-        toast.success(result.message);
-        router.refresh();
-      } else {
-        toast.error(result.message || "Failed to upload routine");
+      try {
+        let result;
+        const currentRoutine = routines[activeTab];
+
+        // Mock previous state for server action
+        const prevState = { success: false, message: "", timestamp: 0 };
+
+        if (currentRoutine?.id) {
+          // Update existing routine
+          result = await updateRoutine(currentRoutine.id, prevState, formData);
+        } else {
+          // Create new routine
+          result = await createRoutine(prevState, formData);
+        }
+
+        if (result.success && result.data) {
+          const newRoutine = result.data as Routine;
+          const displayData: RoutineDisplay = {
+            id: newRoutine.id,
+            name: newRoutine.name,
+            url: newRoutine.fileUrl,
+            type: newRoutine.fileUrl.endsWith(".pdf") ? "pdf" : "image",
+            uploadedAt: new Date().toLocaleDateString(),
+          };
+
+          setRoutines((prev) => ({ ...prev, [activeTab]: displayData }));
+          setIsUploading(false);
+          toast.success(result.message);
+          router.refresh();
+        } else {
+          toast.error(result.message || "Failed to upload routine");
+        }
+      } catch {
+        toast.error("An error occurred during upload");
+      } finally {
+        setIsPending(false);
       }
-    } catch (error) {
-      toast.error("An error occurred during upload");
-    } finally {
-      setIsPending(false);
-    }
-  };
+    },
+    [activeTab, routines, router],
+  );
 
   const onDrop = useCallback(
     (e: React.DragEvent) => {
@@ -129,7 +135,7 @@ const ManageRoutine: React.FC<ManageRoutineProps> = ({ initialRoutines }) => {
       const file = e.dataTransfer.files[0];
       if (file) handleFileUpload(file);
     },
-    [activeTab, routines], // meaningful dependency for closure
+    [handleFileUpload],
   );
 
   return (
@@ -272,7 +278,7 @@ const ManageRoutine: React.FC<ManageRoutineProps> = ({ initialRoutines }) => {
             className="bg-primary hover:bg-blue-700 text-white font-bold h-12 px-8 rounded-md flex gap-2 shadow-lg shadow-blue-500/20 active:scale-95 transition-all"
           >
             <PencilLine className="w-5 h-5" />
-            Update Routine
+            {isPending ? "Updating..." : "Update Routine"}
           </Button>
         </div>
       )}
