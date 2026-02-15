@@ -1,14 +1,11 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { FormInput } from "@/components/ui/form-input";
 import { updateMyProfile } from "@/services/user.service";
 import {
   Building2,
   Calendar,
   Camera,
-  Eye,
-  EyeOff,
   GraduationCap,
   Lock,
   Mail,
@@ -29,7 +26,6 @@ interface MyProfileProps {
 }
 
 const MyProfile: React.FC<MyProfileProps> = ({ user }) => {
-  const [showPassword, setShowPassword] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -57,7 +53,7 @@ const MyProfile: React.FC<MyProfileProps> = ({ user }) => {
         phoneNumber: formData.phoneNumber,
       });
       toast.success("Identity updated successfully");
-    } catch (error) {
+    } catch {
       toast.error("Failed to sync identity updates");
     } finally {
       setIsUpdating(false);
@@ -227,68 +223,52 @@ const MyProfile: React.FC<MyProfileProps> = ({ user }) => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
               <div className="flex flex-col gap-1.5">
-                <Label className="text-sm font-semibold text-gray-700">
-                  Full Name
-                </Label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <Input
-                    value={formData.fullName}
-                    onChange={(e) =>
-                      setFormData({ ...formData, fullName: e.target.value })
-                    }
-                    placeholder="Full Name"
-                    className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-emerald-500 focus:ring-emerald-500 bg-gray-50/20 font-medium shadow-none transition-all"
-                  />
-                </div>
+                <FormInput
+                  label="Full Name"
+                  icon={User}
+                  value={formData.fullName}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setFormData({ ...formData, fullName: e.target.value })
+                  }
+                  placeholder="Full Name"
+                  className="bg-gray-50/20 font-medium shadow-none transition-all"
+                />
               </div>
               <div className="flex flex-col gap-1.5">
-                <Label className="text-sm font-semibold text-gray-700">
-                  Phone Number
-                </Label>
-                <div className="relative">
-                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <Input
-                    type="tel"
-                    value={formData.phoneNumber}
-                    onChange={(e) =>
-                      setFormData({ ...formData, phoneNumber: e.target.value })
-                    }
-                    placeholder="Phone Number"
-                    className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-emerald-500 focus:ring-emerald-500 bg-gray-50/20 font-medium shadow-none transition-all"
-                  />
-                </div>
+                <FormInput
+                  type="tel"
+                  label="Phone Number"
+                  icon={Phone}
+                  value={formData.phoneNumber}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setFormData({ ...formData, phoneNumber: e.target.value })
+                  }
+                  placeholder="Phone Number"
+                  className="bg-gray-50/20 font-medium shadow-none transition-all"
+                />
               </div>
               <div className="flex flex-col gap-1.5">
-                <Label className="text-sm font-semibold text-gray-400">
-                  Email Address (Verification Only)
-                </Label>
-                <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-300" />
-                  <Input
-                    type="email"
-                    value={formData.email}
-                    disabled
-                    className="pl-12 h-12 text-base border-gray-100 bg-gray-50/50 text-gray-400 rounded-md font-medium italic cursor-not-allowed"
-                  />
-                </div>
+                <FormInput
+                  label="Email Address (Verification Only)"
+                  icon={Mail}
+                  type="email"
+                  value={formData.email}
+                  disabled
+                  className="bg-gray-50/50 text-gray-400 font-medium italic cursor-not-allowed"
+                />
               </div>
               <div className="flex flex-col gap-1.5">
-                <Label className="text-sm font-semibold text-gray-400">
-                  System ID / Roll
-                </Label>
-                <div className="relative">
-                  <Shield className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-300" />
-                  <Input
-                    defaultValue={
-                      user?.studentRoll ||
-                      user?.id?.slice(-8).toUpperCase() ||
-                      "ST-ID"
-                    }
-                    disabled
-                    className="pl-12 h-12 text-base border-gray-100 bg-gray-50/50 text-gray-400 rounded-md font-bold uppercase tracking-widest cursor-not-allowed"
-                  />
-                </div>
+                <FormInput
+                  label="System ID / Roll"
+                  icon={Shield}
+                  defaultValue={
+                    user?.studentRoll ||
+                    user?.id?.slice(-8).toUpperCase() ||
+                    "ST-ID"
+                  }
+                  disabled
+                  className="bg-gray-50/50 text-gray-400 font-bold uppercase tracking-widest cursor-not-allowed"
+                />
               </div>
             </div>
 
@@ -326,55 +306,38 @@ const MyProfile: React.FC<MyProfileProps> = ({ user }) => {
             </div>
             <div className="space-y-6">
               <div className="flex flex-col gap-1.5">
-                <Label className="text-sm font-semibold text-gray-700">
-                  Current Password
-                </Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <Input
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Confirm current identity"
-                    className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-amber-500 pr-12 font-medium"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-amber-600 transition-colors"
-                  >
-                    {showPassword ? (
-                      <EyeOff className="w-5 h-5" />
-                    ) : (
-                      <Eye className="w-5 h-5" />
-                    )}
-                  </button>
-                </div>
+                <FormInput
+                  id="currentPassword"
+                  name="currentPassword"
+                  type="password"
+                  label="Current Password"
+                  icon={Lock}
+                  placeholder="Confirm current identity"
+                  className="border-gray-200 focus:border-amber-500 font-medium"
+                />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                 <div className="flex flex-col gap-1.5">
-                  <Label className="text-sm font-semibold text-gray-700">
-                    New Password
-                  </Label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <Input
-                      type="password"
-                      placeholder="New secure password"
-                      className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-amber-500 font-medium"
-                    />
-                  </div>
+                  <FormInput
+                    id="newPassword"
+                    name="newPassword"
+                    type="password"
+                    label="New Password"
+                    icon={Lock}
+                    placeholder="New secure password"
+                    className="border-gray-200 focus:border-amber-500 font-medium"
+                  />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <Label className="text-sm font-semibold text-gray-700">
-                    Confirm Sync
-                  </Label>
-                  <div className="relative">
-                    <Shield className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <Input
-                      type="password"
-                      placeholder="Repeat new password"
-                      className="pl-12 h-12 text-base border-gray-200 rounded-md focus:border-amber-500 font-medium"
-                    />
-                  </div>
+                  <FormInput
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type="password"
+                    label="Confirm Sync"
+                    icon={Shield}
+                    placeholder="Repeat new password"
+                    className="border-gray-200 focus:border-amber-500 font-medium"
+                  />
                 </div>
               </div>
             </div>

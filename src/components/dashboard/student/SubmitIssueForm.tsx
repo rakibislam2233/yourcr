@@ -1,16 +1,10 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { FormInput } from "@/components/ui/form-input";
+import { FormSelect } from "@/components/ui/form-select";
+import { FormTextarea } from "@/components/ui/form-textarea";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { createIssue, type IssueActionState } from "@/services/issue.service";
 import { Send } from "lucide-react";
 import { useActionState, useEffect } from "react";
@@ -55,43 +49,24 @@ const SubmitIssueForm = () => {
     <div className="bg-white rounded-2xl border border-gray-100 p-6">
       <h3 className="text-lg font-semibold text-gray-900 mb-6">New Issue</h3>
       <form action={formAction} className="space-y-6">
-        <div className="space-y-2">
-          <Label htmlFor="title">Issue Title</Label>
-          <Input
-            id="title"
-            name="title"
-            defaultValue={state.inputs?.title}
-            placeholder="Brief title for your issue"
-            className={state.errors?.title ? "border-red-500" : ""}
-            required
-          />
-          {state.errors?.title && (
-            <p className="text-red-500 text-sm mt-1">{state.errors.title[0]}</p>
-          )}
-        </div>
+        <FormInput
+          id="title"
+          name="title"
+          label="Issue Title"
+          defaultValue={state.inputs?.title}
+          placeholder="Brief title for your issue"
+          error={state.errors?.title}
+          required
+        />
 
-        <div className="space-y-2">
-          <Label htmlFor="category">Category</Label>
-          <Select name="category" defaultValue={state.inputs?.category}>
-            <SelectTrigger
-              className={state.errors?.category ? "border-red-500" : ""}
-            >
-              <SelectValue placeholder="Select a category" />
-            </SelectTrigger>
-            <SelectContent>
-              {issueCategories.map((cat) => (
-                <SelectItem key={cat} value={cat}>
-                  {cat}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {state.errors?.category && (
-            <p className="text-red-500 text-sm mt-1">
-              {state.errors.category[0]}
-            </p>
-          )}
-        </div>
+        <FormSelect
+          name="category"
+          label="Category"
+          defaultValue={state.inputs?.category}
+          options={issueCategories.map((c) => ({ value: c, label: c }))}
+          placeholder="Select a category"
+          error={state.errors?.category}
+        />
 
         <div className="space-y-2">
           <Label>Priority</Label>
@@ -124,23 +99,16 @@ const SubmitIssueForm = () => {
           )}
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="description">Description</Label>
-          <Textarea
-            id="description"
-            name="description"
-            defaultValue={state.inputs?.description}
-            placeholder="Describe your issue in detail..."
-            rows={5}
-            className={state.errors?.description ? "border-red-500" : ""}
-            required
-          />
-          {state.errors?.description && (
-            <p className="text-red-500 text-sm mt-1">
-              {state.errors.description[0]}
-            </p>
-          )}
-        </div>
+        <FormTextarea
+          id="description"
+          name="description"
+          label="Description"
+          defaultValue={state.inputs?.description}
+          placeholder="Describe your issue in detail..."
+          rows={5}
+          error={state.errors?.description}
+          required
+        />
 
         <Button
           type="submit"
