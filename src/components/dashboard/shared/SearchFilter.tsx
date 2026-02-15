@@ -1,14 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { FormInput } from "@/components/ui/form-input";
+import { FormSelect } from "@/components/ui/form-select";
 import { Search, X } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
@@ -84,46 +77,37 @@ export function SearchFilter({
       <div className="flex flex-col md:flex-row gap-4">
         {/* Search Input */}
         <div className="flex-1">
-          <Label htmlFor="search" className="sr-only">
-            Search
-          </Label>
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <Input
-              id="search"
-              type="text"
-              placeholder={searchPlaceholder}
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-              className="pl-10 h-11 border-gray-200 rounded-md focus:border-primary focus:ring-primary bg-gray-50/30"
-            />
-          </div>
+          <FormInput
+            id="search"
+            type="text"
+            placeholder={searchPlaceholder}
+            icon={Search}
+            value={searchValue}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setSearchValue(e.target.value)
+            }
+            className="h-11 bg-gray-50/30"
+          />
         </div>
 
         {/* Filter Dropdowns */}
-        {filters?.map((filter) => (
+        {filters.map((filter) => (
           <div key={filter.name} className="min-w-[180px]">
-            <Label htmlFor={filter.name} className="sr-only">
-              {filter.label}
-            </Label>
-            <Select
+            <FormSelect
+              name={filter.name}
               value={
                 searchParams?.get(filter.name) || filter.defaultValue || ""
               }
-              onValueChange={(value) => updateSearchParams(filter.name, value)}
-            >
-              <SelectTrigger className="h-11 bg-gray-50/30 border-gray-200 font-medium">
-                <SelectValue placeholder={filter.label} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="">{filter.label}</SelectItem>
-                {filter.options.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              onValueChange={(value: string) =>
+                updateSearchParams(filter.name, value)
+              }
+              options={[
+                { value: "", label: `All ${filter.label}` },
+                ...filter.options,
+              ]}
+              placeholder={filter.label}
+              triggerClassName="h-11 bg-gray-50/30 font-medium"
+            />
           </div>
         ))}
 
