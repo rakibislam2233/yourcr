@@ -1,7 +1,7 @@
+'use ser'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   createRoutineSchema,
-  routineItemSchema,
   updateRoutineSchema,
 } from "@/validation/routine.validation";
 import { revalidatePath } from "next/cache";
