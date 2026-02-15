@@ -6,7 +6,7 @@ import {
 } from "@/validation/routine.validation";
 import { revalidatePath } from "next/cache";
 import { api } from "./api";
-import { Routine, RoutineItem } from "@/interface/routine.interface";
+import { Routine } from "@/interface/routine.interface";
 
 import { ActionState } from "@/interface/action-state.interface";
 
