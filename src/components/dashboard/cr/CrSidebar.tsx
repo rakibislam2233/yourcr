@@ -173,7 +173,7 @@ const CrSidebar: React.FC = () => {
                           <item.icon
                             className={cn(
                               "shrink-0",
-                              isCollapsed ? "size-8" : "size-6",
+                              isCollapsed ? "size-7!" : "size-6!",
                               active ? "text-white" : "text-gray-400",
                             )}
                           />

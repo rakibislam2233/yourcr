@@ -8,4 +8,5 @@ export interface Routine {
   name: string;
   fileUrl: string;
   type: RoutineType;
+  updatedAt: string;
 }
