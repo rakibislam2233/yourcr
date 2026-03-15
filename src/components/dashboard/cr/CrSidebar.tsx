@@ -21,87 +21,67 @@ import {
   MessageSquare,
   School,
   User,
-  Users
+  Users,
 } from "lucide-react";
 import NextImage from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import * as React from "react";
-const menuGroups = [
+const menuLinks = [
   {
-    label: "Main Menu",
-    items: [
-      {
-        icon: LayoutDashboard,
-        label: "Dashboard",
-        href: "/dashboard/cr",
-      },
-      {
-        icon: Building2,
-        label: "Institution",
-        href: "/dashboard/cr/institution",
-      },
-    ],
+    icon: LayoutDashboard,
+    label: "Dashboard",
+    href: "/dashboard/cr",
   },
   {
-    label: "Management",
-    items: [
-      {
-        icon: Users,
-        label: "Students",
-        href: "/dashboard/cr/students",
-      },
-      {
-        icon: Users,
-        label: "Teachers",
-        href: "/dashboard/cr/teachers",
-      },
-      {
-        icon: BookOpen,
-        label: "Subjects",
-        href: "/dashboard/cr/subjects",
-      },
-      {
-        icon: School,
-        label: "Classes",
-        href: "/dashboard/cr/classes",
-      },
-    ],
+    icon: Building2,
+    label: "Institution",
+    href: "/dashboard/cr/institution",
   },
   {
-    label: "Academic",
-    items: [
-      {
-        icon: Calendar,
-        label: "Routine",
-        href: "/dashboard/cr/routine",
-      },
-      {
-        icon: BookOpen,
-        label: "Assessments",
-        href: "/dashboard/cr/assessments",
-      },
-      {
-        icon: Bell,
-        label: "Notices",
-        href: "/dashboard/cr/notices",
-      },
-    ],
+    icon: Users,
+    label: "Students",
+    href: "/dashboard/cr/students",
   },
   {
-    label: "Support & Account",
-    items: [
-      {
-        icon: MessageSquare,
-        label: "Issues",
-        href: "/dashboard/cr/issues",
-      },
-      {
-        icon: User,
-        label: "Profile",
-        href: "/dashboard/cr/profile",
-      },
-    ],
+    icon: Users,
+    label: "Teachers",
+    href: "/dashboard/cr/teachers",
+  },
+  {
+    icon: BookOpen,
+    label: "Subjects",
+    href: "/dashboard/cr/subjects",
+  },
+  {
+    icon: School,
+    label: "Classes",
+    href: "/dashboard/cr/classes",
+  },
+  {
+    icon: Calendar,
+    label: "Routine",
+    href: "/dashboard/cr/routine",
+  },
+  {
+    icon: BookOpen,
+    label: "Assessments",
+    href: "/dashboard/cr/assessments",
+  },
+  {
+    icon: Bell,
+    label: "Notices",
+    href: "/dashboard/cr/notices",
+  },
+  {
+    icon: MessageSquare,
+    label: "Issues",
+    href: "/dashboard/cr/issues",
+  },
+  {
+    icon: User,
+    label: "Profile",
+    href: "/dashboard/cr/profile",
   },
 ];
 
@@ -145,50 +125,41 @@ const CrSidebar: React.FC = () => {
 
         {/* Content */}
         <SidebarContent className="flex-1 py-2 px-3 overflow-y-auto no-scrollbar">
-          {menuGroups.map((group) => (
-            <SidebarGroup key={group.label}>
-              {!isCollapsed && (
-                <SidebarGroupLabel className="px-3 mb-2 border-b rounded-none border-gray-200 font-semibold  tracking-widest text-gray-400">
-                  {group.label}
-                </SidebarGroupLabel>
-              )}
-              <SidebarMenu className="space-y-1">
-                {group.items.map((item) => {
-                  const active = isActive(item.href);
+          <SidebarMenu  className="space-y-1">
+            {menuLinks.map((item) => {
+              const active = isActive(item.href);
 
-                  return (
-                    <SidebarMenuItem key={item.label}>
-                      <Link href={item.href} className="w-full block">
-                        <SidebarMenuButton
-                          tooltip={isCollapsed ? item.label : undefined}
-                          className={cn(
-                            "w-full h-11  cursor-pointer flex items-center rounded-md transition-none",
-                            isCollapsed ? "justify-center p-0" : "px-3 gap-3",
-                            active
-                              ? "bg-primary text-white hover:bg-primary hover:text-white"
-                              : "text-gray-600 bg-transparent hover:bg-gray-100 hover:text-gray-600",
-                          )}
-                        >
-                          <item.icon
-                            className={cn(
-                              "shrink-0",
-                              isCollapsed ? "size-6!" : "size-5!",
-                              active ? "text-white" : "text-gray-400",
-                            )}
-                          />
-                          {!isCollapsed && (
-                            <span className="text-sm font-semibold truncate leading-none">
-                              {item.label}
-                            </span>
-                          )}
-                        </SidebarMenuButton>
-                      </Link>
-                    </SidebarMenuItem>
-                  );
-                })}
-              </SidebarMenu>
-            </SidebarGroup>
-          ))}
+              return (
+                <SidebarMenuItem key={item.label}>
+                  <Link href={item.href} className="w-full block">
+                    <SidebarMenuButton
+                      tooltip={isCollapsed ? item.label : undefined}
+                      className={cn(
+                        "w-full h-11  cursor-pointer flex items-center rounded-md transition-none",
+                        isCollapsed ? "justify-center p-0" : "px-3 gap-3",
+                        active
+                          ? "bg-primary text-white hover:bg-primary hover:text-white"
+                          : "text-gray-600 bg-transparent hover:bg-gray-100 hover:text-gray-600",
+                      )}
+                    >
+                      <item.icon
+                        className={cn(
+                          "shrink-0",
+                          isCollapsed ? "size-6!" : "size-5!",
+                          active ? "text-white" : "text-gray-400",
+                        )}
+                      />
+                      {!isCollapsed && (
+                        <span className="text-sm font-semibold truncate leading-none">
+                          {item.label}
+                        </span>
+                      )}
+                    </SidebarMenuButton>
+                  </Link>
+                </SidebarMenuItem>
+              );
+            })}
+          </SidebarMenu>
         </SidebarContent>
       </div>
     </Sidebar>

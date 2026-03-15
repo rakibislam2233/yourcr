@@ -2,97 +2,61 @@
 
 import { Button } from "@/components/ui/button";
 import { ConfirmModal } from "@/components/ui/modal";
+import { Assessment } from "@/interface/assessment.interface";
+import { deleteAssessment } from "@/services/assessment.service";
 import {
-    AlertCircle,
-    Calendar,
-    CheckCircle,
-    ClipboardList,
-    Clock,
-    Download,
-    Edit,
-    FileText,
-    Plus,
-    Timer,
-    Trash2,
+  AlertCircle,
+  Calendar,
+  CheckCircle,
+  ClipboardList,
+  Clock,
+  Edit,
+  FileText,
+  Plus,
+  Timer,
+  Trash2,
 } from "lucide-react";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
+import { toast } from "sonner";
 import PageHeader from "../shared/PageHeader";
 
-interface Assessment {
-  id: number;
-  title: string;
-  subject: string;
-  type: string;
-  date: string;
-  time: string;
-  totalMarks: number;
-  status: string;
-  venue?: string;
-  submissions?: number;
-  totalStudents?: number;
-  avgScore?: number;
+interface ManageAssessmentsProps {
+  initialAssessments: Assessment[];
+  meta?: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
 }
 
-const initialAssessments: Assessment[] = [
-  {
-    id: 1,
-    title: "Mid-Term Examination",
-    subject: "Database Management System",
-    type: "Exam",
-    date: "Dec 15, 2024",
-    time: "10:00 AM - 1:00 PM",
-    totalMarks: 50,
-    status: "upcoming",
-    venue: "Exam Hall A",
-  },
-  {
-    id: 2,
-    title: "Assignment 3",
-    subject: "Software Engineering",
-    type: "Assignment",
-    date: "Dec 10, 2024",
-    time: "11:59 PM",
-    totalMarks: 20,
-    status: "ongoing",
-    submissions: 28,
-    totalStudents: 45,
-  },
-  {
-    id: 3,
-    title: "Lab Report",
-    subject: "Computer Networks",
-    type: "Lab",
-    date: "Dec 8, 2024",
-    time: "5:00 PM",
-    totalMarks: 15,
-    status: "ongoing",
-    submissions: 35,
-    totalStudents: 45,
-  },
-  {
-    id: 4,
-    title: "Quiz 2",
-    subject: "Operating Systems",
-    type: "Quiz",
-    date: "Dec 5, 2024",
-    time: "9:00 AM",
-    totalMarks: 10,
-    status: "completed",
-    avgScore: 7.5,
-  },
-  {
-    id: 5,
-    title: "Presentation",
-    subject: "AI & Machine Learning",
-    type: "Presentation",
-    date: "Dec 3, 2024",
-    time: "2:00 PM",
-    totalMarks: 25,
-    status: "completed",
-    avgScore: 20.2,
-  },
-];
+type UiStatus = "upcoming" | "ongoing" | "completed";
+
+const getUiStatus = (assessment: Assessment): UiStatus => {
+  const deadlineValue = assessment.deadline || assessment.date;
+  const deadlineDate = deadlineValue ? new Date(deadlineValue) : null;
+  const hasValidDeadline =
+    !!deadlineDate && !Number.isNaN(deadlineDate.getTime());
+
+  if (assessment.status === "COMPLETED") {
+    return "completed";
+  }
+
+  if (assessment.status === "ACTIVE") {
+    if (hasValidDeadline && deadlineDate.getTime() < Date.now()) {
+      return "completed";
+    }
+
+    return "ongoing";
+  }
+
+  if (hasValidDeadline && deadlineDate.getTime() > Date.now()) {
+    return "upcoming";
+  }
+
+  return "ongoing";
+};
 
 const getStatusConfig = (status: string) => {
   switch (status) {
@@ -133,50 +97,122 @@ const getStatusConfig = (status: string) => {
 
 const getTypeColor = (type: string) => {
   switch (type) {
-    case "Exam":
+    case "EXAM":
       return "bg-red-500";
-    case "Assignment":
+    case "ASSIGNMENT":
       return "bg-blue-500";
-    case "Quiz":
+    case "QUIZ":
       return "bg-purple-500";
-    case "Lab":
+    case "LAB":
       return "bg-green-500";
-    case "Presentation":
+    case "PRESENTATION":
       return "bg-orange-500";
     default:
       return "bg-gray-500";
   }
 };
 
-const ManageAssessments: React.FC = () => {
+const formatDate = (value?: string) => {
+  if (!value) return "N/A";
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return date.toLocaleDateString("en-GB", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+};
+
+const formatTime = (value?: string) => {
+  if (!value) return "N/A";
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return date.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+};
+
+const getSubjectName = (assessment: Assessment) => {
+  if (typeof assessment.subject === "string") {
+    return assessment.subject;
+  }
+
+  return assessment.subject?.name || "Unknown Subject";
+};
+
+const formatTypeLabel = (type: string) =>
+  type
+    .toLowerCase()
+    .split("_")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+
+const ManageAssessments: React.FC<ManageAssessmentsProps> = ({
+  initialAssessments,
+}) => {
   const [assessments, setAssessments] =
     useState<Assessment[]>(initialAssessments);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedAssessment, setSelectedAssessment] =
     useState<Assessment | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = (assessment: Assessment) => {
     setSelectedAssessment(assessment);
     setIsDeleteModalOpen(true);
   };
 
-  const handleConfirmDelete = () => {
-    if (selectedAssessment) {
-      setAssessments(assessments.filter((a) => a.id !== selectedAssessment.id));
-      setSelectedAssessment(null);
+  const handleConfirmDelete = async () => {
+    if (!selectedAssessment) return;
+
+    setIsDeleting(true);
+    try {
+      const result = await deleteAssessment(selectedAssessment.id);
+      if (result.success) {
+        setAssessments((prev) =>
+          prev.filter((assessment) => assessment.id !== selectedAssessment.id),
+        );
+        toast.success(result.message || "Assessment deleted successfully");
+        setIsDeleteModalOpen(false);
+        setSelectedAssessment(null);
+      } else {
+        toast.error(result.message || "Failed to delete assessment");
+      }
+    } catch {
+      toast.error("Failed to delete assessment");
+    } finally {
+      setIsDeleting(false);
     }
   };
 
-  const upcomingCount = assessments.filter(
-    (a) => a.status === "upcoming",
-  ).length;
-  const ongoingCount = assessments.filter((a) => a.status === "ongoing").length;
-  const completedCount = assessments.filter(
-    (a) => a.status === "completed",
-  ).length;
+  const statusCounts = useMemo(() => {
+    return assessments.reduce(
+      (acc, assessment) => {
+        const uiStatus = getUiStatus(assessment);
+        acc[uiStatus] += 1;
+        return acc;
+      },
+      {
+        upcoming: 0,
+        ongoing: 0,
+        completed: 0,
+      },
+    );
+  }, [assessments]);
 
   return (
-    <div className="space-y-6">
+    <section className="space-y-6">
       <PageHeader
         title="Manage Assessments"
         description="Create and manage exams, assignments, and quizzes"
@@ -206,99 +242,91 @@ const ManageAssessments: React.FC = () => {
         <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Upcoming</p>
           <p className="text-2xl font-bold text-blue-600 mt-1">
-            {upcomingCount}
+            {statusCounts.upcoming}
           </p>
         </div>
         <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Ongoing</p>
           <p className="text-2xl font-bold text-orange-600 mt-1">
-            {ongoingCount}
+            {statusCounts.ongoing}
           </p>
         </div>
         <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Completed</p>
           <p className="text-2xl font-bold text-green-600 mt-1">
-            {completedCount}
+            {statusCounts.completed}
           </p>
         </div>
       </div>
 
       {/* Assessments List */}
       <div className="space-y-4">
-        {assessments.map((assessment) => {
-          const statusConfig = getStatusConfig(assessment.status);
+        {assessments.length === 0 ? (
+          <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center">
+            <ClipboardList className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+            <p className="text-gray-500">No assessments found yet</p>
+            <Link href="/dashboard/cr/assessments/add">
+              <Button className="mt-4">Create Your First Assessment</Button>
+            </Link>
+          </div>
+        ) : (
+          assessments.map((assessment) => {
+            const uiStatus = getUiStatus(assessment);
+            const statusConfig = getStatusConfig(uiStatus);
+            const deadlineValue = assessment.deadline || assessment.date;
+            const marks = Number(assessment.totalMarks) || 0;
 
-          return (
-            <div
-              key={assessment.id}
-              className="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-md transition-shadow"
-            >
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                <div className="flex items-start gap-4">
-                  <div
-                    className={`w-14 h-14 ${getTypeColor(
-                      assessment.type,
-                    )} rounded-xl flex items-center justify-center text-white`}
-                  >
-                    <ClipboardList className="w-7 h-7" />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <h3 className="font-semibold text-gray-900">
-                        {assessment.title}
-                      </h3>
-                      <span
-                        className={`px-2 py-0.5 text-xs font-medium rounded-full ${statusConfig.badge}`}
-                      >
-                        {statusConfig.label}
-                      </span>
+            return (
+              <div
+                key={assessment.id}
+                className="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-md transition-shadow"
+              >
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                  <div className="flex items-start gap-4">
+                    <div
+                      className={`w-14 h-14 ${getTypeColor(
+                        assessment.type,
+                      )} rounded-xl flex items-center justify-center text-white`}
+                    >
+                      <ClipboardList className="w-7 h-7" />
                     </div>
-                    <p className="text-sm text-primary font-medium mt-1">
-                      {assessment.subject}
-                    </p>
-                    <div className="flex items-center gap-4 mt-3 text-sm text-gray-500 flex-wrap">
-                      <span className="px-2 py-1 bg-gray-100 rounded-md font-medium">
-                        {assessment.type}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Calendar className="w-4 h-4" />
-                        {assessment.date}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Clock className="w-4 h-4" />
-                        {assessment.time ?? "N/A"}
-                      </span>
-                      <span className="font-medium text-gray-700">
-                        {assessment.totalMarks} Marks
-                      </span>
+                    <div>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h3 className="font-semibold text-gray-900">
+                          {assessment.title}
+                        </h3>
+                        <span
+                          className={`px-2 py-0.5 text-xs font-medium rounded-full ${statusConfig.badge}`}
+                        >
+                          {statusConfig.label}
+                        </span>
+                      </div>
+                      <p className="text-sm text-primary font-medium mt-1">
+                        {getSubjectName(assessment)}
+                      </p>
+                      <div className="flex items-center gap-4 mt-3 text-sm text-gray-500 flex-wrap">
+                        <span className="px-2 py-1 bg-gray-100 rounded-md font-medium">
+                          {formatTypeLabel(assessment.type)}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Calendar className="w-4 h-4" />
+                          {formatDate(deadlineValue)}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Clock className="w-4 h-4" />
+                          {formatTime(deadlineValue)}
+                        </span>
+                        <span className="font-medium text-gray-700">
+                          {marks} Marks
+                        </span>
+                        <span className="font-medium text-gray-600">
+                          Files: {assessment.fileUrls?.length || 0}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="flex items-center gap-4 pl-18 lg:pl-0">
-                  {assessment.status === "ongoing" && (
-                    <div className="text-right">
-                      <p className="text-sm text-gray-500">Submissions</p>
-                      <p className="font-semibold text-gray-900">
-                        {assessment.submissions}/{assessment.totalStudents}
-                      </p>
-                    </div>
-                  )}
-                  {assessment.status === "completed" && (
-                    <div className="text-right">
-                      <p className="text-sm text-gray-500">Avg. Score</p>
-                      <p className="font-semibold text-gray-900">
-                        {assessment.avgScore}/{assessment.totalMarks}
-                      </p>
-                    </div>
-                  )}
-                  <div className="flex items-center gap-1">
-                    {assessment.status === "completed" && (
-                      <Button variant="outline" size="sm" className="gap-1">
-                        <Download className="w-4 h-4" />
-                        Results
-                      </Button>
-                    )}
+                  <div className="flex items-center gap-1 pl-18 lg:pl-0">
                     <Link
                       href={`/dashboard/cr/assessments/${assessment.id}/edit`}
                     >
@@ -317,9 +345,9 @@ const ManageAssessments: React.FC = () => {
                   </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        )}
       </div>
 
       {/* Delete Confirmation Modal */}
@@ -329,11 +357,12 @@ const ManageAssessments: React.FC = () => {
         onConfirm={handleConfirmDelete}
         title="Delete Assessment"
         description={`Are you sure you want to delete the assessment "${selectedAssessment?.title}"? This action cannot be undone.`}
-        confirmText="Delete"
+        confirmText={isDeleting ? "Deleting..." : "Delete"}
         cancelText="Cancel"
         variant="danger"
+        isLoading={isDeleting}
       />
-    </div>
+    </section>
   );
 };
 

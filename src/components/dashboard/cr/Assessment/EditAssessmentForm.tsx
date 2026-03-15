@@ -12,7 +12,7 @@ import {
   updateAssessment,
   type AssessmentActionState,
 } from "@/services/assessment.service";
-import { Calendar, FileText, Hash, Paperclip } from "lucide-react";
+import { FileText, Hash, Paperclip, Upload, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { startTransition, useActionState, useEffect, useRef, useState } from "react";
@@ -47,15 +47,25 @@ const toDateValue = (value?: string) => {
   return Number.isNaN(parsedDate.getTime()) ? undefined : parsedDate;
 };
 
-const toDateTimeLocalValue = (value?: string) => {
-  if (!value) return "";
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    return "";
+const formatLocalDate = (date: Date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
+const formatFileSize = (bytes: number) => {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+};
+
+const getAssessmentSubjectName = (assessment: Assessment) => {
+  if (typeof assessment.subject === "string") {
+    return assessment.subject;
   }
 
-  const local = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
-  return local.toISOString().slice(0, 16);
+  return assessment.subject?.name;
 };
 
 const EditAssessmentForm: React.FC<EditAssessmentFormProps> = ({
@@ -64,45 +74,57 @@ const EditAssessmentForm: React.FC<EditAssessmentFormProps> = ({
 }) => {
   const router = useRouter();
   const updateAssessmentWithId = updateAssessment.bind(null, assessment.id);
-  const initialDateFromAssessment = toDateValue(assessment.date);
-  const initialDeadlineFromAssessment = toDateTimeLocalValue(
-    assessment.deadline,
+  const initialDeadlineDateFromAssessment = toDateValue(
+    assessment.date || assessment.deadline,
   );
   const [state, formAction, isPending] = useActionState(
     updateAssessmentWithId,
     initialState,
   );
 
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-    toDateValue(state.inputs?.date) || initialDateFromAssessment,
+  const [deadlineDate, setDeadlineDate] = useState<Date | undefined>(
+    toDateValue(state.inputs?.date as string) ||
+      toDateValue(state.inputs?.deadline as string) ||
+      initialDeadlineDateFromAssessment,
   );
-  const [deadline, setDeadline] = useState<string>(
-    (state.inputs?.deadline as string) || initialDeadlineFromAssessment,
-  );
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [isDraggingFiles, setIsDraggingFiles] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const nextDate = toDateValue(state.inputs?.date) || toDateValue(assessment.date);
+    const nextDate =
+      toDateValue(state.inputs?.date as string) ||
+      toDateValue(state.inputs?.deadline as string) ||
+      toDateValue(assessment.date || assessment.deadline);
+
     const nextDateKey = nextDate
       ? `${nextDate.getFullYear()}-${nextDate.getMonth()}-${nextDate.getDate()}`
       : "";
 
-    setSelectedDate((prev) => {
+    setDeadlineDate((prev) => {
       const prevKey = prev
         ? `${prev.getFullYear()}-${prev.getMonth()}-${prev.getDate()}`
         : "";
       return prevKey === nextDateKey ? prev : nextDate;
     });
-
-    const nextDeadline =
-      (state.inputs?.deadline as string) ||
-      toDateTimeLocalValue(assessment.deadline);
-
-    setDeadline((prev) => (prev === nextDeadline ? prev : nextDeadline));
   }, [state.inputs?.date, state.inputs?.deadline, assessment.date, assessment.deadline]);
+
+  const existingFileUrls = assessment.fileUrls || assessment.files || [];
+
+  const getFileNameFromUrl = (fileUrl: string) => {
+    try {
+      const pathname = new URL(fileUrl).pathname;
+      const fileName = pathname.split("/").pop();
+      return fileName || "Attachment";
+    } catch {
+      const fileName = fileUrl.split("/").pop();
+      return fileName || "Attachment";
+    }
+  };
 
   const existingSubjectId =
     assessment.subjectId ||
-    subjects.find((subject) => subject.name === assessment.subject)?.id ||
+    subjects.find((subject) => subject.name === getAssessmentSubjectName(assessment))?.id ||
     "";
 
   const lastToastTimestamp = useRef(state.timestamp);
@@ -126,22 +148,91 @@ const EditAssessmentForm: React.FC<EditAssessmentFormProps> = ({
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
-    if (selectedDate) {
-      formData.set("date", selectedDate.toISOString().split("T")[0]);
+    if (deadlineDate) {
+      const deadlineDateString = formatLocalDate(deadlineDate);
+      formData.set("date", deadlineDateString);
+      formData.set("deadline", `${deadlineDateString}T23:59:00`);
     }
-    if (deadline) {
-      formData.set("deadline", deadline);
-    }
+
+    formData.delete("files");
+    uploadedFiles.forEach((file) => {
+      formData.append("files", file);
+    });
 
     startTransition(() => {
       formAction(formData);
     });
   };
 
+  const addFiles = (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+
+    setUploadedFiles((prev) => {
+      const next = [...prev];
+
+      Array.from(files).forEach((file) => {
+        if (file.type.startsWith("video/")) {
+          return;
+        }
+
+        const alreadyExists = next.some(
+          (item) =>
+            item.name === file.name &&
+            item.size === file.size &&
+            item.lastModified === file.lastModified,
+        );
+
+        if (!alreadyExists) {
+          next.push(file);
+        }
+      });
+
+      return next;
+    });
+
+    const hasVideo = Array.from(files).some((file) =>
+      file.type.startsWith("video/"),
+    );
+    if (hasVideo) {
+      toast.error("Video upload is not allowed");
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    addFiles(e.target.files);
+    e.target.value = "";
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDraggingFiles(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDraggingFiles(false);
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDraggingFiles(false);
+    addFiles(e.dataTransfer.files);
+  };
+
+  const removeFile = (index: number) => {
+    setUploadedFiles((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const viewLocalFile = (file: File) => {
+    const objectUrl = URL.createObjectURL(file);
+    window.open(objectUrl, "_blank", "noopener,noreferrer");
+    setTimeout(() => URL.revokeObjectURL(objectUrl), 10000);
+  };
+
   return (
     <div className="bg-white rounded-2xl border border-gray-100 p-6">
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
           <FormInput
             id="title"
             name="title"
@@ -150,6 +241,7 @@ const EditAssessmentForm: React.FC<EditAssessmentFormProps> = ({
             defaultValue={state.inputs?.title ?? assessment.title}
             placeholder="e.g., Mid-Term Examination"
             error={state.errors?.title}
+            className="bg-gray-50/30 font-medium"
             required
           />
 
@@ -184,29 +276,18 @@ const EditAssessmentForm: React.FC<EditAssessmentFormProps> = ({
             defaultValue={state.inputs?.totalMarks ?? assessment.totalMarks}
             placeholder="e.g., 50"
             error={state.errors?.totalMarks}
-            required
-          />
-
-          <FormInput
-            id="deadline"
-            name="deadline"
-            type="datetime-local"
-            label="Deadline"
-            icon={Calendar}
-            value={deadline}
-            onChange={(e) => setDeadline(e.target.value)}
-            error={state.errors?.deadline}
+            className="bg-gray-50/30 font-medium"
             required
           />
 
           <FormDatePicker
-            id="date"
-            name="date"
-            label="Date"
-            value={selectedDate}
-            onChange={setSelectedDate}
-            placeholder="Select a date"
-            error={state.errors?.date}
+            id="deadline"
+            name="deadline"
+            label="Deadline"
+            value={deadlineDate}
+            onChange={setDeadlineDate}
+            placeholder="Select deadline date"
+            error={state.errors?.deadline || state.errors?.date}
             required
           />
 
@@ -215,15 +296,116 @@ const EditAssessmentForm: React.FC<EditAssessmentFormProps> = ({
               <Label htmlFor="files" className="text-sm font-semibold text-gray-700">
                 Attachment (Optional)
               </Label>
-              <div className="relative">
-                <Paperclip className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
-                <input
-                  id="files"
-                  name="files"
-                  type="file"
-                  className="h-12 text-base border border-gray-200 rounded-md focus:border-primary focus:ring-primary transition-all font-medium bg-gray-50/30 pl-10 file:mr-3 file:h-8 file:border-0 file:rounded file:bg-gray-200 file:px-3 file:text-sm"
-                />
+              <input
+                ref={fileInputRef}
+                id="files"
+                name="files"
+                type="file"
+                multiple
+                accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.jpg,.jpeg,.png,.webp,.zip,.rar"
+                onChange={handleFileChange}
+                className="hidden"
+              />
+              <div
+                className={`rounded-lg border-2 border-dashed p-6 transition-all cursor-pointer ${
+                  isDraggingFiles
+                    ? "border-primary bg-primary/5"
+                    : "border-gray-300 bg-gray-50/30 hover:border-gray-400"
+                }`}
+                onClick={() => fileInputRef.current?.click()}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+              >
+                <div className="flex flex-col items-center justify-center gap-2 text-center">
+                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-white border border-gray-200">
+                    <Upload className="w-5 h-5 text-gray-500" />
+                  </div>
+                  <p className="text-sm font-semibold text-gray-700">
+                    Drag & drop files here, or click to upload
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    Multiple attachments supported
+                  </p>
+                </div>
               </div>
+
+              {existingFileUrls.length > 0 && (
+                <div className="mt-2 space-y-2">
+                  <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                    Existing Attachments
+                  </p>
+                  {existingFileUrls.map((fileUrl, index) => (
+                    <div
+                      key={`${fileUrl}-${index}`}
+                      className="flex items-center justify-between gap-3 rounded-md border border-gray-200 bg-white px-3 py-2"
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-9 h-9 rounded-md bg-gray-100 flex items-center justify-center shrink-0">
+                          <Paperclip className="w-4 h-4 text-gray-500" />
+                        </div>
+                        <p className="text-sm font-medium text-gray-800 truncate">
+                          {getFileNameFromUrl(fileUrl)}
+                        </p>
+                      </div>
+                      <a
+                        href={fileUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-2 py-1 rounded text-xs font-semibold text-primary hover:bg-primary/10"
+                      >
+                        View
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {uploadedFiles.length > 0 && (
+                <div className="mt-2 space-y-2">
+                  <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                    New Attachments
+                  </p>
+                  {uploadedFiles.map((file, index) => (
+                    <div
+                      key={`${file.name}-${file.size}-${file.lastModified}`}
+                      className="flex items-center justify-between gap-3 rounded-md border border-gray-200 bg-white px-3 py-2"
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-9 h-9 rounded-md bg-gray-100 flex items-center justify-center shrink-0">
+                          <Paperclip className="w-4 h-4 text-gray-500" />
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-sm font-medium text-gray-800 truncate">
+                            {file.name}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {formatFileSize(file.size)}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <button
+                          type="button"
+                          onClick={() => viewLocalFile(file)}
+                          className="px-2 py-1 rounded text-xs font-semibold text-primary hover:bg-primary/10"
+                        >
+                          View
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => removeFile(index)}
+                          className="w-7 h-7 rounded-full text-gray-500 hover:text-red-500 hover:bg-red-50 flex items-center justify-center"
+                          aria-label={`Remove ${file.name}`}
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
               {state.errors?.files && (
                 <p className="text-xs font-medium text-red-500 mt-1">
                   {Array.isArray(state.errors.files)
@@ -243,17 +425,17 @@ const EditAssessmentForm: React.FC<EditAssessmentFormProps> = ({
               placeholder="Add any additional instructions..."
               rows={4}
               error={state.errors?.description}
-              className="resize-none"
+              className="bg-gray-50/30 resize-none font-medium"
             />
           </div>
         </div>
 
-        <div className="flex gap-3 pt-4 border-t border-gray-100">
-          <Link href="/dashboard/cr/assessments">
-            <Button type="button" variant="outline" className="w-full h-12">
+        <div className="flex gap-3 pt-4 justify-end">
+          <Button asChild type="button" variant="outline" className="h-12">
+            <Link href="/dashboard/cr/assessments">
               Cancel
-            </Button>
-          </Link>
+            </Link>
+          </Button>
           <Button type="submit" className="h-12" disabled={isPending}>
             {isPending ? "Saving..." : "Save Changes"}
           </Button>
