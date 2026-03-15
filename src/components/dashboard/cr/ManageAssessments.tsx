@@ -28,6 +28,8 @@ interface ManageAssessmentsProps {
   };
 }
 
+type AssessmentFilter = "all" | "upcoming" | "ongoing" | "completed";
+
 const getTypeColor = (type: string) => {
   switch (type) {
     case "EXAM":
@@ -91,11 +93,42 @@ const formatTypeLabel = (type: string) =>
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 
+const getAssessmentFilterStatus = (
+  assessment: Assessment,
+): Exclude<AssessmentFilter, "all"> => {
+  const rawStatus = (assessment.status || "").toUpperCase();
+
+  if (rawStatus === "COMPLETED" || rawStatus === "CANCELLED") {
+    return "completed";
+  }
+
+  if (rawStatus === "SCHEDULED") {
+    return "upcoming";
+  }
+
+  const deadlineValue = assessment.deadline || assessment.date;
+  if (deadlineValue) {
+    const deadlineDate = new Date(deadlineValue);
+    if (!Number.isNaN(deadlineDate.getTime())) {
+      if (deadlineDate.getTime() < Date.now()) {
+        return "completed";
+      }
+
+      if (rawStatus !== "ACTIVE") {
+        return "upcoming";
+      }
+    }
+  }
+
+  return "ongoing";
+};
+
 const ManageAssessments: React.FC<ManageAssessmentsProps> = ({
   initialAssessments,
 }) => {
   const [assessments, setAssessments] =
     useState<Assessment[]>(initialAssessments);
+  const [activeFilter, setActiveFilter] = useState<AssessmentFilter>("all");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedAssessment, setSelectedAssessment] =
     useState<Assessment | null>(null);
@@ -129,6 +162,11 @@ const ManageAssessments: React.FC<ManageAssessmentsProps> = ({
     }
   };
 
+  const filteredAssessments = assessments.filter((assessment) => {
+    if (activeFilter === "all") return true;
+    return getAssessmentFilterStatus(assessment) === activeFilter;
+  });
+
   return (
     <section className="space-y-6">
       <PageHeader
@@ -159,18 +197,45 @@ const ManageAssessments: React.FC<ManageAssessmentsProps> = ({
         gridClassName="grid-cols-1"
       />
 
+      <div className="flex gap-2 overflow-x-auto pb-2">
+        {[
+          { value: "all", label: "All" },
+          { value: "upcoming", label: "Upcoming" },
+          { value: "ongoing", label: "Ongoing" },
+          { value: "completed", label: "Completed" },
+        ].map((filter) => (
+          <button
+            key={filter.value}
+            onClick={() => setActiveFilter(filter.value as AssessmentFilter)}
+            className={`px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-colors ${
+              activeFilter === filter.value
+                ? "bg-primary text-white"
+                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+            }`}
+          >
+            {filter.label}
+          </button>
+        ))}
+      </div>
+
       {/* Assessments List */}
       <div className="space-y-4">
-        {assessments.length === 0 ? (
+        {filteredAssessments.length === 0 ? (
           <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center">
             <ClipboardList className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-500">No assessments found yet</p>
-            <Link href="/dashboard/cr/assessments/add">
-              <Button className="mt-4">Create Your First Assessment</Button>
-            </Link>
+            <p className="text-gray-500">
+              {assessments.length === 0
+                ? "No assessments found yet"
+                : `No ${activeFilter} assessments found`}
+            </p>
+            {assessments.length === 0 && (
+              <Link href="/dashboard/cr/assessments/add">
+                <Button className="mt-4">Create Your First Assessment</Button>
+              </Link>
+            )}
           </div>
         ) : (
-          assessments.map((assessment) => {
+          filteredAssessments.map((assessment) => {
             const deadlineValue = assessment.deadline || assessment.date;
             const marks = Number(assessment.totalMarks) || 0;
 
