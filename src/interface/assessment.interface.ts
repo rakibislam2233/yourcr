@@ -2,9 +2,11 @@ export interface Assessment {
   id: string;
   title: string;
   subject: string;
+  subjectId?: string;
   type: string;
   date: string;
-  time: string;
+  deadline?: string;
+  time?: string;
   venue?: string;
   totalMarks: number;
   description?: string;

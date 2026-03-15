@@ -211,13 +211,13 @@ const AddClassForm = ({ subjects = [], teachers = [] }: AddClassFormProps) => {
           <input type="hidden" name="status" value="SCHEDULED" />
         </div>
 
-        <div className="flex gap-3 pt-4 border-t border-gray-100">
-          <Link href="/dashboard/cr/classes" className="flex-1">
+        <div className="flex gap-3 pt-4 justify-end">
+          <Link href="/dashboard/cr/classes">
             <Button type="button" variant="outline" className="w-full h-12">
               Cancel
             </Button>
           </Link>
-          <Button type="submit" className="flex-1 h-12" disabled={isPending}>
+          <Button type="submit" className="h-12" disabled={isPending}>
             {isPending ? "Scheduling..." : "Schedule Class"}
           </Button>
         </div>

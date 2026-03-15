@@ -249,11 +249,12 @@ const EditClassForm: React.FC<EditClassFormProps> = ({
               <FormInput
                 id="joinLink"
                 name="joinLink"
-                label="Meeting Link (Optional)"
+                label="Meeting Link"
                 icon={LinkIcon}
                 defaultValue={
                   (state.inputs?.joinLink as string) || classData.joinLink
                 }
+                required={classType === "ONLINE"}
                 placeholder="e.g., https://meet.google.com/xxx-xxxx-xxx"
                 error={state.errors?.joinLink}
               />
@@ -261,8 +262,8 @@ const EditClassForm: React.FC<EditClassFormProps> = ({
           )}
         </div>
 
-        <div className="flex gap-3 pt-4 border-t border-gray-100">
-          <Link href="/dashboard/cr/classes" className="flex-1">
+        <div className="flex gap-3 pt-4 justify-end">
+          <Link href="/dashboard/cr/classes">
             <Button
               type="button"
               variant="outline"
@@ -273,7 +274,7 @@ const EditClassForm: React.FC<EditClassFormProps> = ({
           </Link>
           <Button
             type="submit"
-            className="flex-1 h-12 rounded-lg font-bold shadow-lg shadow-primary/20"
+            className="h-12 rounded-lg font-bold "
             disabled={isPending}
           >
             {isPending ? "Saving..." : "Save Changes"}
