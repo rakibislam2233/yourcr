@@ -3,17 +3,17 @@
 import { Button } from "@/components/ui/button";
 import { ConfirmModal } from "@/components/ui/modal";
 import {
-  AlertCircle,
-  Calendar,
-  CheckCircle,
-  ClipboardList,
-  Clock,
-  Download,
-  Edit,
-  FileText,
-  Plus,
-  Timer,
-  Trash2,
+    AlertCircle,
+    Calendar,
+    CheckCircle,
+    ClipboardList,
+    Clock,
+    Download,
+    Edit,
+    FileText,
+    Plus,
+    Timer,
+    Trash2,
 } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -266,7 +266,7 @@ const ManageAssessments: React.FC = () => {
                       </span>
                       <span className="flex items-center gap-1">
                         <Clock className="w-4 h-4" />
-                        {assessment.time}
+                        {assessment.time ?? "N/A"}
                       </span>
                       <span className="font-medium text-gray-700">
                         {assessment.totalMarks} Marks

@@ -3,14 +3,14 @@
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import {
-  AlertCircle,
-  Calendar,
-  CheckCircle,
-  ClipboardList,
-  Clock,
-  ExternalLink,
-  FileText,
-  Timer,
+    AlertCircle,
+    Calendar,
+    CheckCircle,
+    ClipboardList,
+    Clock,
+    ExternalLink,
+    FileText,
+    Timer,
 } from "lucide-react";
 import React, { useState } from "react";
 import PageHeader from "../shared/PageHeader";
@@ -255,7 +255,7 @@ const ViewAssessments: React.FC = () => {
                       </span>
                       <span className="flex items-center gap-1">
                         <Clock className="w-4 h-4" />
-                        {assessment.time}
+                        {assessment.time ?? "N/A"}
                       </span>
                     </div>
                   </div>

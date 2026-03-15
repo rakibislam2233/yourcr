@@ -18,11 +18,10 @@ import {
   Building2,
   Calendar,
   LayoutDashboard,
-  LogOut,
   MessageSquare,
   School,
   User,
-  Users,
+  Users
 } from "lucide-react";
 import NextImage from "next/image";
 import Link from "next/link";
@@ -173,6 +172,7 @@ const CrSidebar: React.FC = () => {
                           <item.icon
                             className={cn(
                               "shrink-0",
+                              isCollapsed ? "size-6!" : "size-5!",
                               active ? "text-white" : "text-gray-400",
                             )}
                           />

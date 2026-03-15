@@ -15,7 +15,7 @@ import {
 import { Calendar, FileText, Hash, Paperclip } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useActionState, useEffect, useRef, useState } from "react";
+import React, { startTransition, useActionState, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 const typeOptions = [
@@ -51,7 +51,7 @@ const toDateTimeLocalValue = (value?: string) => {
   if (!value) return "";
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) {
-    return value;
+    return "";
   }
 
   const local = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
@@ -79,6 +79,26 @@ const EditAssessmentForm: React.FC<EditAssessmentFormProps> = ({
   const [deadline, setDeadline] = useState<string>(
     (state.inputs?.deadline as string) || initialDeadlineFromAssessment,
   );
+
+  useEffect(() => {
+    const nextDate = toDateValue(state.inputs?.date) || toDateValue(assessment.date);
+    const nextDateKey = nextDate
+      ? `${nextDate.getFullYear()}-${nextDate.getMonth()}-${nextDate.getDate()}`
+      : "";
+
+    setSelectedDate((prev) => {
+      const prevKey = prev
+        ? `${prev.getFullYear()}-${prev.getMonth()}-${prev.getDate()}`
+        : "";
+      return prevKey === nextDateKey ? prev : nextDate;
+    });
+
+    const nextDeadline =
+      (state.inputs?.deadline as string) ||
+      toDateTimeLocalValue(assessment.deadline);
+
+    setDeadline((prev) => (prev === nextDeadline ? prev : nextDeadline));
+  }, [state.inputs?.date, state.inputs?.deadline, assessment.date, assessment.deadline]);
 
   const existingSubjectId =
     assessment.subjectId ||
@@ -113,7 +133,9 @@ const EditAssessmentForm: React.FC<EditAssessmentFormProps> = ({
       formData.set("deadline", deadline);
     }
 
-    formAction(formData);
+    startTransition(() => {
+      formAction(formData);
+    });
   };
 
   return (
@@ -227,12 +249,12 @@ const EditAssessmentForm: React.FC<EditAssessmentFormProps> = ({
         </div>
 
         <div className="flex gap-3 pt-4 border-t border-gray-100">
-          <Link href="/dashboard/cr/assessments" className="flex-1">
+          <Link href="/dashboard/cr/assessments">
             <Button type="button" variant="outline" className="w-full h-12">
               Cancel
             </Button>
           </Link>
-          <Button type="submit" className="flex-1 h-12" disabled={isPending}>
+          <Button type="submit" className="h-12" disabled={isPending}>
             {isPending ? "Saving..." : "Save Changes"}
           </Button>
         </div>
