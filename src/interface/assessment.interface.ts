@@ -8,8 +8,8 @@ export type AssessmentType =
   | "OTHER";
 
 export type AssessmentStatus =
+  | "SCHEDULED"
   | "ACTIVE"
-  | "INACTIVE"
   | "COMPLETED"
   | "CANCELLED";
 

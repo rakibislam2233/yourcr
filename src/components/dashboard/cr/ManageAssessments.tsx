@@ -5,19 +5,15 @@ import { ConfirmModal } from "@/components/ui/modal";
 import { Assessment } from "@/interface/assessment.interface";
 import { deleteAssessment } from "@/services/assessment.service";
 import {
-  AlertCircle,
   Calendar,
-  CheckCircle,
   ClipboardList,
   Clock,
   Edit,
-  FileText,
   Plus,
-  Timer,
   Trash2,
 } from "lucide-react";
 import Link from "next/link";
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { toast } from "sonner";
 import PageHeader from "../shared/PageHeader";
 
@@ -30,70 +26,6 @@ interface ManageAssessmentsProps {
     totalPages: number;
   };
 }
-
-type UiStatus = "upcoming" | "ongoing" | "completed";
-
-const getUiStatus = (assessment: Assessment): UiStatus => {
-  const deadlineValue = assessment.deadline || assessment.date;
-  const deadlineDate = deadlineValue ? new Date(deadlineValue) : null;
-  const hasValidDeadline =
-    !!deadlineDate && !Number.isNaN(deadlineDate.getTime());
-
-  if (assessment.status === "COMPLETED") {
-    return "completed";
-  }
-
-  if (assessment.status === "ACTIVE") {
-    if (hasValidDeadline && deadlineDate.getTime() < Date.now()) {
-      return "completed";
-    }
-
-    return "ongoing";
-  }
-
-  if (hasValidDeadline && deadlineDate.getTime() > Date.now()) {
-    return "upcoming";
-  }
-
-  return "ongoing";
-};
-
-const getStatusConfig = (status: string) => {
-  switch (status) {
-    case "upcoming":
-      return {
-        icon: Timer,
-        color: "text-blue-600",
-        bg: "bg-blue-100",
-        badge: "bg-blue-100 text-blue-700",
-        label: "Upcoming",
-      };
-    case "ongoing":
-      return {
-        icon: AlertCircle,
-        color: "text-orange-600",
-        bg: "bg-orange-100",
-        badge: "bg-orange-100 text-orange-700",
-        label: "Ongoing",
-      };
-    case "completed":
-      return {
-        icon: CheckCircle,
-        color: "text-green-600",
-        bg: "bg-green-100",
-        badge: "bg-green-100 text-green-700",
-        label: "Completed",
-      };
-    default:
-      return {
-        icon: FileText,
-        color: "text-gray-600",
-        bg: "bg-gray-100",
-        badge: "bg-gray-100 text-gray-700",
-        label: "Draft",
-      };
-  }
-};
 
 const getTypeColor = (type: string) => {
   switch (type) {
@@ -196,21 +128,6 @@ const ManageAssessments: React.FC<ManageAssessmentsProps> = ({
     }
   };
 
-  const statusCounts = useMemo(() => {
-    return assessments.reduce(
-      (acc, assessment) => {
-        const uiStatus = getUiStatus(assessment);
-        acc[uiStatus] += 1;
-        return acc;
-      },
-      {
-        upcoming: 0,
-        ongoing: 0,
-        completed: 0,
-      },
-    );
-  }, [assessments]);
-
   return (
     <section className="space-y-6">
       <PageHeader
@@ -232,29 +149,11 @@ const ManageAssessments: React.FC<ManageAssessmentsProps> = ({
       />
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 gap-4">
         <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Total Assessments</p>
           <p className="text-2xl font-bold text-gray-900 mt-1">
             {assessments.length}
-          </p>
-        </div>
-        <div className="bg-white rounded-xl p-5 border border-gray-100">
-          <p className="text-sm text-gray-500">Upcoming</p>
-          <p className="text-2xl font-bold text-blue-600 mt-1">
-            {statusCounts.upcoming}
-          </p>
-        </div>
-        <div className="bg-white rounded-xl p-5 border border-gray-100">
-          <p className="text-sm text-gray-500">Ongoing</p>
-          <p className="text-2xl font-bold text-orange-600 mt-1">
-            {statusCounts.ongoing}
-          </p>
-        </div>
-        <div className="bg-white rounded-xl p-5 border border-gray-100">
-          <p className="text-sm text-gray-500">Completed</p>
-          <p className="text-2xl font-bold text-green-600 mt-1">
-            {statusCounts.completed}
           </p>
         </div>
       </div>
@@ -271,8 +170,6 @@ const ManageAssessments: React.FC<ManageAssessmentsProps> = ({
           </div>
         ) : (
           assessments.map((assessment) => {
-            const uiStatus = getUiStatus(assessment);
-            const statusConfig = getStatusConfig(uiStatus);
             const deadlineValue = assessment.deadline || assessment.date;
             const marks = Number(assessment.totalMarks) || 0;
 
@@ -295,11 +192,6 @@ const ManageAssessments: React.FC<ManageAssessmentsProps> = ({
                         <h3 className="font-semibold text-gray-900">
                           {assessment.title}
                         </h3>
-                        <span
-                          className={`px-2 py-0.5 text-xs font-medium rounded-full ${statusConfig.badge}`}
-                        >
-                          {statusConfig.label}
-                        </span>
                       </div>
                       <p className="text-sm text-primary font-medium mt-1">
                         {getSubjectName(assessment)}
