@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { toast } from "sonner";
 import PageHeader from "../../shared/PageHeader";
+import StatsOverview from "../../shared/StatsOverview";
 import SubjectCard from "./SubjectCard";
 
 interface ManageSubjectsProps {
@@ -73,33 +74,23 @@ const ManageSubjects: React.FC<ManageSubjectsProps> = ({ subjects }) => {
         }
       />
 
-      {/* Stats Summary */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white rounded-xl p-5 border border-gray-100">
-          <p className="text-sm text-gray-500">Total Subjects</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">
-            {subjects?.length}
-          </p>
-        </div>
-        <div className="bg-white rounded-xl p-5 border border-gray-100">
-          <p className="text-sm text-gray-500">Total Credits</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">
-            {subjects?.reduce((sum, s) => sum + s.credit, 0)}
-          </p>
-        </div>
-        <div className="bg-white rounded-xl p-5 border border-gray-100">
-          <p className="text-sm text-gray-500">Departmental</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">
-            {subjects?.filter((s) => s.isDepartmental).length}
-          </p>
-        </div>
-        <div className="bg-white rounded-xl p-5 border border-gray-100">
-          <p className="text-sm text-gray-500">Non-Departmental</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">
-            {subjects?.filter((s) => !s.isDepartmental).length}
-          </p>
-        </div>
-      </div>
+      <StatsOverview
+        items={[
+          { label: "Total Subjects", value: subjects?.length },
+          {
+            label: "Total Credits",
+            value: subjects?.reduce((sum, s) => sum + s.credit, 0),
+          },
+          {
+            label: "Departmental",
+            value: subjects?.filter((s) => s.isDepartmental).length,
+          },
+          {
+            label: "Non-Departmental",
+            value: subjects?.filter((s) => !s.isDepartmental).length,
+          },
+        ]}
+      />
 
       {/* Subjects Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

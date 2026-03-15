@@ -16,6 +16,7 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { toast } from "sonner";
 import PageHeader from "../shared/PageHeader";
+import StatsOverview from "../shared/StatsOverview";
 
 interface ManageAssessmentsProps {
   initialAssessments: Assessment[];
@@ -148,15 +149,15 @@ const ManageAssessments: React.FC<ManageAssessmentsProps> = ({
         }
       />
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 gap-4">
-        <div className="bg-white rounded-xl p-5 border border-gray-100">
-          <p className="text-sm text-gray-500">Total Assessments</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">
-            {assessments.length}
-          </p>
-        </div>
-      </div>
+      <StatsOverview
+        items={[
+          {
+            label: "Total Assessments",
+            value: assessments.length,
+          },
+        ]}
+        gridClassName="grid-cols-1"
+      />
 
       {/* Assessments List */}
       <div className="space-y-4">

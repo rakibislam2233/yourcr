@@ -5,20 +5,21 @@ import { ConfirmModal } from "@/components/ui/modal";
 import { Class } from "@/interface/class.interface";
 import { deleteClass } from "@/services/class.service";
 import {
-  Calendar,
-  Clock,
-  Copy,
-  Edit,
-  ExternalLink,
-  MapPin,
-  Plus,
-  Trash2,
-  Video,
+    Calendar,
+    Clock,
+    Copy,
+    Edit,
+    ExternalLink,
+    MapPin,
+    Plus,
+    Trash2,
+    Video,
 } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
 import { toast } from "sonner";
 import PageHeader from "../../shared/PageHeader";
+import StatsOverview from "../../shared/StatsOverview";
 
 interface ManageClassesProps {
   initialClasses: Class[];
@@ -142,33 +143,25 @@ const ManageClasses: React.FC<ManageClassesProps> = ({ initialClasses }) => {
         }
       />
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white rounded-xl p-5 border border-gray-100">
-          <p className="text-sm text-gray-500">Total Classes</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">
-            {classes.length}
-          </p>
-        </div>
-        <div className="bg-white rounded-xl p-5 border border-gray-100">
-          <p className="text-sm text-gray-500">Ongoing</p>
-          <p className="text-2xl font-bold text-red-600 mt-1">
-            {classes.filter((c) => c.status === "ONGOING").length}
-          </p>
-        </div>
-        <div className="bg-white rounded-xl p-5 border border-gray-100">
-          <p className="text-sm text-gray-500">Scheduled</p>
-          <p className="text-2xl font-bold text-green-600 mt-1">
-            {classes.filter((c) => c.status === "SCHEDULED").length}
-          </p>
-        </div>
-        <div className="bg-white rounded-xl p-5 border border-gray-100">
-          <p className="text-sm text-gray-500">Completed</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">
-            {classes.filter((c) => c.status === "COMPLETED").length}
-          </p>
-        </div>
-      </div>
+      <StatsOverview
+        items={[
+          { label: "Total Classes", value: classes.length },
+          {
+            label: "Ongoing",
+            value: classes.filter((c) => c.status === "ONGOING").length,
+            valueClassName: "text-red-600",
+          },
+          {
+            label: "Scheduled",
+            value: classes.filter((c) => c.status === "SCHEDULED").length,
+            valueClassName: "text-green-600",
+          },
+          {
+            label: "Completed",
+            value: classes.filter((c) => c.status === "COMPLETED").length,
+          },
+        ]}
+      />
 
       {/* Classes List */}
       <div className="bg-white rounded-2xl border border-gray-100">

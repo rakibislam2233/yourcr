@@ -1,23 +1,24 @@
 "use client";
 
-import React, { useState } from "react";
-import {
-  Bell,
-  Plus,
-  Edit,
-  Trash2,
-  Eye,
-  Pin,
-  Calendar,
-  User,
-  AlertCircle,
-  Info,
-  CheckCircle,
-} from "lucide-react";
-import PageHeader from "../shared/PageHeader";
 import { Button } from "@/components/ui/button";
 import { ConfirmModal } from "@/components/ui/modal";
+import {
+    AlertCircle,
+    Bell,
+    Calendar,
+    CheckCircle,
+    Edit,
+    Eye,
+    Info,
+    Pin,
+    Plus,
+    Trash2,
+    User,
+} from "lucide-react";
 import Link from "next/link";
+import React, { useState } from "react";
+import PageHeader from "../shared/PageHeader";
+import StatsOverview from "../shared/StatsOverview";
 
 interface Notice {
   id: number;
@@ -166,25 +167,14 @@ const ManageNotices: React.FC = () => {
         }
       />
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white rounded-xl p-5 border border-gray-100">
-          <p className="text-sm text-gray-500">Total Notices</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">{notices.length}</p>
-        </div>
-        <div className="bg-white rounded-xl p-5 border border-gray-100">
-          <p className="text-sm text-gray-500">Pinned</p>
-          <p className="text-2xl font-bold text-orange-600 mt-1">{pinnedCount}</p>
-        </div>
-        <div className="bg-white rounded-xl p-5 border border-gray-100">
-          <p className="text-sm text-gray-500">This Week</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">5</p>
-        </div>
-        <div className="bg-white rounded-xl p-5 border border-gray-100">
-          <p className="text-sm text-gray-500">Total Views</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">{totalViews}</p>
-        </div>
-      </div>
+      <StatsOverview
+        items={[
+          { label: "Total Notices", value: notices.length },
+          { label: "Pinned", value: pinnedCount, valueClassName: "text-orange-600" },
+          { label: "This Week", value: 5 },
+          { label: "Total Views", value: totalViews },
+        ]}
+      />
 
       {/* Notices List */}
       <div className="space-y-4">

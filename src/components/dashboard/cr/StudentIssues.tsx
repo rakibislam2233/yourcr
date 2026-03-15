@@ -2,20 +2,21 @@
 
 import { Button } from "@/components/ui/button";
 import {
-  AlertCircle,
-  CheckCircle,
-  ChevronRight,
-  Clock,
-  Filter,
-  MessageCircle,
-  MessageSquare,
-  Search,
-  User,
-  XCircle,
+    AlertCircle,
+    CheckCircle,
+    ChevronRight,
+    Clock,
+    Filter,
+    MessageCircle,
+    MessageSquare,
+    Search,
+    User,
+    XCircle,
 } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
 import PageHeader from "../shared/PageHeader";
+import StatsOverview from "../shared/StatsOverview";
 
 interface Issue {
   id: number;
@@ -183,31 +184,18 @@ const StudentIssues: React.FC = () => {
         ]}
       />
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white rounded-xl p-5 border border-gray-100">
-          <p className="text-sm text-gray-500">Total Issues</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">
-            {issues.length}
-          </p>
-        </div>
-        <div className="bg-white rounded-xl p-5 border border-gray-100">
-          <p className="text-sm text-gray-500">Open</p>
-          <p className="text-2xl font-bold text-red-600 mt-1">{openCount}</p>
-        </div>
-        <div className="bg-white rounded-xl p-5 border border-gray-100">
-          <p className="text-sm text-gray-500">In Progress</p>
-          <p className="text-2xl font-bold text-orange-600 mt-1">
-            {inProgressCount}
-          </p>
-        </div>
-        <div className="bg-white rounded-xl p-5 border border-gray-100">
-          <p className="text-sm text-gray-500">Resolved</p>
-          <p className="text-2xl font-bold text-green-600 mt-1">
-            {resolvedCount}
-          </p>
-        </div>
-      </div>
+      <StatsOverview
+        items={[
+          { label: "Total Issues", value: issues.length },
+          { label: "Open", value: openCount, valueClassName: "text-red-600" },
+          {
+            label: "In Progress",
+            value: inProgressCount,
+            valueClassName: "text-orange-600",
+          },
+          { label: "Resolved", value: resolvedCount, valueClassName: "text-green-600" },
+        ]}
+      />
 
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
