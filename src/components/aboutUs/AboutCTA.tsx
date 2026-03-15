@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import React from "react";
 
 const AboutCTA = () => {
   return (
@@ -8,7 +7,7 @@ const AboutCTA = () => {
         <div className="bg-linear-to-r from-[#2456C4]  to-[#1E293B] p-12 md:p-20 rounded-md text-center text-white relative overflow-hidden">
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
           <div className="relative z-10 max-w-2xl mx-auto space-y-8">
-            <h2 className="text-4xl md:text-5xl font-black">
+            <h2 className="text-4xl md:text-5xl ">
               Ready to Lead Your Class Better?
             </h2>
             <p className="text-xl text-primary-foreground/80">

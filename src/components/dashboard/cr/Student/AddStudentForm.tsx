@@ -46,7 +46,7 @@ const AddStudentForm = () => {
   }, [state, router, lastActionTimestamp]);
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 p-6">
+    <div className="w-full bg-white rounded-2xl border border-gray-100 p-6">
       <form action={formAction} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
           <FormInput

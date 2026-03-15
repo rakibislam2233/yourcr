@@ -23,7 +23,7 @@ export default function NotFound() {
             <motion.h1
               initial={{ scale: 0.8 }}
               animate={{ scale: 1 }}
-              className="text-[120px] md:text-[200px] font-black text-gray-900 leading-none tracking-tighter"
+              className="text-[120px] md:text-[200px]  text-gray-900 leading-none tracking-tighter"
             >
               404
             </motion.h1>

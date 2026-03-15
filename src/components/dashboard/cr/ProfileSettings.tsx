@@ -4,16 +4,16 @@ import { FormInput } from "@/components/ui/form-input";
 import { UserProfile } from "@/interface/user.interface";
 import { updateMyProfile } from "@/services/user.service";
 import {
-  Building2,
-  Camera,
-  GraduationCap,
-  Lock,
-  Mail,
-  Phone,
-  Save,
-  Settings,
-  Shield,
-  User,
+    Building2,
+    Camera,
+    GraduationCap,
+    Lock,
+    Mail,
+    Phone,
+    Save,
+    Settings,
+    Shield,
+    User,
 } from "lucide-react";
 import NextImage from "next/image";
 import { useRouter } from "next/navigation";
@@ -112,7 +112,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
               <h3 className="text-xl font-bold text-gray-900 mt-6 leading-tight">
                 {user?.fullName}
               </h3>
-              <p className="text-primary font-black text-[10px] uppercase tracking-[0.2em] mt-2 bg-primary/5 px-2 py-1 rounded">
+              <p className="text-primary  text-[10px] uppercase tracking-[0.2em] mt-2 bg-primary/5 px-2 py-1 rounded">
                 Class Representative
               </p>
 
