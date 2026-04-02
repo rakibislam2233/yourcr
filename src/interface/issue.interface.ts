@@ -2,12 +2,13 @@ export interface Issue {
   id: string;
   title: string;
   description: string;
-  status: "pending" | "in-progress" | "resolved" | "closed";
-  priority: "low" | "medium" | "high" | "urgent";
-  category: string;
-  file?: string;
+  status: "NEW" | "IN_PROGRESS" | "RESOLVED" | "CLOSED";
+  priority: "LOW" | "MEDIUM" | "HIGH" | "URGENT";
+  type: "ACADEMIC" | "TECHNICAL" | "ADMINISTRATIVE" | "OTHER";
+  fileUrl?: string | null;
   studentId: string;
-  institutionId: string;
+  batchId?: string;
+  resolution?: string | null;
   createdAt: string;
   updatedAt: string;
 }

@@ -1,14 +1,14 @@
 import {
+  DashboardCardsSkeleton,
   ListSkeleton,
   PageHeaderSkeleton,
-  SearchFilterSkeleton,
 } from "@/components/ui/loading-skeletons";
 
 export default function StudentAssessmentsLoading() {
   return (
     <div className="space-y-6">
       <PageHeaderSkeleton />
-      <SearchFilterSkeleton />
+      <DashboardCardsSkeleton count={4} />
       <ListSkeleton count={6} />
     </div>
   );

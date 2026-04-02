@@ -3,8 +3,13 @@ import PageHeader from "@/components/dashboard/shared/PageHeader";
 import { getAllIssues } from "@/services/issue.service";
 import { MessageSquare } from "lucide-react";
 
-export default async function CrIssuesPage() {
-  const res = await getAllIssues();
+export default async function CrIssuesPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string>>;
+}) {
+  const params = await searchParams;
+  const res = await getAllIssues(params);
   const initialIssues = res.data || [];
 
   return (

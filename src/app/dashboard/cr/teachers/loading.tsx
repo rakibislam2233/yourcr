@@ -4,7 +4,7 @@ import {
   SearchFilterSkeleton,
 } from "@/components/ui/loading-skeletons";
 
-export default function TeachersLoading() {
+export default function CRTeachersLoading() {
   return (
     <div className="space-y-6">
       <PageHeaderSkeleton />

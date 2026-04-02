@@ -1,15 +1,15 @@
 import {
-  ListSkeleton,
+  CardGridSkeleton,
   PageHeaderSkeleton,
   SearchFilterSkeleton,
 } from "@/components/ui/loading-skeletons";
 
-export default function ClassesLoading() {
+export default function CRClassesLoading() {
   return (
     <div className="space-y-6">
       <PageHeaderSkeleton />
       <SearchFilterSkeleton />
-      <ListSkeleton count={8} />
+      <CardGridSkeleton count={6} />
     </div>
   );
 }

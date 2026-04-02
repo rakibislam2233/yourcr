@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { api } from "./api";
 import { Issue } from "@/interface/issue.interface";
 import { ActionState } from "@/interface/action-state.interface";
+import { issueSchema } from "@/validation/issue.validation";
 
 export type IssueActionState = ActionState;
 
@@ -35,7 +36,41 @@ export async function createIssue(
   formData: FormData,
 ): Promise<IssueActionState> {
   try {
-    const response = await api.post<Issue>("/issues", formData);
+    const cleanFormData = new FormData();
+    const title = formData.get("title") as string;
+    const description = formData.get("description") as string;
+    const type = formData.get("type") as string;
+    const priority = formData.get("priority") as string;
+    const file = formData.get("file") as File;
+
+    // Validation
+    const validatedFields = issueSchema.safeParse({
+      title,
+      description,
+      type,
+      priority,
+    });
+
+    if (!validatedFields.success) {
+      return {
+        success: false,
+        message: "Invalid form data",
+        errors: validatedFields.error.flatten().fieldErrors as any,
+        inputs: { title, description, type, priority },
+        timestamp: Date.now(),
+      };
+    }
+
+    if (title) cleanFormData.append("title", title);
+    if (description) cleanFormData.append("description", description);
+    if (type) cleanFormData.append("type", type);
+    if (priority) cleanFormData.append("priority", priority);
+    
+    if (file && file.size > 0) {
+      cleanFormData.append("file", file);
+    }
+
+    const response = await api.post<Issue>("/issues", cleanFormData);
 
     if (response.success) {
       revalidatePath("/dashboard/cr/issues");
@@ -70,7 +105,45 @@ export async function updateIssue(
   formData: FormData,
 ): Promise<IssueActionState> {
   try {
-    const response = await api.patch<Issue>(`/issues/${id}`, formData);
+    const cleanFormData = new FormData();
+    const title = formData.get("title") as string;
+    const description = formData.get("description") as string;
+    const type = formData.get("type") as string;
+    const priority = formData.get("priority") as string;
+    const status = formData.get("status") as string;
+    const resolution = formData.get("resolution") as string;
+    const file = formData.get("file") as File;
+
+    // Validation
+    const validatedFields = issueSchema.safeParse({
+      title,
+      description,
+      type,
+      priority,
+    });
+
+    if (!validatedFields.success) {
+      return {
+        success: false,
+        message: "Invalid form data",
+        errors: validatedFields.error.flatten().fieldErrors as any,
+        inputs: { title, description, type, priority, status, resolution },
+        timestamp: Date.now(),
+      };
+    }
+
+    if (title) cleanFormData.append("title", title);
+    if (description) cleanFormData.append("description", description);
+    if (type) cleanFormData.append("type", type);
+    if (priority) cleanFormData.append("priority", priority);
+    if (status) cleanFormData.append("status", status);
+    if (resolution) cleanFormData.append("resolution", resolution);
+    
+    if (file && file.size > 0) {
+      cleanFormData.append("file", file);
+    }
+
+    const response = await api.patch<Issue>(`/issues/${id}`, cleanFormData);
 
     if (response.success) {
       revalidatePath("/dashboard/cr/issues");

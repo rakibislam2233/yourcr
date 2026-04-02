@@ -148,3 +148,65 @@ export function ListSkeleton({ count = 5 }: { count?: number }) {
     </div>
   );
 }
+
+export function ProfileSkeleton() {
+  return (
+    <div className="space-y-6">
+      <PageHeaderSkeleton />
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-1 space-y-6">
+          <div className="bg-white rounded-md border border-gray-100 p-8 shadow-sm flex flex-col items-center">
+            <Skeleton className="w-28 h-28 rounded-md" />
+            <Skeleton className="h-6 w-32 mt-6" />
+            <Skeleton className="h-4 w-20 mt-2" />
+            <div className="w-full mt-8 pt-6 border-t border-gray-100 space-y-4">
+              <Skeleton className="h-10 w-full rounded-md" />
+              <Skeleton className="h-10 w-full rounded-md" />
+            </div>
+          </div>
+          <div className="bg-white rounded-md border border-gray-100 p-6 shadow-sm space-y-4">
+            <Skeleton className="h-4 w-32 border-b pb-2" />
+            <Skeleton className="h-12 w-full rounded-md" />
+            <Skeleton className="h-12 w-full rounded-md" />
+            <Skeleton className="h-12 w-full rounded-md" />
+          </div>
+        </div>
+        <div className="lg:col-span-2 space-y-6">
+          <div className="bg-white rounded-md border border-gray-100 p-8 shadow-sm space-y-8">
+            <div className="flex gap-4">
+              <Skeleton className="w-12 h-12 rounded-md" />
+              <div className="space-y-2">
+                <Skeleton className="h-5 w-32" />
+                <Skeleton className="h-3 w-48" />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="space-y-2">
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-12 w-full rounded-md" />
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="bg-white rounded-md border border-gray-100 p-8 shadow-sm space-y-8">
+            <div className="flex gap-4">
+              <Skeleton className="w-12 h-12 rounded-md" />
+              <div className="space-y-2">
+                <Skeleton className="h-5 w-32" />
+                <Skeleton className="h-3 w-48" />
+              </div>
+            </div>
+            <div className="space-y-6">
+              <Skeleton className="h-12 w-full rounded-md" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <Skeleton className="h-12 w-full rounded-md" />
+                <Skeleton className="h-12 w-full rounded-md" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

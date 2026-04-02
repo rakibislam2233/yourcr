@@ -17,28 +17,28 @@ import React, { useState } from "react";
 
 const getStatusConfig = (status: string) => {
   switch (status) {
-    case "pending":
+    case "NEW":
       return {
         icon: AlertCircle,
         color: "text-red-600",
         bg: "bg-red-100",
-        label: "Pending",
+        label: "New",
       };
-    case "in-progress":
+    case "IN_PROGRESS":
       return {
         icon: Clock,
         color: "text-orange-600",
         bg: "bg-orange-100",
         label: "In Progress",
       };
-    case "resolved":
+    case "RESOLVED":
       return {
         icon: CheckCircle,
         color: "text-green-600",
         bg: "bg-green-100",
         label: "Resolved",
       };
-    case "closed":
+    case "CLOSED":
       return {
         icon: XCircle,
         color: "text-gray-600",
@@ -57,12 +57,12 @@ const getStatusConfig = (status: string) => {
 
 const getPriorityColor = (priority: string) => {
   switch (priority) {
-    case "high":
-    case "urgent":
+    case "HIGH":
+    case "URGENT":
       return "bg-red-100 text-red-700";
-    case "medium":
+    case "MEDIUM":
       return "bg-yellow-100 text-yellow-700";
-    case "low":
+    case "LOW":
       return "bg-green-100 text-green-700";
     default:
       return "bg-gray-100 text-gray-700";
@@ -88,14 +88,14 @@ const StudentIssuesList: React.FC<StudentIssuesListProps> = ({
     return matchesFilter && matchesSearch;
   });
 
-  const pendingCount = initialIssues.filter(
-    (i) => i.status === "pending",
+  const newCount = initialIssues.filter(
+    (i) => i.status === "NEW",
   ).length;
   const inProgressCount = initialIssues.filter(
-    (i) => i.status === "in-progress",
+    (i) => i.status === "IN_PROGRESS",
   ).length;
   const resolvedCount = initialIssues.filter(
-    (i) => i.status === "resolved",
+    (i) => i.status === "RESOLVED",
   ).length;
 
   return (
@@ -109,8 +109,8 @@ const StudentIssuesList: React.FC<StudentIssuesListProps> = ({
           </p>
         </div>
         <div className="bg-white rounded-xl p-5 border border-gray-100">
-          <p className="text-sm text-gray-500">Pending</p>
-          <p className="text-2xl font-bold text-red-600 mt-1">{pendingCount}</p>
+          <p className="text-sm text-gray-500">New</p>
+          <p className="text-2xl font-bold text-red-600 mt-1">{newCount}</p>
         </div>
         <div className="bg-white rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">In Progress</p>
@@ -129,25 +129,25 @@ const StudentIssuesList: React.FC<StudentIssuesListProps> = ({
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <div className="flex gap-2 overflow-x-auto pb-2 sm:pb-0">
-          {["all", "pending", "in-progress", "resolved", "closed"].map(
-            (filter) => (
-              <button
-                key={filter}
-                onClick={() => setActiveFilter(filter)}
-                className={`px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-colors ${
-                  activeFilter === filter
-                    ? "bg-primary text-white"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                }`}
-              >
-                {filter === "all"
-                  ? "All Issues"
-                  : filter === "in-progress"
-                    ? "In Progress"
-                    : filter.charAt(0).toUpperCase() + filter.slice(1)}
-              </button>
-            ),
-          )}
+          {[
+            { value: "all", label: "All Issues" },
+            { value: "NEW", label: "New" },
+            { value: "IN_PROGRESS", label: "In Progress" },
+            { value: "RESOLVED", label: "Resolved" },
+            { value: "CLOSED", label: "Closed" },
+          ].map((filter) => (
+            <button
+              key={filter.value}
+              onClick={() => setActiveFilter(filter.value)}
+              className={`px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-colors ${
+                activeFilter === filter.value
+                  ? "bg-primary text-white"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              {filter.label}
+            </button>
+          ))}
         </div>
         <div className="flex gap-2">
           <div className="relative">
@@ -204,7 +204,7 @@ const StudentIssuesList: React.FC<StudentIssuesListProps> = ({
                               )}`}
                             >
                               {issue.priority.charAt(0).toUpperCase() +
-                                issue.priority.slice(1)}
+                                issue.priority.slice(1).toLowerCase()}
                             </span>
                           </div>
                           <p className="text-gray-600 mt-2 line-clamp-2">

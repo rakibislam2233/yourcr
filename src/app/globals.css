@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:is(.dark *));
-
 @theme inline {
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
@@ -67,9 +65,9 @@
   --secondary: #1a1a1a;
   --secondary-foreground: #ffffff;
 
-  /* Accent Colors */
-  --accent: #ff3b3b;
-  --accent-foreground: #ffffff;
+  /* Accent Colors (Highlights, Skeleton, Selection) */
+  --accent: #f0f4ff;
+  --accent-foreground: #2459c8;
 
   /* Background Colors */
   --background: #ffffff;
@@ -138,87 +136,6 @@
   --chart-3: #f59e0b;
   --chart-4: #64748b;
   --chart-5: #a0aec0;
-}
-
-/* ====================== DARK MODE ====================== */
-
-.dark {
-  --radius: 0.5rem;
-
-  /* Primary Brand Colors */
-  --primary: #2459c8;
-  --primary-foreground: #ffffff;
-
-  /* Secondary Colors */
-  --secondary: #112218;
-  --secondary-foreground: #ffffff;
-
-  /* Accent Colors */
-  --accent: #ff5c5c;
-  --accent-foreground: #ffffff;
-
-  /* Background Colors */
-  --background: #112218;
-  --foreground: #e2e8f0;
-
-  /* Card & Surface */
-  --card: #112218;
-  --card-foreground: #e2e8f0;
-
-  /* Popover */
-  --popover: #112218;
-  --popover-foreground: #e2e8f0;
-
-  /* Muted */
-  --muted: #2d3748;
-  --muted-foreground: #a0aec0;
-
-  /* Destructive */
-  --destructive: #fc8181;
-  --destructive-foreground: #1a202c;
-
-  /* Border & Input */
-  --border: #244732;
-  --input: #244732;
-
-  /* Ring */
-  --ring: #112218;
-
-  /* Betting Specific Colors */
-  --odds-background: #112218;
-  --odds-hover: #2d3748;
-  --odds-selected: #2459c8;
-  --odds-text: #e2e8f0;
-
-  /* Status Colors */
-  --live: #ff6b6b;
-  --won: #2459c8;
-  --lost: #a0aec0;
-  --pending: #f6e05e;
-
-  /* Gradients */
-  --gradient-primary: linear-gradient(135deg, #2459c8 0%, #00b84d 100%);
-  --gradient-dark: linear-gradient(135deg, #1a242d 0%, #2d3748 100%);
-  --gradient-card: linear-gradient(
-    135deg,
-    rgba(0, 214, 92, 0.1) 0%,
-    rgba(0, 214, 92, 0.05) 100%
-  );
-
-  /* Scrollbar */
-  --scrollbar-thumb: #244732;
-  --scrollbar-track: transparent;
-  --scrollbar-thumb-hover: #2459c8;
-
-  /* Sidebar & Chart in dark mode */
-  --sidebar: #112218;
-  --sidebar-foreground: #e2e8f0;
-  --sidebar-primary: #2459c8;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #2d3748;
-  --sidebar-accent-foreground: #e2e8f0;
-  --sidebar-border: #244732;
-  --sidebar-ring: #2459c8;
 }
 
 /* ====================== BASE STYLES ====================== */

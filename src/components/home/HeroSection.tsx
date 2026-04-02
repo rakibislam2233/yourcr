@@ -6,7 +6,7 @@ import { MdCampaign } from "react-icons/md";
 
 const HeroSection: React.FC = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center py-20 lg:py-24 overflow-hidden">
+    <section className="relative w-full h-auto md:min-h-screen flex items-center justify-center py-28 md:py-0 overflow-hidden">
       <div
         className="absolute inset-0 z-0"
         style={{
@@ -22,16 +22,16 @@ const HeroSection: React.FC = () => {
       {/* Background glow blob - smaller on mobile */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] md:w-[800px] md:h-[800px] bg-primary/10 rounded-full blur-[80px] md:blur-[120px] -z-10 pointer-events-none" />
 
-      <div className="w-full container mx-auto px-4 md:px-6  grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-12 lg:gap-16 items-center">
+      <div className="w-full container mx-auto px-4 md:px-6  grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12 lg:gap-16 items-center">
         {/* Left - Text content */}
-        <div className="flex flex-col gap-7 md:gap-9 text-center lg:text-left z-10 order-2 lg:order-1">
+        <div className="flex flex-col gap-7 md:gap-9 text-center lg:text-left z-10">
           <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl font-semibold ">
-            Simplify Class <br className="hidden sm:block" />
+            Simplify Class 
             <span className="relative inline-block">Management</span> with{" "}
             <span className="text-primary">Your CR</span>
           </h1>
 
-          <p className="text-base sm:text-lg md:text-xl text-text-muted dark:text-gray-300 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl text-text-muted dark:text-gray-300 max-w-lg mx-auto lg:mx-0 leading-relaxed">
             The all-in-one platform bridging the gap between students, reps, and
             faculty. Announcements, polls, and resources — all in one place.
           </p>
@@ -49,40 +49,11 @@ const HeroSection: React.FC = () => {
               </Button>
             </Link>
           </div>
-
-          <div className="flex items-center justify-center lg:justify-start gap-4 pt-4 opacity-90 text-sm md:text-base">
-            <div className="flex -space-x-2 sm:-space-x-3">
-              <Image
-                alt="User avatar"
-                width={44}
-                height={44}
-                className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border-2 border-white dark:border-background-dark object-cover"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcx5tLX-1xL-tZUpK7mPjkXf7RmPHjH5v3rrOVxIUDiN3IPiOpFnrx_cOB1UDqBofB_sH4rdZPFMAULi0_mE7oRUxwOFbde4xR3KfTafbmTM6orn4QUS3mjWTBlJ0vCiP1WL7oQyyi1qUhMnLJyzfdEcRb6ndTpJaHmq67UsMFHsUMRYZHwMfcGYR9pLAdDZQBku10xffC7JX9wmBDRPXiQPxreNGgE80HjZ19hoWOsswmhyYf2PnYHLUFP3rJV814eHfG5JIPqfQ"
-              />
-              <Image
-                alt="User avatar"
-                width={44}
-                height={44}
-                className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border-2 border-white dark:border-background-dark object-cover"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2c8ku-lDPydE54hMmTAJsYx7FNuzPvlEfIquIoX8uhx2E_2wfHWBDrhB_NAonmzZT1L8TwB8IHSxljPd6XL60SAmnyp2I2_OOlhDRVdAQCfXarsc_2pHMg6ZUzXcNIFRpV954tZA6N6sV6BLA2rgCJPFynrt_YaGg8YKzjMinfku_qdTp-p5ewzxMrikPDYOVjksuDKwm1i0dvrar1RYn9ykOCEj42ezLRX39me5Es2ciKEesiqv93q67UZZX-XmSTS2wkflk8Cs"
-              />
-              <Image
-                alt="User avatar"
-                width={44}
-                height={44}
-                className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border-2 border-white dark:border-background-dark object-cover"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJdXy3iuWGV2AJWotR0NrtnNPB_j0G3VhW9AI0o6_C2qMTP6hbdwG2G0vZPDASm4knVV31junCZU91kMAW2l4dwCbtiG8wDEJADdgNGBmFKL1vwHSs9uH1A7fcQyUpHI_cfg7gBJof9zFc_kpHwq16nVCnhu-aL-TjYvaago5XrNCYvPVL4UikNKL3EwRUxQnuGwyUqkyyy-EJh3LNujY6LdZwf7fFmo4ETzVzGICh3iBvg2ohtHe50-qDCRgNxVHN-Ayv_MnBVow"
-              />
-            </div>
-            <div className="font-medium">
-              Trusted by <span className="font-bold">500+</span> Universities
-            </div>
-          </div>
         </div>
 
         {/* Right - Image + floating card */}
-        <div className="relative w-full max-w-[520px] sm:max-w-[580px] lg:max-w-none mx-auto order-1 lg:order-2">
-          <div className="relative aspect-4/4 sm:aspect-5/4 md:aspect-[4/3.3] lg:aspect-square rounded-2xl overflow-hidden shadow-2xl">
+        <div className="relative hidden md:block w-full max-w-[420px] sm:max-w-[580px] lg:max-w-none mx-auto">
+          <div className="relative aspect-square rounded-2xl overflow-hidden shadow-2xl">
             <Image
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQ02NOE3WQ9k6Z0hCZh9MxH6cAHvpwTf12CQ4VRO_fwR0S-2fyIHFX_CPh_0WvrLlXjw-C9hHvMjtCRBKkiZT8HJ1duKKXhSBWWM-1460QNt9U1bBMWxqaXI9NcCcDF4lxN0VRkL37kYny5Yd_whnRdWSxXX2VZ1wVLzTaIjOQ9i3c6up_pKIRNN2z2Srgc2zp-qwN1R3GfLl1sE8R2vXF81pSF-SVuBqv1ue0cfW0eyPfkjApxai2QPCRjej1bwmQPR_r9z1pYAw"
               alt="Class representative dashboard preview"

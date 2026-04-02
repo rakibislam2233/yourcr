@@ -3,8 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { api } from "./api";
 import { Notice } from "@/interface/notice.interface";
-
 import { ActionState } from "@/interface/action-state.interface";
+import { noticeSchema } from "@/validation/notice.validation";
 
 export type NoticeActionState = ActionState;
 
@@ -36,8 +36,41 @@ export async function createNotice(
   formData: FormData,
 ): Promise<NoticeActionState> {
   try {
-    // FormData will be sent as-is to handle file uploads
-    const response = await api.post<Notice>("/notices", formData);
+    // Construct a clean FormData to avoid "Unexpected field" errors from Next.js internal fields
+    const cleanFormData = new FormData();
+    const title = formData.get("title") as string;
+    const content = formData.get("content") as string;
+    const type = formData.get("type") as string;
+    const file = formData.get("file") as File;
+
+    // Client-side validation
+    const validatedFields = noticeSchema.safeParse({
+      title,
+      type,
+      content,
+      file,
+    });
+
+    if (!validatedFields.success) {
+      return {
+        success: false,
+        message: "Invalid form data",
+        errors: validatedFields.error.flatten().fieldErrors as any,
+        inputs: { title, type, content },
+        timestamp: Date.now(),
+      };
+    }
+
+    if (title) cleanFormData.append("title", title);
+    if (content) cleanFormData.append("content", content);
+    if (type) cleanFormData.append("type", type);
+    
+    // Only append file if it's a real file with content
+    if (file && file.size > 0) {
+      cleanFormData.append("file", file);
+    }
+
+    const response = await api.post<Notice>("/notices", cleanFormData);
 
     if (response.success) {
       revalidatePath("/dashboard/cr/notices");
@@ -71,7 +104,42 @@ export async function updateNotice(
   formData: FormData,
 ): Promise<NoticeActionState> {
   try {
-    const response = await api.patch<Notice>(`/notices/${id}`, formData);
+    const cleanFormData = new FormData();
+    const title = formData.get("title") as string;
+    const content = formData.get("content") as string;
+    const type = formData.get("type") as string;
+    const status = formData.get("status") as string;
+    const file = formData.get("file") as File;
+    const isActive = formData.get("isActive") as string;
+
+    // Validation
+    const validatedFields = noticeSchema.safeParse({
+      title,
+      type,
+      content,
+      file,
+    });
+
+    if (!validatedFields.success) {
+      return {
+        success: false,
+        message: "Invalid form data",
+        errors: validatedFields.error.flatten().fieldErrors as any,
+        inputs: { title, type, content, status, isActive },
+        timestamp: Date.now(),
+      };
+    }
+
+    if (title) cleanFormData.append("title", title);
+    if (content) cleanFormData.append("content", content);
+    if (type) cleanFormData.append("type", type);
+    if (isActive) cleanFormData.append("isActive", isActive);
+    
+    if (file && file.size > 0) {
+      cleanFormData.append("file", file);
+    }
+
+    const response = await api.patch<Notice>(`/notices/${id}`, cleanFormData);
 
     if (response.success) {
       revalidatePath("/dashboard/cr/notices");

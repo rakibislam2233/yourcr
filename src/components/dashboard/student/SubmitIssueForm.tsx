@@ -11,13 +11,10 @@ import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
 
 const issueCategories = [
-  "Academic Issue",
-  "Attendance Problem",
-  "Lab/Equipment Issue",
-  "Schedule Conflict",
-  "Assessment Related",
-  "General Query",
-  "Other",
+  { value: "ACADEMIC", label: "Academic Issue" },
+  { value: "TECHNICAL", label: "Technical Problem" },
+  { value: "ADMINISTRATIVE", label: "Administrative" },
+  { value: "OTHER", label: "Other" },
 ];
 
 const initialState: IssueActionState = {
@@ -60,18 +57,18 @@ const SubmitIssueForm = () => {
         />
 
         <FormSelect
-          name="category"
+          name="type"
           label="Category"
-          defaultValue={state.inputs?.category}
-          options={issueCategories.map((c) => ({ value: c, label: c }))}
+          defaultValue={state.inputs?.type}
+          options={issueCategories}
           placeholder="Select a category"
-          error={state.errors?.category}
+          error={state.errors?.type}
         />
 
         <div className="space-y-2">
           <Label>Priority</Label>
           <div className="flex gap-3">
-            {(["low", "medium", "high"] as const).map((priority) => (
+            {(["LOW", "MEDIUM", "HIGH", "URGENT"] as const).map((priority) => (
               <label key={priority} className="flex-1 cursor-pointer">
                 <input
                   type="radio"
@@ -81,13 +78,13 @@ const SubmitIssueForm = () => {
                   defaultChecked={
                     state.inputs?.priority === priority ||
                     (state.inputs?.priority === undefined &&
-                      priority === "medium")
+                      priority === "MEDIUM")
                   }
                 />
                 <div
                   className={`py-3 px-4 rounded-xl text-sm font-medium border-2 text-center transition-all peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary border-gray-200 hover:border-gray-300`}
                 >
-                  {priority.charAt(0).toUpperCase() + priority.slice(1)}
+                  {priority.charAt(0).toUpperCase() + priority.slice(1).toLowerCase()}
                 </div>
               </label>
             ))}

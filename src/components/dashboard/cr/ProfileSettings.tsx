@@ -236,7 +236,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
                 icon={Mail}
                 value={formData.email}
                 disabled
-                className="border-gray-100 bg-gray-50/50 text-gray-400 font-medium italic cursor-not-allowed"
+                className="border-gray-100 bg-gray-50/50 text-gray-400 font-medium cursor-not-allowed"
               />
 
               <FormInput

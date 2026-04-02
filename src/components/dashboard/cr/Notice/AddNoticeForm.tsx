@@ -62,7 +62,6 @@ const AddNoticeForm = () => {
             placeholder="e.g., Mid-Term Examination Schedule"
             error={state.errors?.title}
             className="bg-gray-50/30 font-medium"
-            required
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
@@ -73,24 +72,23 @@ const AddNoticeForm = () => {
               options={typeOptions}
               placeholder="Select type"
               error={state.errors?.type}
-              required
             />
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="fileUrl" className="text-sm font-semibold text-gray-700">
+            <Label htmlFor="file" className="text-sm font-semibold text-gray-700">
               Attachment (Optional)
             </Label>
             <input
-              id="fileUrl"
-              name="fileUrl"
+              id="file"
+              name="file"
               type="file"
               accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp"
               className="h-12 text-base border border-gray-200 rounded-md focus:border-primary focus:ring-primary transition-all font-medium bg-gray-50/30 px-3 file:mr-3 file:h-8 file:border-0 file:rounded file:bg-gray-200 file:px-3 file:text-sm"
             />
-            {state.errors?.fileUrl && (
+            {state.errors?.file && (
               <p className="text-red-500 text-xs mt-1">
-                {state.errors.fileUrl[0]}
+                {state.errors.file[0]}
               </p>
             )}
           </div>
@@ -104,7 +102,6 @@ const AddNoticeForm = () => {
             rows={6}
             error={state.errors?.content}
             className="bg-gray-50/30 resize-none font-medium"
-            required
           />
         </div>
 
