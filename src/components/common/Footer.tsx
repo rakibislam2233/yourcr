@@ -56,10 +56,10 @@ const Footer = () => {
               >
                 <Image
                   src={logo}
-                  alt="logo"
-                  width={160}
-                  height={100}
-                  style={{ height: "auto" }}
+                  alt="YourCR Logo"
+                  width={140}
+                  height={80}
+                  className="w-28 sm:w-36"
                 />
               </Link>
             </div>

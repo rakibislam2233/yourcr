@@ -1,4 +1,5 @@
-
+import Footer from "@/components/common/Footer";
+import Navbar from "@/components/common/Navbar";
 import React from "react";
 
 export default function AuthLayout({
@@ -8,7 +9,9 @@ export default function AuthLayout({
 }) {
   return (
     <div className="flex flex-col min-h-screen">
-      <main className="grow">{children}</main>
+      <Navbar />
+      <main className="grow bg-amber-400">{children}</main>
+      <Footer />
     </div>
   );
 }

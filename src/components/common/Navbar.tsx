@@ -35,7 +35,7 @@ const Navbar = async () => {
               alt="YourCR Logo"
               width={140}
               height={80}
-              className="w-32 sm:w-40"
+              className="w-28 sm:w-36"
             />
           </Link>
 
@@ -54,8 +54,8 @@ const Navbar = async () => {
               <div className="flex items-center gap-4">
                 <Link href="/auth/login">
                   <Button
-                    variant="outline"
-                    className="h-10 sm:h-11 px-5 sm:px-6 border-primary text-primary hover:bg-primary/5 cursor-pointer"
+                    variant="default"
+                    className="h-10 sm:h-11 px-5 sm:px-6 border-primary text-primary bg-transparent border hover:bg-transparent cursor-pointer"
                   >
                     Login
                   </Button>

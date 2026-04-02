@@ -7,8 +7,8 @@ import { FormTextarea } from "@/components/ui/form-textarea";
 import { Label } from "@/components/ui/label";
 import { Notice } from "@/interface/notice.interface";
 import {
-  updateNotice,
-  type NoticeActionState,
+    updateNotice,
+    type NoticeActionState,
 } from "@/services/notice.service";
 import { FileText } from "lucide-react";
 import Link from "next/link";
@@ -17,10 +17,11 @@ import React, { useActionState, useEffect } from "react";
 import { toast } from "sonner";
 
 const typeOptions = [
-  { value: "important", label: "Important" },
-  { value: "alert", label: "Alert" },
-  { value: "info", label: "Information" },
-  { value: "general", label: "General" },
+  { value: "GENERAL", label: "General" },
+  { value: "URGENT", label: "Urgent" },
+  { value: "EVENT", label: "Event" },
+  { value: "EXAM", label: "Exam" },
+  { value: "HOLIDAY", label: "Holiday" },
 ];
 
 const initialState: NoticeActionState = {
@@ -73,43 +74,39 @@ const EditNoticeForm: React.FC<EditNoticeFormProps> = ({ notice }) => {
             <FormSelect
               name="type"
               label="Notice Type"
-              defaultValue={state.inputs?.type ?? notice.type}
+              defaultValue={state.inputs?.type ?? notice.type ?? "GENERAL"}
               options={typeOptions}
               placeholder="Select type"
               error={state.errors?.type}
             />
+          </div>
 
-            <div className="space-y-2">
-              <Label
-                htmlFor="pinned"
-                className="text-sm font-semibold text-gray-700"
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="fileUrl" className="text-sm font-semibold text-gray-700">
+              Attachment (Optional)
+            </Label>
+            <input
+              id="fileUrl"
+              name="fileUrl"
+              type="file"
+              accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp"
+              className="h-12 text-base border border-gray-200 rounded-md focus:border-primary focus:ring-primary transition-all font-medium bg-gray-50/30 px-3 file:mr-3 file:h-8 file:border-0 file:rounded file:bg-gray-200 file:px-3 file:text-sm"
+            />
+            {notice.fileUrl && (
+              <a
+                href={notice.fileUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs text-primary font-medium hover:underline"
               >
-                Pin Notice
-              </Label>
-              <div className="flex items-center gap-3 h-10 border border-transparent">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    id="pinned"
-                    name="pinned"
-                    value="true"
-                    defaultChecked={
-                      state.inputs?.pinned === "true" ||
-                      (state.inputs?.pinned === undefined && notice.pinned)
-                    }
-                    className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary/20"
-                  />
-                  <span className="text-sm text-gray-600">
-                    Pin this notice to top
-                  </span>
-                </label>
-              </div>
-              {state.errors?.pinned && (
-                <p className="text-red-500 text-xs mt-1">
-                  {state.errors.pinned[0]}
-                </p>
-              )}
-            </div>
+                View current attachment
+              </a>
+            )}
+            {state.errors?.fileUrl && (
+              <p className="text-red-500 text-xs mt-1">
+                {state.errors.fileUrl[0]}
+              </p>
+            )}
           </div>
 
           <FormTextarea

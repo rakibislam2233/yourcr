@@ -2,7 +2,7 @@ import CrRegisterForm from "@/pages/Auth/CrRegisterForm";
 
 const CrRegisterPage = () => {
   return (
-    <>
+    <section>
       <div className="w-full mb-10 text-center">
         <h1 className="mb-2 text-3xl font-bold tracking-tight text-gray-900">
           Create CR Account
@@ -12,7 +12,7 @@ const CrRegisterPage = () => {
         </p>
       </div>
       <CrRegisterForm />
-    </>
+    </section>
   );
 };
 

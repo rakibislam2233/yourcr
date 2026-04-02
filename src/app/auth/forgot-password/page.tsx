@@ -1,48 +1,22 @@
-import logo from "@/assets/logo/logo.png";
 import ForgotPasswordForm from "@/pages/Auth/ForgotPasswordForm";
-import Image from "next/image";
-import Link from "next/link";
 
 const ForgotPasswordPage = () => {
   return (
-    <section className="flex min-h-screen w-full flex-col lg:flex-row">
-      {/* Left Side: Form Content */}
-      <div className="flex flex-1 flex-col justify-center bg-white px-6 py-12 lg:px-20 xl:px-24">
-        <div className="mx-auto w-full max-w-md">
-          {/* Brand Header */}
-          <div className="mb-10 flex items-center justify-center gap-3">
-            <Link href="/">
-              <Image src={logo} alt="Your CR Logo" className="h-8 w-auto" />
-            </Link>
-          </div>
-
-          {/* Text Content */}
-          <div className="mb-8 text-center lg:text-left">
-            <h1 className="mb-2 text-3xl sm:text-4xl leading-tight tracking-tight text-gray-900">
-              Forgot Password?
-            </h1>
-            <p className="text-base text-gray-600">
-              No worries! Enter your email address and we&apos;ll send you a
-              link to reset your password.
-            </p>
-          </div>
-
-          {/* Form */}
-          <ForgotPasswordForm />
+    <section className="w-full bg-white flex justify-center items-center min-h-screen px-6 py-12 lg:px-20 xl:px-24">
+      <div className="mx-auto w-full max-w-lg border border-gray-200 rounded-lg p-6">
+        {/* Text Content */}
+        <div className="mb-8 text-center">
+          <h1 className="mb-2 text-3xl sm:text-4xl leading-tight tracking-tight text-gray-900">
+            Forgot Password?
+          </h1>
+          <p className="text-base text-gray-600">
+            No worries! Enter your email address and we&apos;ll send you a link
+            to reset your password.
+          </p>
         </div>
-      </div>
 
-      {/* Right Side: Image with Overlay */}
-      <div className="hidden lg:flex lg:w-1/2 relative bg-gray-100">
-        <div className="absolute inset-0 bg-primary/20 mix-blend-multiply z-10"></div>
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage:
-              "url('https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=1200&auto=format&fit=crop')",
-          }}
-        />
-        <div className="absolute inset-0 bg-gray-900 opacity-40 mix-blend-multiply z-10"></div>
+        {/* Form */}
+        <ForgotPasswordForm />
       </div>
     </section>
   );
