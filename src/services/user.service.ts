@@ -52,6 +52,33 @@ export async function updateMyProfile(data: any) {
   }
 }
 
+export async function updateProfileImage(formData: FormData) {
+  try {
+    const res = await api.patch("/users/profile/update-image", formData);
+    if (!res.success) {
+      throw new Error(res.message || "Failed to update profile image");
+    }
+    revalidateTag("profile", { expire: 0 });
+    return res.data;
+  } catch (error: any) {
+    console.error("Failed to update profile image:", error.message);
+    throw error;
+  }
+}
+
+export async function deleteMyProfile() {
+  try {
+    const res = await api.delete("/users/profile/me");
+    if (!res.success) {
+      throw new Error(res.message || "Failed to delete profile");
+    }
+    return res.data;
+  } catch (error: any) {
+    console.error("Failed to delete profile:", error.message);
+    throw error;
+  }
+}
+
 export async function updateInstitutionBatch(
   prevState: UserActionState,
   formData: FormData,

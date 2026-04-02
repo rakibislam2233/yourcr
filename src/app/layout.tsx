@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Syne } from "next/font/google";
+import { Hanken_Grotesk } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
-const mukta = Syne({
+const mukta = Hanken_Grotesk({
   variable: "--font-geist-sans",
-  weight: ["400", "500", "600"],
+  weight: ["300", "400", "500", "600"],
 });
 export const metadata: Metadata = {
   title: {

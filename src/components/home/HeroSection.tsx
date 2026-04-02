@@ -31,7 +31,7 @@ const HeroSection: React.FC = () => {
             <span className="text-primary">Your CR</span>
           </h1>
 
-          <p className="text-base sm:text-lg md:text-xl text-text-muted dark:text-gray-300 max-w-lg mx-auto lg:mx-0 leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl text-text-muted  max-w-lg mx-auto lg:mx-0 leading-relaxed">
             The all-in-one platform bridging the gap between students, reps, and
             faculty. Announcements, polls, and resources — all in one place.
           </p>
@@ -77,17 +77,17 @@ const HeroSection: React.FC = () => {
                 <p className="font-bold text-sm sm:text-base">
                   New Announcement
                 </p>
-                <p className="text-xs sm:text-sm text-text-muted dark:text-gray-400 mt-0.5">
+                <p className="text-xs sm:text-sm text-text-muted mt-0.5">
                   Class schedule updated for CS-101
                 </p>
               </div>
             </div>
 
-            <div className="h-1.5 sm:h-2 w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+            <div className="h-1.5 sm:h-2 w-full bg-gray-200 rounded-full overflow-hidden">
               <div className="h-full bg-primary w-3/4 rounded-full" />
             </div>
 
-            <div className="flex justify-between mt-2.5 text-[10px] sm:text-xs font-semibold uppercase tracking-wide text-text-muted dark:text-gray-400">
+            <div className="flex justify-between mt-2.5 text-[10px] sm:text-xs font-semibold uppercase tracking-wide text-text-muted">
               <span>Read by 84%</span>
               <span>Just now</span>
             </div>

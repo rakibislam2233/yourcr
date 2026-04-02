@@ -2,24 +2,37 @@
 import { Button } from "@/components/ui/button";
 import { FormInput } from "@/components/ui/form-input";
 import { UserProfile } from "@/interface/user.interface";
-import { updateMyProfile } from "@/services/user.service";
 import {
-    Building2,
-    Camera,
-    GraduationCap,
-    Lock,
-    Mail,
-    Phone,
-    Save,
-    Settings,
-    Shield,
-    User,
+  Building2,
+  Camera,
+  GraduationCap,
+  Lock,
+  Mail,
+  Phone,
+  Save,
+  Settings,
+  Shield,
+  User,
 } from "lucide-react";
 import NextImage from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { toast } from "sonner";
 import PageHeader from "../shared/PageHeader";
+import { updateMyProfile, updateProfileImage, deleteMyProfile } from "@/services/user.service";
+import { changePassword, logoutUser } from "@/services/auth.service";
+import { FormDatePicker } from "@/components/ui/form-date-picker";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface ProfileSettingsProps {
   user: UserProfile | null;
@@ -27,13 +40,24 @@ interface ProfileSettingsProps {
 
 const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
   const router = useRouter();
-  const [isUpdating, setIsUpdating] = useState(false);
+  const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
+  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
 
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     phoneNumber: "",
+    bio: "",
+    dateOfBirth: "",
   });
+
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (user) {
@@ -41,6 +65,8 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
         fullName: user.fullName || "",
         email: user.email || "",
         phoneNumber: user.phoneNumber || "",
+        bio: user.bio || "",
+        dateOfBirth: user.dateOfBirth ? new Date(user.dateOfBirth).toISOString().split("T")[0] : "",
       });
     }
   }, [user]);
@@ -48,17 +74,74 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
   const handleUpdateProfile = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      setIsUpdating(true);
+      setIsUpdatingProfile(true);
       await updateMyProfile({
         fullName: formData.fullName,
         phoneNumber: formData.phoneNumber,
+        bio: formData.bio,
+        dateOfBirth: formData.dateOfBirth,
       });
       await router.refresh();
       toast.success("Profile updated successfully");
-    } catch {
-      toast.error("Failed to update profile");
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Failed to update profile";
+      toast.error(errorMessage);
     } finally {
-      setIsUpdating(false);
+      setIsUpdatingProfile(false);
+    }
+  };
+
+  const handleUpdateImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("profileImage", file);
+
+    try {
+      toast.loading("Uploading image...", { id: "upload-image" });
+      await updateProfileImage(formData);
+      await router.refresh();
+      toast.success("Profile image updated", { id: "upload-image" });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Upload failed";
+      toast.error(errorMessage, { id: "upload-image" });
+    }
+  };
+
+  const handleChangePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("currentPassword", passwordData.currentPassword);
+    formData.append("newPassword", passwordData.newPassword);
+    formData.append("confirmPassword", passwordData.confirmPassword);
+
+    try {
+      setIsUpdatingPassword(true);
+      const res = await changePassword({ success: false, message: "", timestamp: 0 }, formData);
+      if (res.success) {
+        toast.success(res.message);
+        setPasswordData({ currentPassword: "", newPassword: "", confirmPassword: "" });
+      } else {
+        toast.error(res.message);
+      }
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Failed to change password";
+      toast.error(errorMessage);
+    } finally {
+      setIsUpdatingPassword(false);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    try {
+      await deleteMyProfile();
+      toast.success("Account deleted successfully");
+      await logoutUser();
+      router.push("/auth/login");
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Failed to delete account";
+      toast.error(errorMessage);
     }
   };
 
@@ -105,7 +188,17 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
                       .slice(0, 2) || "CR"
                   )}
                 </div>
-                <button className="absolute -bottom-2 -right-2 p-2 bg-white rounded-md border border-gray-200 shadow-md hover:bg-gray-50 transition-all active:scale-90">
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleUpdateImage}
+                  className="hidden"
+                  accept="image/*"
+                />
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="absolute -bottom-2 -right-2 p-2 bg-white rounded-md border border-gray-200 shadow-md hover:bg-gray-50 transition-all active:scale-90"
+                >
                   <Camera className="w-4 h-4 text-gray-600" />
                 </button>
               </div>
@@ -236,25 +329,38 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
                 icon={Mail}
                 value={formData.email}
                 disabled
-                className="border-gray-100 bg-gray-50/50 text-gray-400 font-medium cursor-not-allowed"
+                className="border-gray-100 bg-gray-50/50 text-gray-400 font-bold  tracking-wider cursor-not-allowed"
               />
 
-              <FormInput
-                label="System Role"
-                icon={Shield}
-                value={user?.role || "CR"}
-                disabled
-                className="border-gray-100 bg-gray-50/50 text-gray-400 font-bold uppercase tracking-wider cursor-not-allowed"
+              <FormDatePicker
+                label="Date of Birth"
+                value={formData.dateOfBirth}
+                onChange={(date) =>
+                  setFormData({ ...formData, dateOfBirth: date.toISOString() })
+                }
+                placeholder="Select birth date"
               />
+
+              <div className="md:col-span-2">
+                <label className="text-sm font-semibold text-gray-700 mb-1.5 block">
+                  Bio / About Me
+                </label>
+                <textarea
+                  value={formData.bio}
+                  onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
+                  placeholder="Tell us a little about yourself..."
+                  className="w-full min-h-[100px] p-4 text-base border border-gray-200 rounded-md focus:border-primary focus:ring-primary transition-all font-medium bg-gray-50/30 resize-none outline-hidden"
+                />
+              </div>
             </div>
 
             <div className="mt-10 flex justify-end">
               <Button
                 type="submit"
-                disabled={isUpdating}
+                disabled={isUpdatingProfile}
                 className="h-11 px-10 font-bold bg-primary hover:bg-black text-white rounded-md flex gap-2 active:scale-95 transition-all shadow-md shadow-primary/10"
               >
-                {isUpdating ? (
+                {isUpdatingProfile ? (
                   "Syncing..."
                 ) : (
                   <>
@@ -266,7 +372,10 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
           </form>
 
           {/* Security Management */}
-          <div className="bg-white rounded-md border border-gray-100 p-8 shadow-sm">
+          <form
+            onSubmit={handleChangePassword}
+            className="bg-white rounded-md border border-gray-100 p-8 shadow-sm"
+          >
             <div className="flex items-center gap-4 mb-8">
               <div className="p-3 bg-amber-50 rounded-md border border-amber-100">
                 <Lock className="w-5 h-5 text-amber-600" />
@@ -285,8 +394,11 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
                 type="password"
                 label="Current Password"
                 icon={Lock}
+                value={passwordData.currentPassword}
+                onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
                 placeholder="Verify current identity"
-                className="border-gray-200 focus:border-amber-500 font-medium"
+                className="border-gray-200 focus:border-primary font-medium"
+                required
               />
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
@@ -294,29 +406,36 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
                   type="password"
                   label="New Password"
                   icon={Lock}
+                  value={passwordData.newPassword}
+                  onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
                   placeholder="At least 8 characters"
-                  className="border-gray-200 focus:border-amber-500 font-medium"
+                  className="border-gray-200 focus:border-primary font-medium"
+                  required
                 />
 
                 <FormInput
                   type="password"
                   label="Confirm Password"
                   icon={Shield}
+                  value={passwordData.confirmPassword}
+                  onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
                   placeholder="Repeat new password"
-                  className="border-gray-200 focus:border-amber-500 font-medium"
+                  className="border-gray-200 focus:border-primary font-medium"
+                  required
                 />
               </div>
             </div>
             <div className="mt-10 flex justify-end">
               <Button
-                variant="outline"
-                className="h-11 px-10 font-bold border-gray-200 hover:bg-amber-50 hover:text-amber-700 hover:border-amber-200 rounded-md flex gap-2 active:scale-95 transition-all"
+                type="submit"
+                disabled={isUpdatingPassword}
+                className="h-11 px-10 font-bold bg-primary hover:bg-black text-white rounded-md flex gap-2 active:scale-95 transition-all shadow-md shadow-primary/10"
               >
                 <Shield className="w-4 h-4" />
-                Sync New Credentials
+                {isUpdatingPassword ? "Syncing..." : "Sync New Credentials"}
               </Button>
             </div>
-          </div>
+          </form>
 
           {/* Critical Actions */}
           <div className="bg-red-50/40 rounded-md border border-red-100 p-8 shadow-sm">
@@ -333,12 +452,44 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
               all student records you manage, and reset your CR status. This
               action is irreversible.
             </p>
-            <Button
-              variant="outline"
-              className="h-11 px-8 font-bold text-red-600 border-red-200 bg-white hover:bg-red-600 hover:text-white transition-all rounded-md shadow-sm"
-            >
-              Confirm Permanent Deletion
-            </Button>
+
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="h-11 px-8 font-bold text-red-600 border-red-200 bg-white hover:bg-red-600 hover:text-white transition-all rounded-md shadow-sm"
+                >
+                  Confirm Permanent Deletion
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent className="rounded-xl border-red-100 shadow-2xl">
+                <AlertDialogHeader>
+                  <div className="size-12 bg-red-100 rounded-full flex items-center justify-center mb-4">
+                    <Shield className="w-6 h-6 text-red-600" />
+                  </div>
+                  <AlertDialogTitle className="text-xl font-bold text-red-700">
+                    Irreversible Deletion Request
+                  </AlertDialogTitle>
+                  <AlertDialogDescription className="text-gray-600 leading-relaxed">
+                    You are about to permanently delete your **YourCR**
+                    institutional access. This will erase all your managed
+                    data, academic records, and synchronization history. This
+                    action cannot be undone. Are you absolutely certain?
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter className="mt-8">
+                  <AlertDialogCancel className="h-11 rounded-md border-gray-200 font-bold px-6">
+                    Return to Profile
+                  </AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={handleDeleteAccount}
+                    className="h-11 rounded-md bg-red-600 hover:bg-red-700 text-white font-bold px-8 active:scale-95 transition-all shadow-lg shadow-red-500/20"
+                  >
+                    Confirm Deletion
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </div>
       </div>

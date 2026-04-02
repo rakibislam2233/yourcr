@@ -557,3 +557,44 @@ export async function logoutUser() {
   }
   return { success: true };
 }
+
+export async function changePassword(prevState: AuthActionState, formData: FormData) {
+  const currentPassword = formData.get("currentPassword");
+  const newPassword = formData.get("newPassword");
+  const confirmPassword = formData.get("confirmPassword");
+
+  if (newPassword !== confirmPassword) {
+    return {
+      success: false,
+      message: "Passwords do not match",
+      timestamp: Date.now(),
+    };
+  }
+
+  try {
+    const res = await api.post("/auth/change-password", {
+      oldPassword: currentPassword,
+      newPassword,
+    });
+
+    if (!res.success) {
+      return {
+        success: false,
+        message: res.message || "Failed to change password",
+        timestamp: Date.now(),
+      };
+    }
+
+    return {
+      success: true,
+      message: "Password changed successfully!",
+      timestamp: Date.now(),
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      message: error.message || "Something went wrong",
+      timestamp: Date.now(),
+    };
+  }
+}

@@ -18,6 +18,7 @@ import {
   Building2,
   Calendar,
   LayoutDashboard,
+  Layers,
   MessageSquare,
   School,
   User,
@@ -37,6 +38,11 @@ const menuLinks = [
     icon: Building2,
     label: "Institution",
     href: "/dashboard/cr/institution",
+  },
+  {
+    icon: Layers,
+    label: "My Batches",
+    href: "/dashboard/cr/batches",
   },
   {
     icon: Users,

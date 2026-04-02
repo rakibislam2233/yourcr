@@ -15,6 +15,8 @@ export interface UserProfile {
   currentBatchId: string;
   createdAt: string;
   profileImage?: string;
+  bio?: string;
+  dateOfBirth?: string;
   institution?: Institution;
   currentBatch?: Batch;
 }
