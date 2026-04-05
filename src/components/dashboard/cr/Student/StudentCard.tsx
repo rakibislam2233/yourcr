@@ -1,3 +1,4 @@
+import studentCard from "@/assets/students/student-card.png";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -9,9 +10,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Student from "@/interface/student.interface";
 import { Edit, MoreVertical, Phone, Trash2 } from "lucide-react";
-import Link from "next/link";
 import Image from "next/image";
-import studentCard from "@/assets/students/student-card.png";
+import Link from "next/link";
 
 interface StudentCardProps {
   student: Student;
@@ -29,7 +29,7 @@ const StudentCard = ({ student, onDelete }: StudentCardProps) => {
 
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative z-10">
         <div className="flex items-center space-x-4">
-          <Avatar className="h-12 w-12 rounded-md border-2 border-white shadow-sm">
+          <Avatar className="h-12 w-12 rounded-md border-2 border-white ">
             <AvatarImage src={student.profileImage} alt={student.fullName} />
             <AvatarFallback className="bg-primary/10 text-primary font-bold rounded-md">
               {student.fullName

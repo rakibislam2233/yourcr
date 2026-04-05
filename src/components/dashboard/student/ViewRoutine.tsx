@@ -79,7 +79,7 @@ const ViewRoutine: React.FC = () => {
             key="preview"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="bg-white rounded-2xl border border-emerald-50 p-6 shadow-sm overflow-hidden min-h-[500px] flex flex-col items-center"
+            className="bg-white rounded-2xl border border-emerald-50 p-6  overflow-hidden min-h-[500px] flex flex-col items-center"
           >
             <div className="w-full flex justify-between items-center mb-6">
               <div className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-widest">
@@ -107,7 +107,7 @@ const ViewRoutine: React.FC = () => {
               <img
                 src={routines[activeTab]?.url}
                 alt="Routine"
-                className="max-w-full h-auto rounded-md shadow-sm border border-gray-100"
+                className="max-w-full h-auto rounded-md  border border-gray-100"
               />
             ) : (
               <div className="w-full h-[500px] bg-white rounded-xl overflow-hidden border border-gray-100 shadow-lg">
@@ -127,7 +127,7 @@ const ViewRoutine: React.FC = () => {
             key="empty"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="bg-white rounded-2xl border border-emerald-50 p-24 flex flex-col items-center justify-center text-center shadow-sm"
+            className="bg-white rounded-2xl border border-emerald-50 p-24 flex flex-col items-center justify-center text-center "
           >
             <div className="size-20 bg-emerald-50 rounded-full flex items-center justify-center mb-6">
               <Inbox className="w-10 h-10 text-emerald-200" />

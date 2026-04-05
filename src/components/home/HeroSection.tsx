@@ -6,7 +6,7 @@ import { MdCampaign } from "react-icons/md";
 
 const HeroSection: React.FC = () => {
   return (
-    <section className="relative w-full h-auto md:min-h-screen flex items-center justify-center py-28 md:py-0 overflow-hidden">
+    <section className="relative w-full h-screen flex items-center justify-center overflow-hidden">
       <div
         className="absolute inset-0 z-0"
         style={{

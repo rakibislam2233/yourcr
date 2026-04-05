@@ -86,7 +86,7 @@ const MyProfile: React.FC<MyProfileProps> = ({ user }) => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Profile Card */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-md border border-gray-100 p-8 shadow-sm">
+          <div className="bg-white rounded-md border border-gray-100 p-8 ">
             <div className="flex flex-col items-center text-center">
               <div className="relative group">
                 <div className="w-28 h-28 bg-linear-to-br from-emerald-500 to-emerald-400 rounded-md flex items-center justify-center text-white text-3xl font-bold shadow-lg transition-transform group-hover:scale-105">
@@ -150,7 +150,7 @@ const MyProfile: React.FC<MyProfileProps> = ({ user }) => {
           </div>
 
           {/* Academic Info */}
-          <div className="bg-white rounded-md border border-gray-100 p-6 mt-6 shadow-sm">
+          <div className="bg-white rounded-md border border-gray-100 p-6 mt-6 ">
             <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-5 border-b border-gray-50 pb-2">
               Academic Profile
             </h4>
@@ -205,7 +205,7 @@ const MyProfile: React.FC<MyProfileProps> = ({ user }) => {
         <div className="lg:col-span-2 space-y-6">
           <form
             onSubmit={handleUpdateProfile}
-            className="bg-white rounded-md border border-gray-100 p-8 shadow-sm"
+            className="bg-white rounded-md border border-gray-100 p-8 "
           >
             <div className="flex items-center gap-4 mb-8">
               <div className="p-3.5 bg-emerald-50 rounded-md border border-emerald-100">
@@ -290,7 +290,7 @@ const MyProfile: React.FC<MyProfileProps> = ({ user }) => {
           </form>
 
           {/* Access Security */}
-          <div className="bg-white rounded-md border border-gray-100 p-8 shadow-sm">
+          <div className="bg-white rounded-md border border-gray-100 p-8 ">
             <div className="flex items-center gap-4 mb-8">
               <div className="p-3.5 bg-amber-50 rounded-md border border-amber-100">
                 <Lock className="w-5 h-5 text-amber-600" />
@@ -344,7 +344,7 @@ const MyProfile: React.FC<MyProfileProps> = ({ user }) => {
             <div className="mt-10 flex justify-end">
               <Button
                 variant="outline"
-                className="h-11 px-10 font-bold border-gray-200 hover:bg-amber-50 hover:text-amber-700 hover:border-amber-100 rounded-md flex gap-2 active:scale-95 transition-all shadow-sm"
+                className="h-11 px-10 font-bold border-gray-200 hover:bg-amber-50 hover:text-amber-700 hover:border-amber-100 rounded-md flex gap-2 active:scale-95 transition-all "
               >
                 <Shield className="w-4 h-4" />
                 Update Security Credentials

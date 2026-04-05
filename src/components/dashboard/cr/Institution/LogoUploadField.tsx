@@ -137,7 +137,7 @@ export default function LogoUploadField({ defaultLogo }: LogoUploadFieldProps) {
         </div>
       ) : (
         <>
-          <div className="p-4 bg-white rounded-full shadow-sm">
+          <div className="p-4 bg-white rounded-full ">
             <UploadCloud className="w-8 h-8 text-primary" />
           </div>
           <div className="text-center px-4">

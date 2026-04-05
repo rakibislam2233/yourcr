@@ -9,16 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Subject } from "@/interface/subject.interface";
-import {
-  BookOpen,
-  BookOpenText,
-  Building2,
-  CreditCard,
-  Edit,
-  MoreVertical,
-  Trash2,
-  User,
-} from "lucide-react";
+import { BookOpen, Edit, MoreVertical, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -38,7 +29,7 @@ const SubjectCard = ({ subject, onDelete }: SubjectCardProps) => {
 
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative z-10">
         <div className="flex items-center space-x-4">
-          <Avatar className="h-12 w-12 rounded-md border-2 border-white shadow-sm bg-primary/10">
+          <Avatar className="h-12 w-12 rounded-md border-2 border-white  bg-primary/10">
             <AvatarFallback className="bg-primary/10 text-primary font-bold rounded-md">
               <BookOpen className="w-6 h-6" />
             </AvatarFallback>

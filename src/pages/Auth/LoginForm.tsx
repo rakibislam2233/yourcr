@@ -170,7 +170,7 @@ const LoginForm = () => {
 
         <Button
           type="submit"
-          className="w-full h-12 text-base font-bold bg-primary hover:bg-blue-700 text-white rounded-md shadow-sm transition-all active:scale-[0.98] cursor-pointer disabled:opacity-70"
+          className="w-full h-12 text-base font-bold bg-primary hover:bg-blue-700 text-white rounded-md  transition-all active:scale-[0.98] cursor-pointer disabled:opacity-70"
           disabled={isPending}
         >
           {isPending ? (

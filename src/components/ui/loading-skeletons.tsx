@@ -155,7 +155,7 @@ export function ProfileSkeleton() {
       <PageHeaderSkeleton />
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-1 space-y-6">
-          <div className="bg-white rounded-md border border-gray-100 p-8 shadow-sm flex flex-col items-center">
+          <div className="bg-white rounded-md border border-gray-100 p-8  flex flex-col items-center">
             <Skeleton className="w-28 h-28 rounded-md" />
             <Skeleton className="h-6 w-32 mt-6" />
             <Skeleton className="h-4 w-20 mt-2" />
@@ -164,7 +164,7 @@ export function ProfileSkeleton() {
               <Skeleton className="h-10 w-full rounded-md" />
             </div>
           </div>
-          <div className="bg-white rounded-md border border-gray-100 p-6 shadow-sm space-y-4">
+          <div className="bg-white rounded-md border border-gray-100 p-6  space-y-4">
             <Skeleton className="h-4 w-32 border-b pb-2" />
             <Skeleton className="h-12 w-full rounded-md" />
             <Skeleton className="h-12 w-full rounded-md" />
@@ -172,7 +172,7 @@ export function ProfileSkeleton() {
           </div>
         </div>
         <div className="lg:col-span-2 space-y-6">
-          <div className="bg-white rounded-md border border-gray-100 p-8 shadow-sm space-y-8">
+          <div className="bg-white rounded-md border border-gray-100 p-8  space-y-8">
             <div className="flex gap-4">
               <Skeleton className="w-12 h-12 rounded-md" />
               <div className="space-y-2">
@@ -189,7 +189,7 @@ export function ProfileSkeleton() {
               ))}
             </div>
           </div>
-          <div className="bg-white rounded-md border border-gray-100 p-8 shadow-sm space-y-8">
+          <div className="bg-white rounded-md border border-gray-100 p-8  space-y-8">
             <div className="flex gap-4">
               <Skeleton className="w-12 h-12 rounded-md" />
               <div className="space-y-2">

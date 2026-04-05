@@ -64,7 +64,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({
           )}
           <Avatar
             className={cn(
-              "size-10 rounded-full border shadow-sm transition-transform group-hover:scale-105",
+              "size-10 rounded-full border  transition-transform group-hover:scale-105",
               isEmerald ? "border-emerald-200" : "border-gray-200",
             )}
           >

@@ -172,7 +172,7 @@ export default function CompleteProfileForm() {
             type="button"
             variant="outline"
             onClick={() => setStep(step - 1)}
-            className="h-11 px-6 font-bold border-gray-200 text-gray-600 hover:bg-gray-50 rounded-md shadow-sm transition-all active:scale-[0.98]"
+            className="h-11 px-6 font-bold border-gray-200 text-gray-600 hover:bg-gray-50 rounded-md  transition-all active:scale-[0.98]"
             disabled={isPending}
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -182,7 +182,7 @@ export default function CompleteProfileForm() {
         <Button
           type="button"
           onClick={handleContinue}
-          className="flex-1 h-11 text-base font-bold bg-primary hover:bg-blue-700 text-white rounded-md shadow-sm transition-all active:scale-[0.98] cursor-pointer"
+          className="flex-1 h-11 text-base font-bold bg-primary hover:bg-blue-700 text-white rounded-md  transition-all active:scale-[0.98] cursor-pointer"
           disabled={isPending}
         >
           {step === 3 ? (

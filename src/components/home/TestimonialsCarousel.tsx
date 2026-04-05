@@ -168,7 +168,7 @@ const TestimonialCarousel = () => {
         <div className="flex items-center justify-center gap-6 mt-16">
           <button
             onClick={() => paginate(-1)}
-            className="p-3 rounded-full bg-white border border-gray-200 shadow-sm hover:shadow-md hover:bg-gray-50 transition-all active:scale-95 group cursor-pointer"
+            className="p-3 rounded-full bg-white border border-gray-200  hover:shadow-md hover:bg-gray-50 transition-all active:scale-95 group cursor-pointer"
             aria-label="Previous testimonial"
           >
             <ChevronLeft className="w-5 h-5 text-gray-600 group-hover:text-primary transition-colors" />
@@ -198,7 +198,7 @@ const TestimonialCarousel = () => {
 
           <button
             onClick={() => paginate(1)}
-            className="p-3 rounded-full bg-white border border-gray-200 shadow-sm hover:shadow-md hover:bg-gray-50 transition-all active:scale-95 group cursor-pointer"
+            className="p-3 rounded-full bg-white border border-gray-200  hover:shadow-md hover:bg-gray-50 transition-all active:scale-95 group cursor-pointer"
             aria-label="Next testimonial"
           >
             <ChevronRight className="w-5 h-5 text-gray-600 group-hover:text-primary transition-colors" />

@@ -22,8 +22,8 @@ import {
   BookOpen,
   Building2,
   Calendar,
-  LayoutDashboard,
   Layers,
+  LayoutDashboard,
   LogOut,
   MessageSquare,
   School,
@@ -151,7 +151,7 @@ const StudentSidebar: React.FC<StudentSidebarProps> = ({ user }) => {
         >
           <Link href="/" className="flex items-center">
             {isCollapsed ? (
-              <div className="w-10 h-10 bg-emerald-600 rounded-md flex items-center justify-center text-white font-bold text-lg shadow-sm">
+              <div className="w-10 h-10 bg-emerald-600 rounded-md flex items-center justify-center text-white font-bold text-lg ">
                 ST
               </div>
             ) : (

@@ -91,7 +91,7 @@ const DocumentationStep: React.FC<DocumentationStepProps> = ({
                 setIdCardPreview(null);
                 setSelectedFile(null);
               }}
-              className="absolute top-4 right-4 p-2 bg-white/80 backdrop-blur-sm rounded-full text-red-500 hover:bg-red-50 transition-colors shadow-sm"
+              className="absolute top-4 right-4 p-2 bg-white/80 backdrop-blur-sm rounded-full text-red-500 hover:bg-red-50 transition-colors "
             >
               <X className="size-5" />
             </button>

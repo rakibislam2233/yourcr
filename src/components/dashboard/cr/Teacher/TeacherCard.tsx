@@ -1,3 +1,4 @@
+import studentCard from "@/assets/students/student-card.png";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -16,10 +17,9 @@ import {
   Phone,
   Trash2,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import studentCard from "@/assets/students/student-card.png";
-import Image from "next/image";
 
 interface TeacherCardProps {
   teacher: Teacher;
@@ -46,7 +46,7 @@ const TeacherCard: React.FC<TeacherCardProps> = ({ teacher, onDelete }) => {
 
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative z-10">
         <div className="flex items-center space-x-4">
-          <Avatar className="h-12 w-12 rounded-md border-2 border-white shadow-sm">
+          <Avatar className="h-12 w-12 rounded-md border-2 border-white ">
             <AvatarImage
               src={teacher?.photoUrl}
               alt={teacher.name}

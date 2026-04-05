@@ -22,7 +22,7 @@ const StudentHeader = async () => {
           <input
             type="text"
             placeholder="Search portal..."
-            className="w-full h-10 bg-emerald-50/20 border border-emerald-100 rounded-md pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/10 focus:border-emerald-500 focus:bg-white transition-all shadow-sm"
+            className="w-full h-10 bg-emerald-50/20 border border-emerald-100 rounded-md pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/10 focus:border-emerald-500 focus:bg-white transition-all "
           />
         </div>
       </div>
