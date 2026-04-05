@@ -2,9 +2,10 @@ import React from "react";
 
 const CrRegisterLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <section className="w-full flex-1 flex flex-col items-center justify-center py-12 px-4 sm:px-6">
-      <div className="w-full max-w-[480px]">
-        <div className="bg-white border border-gray-100/80 rounded-2xl shadow-2xl shadow-blue-900/[0.06] p-6 sm:p-8">
+    <section className="w-full flex flex-col justify-center items-center mt-20 py-10 md:py-20">
+      {/* Left Side: Form Content */}
+      <div className="w-full flex-1 flex flex-col justify-center items-center px-6 md:px-10 lg:px-20 xl:px-24 pt-4">
+        <div className="w-full max-w-xl border border-gray-200 rounded-xl p-8 md:p-10 shadow-sm bg-white">
           {children}
         </div>
       </div>
