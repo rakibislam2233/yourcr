@@ -5,11 +5,6 @@ import { getMyProfile } from "@/services/user.service";
 import {
   Building2,
   Edit,
-  ExternalLink,
-  Globe,
-  Mail,
-  MapPin,
-  Phone,
 } from "lucide-react";
 import Link from "next/link";
 

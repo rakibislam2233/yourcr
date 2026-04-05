@@ -32,62 +32,62 @@ const menuLinks = [
   {
     icon: LayoutDashboard,
     label: "Dashboard",
-    href: "/dashboard/cr",
+    href: "/dashboard",
   },
   {
     icon: Building2,
     label: "Institution",
-    href: "/dashboard/cr/institution",
+    href: "/dashboard/institution",
   },
   {
     icon: Layers,
     label: "My Batches",
-    href: "/dashboard/cr/batches",
+    href: "/dashboard/batches",
   },
   {
     icon: Users,
     label: "Students",
-    href: "/dashboard/cr/students",
+    href: "/dashboard/students",
   },
   {
     icon: Users,
     label: "Teachers",
-    href: "/dashboard/cr/teachers",
+    href: "/dashboard/teachers",
   },
   {
     icon: BookOpen,
     label: "Subjects",
-    href: "/dashboard/cr/subjects",
+    href: "/dashboard/subjects",
   },
   {
     icon: School,
     label: "Classes",
-    href: "/dashboard/cr/classes",
+    href: "/dashboard/classes",
   },
   {
     icon: Calendar,
     label: "Routine",
-    href: "/dashboard/cr/routine",
+    href: "/dashboard/routine",
   },
   {
     icon: BookOpen,
     label: "Assessments",
-    href: "/dashboard/cr/assessments",
+    href: "/dashboard/assessments",
   },
   {
     icon: Bell,
     label: "Notices",
-    href: "/dashboard/cr/notices",
+    href: "/dashboard/notices",
   },
   {
     icon: MessageSquare,
     label: "Issues",
-    href: "/dashboard/cr/issues",
+    href: "/dashboard/issues",
   },
   {
     icon: User,
     label: "Profile",
-    href: "/dashboard/cr/profile",
+    href: "/dashboard/profile",
   },
 ];
 
@@ -98,7 +98,7 @@ const CrSidebar: React.FC = () => {
 
   const isActive = (href: string) => {
     if (!href) return false;
-    if (href === "/dashboard/cr") return pathname === href;
+    if (href === "/dashboard") return pathname === href;
     return pathname === href || pathname?.startsWith(href + "/");
   };
 
